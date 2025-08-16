@@ -41,7 +41,3 @@ yarn-error.*
 # IDE
 .vscode/
 .idea/
-
-# Project specific
-frontend/dist/
-frontend/.expo/
