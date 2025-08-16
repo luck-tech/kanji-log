@@ -41,10 +41,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary[600],
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: Colors.black,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
+    boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.3)',
     elevation: 8,
   },
 });
