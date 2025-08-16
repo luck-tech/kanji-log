@@ -5,14 +5,15 @@ import {
   ActivityIndicator,
   ViewStyle,
   TextStyle,
+  View,
 } from 'react-native';
-import { Colors } from '@/constants/Colors';
+import { LinearGradient } from 'expo-linear-gradient';
 
 interface ButtonProps {
   title?: string;
   onPress: () => void;
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'gradient';
+  size?: 'sm' | 'md' | 'lg' | 'xl';
   loading?: boolean;
   disabled?: boolean;
   style?: ViewStyle;
@@ -20,6 +21,7 @@ interface ButtonProps {
   icon?: React.ReactNode;
   fullWidth?: boolean;
   className?: string;
+  hapticFeedback?: boolean;
 }
 
 export const Button: React.FC<ButtonProps> = ({
@@ -34,65 +36,86 @@ export const Button: React.FC<ButtonProps> = ({
   icon,
   fullWidth = false,
   className,
+  hapticFeedback = true,
 }) => {
-  // Base Tailwind classes
-  const baseClasses = "rounded-lg flex-row items-center justify-center border";
+  // Base Tailwind classes with modern styling
+  const baseClasses = "rounded-2xl flex-row items-center justify-center shadow-soft";
   
-  // Size classes
+  // Size classes with improved proportions
   const sizeClasses = {
-    sm: "px-4 py-1 min-h-8",
-    md: "px-6 py-3 min-h-11", 
-    lg: "px-8 py-4 min-h-14"
+    sm: "px-4 py-2.5 min-h-10",
+    md: "px-6 py-3.5 min-h-12", 
+    lg: "px-8 py-4 min-h-14",
+    xl: "px-10 py-5 min-h-16"
   };
   
-  // Variant classes
+  // Enhanced variant classes
   const variantClasses = {
-    primary: "bg-blue-600 border-blue-600",
-    secondary: "bg-gray-100 border-gray-200",
-    outline: "bg-transparent border-blue-600",
-    ghost: "bg-transparent border-transparent"
+    primary: "bg-primary-600 border-0 shadow-medium",
+    secondary: "bg-neutral-100 border-0 shadow-soft",
+    outline: "bg-transparent border-2 border-primary-600",
+    ghost: "bg-transparent border-0",
+    gradient: "border-0 shadow-large"
   };
   
   // Text color classes
   const textColorClasses = {
     primary: "text-white",
-    secondary: "text-gray-700",
-    outline: "text-blue-600",
-    ghost: "text-blue-600"
+    secondary: "text-neutral-700",
+    outline: "text-primary-600",
+    ghost: "text-primary-600",
+    gradient: "text-white"
   };
+  
+  // Text size classes
+  const textSizeClasses = {
+    sm: "text-sm",
+    md: "text-base",
+    lg: "text-lg",
+    xl: "text-xl"
+  };
+  
+  // Active state styles
+  const activeOpacity = disabled || loading ? 1 : 0.85;
   
   // Combine classes
   const buttonClasses = [
     baseClasses,
     sizeClasses[size],
-    variantClasses[variant],
+    variant !== 'gradient' && variantClasses[variant],
     fullWidth && "w-full",
-    (disabled || loading) && "opacity-60",
+    (disabled || loading) && "opacity-50",
     className
   ].filter(Boolean).join(" ");
   
   const textClasses = [
-    "font-medium text-base",
+    "font-semibold tracking-wide",
+    textSizeClasses[size],
     textColorClasses[variant],
-    icon && "ml-2"
+    icon && title && "ml-2"
   ].filter(Boolean).join(" ");
 
-  return (
-    <TouchableOpacity
-      className={buttonClasses}
-      style={style}
-      onPress={onPress}
-      disabled={disabled || loading}
-      activeOpacity={0.8}
-    >
+  const handlePress = () => {
+    if (hapticFeedback && typeof navigator !== 'undefined' && navigator.vibrate) {
+      navigator.vibrate(10); // Light haptic feedback
+    }
+    onPress();
+  };
+
+  const ButtonContent = () => (
+    <>
       {loading && (
         <ActivityIndicator
           size="small"
-          color={variant === 'primary' ? Colors.white : '#3b82f6'}
+          color={variant === 'primary' || variant === 'gradient' ? '#ffffff' : '#0284c7'}
           className={icon || title ? "mr-2" : ""}
         />
       )}
-      {icon && !loading && icon}
+      {icon && !loading && (
+        <View className={title ? "mr-2" : ""}>
+          {icon}
+        </View>
+      )}
       {title && (
         <Text
           className={textClasses}
@@ -101,6 +124,38 @@ export const Button: React.FC<ButtonProps> = ({
           {title}
         </Text>
       )}
+    </>
+  );
+
+  if (variant === 'gradient') {
+    return (
+      <TouchableOpacity
+        onPress={handlePress}
+        disabled={disabled || loading}
+        activeOpacity={activeOpacity}
+        style={style}
+      >
+        <LinearGradient
+          colors={['#0ea5e9', '#0284c7']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          className={buttonClasses}
+        >
+          <ButtonContent />
+        </LinearGradient>
+      </TouchableOpacity>
+    );
+  }
+
+  return (
+    <TouchableOpacity
+      className={buttonClasses}
+      style={style}
+      onPress={handlePress}
+      disabled={disabled || loading}
+      activeOpacity={activeOpacity}
+    >
+      <ButtonContent />
     </TouchableOpacity>
   );
 };

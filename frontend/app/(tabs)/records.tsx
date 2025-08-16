@@ -7,6 +7,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Card } from '@/components/common/Card';
 import { Button } from '@/components/common/Button';
 import { Header } from '@/components/common/Header';
@@ -70,7 +71,7 @@ const mockSharedRecords: SharedRecord[] = [
 ];
 
 export default function RecordsScreen() {
-  const [hasSharedRecord] = useState(false);
+  const [hasSharedRecord] = useState(true); // Changed to true to show records by default
 
   const handleUnlock = () => {
     console.log('Navigate to my events for sharing');
@@ -130,131 +131,174 @@ export default function RecordsScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50">
-      <Header
-        title="みんなの記録"
-        subtitle="他の幹事が共有した貴重な経験とナレッジ"
+    <View className="flex-1">
+      {/* Background */}
+      <LinearGradient
+        colors={['#f8fafc', '#f1f5f9']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        className="absolute inset-0"
       />
+      
+      <SafeAreaView className="flex-1">
+        <Header
+          title="みんなの記録"
+          subtitle="他の幹事が共有した貴重な経験とナレッジ"
+          variant="gradient"
+          leftIcon="book"
+          onLeftPress={() => console.log('Records')}
+        />
 
-      {!hasSharedRecord ? (
-        <ScrollView
-          className="flex-1"
-          contentContainerClassName="pt-6 px-6 pb-8"
-          showsVerticalScrollIndicator={false}
-        >
-          <View className="items-center">
-            <View className="mb-6">
-              <Ionicons name="lock-closed-outline" size={48} color="#9ca3af" />
-            </View>
-
-            <Text className="text-xl font-semibold text-gray-900 text-center leading-7">記録を共有して、</Text>
-            <Text className="text-xl font-semibold text-gray-900 text-center leading-7">他の幹事のナレッジを閲覧しよう</Text>
-
-            <Text className="text-base text-gray-600 text-center leading-6 my-6">
-              あなたの終了済みイベントの記録を1つ以上共有すると、
-              {'\n'}他の幹事が投稿した貴重な情報にアクセスできます。
-            </Text>
-
-            <Card className="w-full mb-8 p-6">
-              <View className="flex-row items-center gap-3 mb-4">
-                <Ionicons name="star" size={20} color="#f59e0b" />
-                <Text className="text-sm text-gray-700">お店の評価とレビュー</Text>
-              </View>
-              <View className="flex-row items-center gap-3 mb-4">
-                <Ionicons name="cash-outline" size={20} color="#10b981" />
-                <Text className="text-sm text-gray-700">予算と費用の参考情報</Text>
-              </View>
-              <View className="flex-row items-center gap-3 mb-4">
-                <Ionicons name="location-outline" size={20} color="#3b82f6" />
-                <Text className="text-sm text-gray-700">エリア別のおすすめ店舗</Text>
-              </View>
-              <View className="flex-row items-center gap-3">
-                <Ionicons name="share-social-outline" size={20} color="#8b5cf6" />
-                <Text className="text-sm text-gray-700">イベント企画のコツ</Text>
-              </View>
-            </Card>
-
-            <Button
-              title="記録を共有する"
-              onPress={handleUnlock}
-              size="lg"
-              fullWidth
-              icon={<Ionicons name="lock-open-outline" size={20} color="white" />}
-              className="mb-6"
-            />
-
-            <Text className="text-xs text-gray-500 text-center leading-4">
-              共有する記録は、店舗情報と評価のみ表示され、
-              {'\n'}個人情報は一切公開されません。
-            </Text>
-          </View>
-        </ScrollView>
-      ) : (
-        <ScrollView
-          className="flex-1"
-          contentContainerClassName="pt-6 px-6 pb-8"
-          showsVerticalScrollIndicator={false}
-        >
-          <View className="gap-4">
-            {mockSharedRecords.map((record) => (
-              <TouchableOpacity
-                key={record.id}
-                onPress={() => handleRecordPress(record)}
-                activeOpacity={0.7}
+        {!hasSharedRecord ? (
+          /* Unlock Screen */
+          <ScrollView
+            className="flex-1 px-6"
+            contentContainerStyle={{ paddingTop: 40, paddingBottom: 120 }}
+            showsVerticalScrollIndicator={false}
+          >
+            <View className="items-center">
+              <LinearGradient
+                colors={['#f59e0b', '#d97706']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                className="w-24 h-24 rounded-3xl justify-center items-center mb-8"
               >
-                <Card className="mb-4">
-                  <View className="flex-row justify-between items-start mb-3">
-                    <View className="flex-1 mr-3">
-                      <Text className="text-lg font-semibold text-gray-900 mb-1">
-                        {record.eventLog.venue.name}
-                      </Text>
-                      <View className="flex-row items-center gap-2">
-                        {renderStars(record.eventLog.rating)}
-                        <Text className="text-sm text-gray-600 font-semibold">
-                          {record.eventLog.rating.toFixed(1)}
+                <Ionicons name="lock-closed" size={48} color="white" />
+              </LinearGradient>
+
+              <Text className="text-2xl font-bold text-neutral-900 text-center mb-2">
+                記録を共有して、
+              </Text>
+              <Text className="text-2xl font-bold text-neutral-900 text-center mb-6">
+                他の幹事のナレッジを閲覧しよう
+              </Text>
+
+              <Text className="text-base text-neutral-600 text-center leading-6 mb-8 max-w-sm">
+                あなたの終了済みイベントの記録を1つ以上共有すると、他の幹事が投稿した貴重な情報にアクセスできます。
+              </Text>
+
+              <Card variant="gradient" shadow="large" animated={true} className="w-full mb-8">
+                <Text className="text-lg font-bold text-neutral-900 mb-4">
+                  アクセスできる情報
+                </Text>
+                <View className="gap-4">
+                  <View className="flex-row items-center gap-3">
+                    <View className="w-10 h-10 rounded-2xl bg-warning-100 justify-center items-center">
+                      <Ionicons name="star" size={20} color="#f59e0b" />
+                    </View>
+                    <Text className="text-base text-neutral-700 flex-1">お店の評価とレビュー</Text>
+                  </View>
+                  <View className="flex-row items-center gap-3">
+                    <View className="w-10 h-10 rounded-2xl bg-success-100 justify-center items-center">
+                      <Ionicons name="cash-outline" size={20} color="#10b981" />
+                    </View>
+                    <Text className="text-base text-neutral-700 flex-1">予算と費用の参考情報</Text>
+                  </View>
+                  <View className="flex-row items-center gap-3">
+                    <View className="w-10 h-10 rounded-2xl bg-primary-100 justify-center items-center">
+                      <Ionicons name="location-outline" size={20} color="#0284c7" />
+                    </View>
+                    <Text className="text-base text-neutral-700 flex-1">エリア別のおすすめ店舗</Text>
+                  </View>
+                  <View className="flex-row items-center gap-3">
+                    <View className="w-10 h-10 rounded-2xl bg-accent-100 justify-center items-center">
+                      <Ionicons name="share-social-outline" size={20} color="#ec7c30" />
+                    </View>
+                    <Text className="text-base text-neutral-700 flex-1">イベント企画のコツ</Text>
+                  </View>
+                </View>
+              </Card>
+
+              <Button
+                title="記録を共有する"
+                onPress={handleUnlock}
+                size="lg"
+                variant="gradient"
+                fullWidth
+                icon={<Ionicons name="lock-open-outline" size={20} color="white" />}
+                className="mb-6"
+              />
+
+              <Text className="text-sm text-neutral-500 text-center leading-5 max-w-xs">
+                共有する記録は、店舗情報と評価のみ表示され、個人情報は一切公開されません。
+              </Text>
+            </View>
+          </ScrollView>
+        ) : (
+          /* Records List */
+          <ScrollView
+            className="flex-1 px-6"
+            contentContainerStyle={{ paddingTop: 20, paddingBottom: 120 }}
+            showsVerticalScrollIndicator={false}
+          >
+            <View className="gap-4">
+              {mockSharedRecords.map((record, index) => (
+                <TouchableOpacity
+                  key={record.id}
+                  onPress={() => handleRecordPress(record)}
+                  activeOpacity={0.8}
+                  className="animate-fade-in"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  <Card variant="elevated" shadow="large" animated={true}>
+                    <View className="flex-row justify-between items-start mb-4">
+                      <View className="flex-1 mr-4">
+                        <Text className="text-xl font-bold text-neutral-900 mb-2">
+                          {record.eventLog.venue.name}
+                        </Text>
+                        <View className="flex-row items-center gap-3 mb-1">
+                          {renderStars(record.eventLog.rating)}
+                          <Text className="text-base text-neutral-600 font-semibold">
+                            {record.eventLog.rating.toFixed(1)}
+                          </Text>
+                        </View>
+                      </View>
+
+                      <View className="px-3 py-1.5 rounded-full bg-primary-100">
+                        <Text className="text-sm font-semibold text-primary-700">
+                          {getPurposeLabel(record.event.purpose)}
                         </Text>
                       </View>
                     </View>
 
-                    <View className="bg-blue-50 px-3 py-1 rounded-md">
-                      <Text className="text-xs text-blue-700 font-semibold">
-                        {getPurposeLabel(record.event.purpose)}
-                      </Text>
-                    </View>
-                  </View>
-
-                  <Text className="text-sm text-gray-700 leading-5 mb-3" numberOfLines={2}>
-                    {record.eventLog.notes}
-                  </Text>
-
-                  <View className="flex-row gap-6 mb-3">
-                    <View className="flex-row items-center gap-2">
-                      <Ionicons name="cash-outline" size={16} color="#10b981" />
-                      <Text className="text-sm text-gray-600">
-                        ¥{record.eventLog.costPerPerson.toLocaleString()}/人
-                      </Text>
-                    </View>
-
-                    <View className="flex-row items-center gap-2">
-                      <Ionicons name="location-outline" size={16} color="#6b7280" />
-                      <Text className="text-sm text-gray-600">
-                        {record.eventLog.venue.address}
-                      </Text>
-                    </View>
-                  </View>
-
-                  <View className="pt-3 border-t border-gray-100">
-                    <Text className="text-xs text-gray-500 text-right">
-                      {record.organizer.name}さんの記録
+                    <Text className="text-base text-neutral-700 leading-6 mb-4" numberOfLines={2}>
+                      {record.eventLog.notes}
                     </Text>
-                  </View>
-                </Card>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </ScrollView>
-      )}
-    </SafeAreaView>
+
+                    <View className="flex-row gap-6 mb-4">
+                      <View className="flex-row items-center gap-2">
+                        <View className="p-2 rounded-xl bg-success-100">
+                          <Ionicons name="cash-outline" size={16} color="#10b981" />
+                        </View>
+                        <Text className="text-base text-neutral-700 font-medium">
+                          ¥{record.eventLog.costPerPerson.toLocaleString()}/人
+                        </Text>
+                      </View>
+
+                      <View className="flex-row items-center gap-2">
+                        <View className="p-2 rounded-xl bg-neutral-100">
+                          <Ionicons name="location-outline" size={16} color="#64748b" />
+                        </View>
+                        <Text className="text-base text-neutral-700">
+                          {record.eventLog.venue.address}
+                        </Text>
+                      </View>
+                    </View>
+
+                    <View className="pt-4 border-t border-neutral-200 flex-row justify-between items-center">
+                      <Text className="text-sm text-neutral-500">
+                        {record.organizer.name}さんの記録
+                      </Text>
+                      <Ionicons name="chevron-forward" size={20} color="#94a3b8" />
+                    </View>
+                  </Card>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </ScrollView>
+        )}
+      </SafeAreaView>
+    </View>
   );
 }
 

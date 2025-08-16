@@ -8,7 +8,9 @@ import {
   Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Card } from '@/components/common/Card';
+import { Header } from '@/components/common/Header';
 
 interface SettingsItem {
   id: string;
@@ -58,15 +60,15 @@ export default function SettingsScreen() {
       id: 'notifications',
       title: '通知設定',
       description: 'イベントの更新やリマインダーの設定',
-      icon: <Ionicons name="notifications-outline" size={24} color="#4b5563" />,
+      icon: <Ionicons name="notifications-outline" size={24} color="#0284c7" />,
       onPress: handleNotifications,
       showArrow: true,
     },
     {
       id: 'privacy',
       title: 'プライバシー・セキュリティ',
-      description: 'アカウントの安全性と情報の共有設定',
-      icon: <Ionicons name="shield-outline" size={24} color="#4b5563" />,
+      description: 'アカウントの安全性とイベント情報の共有設定',
+      icon: <Ionicons name="shield-outline" size={24} color="#0284c7" />,
       onPress: handlePrivacy,
       showArrow: true,
     },
@@ -74,7 +76,7 @@ export default function SettingsScreen() {
       id: 'support',
       title: 'ヘルプ・サポート',
       description: '使い方や問題の解決方法',
-      icon: <Ionicons name="help-circle-outline" size={24} color="#4b5563" />,
+      icon: <Ionicons name="help-circle-outline" size={24} color="#0284c7" />,
       onPress: handleSupport,
       showArrow: true,
     },
@@ -88,109 +90,156 @@ export default function SettingsScreen() {
   ];
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50">
-      {/* Header */}
-      <View className="px-6 pt-4 pb-6 bg-white">
-        <Text className="text-2xl font-bold text-gray-900 mb-2">設定</Text>
-        <Text className="text-sm text-gray-600">アカウントとアプリの設定管理</Text>
-      </View>
+    <View className="flex-1">
+      {/* Background */}
+      <LinearGradient
+        colors={['#f8fafc', '#f1f5f9']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        className="absolute inset-0"
+      />
+      
+      <SafeAreaView className="flex-1">
+        <Header
+          title="設定"
+          subtitle="アカウントとアプリ設定の管理"
+          variant="gradient"
+          leftIcon="settings"
+          onLeftPress={() => console.log('Settings')}
+        />
 
-      <ScrollView className="flex-1 p-6" showsVerticalScrollIndicator={false}>
-        {/* Profile Section */}
-        <Card className="mb-6">
-          <View className="flex-row items-center mb-4">
-            <View className="w-16 h-16 rounded-full bg-blue-600 justify-center items-center mr-4">
-              <Ionicons name="person" size={32} color="white" />
+        <ScrollView 
+          className="flex-1 px-6" 
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 120 }}
+        >
+          {/* Profile Section */}
+          <Card variant="elevated" shadow="large" animated={true} className="mb-6 mt-4">
+            <View className="flex-row items-center mb-4">
+              <LinearGradient
+                colors={['#0ea5e9', '#0284c7']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                className="w-20 h-20 rounded-3xl justify-center items-center mr-4"
+              >
+                <Ionicons name="person" size={36} color="white" />
+              </LinearGradient>
+              <View className="flex-1">
+                <Text className="text-xl font-bold text-neutral-900 mb-1">幹事太郎</Text>
+                <Text className="text-base text-neutral-600">イベント企画・管理者</Text>
+              </View>
+              <TouchableOpacity
+                className="p-3 rounded-2xl bg-neutral-100"
+                onPress={handleEditProfile}
+                activeOpacity={0.7}
+              >
+                <Ionicons name="pencil" size={20} color="#0284c7" />
+              </TouchableOpacity>
             </View>
-            <View className="flex-1">
-              <Text className="text-lg font-semibold text-gray-900 mb-1">山田太郎</Text>
-              <Text className="text-sm text-gray-600">イベント管理者</Text>
-            </View>
-            <TouchableOpacity
-              className="p-3"
-              onPress={handleEditProfile}
-            >
-              <Ionicons name="pencil" size={20} color="#3b82f6" />
-            </TouchableOpacity>
-          </View>
 
-          <View className="gap-2">
-            <View className="flex-row items-center gap-3">
-              <Ionicons name="mail-outline" size={16} color="#6b7280" />
-              <Text className="text-sm text-gray-600">yamada@example.com</Text>
-            </View>
-            <View className="flex-row items-center gap-3">
-              <Ionicons name="call-outline" size={16} color="#6b7280" />
-              <Text className="text-sm text-gray-600">090-1234-5678</Text>
-            </View>
-          </View>
-        </Card>
-
-        {/* Stats Section */}
-        <Card className="mb-6">
-          <Text className="text-lg font-semibold text-gray-900 mb-4">利用統計</Text>
-          <View className="flex-row justify-around items-center">
-            <View className="items-center">
-              <Text className="text-2xl font-bold text-blue-600">12</Text>
-              <Text className="text-xs text-gray-600 mt-1">主催イベント</Text>
-            </View>
-            <View className="w-px h-10 bg-gray-200" />
-            <View className="items-center">
-              <Text className="text-2xl font-bold text-blue-600">8</Text>
-              <Text className="text-xs text-gray-600 mt-1">共有記録</Text>
-            </View>
-            <View className="w-px h-10 bg-gray-200" />
-            <View className="items-center">
-              <Text className="text-2xl font-bold text-blue-600">45</Text>
-              <Text className="text-xs text-gray-600 mt-1">招待メンバー</Text>
-            </View>
-          </View>
-        </Card>
-
-        {/* Settings List */}
-        <View className="gap-3 mb-8">
-          {settingsItems.map((item) => (
-            <TouchableOpacity
-              key={item.id}
-              onPress={item.onPress}
-              activeOpacity={0.7}
-            >
-              <Card shadow={false} className="border-gray-100">
-                <View className="flex-row items-center justify-between">
-                  <View className="flex-row items-center flex-1">
-                    {item.icon}
-                    <View className="ml-4 flex-1">
-                      <Text
-                        className="text-base text-gray-900 mb-1"
-                        style={item.textColor && { color: item.textColor }}
-                      >
-                        {item.title}
-                      </Text>
-                      {item.description && (
-                        <Text className="text-sm text-gray-600 leading-5">
-                          {item.description}
-                        </Text>
-                      )}
-                    </View>
-                  </View>
-                  {item.showArrow && (
-                    <Ionicons name="chevron-forward" size={20} color="#9ca3af" />
-                  )}
+            <View className="gap-3 pt-4 border-t border-neutral-200">
+              <View className="flex-row items-center gap-3">
+                <View className="p-2 rounded-xl bg-neutral-100">
+                  <Ionicons name="mail-outline" size={16} color="#64748b" />
                 </View>
-              </Card>
-            </TouchableOpacity>
-          ))}
-        </View>
+                <Text className="text-base text-neutral-700">user@example.com</Text>
+              </View>
+              <View className="flex-row items-center gap-3">
+                <View className="p-2 rounded-xl bg-neutral-100">
+                  <Ionicons name="calendar-outline" size={16} color="#64748b" />
+                </View>
+                <Text className="text-base text-neutral-700">2024年1月15日から利用開始</Text>
+              </View>
+            </View>
+          </Card>
 
-        {/* App Info */}
-        <View className="items-center py-6">
-          <Text className="text-lg font-semibold text-blue-600 mb-2">幹事ナビ</Text>
-          <Text className="text-sm text-gray-600 mb-3">バージョン 1.0.0</Text>
-          <Text className="text-xs text-gray-500 text-center">
-            © 2024 Event Organizer. All rights reserved.
-          </Text>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+          {/* Stats Section */}
+          <Card variant="gradient" shadow="large" animated={true} className="mb-6">
+            <Text className="text-xl font-bold text-neutral-900 mb-4">幹事統計</Text>
+            <View className="flex-row justify-around items-center">
+              <View className="items-center">
+                <View className="w-16 h-16 rounded-2xl bg-primary-100 justify-center items-center mb-2">
+                  <Text className="text-2xl font-bold text-primary-700">12</Text>
+                </View>
+                <Text className="text-sm text-neutral-600 font-medium">主催イベント</Text>
+              </View>
+              <View className="w-px h-16 bg-neutral-200" />
+              <View className="items-center">
+                <View className="w-16 h-16 rounded-2xl bg-success-100 justify-center items-center mb-2">
+                  <Text className="text-2xl font-bold text-success-700">8</Text>
+                </View>
+                <Text className="text-sm text-neutral-600 font-medium">共有記録</Text>
+              </View>
+              <View className="w-px h-16 bg-neutral-200" />
+              <View className="items-center">
+                <View className="w-16 h-16 rounded-2xl bg-accent-100 justify-center items-center mb-2">
+                  <Text className="text-2xl font-bold text-accent-700">45</Text>
+                </View>
+                <Text className="text-sm text-neutral-600 font-medium">招待メンバー</Text>
+              </View>
+            </View>
+          </Card>
+
+          {/* Settings List */}
+          <View className="gap-3 mb-8">
+            {settingsItems.map((item, index) => (
+              <TouchableOpacity
+                key={item.id}
+                onPress={item.onPress}
+                activeOpacity={0.8}
+                className="animate-fade-in"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                <Card variant="elevated" shadow="medium" animated={true}>
+                  <View className="flex-row items-center justify-between">
+                    <View className="flex-row items-center flex-1">
+                      <View className="p-3 rounded-2xl bg-neutral-100 mr-4">
+                        {item.icon}
+                      </View>
+                      <View className="flex-1">
+                        <Text
+                          className="text-lg font-semibold text-neutral-900 mb-1"
+                          style={item.textColor && { color: item.textColor }}
+                        >
+                          {item.title}
+                        </Text>
+                        {item.description && (
+                          <Text className="text-sm text-neutral-600 leading-5">
+                            {item.description}
+                          </Text>
+                        )}
+                      </View>
+                    </View>
+                    {item.showArrow && (
+                      <Ionicons name="chevron-forward" size={20} color="#94a3b8" />
+                    )}
+                  </View>
+                </Card>
+              </TouchableOpacity>
+            ))}
+          </View>
+
+          {/* App Info */}
+          <View className="items-center py-8">
+            <LinearGradient
+              colors={['#0ea5e9', '#0284c7']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              className="w-16 h-16 rounded-3xl justify-center items-center mb-4"
+            >
+              <Ionicons name="wine" size={28} color="white" />
+            </LinearGradient>
+            <Text className="text-2xl font-bold text-primary-600 mb-2">幹事ナビ</Text>
+            <Text className="text-base text-neutral-600 mb-3">バージョン 1.0.0</Text>
+            <Text className="text-sm text-neutral-500 text-center max-w-xs">
+              飲み会の企画・管理をスマートにサポートするアプリ
+            </Text>
+            <Text className="text-xs text-neutral-400 text-center mt-4">
+              © 2024 Kanji Navi. All rights reserved.
+            </Text>
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    </View>
   );
 }

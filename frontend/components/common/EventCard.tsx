@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Card } from './Card';
 import { Event } from '@/types';
 
@@ -10,6 +11,7 @@ interface EventCardProps {
   statusIcon: React.ReactNode;
   style?: any;
   className?: string;
+  variant?: 'default' | 'gradient' | 'elevated';
 }
 
 export const EventCard: React.FC<EventCardProps> = ({
@@ -18,6 +20,7 @@ export const EventCard: React.FC<EventCardProps> = ({
   statusIcon,
   style,
   className,
+  variant = 'elevated',
 }) => {
   const formatDate = (event: Event) => {
     if (event.date && event.time) {
@@ -39,39 +42,100 @@ export const EventCard: React.FC<EventCardProps> = ({
     return purposeMap[purpose as keyof typeof purposeMap] || 'その他';
   };
 
+  const getStatusColor = (status: string) => {
+    const colorMap = {
+      planning: '#f59e0b',
+      confirmed: '#10b981',
+      completed: '#6b7280',
+      cancelled: '#ef4444'
+    };
+    return colorMap[status as keyof typeof colorMap] || '#6b7280';
+  };
+
+  const CardContent = () => (
+    <>
+      {/* Header Section */}
+      <View className="flex-row justify-between items-start mb-4">
+        <View className="flex-1 mr-4">
+          <Text className="text-xl font-bold text-neutral-900 mb-1 leading-6">
+            {event.title}
+          </Text>
+          <View className="flex-row items-center">
+            <View 
+              className="w-2 h-2 rounded-full mr-2"
+              style={{ backgroundColor: getStatusColor(event.status) }}
+            />
+            <Text className="text-sm font-medium text-neutral-600 capitalize">
+              {event.status}
+            </Text>
+          </View>
+        </View>
+        <View className="p-3 rounded-2xl bg-primary-50">
+          {statusIcon}
+        </View>
+      </View>
+
+      {/* Info Section */}
+      <View className="space-y-3 mb-4">
+        <View className="flex-row items-center">
+          <View className="p-2 rounded-xl bg-neutral-100 mr-3">
+            <Ionicons name="calendar-outline" size={18} color="#0284c7" />
+          </View>
+          <Text className="text-base text-neutral-700 font-medium">
+            {formatDate(event)}
+          </Text>
+        </View>
+
+        <View className="flex-row items-center">
+          <View className="p-2 rounded-xl bg-neutral-100 mr-3">
+            <Ionicons name="people-outline" size={18} color="#0284c7" />
+          </View>
+          <Text className="text-base text-neutral-700 font-medium">
+            {event.members.length}名参加
+          </Text>
+        </View>
+      </View>
+
+      {/* Purpose Badge */}
+      <View className="pt-4 border-t border-neutral-200">
+        <View className="flex-row items-center justify-between">
+          <View className="px-3 py-1.5 rounded-full bg-accent-100">
+            <Text className="text-sm font-medium text-accent-800">
+              {getPurposeLabel(event.purpose)}
+            </Text>
+          </View>
+          <Ionicons name="chevron-forward" size={20} color="#94a3b8" />
+        </View>
+      </View>
+    </>
+  );
+
   return (
     <TouchableOpacity
       onPress={() => onPress(event.id)}
-      activeOpacity={0.7}
+      activeOpacity={0.8}
       style={style}
-      className={className}
+      className={`mb-4 ${className || ''}`}
     >
-      <Card className="mb-4">
-        <View className="flex-row justify-between items-start mb-3">
-          <Text className="text-lg font-semibold text-gray-900 flex-1 mr-3">
-            {event.title}
-          </Text>
-          <View className="p-2">{statusIcon}</View>
-        </View>
-
-        <View className="gap-3 mb-3">
-          <View className="flex-row items-center gap-2">
-            <Ionicons name="calendar-outline" size={16} color="#6b7280" />
-            <Text className="text-sm text-gray-600">{formatDate(event)}</Text>
-          </View>
-
-          <View className="flex-row items-center gap-2">
-            <Ionicons name="people-outline" size={16} color="#6b7280" />
-            <Text className="text-sm text-gray-600">{event.members.length}名参加</Text>
-          </View>
-        </View>
-
-        <View className="pt-3 border-t border-gray-100">
-          <Text className="text-xs text-gray-500">
-            目的: {getPurposeLabel(event.purpose)}
-          </Text>
-        </View>
-      </Card>
+      {variant === 'gradient' ? (
+        <LinearGradient
+          colors={['#ffffff', '#f8fafc']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          className="rounded-2xl p-5 shadow-large border border-neutral-200"
+        >
+          <CardContent />
+        </LinearGradient>
+      ) : (
+        <Card 
+          variant={variant}
+          shadow="large"
+          animated={true}
+          className="border-0"
+        >
+          <CardContent />
+        </Card>
+      )}
     </TouchableOpacity>
   );
 };

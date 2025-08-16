@@ -1,18 +1,135 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 
 interface HeaderProps {
   title: string;
   subtitle?: string;
   style?: any;
   className?: string;
+  variant?: 'default' | 'gradient' | 'glass';
+  leftIcon?: string;
+  rightIcon?: string;
+  onLeftPress?: () => void;
+  onRightPress?: () => void;
+  animated?: boolean;
 }
 
-export const Header: React.FC<HeaderProps> = ({ title, subtitle, style, className }) => {
+export const Header: React.FC<HeaderProps> = ({ 
+  title, 
+  subtitle, 
+  style, 
+  className,
+  variant = 'default',
+  leftIcon,
+  rightIcon,
+  onLeftPress,
+  onRightPress,
+  animated = true
+}) => {
+  const baseClasses = `px-6 pt-safe-top pb-6 ${animated ? 'animate-fade-in' : ''}`;
+  
+  const variantClasses = {
+    default: 'bg-white',
+    gradient: '',
+    glass: 'glass'
+  };
+
+  const headerContent = (
+    <View className="flex-row items-center justify-between">
+      {leftIcon ? (
+        <TouchableOpacity
+          onPress={onLeftPress}
+          className="p-2 rounded-xl bg-neutral-100 mr-4"
+          activeOpacity={0.7}
+        >
+          <Ionicons name={leftIcon as any} size={24} color="#334155" />
+        </TouchableOpacity>
+      ) : (
+        <View className="w-8" />
+      )}
+      
+      <View className="flex-1 items-center">
+        <Text className="text-3xl font-bold text-neutral-900 tracking-tight">
+          {title}
+        </Text>
+        {subtitle && (
+          <Text className="text-base text-neutral-600 mt-1 font-medium">
+            {subtitle}
+          </Text>
+        )}
+      </View>
+      
+      {rightIcon ? (
+        <TouchableOpacity
+          onPress={onRightPress}
+          className="p-2 rounded-xl bg-neutral-100 ml-4"
+          activeOpacity={0.7}
+        >
+          <Ionicons name={rightIcon as any} size={24} color="#334155" />
+        </TouchableOpacity>
+      ) : (
+        <View className="w-8" />
+      )}
+    </View>
+  );
+
+  if (variant === 'gradient') {
+    return (
+      <LinearGradient
+        colors={['#0ea5e9', '#0284c7']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        className={`${baseClasses} ${className || ''}`}
+        style={style}
+      >
+        <View className="flex-row items-center justify-between">
+          {leftIcon ? (
+            <TouchableOpacity
+              onPress={onLeftPress}
+              className="p-2 rounded-xl bg-white/20 mr-4"
+              activeOpacity={0.7}
+            >
+              <Ionicons name={leftIcon as any} size={24} color="#ffffff" />
+            </TouchableOpacity>
+          ) : (
+            <View className="w-8" />
+          )}
+          
+          <View className="flex-1 items-center">
+            <Text className="text-3xl font-bold text-white tracking-tight">
+              {title}
+            </Text>
+            {subtitle && (
+              <Text className="text-base text-white/90 mt-1 font-medium">
+                {subtitle}
+              </Text>
+            )}
+          </View>
+          
+          {rightIcon ? (
+            <TouchableOpacity
+              onPress={onRightPress}
+              className="p-2 rounded-xl bg-white/20 ml-4"
+              activeOpacity={0.7}
+            >
+              <Ionicons name={rightIcon as any} size={24} color="#ffffff" />
+            </TouchableOpacity>
+          ) : (
+            <View className="w-8" />
+          )}
+        </View>
+      </LinearGradient>
+    );
+  }
+
   return (
-    <View className={`px-6 pt-4 pb-6 bg-white ${className || ''}`} style={style}>
-      <Text className="text-2xl font-bold text-gray-900 mb-2">{title}</Text>
-      {subtitle && <Text className="text-sm text-gray-600">{subtitle}</Text>}
+    <View 
+      className={`${baseClasses} ${variantClasses[variant]} ${className || ''}`} 
+      style={style}
+    >
+      {headerContent}
     </View>
   );
 };
