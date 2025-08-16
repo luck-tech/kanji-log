@@ -17,6 +17,7 @@ import {
 } from 'lucide-react-native';
 import { Card } from '@/components/common/Card';
 import { Button } from '@/components/common/Button';
+import { Header } from '@/components/common/Header';
 import { Colors } from '@/constants/Colors';
 import { Typography } from '@/constants/Typography';
 import { Layout } from '@/constants/Layout';
@@ -139,28 +140,26 @@ export default function RecordsScreen() {
     return <View style={styles.starsContainer}>{stars}</View>;
   };
 
-  if (!hasSharedRecord) {
-    return (
-      <SafeAreaView style={styles.container}>
-        {/* Header */}
-        <View style={styles.header}>
-          <Text style={styles.headerTitle}>みんなの記録</Text>
-          <Text style={styles.headerSubtitle}>
-            他の幹事が共有した貴重な経験とナレッジ
-          </Text>
-        </View>
+  return (
+    <SafeAreaView style={styles.container}>
+      <Header
+        title="みんなの記録"
+        subtitle="他の幹事が共有した貴重な経験とナレッジ"
+      />
 
-        {/* Unlock Screen */}
-        <View style={styles.unlockContainer}>
+      {!hasSharedRecord ? (
+        <ScrollView
+          style={styles.content}
+          contentContainerStyle={styles.contentContainer}
+          showsVerticalScrollIndicator={false}
+        >
           <View style={styles.unlockContent}>
             <View style={styles.lockIcon}>
               <Lock size={48} color={Colors.gray[400]} strokeWidth={1.5} />
             </View>
 
             <Text style={styles.unlockTitle}>記録を共有して、</Text>
-            <Text style={styles.unlockTitle}>
-              他の幹事のナレッジを閲覧しよう
-            </Text>
+            <Text style={styles.unlockTitle}>他の幹事のナレッジを閲覧しよう</Text>
 
             <Text style={styles.unlockDescription}>
               あなたの終了済みイベントの記録を1つ以上共有すると、
@@ -200,81 +199,72 @@ export default function RecordsScreen() {
               {'\n'}個人情報は一切公開されません。
             </Text>
           </View>
-        </View>
-      </SafeAreaView>
-    );
-  }
+        </ScrollView>
+      ) : (
+        <ScrollView
+          style={styles.content}
+          contentContainerStyle={styles.contentContainer}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.recordsList}>
+            {mockSharedRecords.map((record) => (
+              <TouchableOpacity
+                key={record.id}
+                onPress={() => handleRecordPress(record)}
+                activeOpacity={0.7}
+              >
+                <Card style={styles.recordCard}>
+                  <View style={styles.recordHeader}>
+                    <View style={styles.venueInfo}>
+                      <Text style={styles.venueName}>
+                        {record.eventLog.venue.name}
+                      </Text>
+                      <View style={styles.ratingContainer}>
+                        {renderStars(record.eventLog.rating)}
+                        <Text style={styles.ratingText}>
+                          {record.eventLog.rating.toFixed(1)}
+                        </Text>
+                      </View>
+                    </View>
 
-  return (
-    <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>みんなの記録</Text>
-        <Text style={styles.headerSubtitle}>
-          他の幹事が共有した貴重な経験とナレッジ
-        </Text>
-      </View>
-
-      {/* Records List */}
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        <View style={styles.recordsList}>
-          {mockSharedRecords.map((record) => (
-            <TouchableOpacity
-              key={record.id}
-              onPress={() => handleRecordPress(record)}
-              activeOpacity={0.7}
-            >
-              <Card style={styles.recordCard}>
-                <View style={styles.recordHeader}>
-                  <View style={styles.venueInfo}>
-                    <Text style={styles.venueName}>
-                      {record.eventLog.venue.name}
-                    </Text>
-                    <View style={styles.ratingContainer}>
-                      {renderStars(record.eventLog.rating)}
-                      <Text style={styles.ratingText}>
-                        {record.eventLog.rating.toFixed(1)}
+                    <View style={styles.purposeBadge}>
+                      <Text style={styles.purposeText}>
+                        {getPurposeLabel(record.event.purpose)}
                       </Text>
                     </View>
                   </View>
 
-                  <View style={styles.purposeBadge}>
-                    <Text style={styles.purposeText}>
-                      {getPurposeLabel(record.event.purpose)}
-                    </Text>
-                  </View>
-                </View>
-
-                <Text style={styles.recordNotes} numberOfLines={2}>
-                  {record.eventLog.notes}
-                </Text>
-
-                <View style={styles.recordFooter}>
-                  <View style={styles.footerItem}>
-                    <DollarSign size={16} color={Colors.success[500]} />
-                    <Text style={styles.footerText}>
-                      ¥{record.eventLog.costPerPerson.toLocaleString()}/人
-                    </Text>
-                  </View>
-
-                  <View style={styles.footerItem}>
-                    <MapPin size={16} color={Colors.gray[500]} />
-                    <Text style={styles.footerText}>
-                      {record.eventLog.venue.address}
-                    </Text>
-                  </View>
-                </View>
-
-                <View style={styles.organizerInfo}>
-                  <Text style={styles.organizerText}>
-                    {record.organizer.name}さんの記録
+                  <Text style={styles.recordNotes} numberOfLines={2}>
+                    {record.eventLog.notes}
                   </Text>
-                </View>
-              </Card>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </ScrollView>
+
+                  <View style={styles.recordFooter}>
+                    <View style={styles.footerItem}>
+                      <DollarSign size={16} color={Colors.success[500]} />
+                      <Text style={styles.footerText}>
+                        ¥{record.eventLog.costPerPerson.toLocaleString()}/人
+                      </Text>
+                    </View>
+
+                    <View style={styles.footerItem}>
+                      <MapPin size={16} color={Colors.gray[500]} />
+                      <Text style={styles.footerText}>
+                        {record.eventLog.venue.address}
+                      </Text>
+                    </View>
+                  </View>
+
+                  <View style={styles.organizerInfo}>
+                    <Text style={styles.organizerText}>
+                      {record.organizer.name}さんの記録
+                    </Text>
+                  </View>
+                </Card>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </ScrollView>
+      )}
     </SafeAreaView>
   );
 }
@@ -283,21 +273,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.gray[50],
-  },
-  header: {
-    paddingHorizontal: Layout.padding.lg,
-    paddingTop: Layout.padding.md,
-    paddingBottom: Layout.padding.lg,
-    backgroundColor: Colors.white,
-  },
-  headerTitle: {
-    ...Typography.h2,
-    color: Colors.gray[900],
-    marginBottom: Layout.spacing.xs,
-  },
-  headerSubtitle: {
-    ...Typography.body2,
-    color: Colors.gray[600],
   },
   unlockContainer: {
     flex: 1,
@@ -349,7 +324,11 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    padding: Layout.padding.lg,
+  },
+  contentContainer: {
+    paddingTop: Layout.padding.lg,
+    paddingHorizontal: Layout.padding.lg,
+    paddingBottom: Layout.padding.xl,
   },
   recordsList: {
     gap: Layout.spacing.md,
