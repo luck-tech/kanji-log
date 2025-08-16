@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text } from 'react-native';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, {
@@ -8,9 +8,6 @@ import Animated, {
   withTiming,
   withSequence,
 } from 'react-native-reanimated';
-import { Colors } from '@/constants/Colors';
-import { Typography } from '@/constants/Typography';
-import { Layout } from '@/constants/Layout';
 
 export default function SplashScreen() {
   const scale = useSharedValue(0);
@@ -39,48 +36,14 @@ export default function SplashScreen() {
   }));
 
   return (
-    <View style={styles.container}>
-      <Animated.View style={[styles.logoContainer, animatedLogoStyle]}>
-        <View style={styles.iconContainer}>
-          <Ionicons name="calendar" size={48} color={Colors.white} />
+    <View className="flex-1 bg-blue-600 justify-center items-center">
+      <Animated.View className="items-center" style={animatedLogoStyle}>
+        <View className="w-24 h-24 rounded-xl bg-blue-700 justify-center items-center mb-6 shadow-lg elevation-8">
+          <Ionicons name="calendar" size={48} color="white" />
         </View>
-        <Text style={styles.title}>幹事ナビ</Text>
-        <Text style={styles.subtitle}>Event Organizer</Text>
+        <Text className="text-3xl font-bold text-white mb-2">幹事ナビ</Text>
+        <Text className="text-base text-blue-100 opacity-80">Event Organizer</Text>
       </Animated.View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.primary[600],
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  logoContainer: {
-    alignItems: 'center',
-  },
-  iconContainer: {
-    width: 96,
-    height: 96,
-    borderRadius: Layout.borderRadius.xl,
-    backgroundColor: Colors.primary[700],
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: Layout.spacing.lg,
-    boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.3)',
-    elevation: 8,
-  },
-  title: {
-    ...Typography.h1,
-    color: Colors.white,
-    marginBottom: Layout.spacing.xs,
-    fontWeight: '700',
-  },
-  subtitle: {
-    ...Typography.body1,
-    color: Colors.primary[100],
-    opacity: 0.8,
-  },
-});

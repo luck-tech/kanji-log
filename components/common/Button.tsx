@@ -7,8 +7,6 @@ import {
   TextStyle,
 } from 'react-native';
 import { Colors } from '@/constants/Colors';
-import { Typography } from '@/constants/Typography';
-import { Layout } from '@/constants/Layout';
 
 interface ButtonProps {
   title?: string;
@@ -21,6 +19,7 @@ interface ButtonProps {
   textStyle?: TextStyle;
   icon?: React.ReactNode;
   fullWidth?: boolean;
+  className?: string;
 }
 
 export const Button: React.FC<ButtonProps> = ({
@@ -34,89 +33,54 @@ export const Button: React.FC<ButtonProps> = ({
   textStyle,
   icon,
   fullWidth = false,
+  className,
 }) => {
-  const getButtonStyle = (): ViewStyle => {
-    const baseStyle: ViewStyle = {
-      borderRadius: Layout.borderRadius.lg,
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderWidth: 1,
-    };
-
-    // Size styles
-    switch (size) {
-      case 'sm':
-        baseStyle.paddingHorizontal = Layout.padding.md;
-        baseStyle.paddingVertical = Layout.padding.xs;
-        baseStyle.minHeight = 32;
-        break;
-      case 'lg':
-        baseStyle.paddingHorizontal = Layout.padding.xl;
-        baseStyle.paddingVertical = Layout.padding.md;
-        baseStyle.minHeight = 56;
-        break;
-      default:
-        baseStyle.paddingHorizontal = Layout.padding.lg;
-        baseStyle.paddingVertical = Layout.padding.sm + 2;
-        baseStyle.minHeight = 44;
-    }
-
-    // Variant styles
-    switch (variant) {
-      case 'secondary':
-        baseStyle.backgroundColor = Colors.gray[100];
-        baseStyle.borderColor = Colors.gray[200];
-        break;
-      case 'outline':
-        baseStyle.backgroundColor = 'transparent';
-        baseStyle.borderColor = Colors.primary[600];
-        break;
-      case 'ghost':
-        baseStyle.backgroundColor = 'transparent';
-        baseStyle.borderColor = 'transparent';
-        break;
-      default:
-        baseStyle.backgroundColor = Colors.primary[600];
-        baseStyle.borderColor = Colors.primary[600];
-    }
-
-    if (disabled || loading) {
-      baseStyle.opacity = 0.6;
-    }
-
-    if (fullWidth) {
-      baseStyle.width = '100%';
-    }
-
-    return baseStyle;
+  // Base Tailwind classes
+  const baseClasses = "rounded-lg flex-row items-center justify-center border";
+  
+  // Size classes
+  const sizeClasses = {
+    sm: "px-4 py-1 min-h-8",
+    md: "px-6 py-3 min-h-11", 
+    lg: "px-8 py-4 min-h-14"
   };
-
-  const getTextStyle = (): TextStyle => {
-    const baseStyle: TextStyle = {
-      ...Typography.button,
-    };
-
-    switch (variant) {
-      case 'secondary':
-        baseStyle.color = Colors.gray[700];
-        break;
-      case 'outline':
-        baseStyle.color = Colors.primary[600];
-        break;
-      case 'ghost':
-        baseStyle.color = Colors.primary[600];
-        break;
-      default:
-        baseStyle.color = Colors.white;
-    }
-
-    return baseStyle;
+  
+  // Variant classes
+  const variantClasses = {
+    primary: "bg-blue-600 border-blue-600",
+    secondary: "bg-gray-100 border-gray-200",
+    outline: "bg-transparent border-blue-600",
+    ghost: "bg-transparent border-transparent"
   };
+  
+  // Text color classes
+  const textColorClasses = {
+    primary: "text-white",
+    secondary: "text-gray-700",
+    outline: "text-blue-600",
+    ghost: "text-blue-600"
+  };
+  
+  // Combine classes
+  const buttonClasses = [
+    baseClasses,
+    sizeClasses[size],
+    variantClasses[variant],
+    fullWidth && "w-full",
+    (disabled || loading) && "opacity-60",
+    className
+  ].filter(Boolean).join(" ");
+  
+  const textClasses = [
+    "font-medium text-base",
+    textColorClasses[variant],
+    icon && "ml-2"
+  ].filter(Boolean).join(" ");
 
   return (
     <TouchableOpacity
-      style={[getButtonStyle(), style]}
+      className={buttonClasses}
+      style={style}
       onPress={onPress}
       disabled={disabled || loading}
       activeOpacity={0.8}
@@ -124,18 +88,15 @@ export const Button: React.FC<ButtonProps> = ({
       {loading && (
         <ActivityIndicator
           size="small"
-          color={variant === 'primary' ? Colors.white : Colors.primary[600]}
-          style={[{ marginRight: icon || title ? Layout.spacing.xs : 0 }]}
+          color={variant === 'primary' ? Colors.white : '#3b82f6'}
+          className={icon || title ? "mr-2" : ""}
         />
       )}
       {icon && !loading && icon}
       {title && (
         <Text
-          style={[
-            getTextStyle(),
-            textStyle,
-            icon ? { marginLeft: Layout.spacing.xs } : undefined,
-          ]}
+          className={textClasses}
+          style={textStyle}
         >
           {title}
         </Text>

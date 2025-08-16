@@ -1,13 +1,12 @@
 import React from 'react';
-import { View, StyleSheet, ViewStyle } from 'react-native';
-import { Colors } from '@/constants/Colors';
-import { Layout } from '@/constants/Layout';
+import { View, ViewStyle } from 'react-native';
 
 interface CardProps {
   children: React.ReactNode;
   style?: ViewStyle;
   padding?: 'sm' | 'md' | 'lg';
   shadow?: boolean;
+  className?: string;
 }
 
 export const Card: React.FC<CardProps> = ({
@@ -15,41 +14,29 @@ export const Card: React.FC<CardProps> = ({
   style,
   padding = 'md',
   shadow = true,
+  className,
 }) => {
-  const getPadding = () => {
-    switch (padding) {
-      case 'sm':
-        return Layout.padding.sm;
-      case 'lg':
-        return Layout.padding.lg;
-      default:
-        return Layout.padding.md;
-    }
+  // Padding classes
+  const paddingClasses = {
+    sm: "p-3",
+    md: "p-4", 
+    lg: "p-6"
   };
+  
+  // Combine classes
+  const cardClasses = [
+    "bg-white rounded-lg border border-gray-100",
+    paddingClasses[padding],
+    shadow && "shadow-md elevation-5",
+    className
+  ].filter(Boolean).join(" ");
 
   return (
     <View
-      style={[
-        styles.card,
-        { padding: getPadding() },
-        shadow && styles.shadow,
-        style,
-      ]}
+      className={cardClasses}
+      style={style}
     >
       {children}
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  card: {
-    backgroundColor: Colors.white,
-    borderRadius: Layout.borderRadius.lg,
-    borderWidth: 1,
-    borderColor: Colors.gray[100],
-  },
-  shadow: {
-    boxShadow: '0px 2px 3.84px rgba(0, 0, 0, 0.1)',
-    elevation: 5,
-  },
-});

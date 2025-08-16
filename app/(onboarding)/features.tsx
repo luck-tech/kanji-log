@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Dimensions } from 'react-native';
+import { View, Text, ScrollView, Dimensions } from 'react-native';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Button } from '@/components/common/Button';
 import { Card } from '@/components/common/Card';
-import { Colors } from '@/constants/Colors';
-import { Typography } from '@/constants/Typography';
-import { Layout } from '@/constants/Layout';
 
 const { width } = Dimensions.get('window');
 
@@ -22,28 +19,28 @@ const features: Feature[] = [
   {
     id: 1,
     icon: (
-      <Ionicons name="trending-down" size={32} color={Colors.primary[600]} />
+      <Ionicons name="trending-down" size={32} color="#3b82f6" />
     ),
     title: '負担削減',
     description:
       '日程調整からお店選び、予約まで。煩雑な作業をすべて一つのアプリで効率的に管理できます。',
-    color: Colors.primary[50],
+    color: "#eff6ff",
   },
   {
     id: 2,
-    icon: <Ionicons name="server-outline" size={32} color={Colors.secondary[600]} />,
+    icon: <Ionicons name="server-outline" size={32} color="#8b5cf6" />,
     title: 'ナレッジ蓄積',
     description:
       '過去のイベント情報を記録して、次回の企画に活かせるあなただけの幹事データベースを構築。',
-    color: Colors.secondary[50],
+    color: "#f3e8ff",
   },
   {
     id: 3,
-    icon: <Ionicons name="share-social-outline" size={32} color={Colors.accent[600]} />,
+    icon: <Ionicons name="share-social-outline" size={32} color="#f59e0b" />,
     title: '集合知',
     description:
       '他の幹事が共有した経験やおすすめ店舗情報にアクセスして、より良いイベントを企画。',
-    color: Colors.accent[50],
+    color: "#fffbeb",
   },
 ];
 
@@ -69,10 +66,10 @@ export default function FeaturesScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <View className="flex-1 bg-white">
       {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>3つの価値</Text>
+      <View className="flex-row justify-between items-center px-6 pt-12 pb-6">
+        <Text className="text-2xl font-semibold text-gray-900">3つの価値</Text>
         <Button
           title="スキップ"
           onPress={handleSkip}
@@ -88,123 +85,46 @@ export default function FeaturesScreen() {
         showsHorizontalScrollIndicator={false}
         onScroll={handleScroll}
         scrollEventThrottle={16}
-        contentContainerStyle={styles.scrollContent}
+        className="flex-row"
       >
         {features.map((feature, index) => (
-          <View key={feature.id} style={styles.featureContainer}>
+          <View key={feature.id} className="px-6 items-center justify-center" style={{width}}>
             <Card
-              style={{
-                ...styles.featureCard,
-                backgroundColor: feature.color,
-              }}
+              className="w-40 h-40 justify-center items-center mb-8"
+              style={{ backgroundColor: feature.color }}
               shadow={false}
             >
-              <View style={styles.iconContainer}>{feature.icon}</View>
+              <View className="p-6">{feature.icon}</View>
             </Card>
 
-            <Text style={styles.featureTitle}>{feature.title}</Text>
-            <Text style={styles.featureDescription}>{feature.description}</Text>
+            <Text className="text-2xl font-semibold text-gray-900 mb-4 text-center">{feature.title}</Text>
+            <Text className="text-base text-gray-600 text-center leading-6 px-4">{feature.description}</Text>
           </View>
         ))}
       </ScrollView>
 
       {/* Pagination Dots */}
-      <View style={styles.pagination}>
+      <View className="flex-row justify-center items-center my-8">
         {features.map((_, index) => (
           <View
             key={index}
-            style={[
-              styles.dot,
-              index === currentIndex ? styles.activeDot : styles.inactiveDot,
-            ]}
+            className={`w-2 h-2 rounded-full mx-1 ${
+              index === currentIndex ? 'bg-blue-600' : 'bg-gray-300'
+            }`}
           />
         ))}
       </View>
 
       {/* Navigation */}
-      <View style={styles.navigation}>
+      <View className="px-6 pb-6 mt-auto">
         <Button
           title={currentIndex === features.length - 1 ? 'はじめる' : '次へ'}
           onPress={handleNext}
           size="lg"
           fullWidth
-          icon={<Ionicons name="arrow-forward" size={20} color={Colors.white} />}
+          icon={<Ionicons name="arrow-forward" size={20} color="white" />}
         />
       </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.white,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: Layout.padding.lg,
-    paddingTop: Layout.padding.xl + 20,
-    paddingBottom: Layout.padding.lg,
-  },
-  headerTitle: {
-    ...Typography.h2,
-    color: Colors.gray[900],
-  },
-  scrollContent: {
-    flexDirection: 'row',
-  },
-  featureContainer: {
-    width: width,
-    paddingHorizontal: Layout.padding.lg,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  featureCard: {
-    width: 160,
-    height: 160,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: Layout.spacing.xl,
-  },
-  iconContainer: {
-    padding: Layout.padding.lg,
-  },
-  featureTitle: {
-    ...Typography.h2,
-    color: Colors.gray[900],
-    marginBottom: Layout.spacing.md,
-    textAlign: 'center',
-  },
-  featureDescription: {
-    ...Typography.body1,
-    color: Colors.gray[600],
-    textAlign: 'center',
-    lineHeight: 24,
-    paddingHorizontal: Layout.padding.md,
-  },
-  pagination: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginVertical: Layout.spacing.xl,
-  },
-  dot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    marginHorizontal: 4,
-  },
-  activeDot: {
-    backgroundColor: Colors.primary[600],
-  },
-  inactiveDot: {
-    backgroundColor: Colors.gray[300],
-  },
-  navigation: {
-    paddingHorizontal: Layout.padding.lg,
-    paddingBottom: Layout.padding.lg,
-    marginTop: 'auto',
-  },
-});

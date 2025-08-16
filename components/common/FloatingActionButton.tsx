@@ -1,8 +1,6 @@
 import React from 'react';
-import { TouchableOpacity, StyleSheet } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Colors } from '@/constants/Colors';
-import { Layout } from '@/constants/Layout';
 
 interface FloatingActionButtonProps {
   icon: keyof typeof Ionicons.glyphMap;
@@ -10,6 +8,7 @@ interface FloatingActionButtonProps {
   style?: any;
   size?: number;
   color?: string;
+  className?: string;
 }
 
 export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
@@ -17,11 +16,13 @@ export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
   onPress,
   style,
   size = 24,
-  color = Colors.white,
+  color = 'white',
+  className,
 }) => {
   return (
     <TouchableOpacity
-      style={[styles.fab, style]}
+      className={`absolute bottom-36 right-6 w-14 h-14 rounded-full bg-blue-600 justify-center items-center shadow-lg elevation-8 ${className || ''}`}
+      style={style}
       onPress={onPress}
       activeOpacity={0.8}
     >
@@ -29,19 +30,3 @@ export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
     </TouchableOpacity>
   );
 };
-
-const styles = StyleSheet.create({
-  fab: {
-    position: 'absolute',
-    bottom: Layout.padding.lg + 68, // Tab bar height
-    right: Layout.padding.lg,
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    backgroundColor: Colors.primary[600],
-    justifyContent: 'center',
-    alignItems: 'center',
-    boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.3)',
-    elevation: 8,
-  },
-});

@@ -2,13 +2,9 @@ import React from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import { Colors } from '@/constants/Colors';
-import { Typography } from '@/constants/Typography';
-import { Layout } from '@/constants/Layout';
 
 export interface TabItem<T = string> {
   key: T;
@@ -21,6 +17,7 @@ interface TabBarProps<T> {
   activeTab: T;
   onTabPress: (tab: T) => void;
   style?: any;
+  className?: string;
 }
 
 export function TabBar<T>({
@@ -28,72 +25,39 @@ export function TabBar<T>({
   activeTab,
   onTabPress,
   style,
+  className,
 }: TabBarProps<T>) {
   return (
-    <View style={[styles.tabContainer, style]}>
+    <View className={`bg-white border-b border-gray-100 ${className || ''}`} style={style}>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.tabScrollContent}
+        className="px-6 py-3"
       >
-        {tabs.map((tab) => (
-          <TouchableOpacity
-            key={String(tab.key)}
-            style={[
-              styles.tab,
-              activeTab === tab.key && [
-                styles.activeTab,
-                { borderColor: tab.color },
-              ],
-            ]}
-            onPress={() => onTabPress(tab.key)}
-          >
-            <Text
-              style={[
-                styles.tabText,
-                activeTab === tab.key && [
-                  styles.activeTabText,
-                  { color: tab.color },
-                ],
-              ]}
+        <View className="flex-row">
+          {tabs.map((tab) => (
+            <TouchableOpacity
+              key={String(tab.key)}
+              className={`px-4 py-3 mr-4 rounded-full border ${
+                activeTab === tab.key 
+                  ? 'bg-white border-2' 
+                  : 'border border-gray-200'
+              }`}
+              style={activeTab === tab.key ? { borderColor: tab.color } : undefined}
+              onPress={() => onTabPress(tab.key)}
             >
-              {tab.label}
-            </Text>
-          </TouchableOpacity>
-        ))}
+              <Text
+                className={`text-sm font-medium ${
+                  activeTab === tab.key ? 'font-semibold' : 'text-gray-600'
+                }`}
+                style={activeTab === tab.key ? { color: tab.color } : undefined}
+              >
+                {tab.label}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
       </ScrollView>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  tabContainer: {
-    backgroundColor: Colors.white,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.gray[100],
-  },
-  tabScrollContent: {
-    paddingHorizontal: Layout.padding.lg,
-    paddingVertical: Layout.padding.sm,
-  },
-  tab: {
-    paddingHorizontal: Layout.padding.md,
-    paddingVertical: Layout.padding.sm,
-    marginRight: Layout.spacing.md,
-    borderRadius: Layout.borderRadius.full,
-    borderWidth: 1,
-    borderColor: Colors.gray[200],
-  },
-  activeTab: {
-    backgroundColor: Colors.white,
-    borderWidth: 2,
-  },
-  tabText: {
-    ...Typography.body2,
-    color: Colors.gray[600],
-    fontWeight: '500',
-  },
-  activeTabText: {
-    fontWeight: '600',
-  },
-});

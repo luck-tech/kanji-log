@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
+import { View, Text, ScrollView, SafeAreaView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Card } from '@/components/common/Card';
 import { Input } from '@/components/common/Input';
 import { Button } from '@/components/common/Button';
 import { Header } from '@/components/common/Header';
 import { EmptyState } from '@/components/common/EmptyState';
-import { Colors } from '@/constants/Colors';
-import { Typography } from '@/constants/Typography';
-import { Layout } from '@/constants/Layout';
 
 interface Member {
   id: string;
@@ -95,47 +92,51 @@ export default function MembersScreen() {
     }
 
     return (
-      <View style={styles.memberList}>
+      <View className="gap-4">
         {filteredMembers.map((member) => (
-          <Card key={member.id} style={styles.memberCard}>
-            <View style={styles.memberHeader}>
-              <View style={styles.avatar}>
-                <Text style={styles.avatarText}>{member.name.charAt(0)}</Text>
+          <Card key={member.id} className="p-4">
+            <View className="flex-row items-center mb-4">
+              <View className="w-12 h-12 rounded-full bg-blue-100 justify-center items-center mr-4">
+                <Text className="text-lg font-semibold text-blue-600">
+                  {member.name.charAt(0)}
+                </Text>
               </View>
-              <View style={styles.memberInfo}>
-                <Text style={styles.memberName}>{member.name}</Text>
-                <Text style={styles.memberDepartment}>
+              <View className="flex-1">
+                <Text className="text-lg font-semibold text-gray-900 mb-1">
+                  {member.name}
+                </Text>
+                <Text className="text-sm text-gray-600">
                   {member.department || '部署未設定'}
                 </Text>
               </View>
-              <View style={styles.memberStats}>
-                <Text style={styles.participationCount}>
+              <View className="items-center">
+                <Text className="text-lg font-semibold text-blue-600">
                   {member.eventsParticipated}
                 </Text>
-                <Text style={styles.participationLabel}>参加</Text>
+                <Text className="text-xs text-gray-500">参加</Text>
               </View>
             </View>
 
-            <View style={styles.memberDetails}>
-              <View style={styles.contactItem}>
-                <Ionicons name="mail-outline" size={16} color={Colors.gray[500]} />
-                <Text style={styles.contactText}>{member.email}</Text>
+            <View className="gap-2 mb-4">
+              <View className="flex-row items-center gap-2">
+                <Ionicons name="mail-outline" size={16} color="#6b7280" />
+                <Text className="text-sm text-gray-600">{member.email}</Text>
               </View>
               {member.phone && (
-                <View style={styles.contactItem}>
-                  <Ionicons name="call-outline" size={16} color={Colors.gray[500]} />
-                  <Text style={styles.contactText}>{member.phone}</Text>
+                <View className="flex-row items-center gap-2">
+                  <Ionicons name="call-outline" size={16} color="#6b7280" />
+                  <Text className="text-sm text-gray-600">{member.phone}</Text>
                 </View>
               )}
             </View>
 
-            <View style={styles.memberActions}>
+            <View className="items-end">
               <Button
                 title="連絡する"
                 onPress={() => handleContactMember(member)}
                 variant="outline"
                 size="sm"
-                style={styles.contactButton}
+                className="min-w-20"
               />
             </View>
           </Card>
@@ -145,128 +146,32 @@ export default function MembersScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView className="flex-1 bg-gray-50">
       <Header
         title="メンバーリスト"
         subtitle="イベントに参加可能なメンバー一覧"
       />
 
       {/* Search and Add */}
-      <View style={styles.searchContainer}>
+      <View className="flex-row px-6 py-4 bg-white border-b border-gray-100 gap-3">
         <Input
           placeholder="名前、メール、部署で検索"
           value={searchQuery}
           onChangeText={handleSearch}
-          leftIcon={<Ionicons name="search-outline" size={20} color={Colors.gray[400]} />}
-          containerStyle={styles.searchInput}
+          leftIcon={<Ionicons name="search-outline" size={20} color="#9ca3af" />}
+          className="flex-1"
         />
         <Button
           onPress={handleAddMember}
-          icon={<Ionicons name="person-add-outline" size={20} color={Colors.white} />}
-          style={styles.addButton}
+          icon={<Ionicons name="person-add-outline" size={20} color="white" />}
+          className="w-11 h-11 rounded-md"
         />
       </View>
 
       {/* Members List */}
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView className="flex-1 p-6" showsVerticalScrollIndicator={false}>
         {renderMembers()}
       </ScrollView>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.gray[50],
-  },
-  searchContainer: {
-    flexDirection: 'row',
-    paddingHorizontal: Layout.padding.lg,
-    paddingVertical: Layout.padding.md,
-    backgroundColor: Colors.white,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.gray[100],
-    gap: Layout.spacing.sm,
-  },
-  searchInput: {
-    flex: 1,
-  },
-  addButton: {
-    width: 44,
-    height: 44,
-    borderRadius: Layout.borderRadius.md,
-  },
-  content: {
-    flex: 1,
-    padding: Layout.padding.lg,
-  },
-  memberList: {
-    gap: Layout.spacing.md,
-  },
-  memberCard: {
-    padding: Layout.padding.md,
-  },
-  memberHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: Layout.spacing.md,
-  },
-  avatar: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: Colors.primary[100],
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: Layout.spacing.md,
-  },
-  avatarText: {
-    ...Typography.h4,
-    color: Colors.primary[600],
-    fontWeight: '600',
-  },
-  memberInfo: {
-    flex: 1,
-  },
-  memberName: {
-    ...Typography.h4,
-    color: Colors.gray[900],
-    marginBottom: Layout.spacing.xs,
-  },
-  memberDepartment: {
-    ...Typography.body2,
-    color: Colors.gray[600],
-  },
-  memberStats: {
-    alignItems: 'center',
-  },
-  participationCount: {
-    ...Typography.h4,
-    color: Colors.primary[600],
-    fontWeight: '600',
-  },
-  participationLabel: {
-    ...Typography.caption,
-    color: Colors.gray[500],
-  },
-  memberDetails: {
-    gap: Layout.spacing.sm,
-    marginBottom: Layout.spacing.md,
-  },
-  contactItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Layout.spacing.sm,
-  },
-  contactText: {
-    ...Typography.body2,
-    color: Colors.gray[600],
-  },
-  memberActions: {
-    alignItems: 'flex-end',
-  },
-  contactButton: {
-    minWidth: 80,
-  },
-});

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -11,9 +10,6 @@ import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Button } from '@/components/common/Button';
 import { Input } from '@/components/common/Input';
-import { Colors } from '@/constants/Colors';
-import { Typography } from '@/constants/Typography';
-import { Layout } from '@/constants/Layout';
 
 export default function AuthScreen() {
   const [isLogin, setIsLogin] = useState(true);
@@ -44,19 +40,19 @@ export default function AuthScreen() {
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      className="flex-1 bg-white"
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <ScrollView
-        contentContainerStyle={styles.scrollContent}
+        className="flex-grow px-6 pt-12 pb-6"
         showsVerticalScrollIndicator={false}
       >
         {/* Header */}
-        <View style={styles.header}>
-          <Text style={styles.title}>
+        <View className="mb-8">
+          <Text className="text-3xl font-bold text-gray-900 mb-3 text-center">
             {isLogin ? 'おかえりなさい' : 'アカウント作成'}
           </Text>
-          <Text style={styles.subtitle}>
+          <Text className="text-base text-gray-600 text-center leading-6">
             {isLogin
               ? 'アカウントにログインして、イベント管理を始めましょう'
               : '新しいアカウントを作成して、幹事ライフを始めましょう'}
@@ -64,14 +60,14 @@ export default function AuthScreen() {
         </View>
 
         {/* Form */}
-        <View style={styles.form}>
+        <View className="mb-6">
           {!isLogin && (
             <Input
               label="お名前"
               value={form.name}
               onChangeText={(text) => setForm({ ...form, name: text })}
               placeholder="山田太郎"
-              leftIcon={<Ionicons name="person-outline" size={20} color={Colors.gray[400]} />}
+              leftIcon={<Ionicons name="person-outline" size={20} color="#9ca3af" />}
             />
           )}
 
@@ -82,7 +78,7 @@ export default function AuthScreen() {
             placeholder="example@email.com"
             keyboardType="email-address"
             autoCapitalize="none"
-            leftIcon={<Ionicons name="mail-outline" size={20} color={Colors.gray[400]} />}
+            leftIcon={<Ionicons name="mail-outline" size={20} color="#9ca3af" />}
           />
 
           <Input
@@ -91,17 +87,17 @@ export default function AuthScreen() {
             onChangeText={(text) => setForm({ ...form, password: text })}
             placeholder="8文字以上"
             secureTextEntry={!showPassword}
-            leftIcon={<Ionicons name="lock-closed-outline" size={20} color={Colors.gray[400]} />}
+            leftIcon={<Ionicons name="lock-closed-outline" size={20} color="#9ca3af" />}
             rightIcon={
               <Button
                 onPress={() => setShowPassword(!showPassword)}
                 variant="ghost"
-                style={styles.eyeButton}
+                className="p-0 min-h-0"
                 icon={
                   showPassword ? (
-                    <Ionicons name="eye-off-outline" size={20} color={Colors.gray[400]} />
+                    <Ionicons name="eye-off-outline" size={20} color="#9ca3af" />
                   ) : (
-                    <Ionicons name="eye-outline" size={20} color={Colors.gray[400]} />
+                    <Ionicons name="eye-outline" size={20} color="#9ca3af" />
                   )
                 }
               />
@@ -114,19 +110,19 @@ export default function AuthScreen() {
             loading={loading}
             fullWidth
             size="lg"
-            style={styles.authButton}
+            className="mt-4"
           />
         </View>
 
         {/* Divider */}
-        <View style={styles.divider}>
-          <View style={styles.dividerLine} />
-          <Text style={styles.dividerText}>または</Text>
-          <View style={styles.dividerLine} />
+        <View className="flex-row items-center my-6">
+          <View className="flex-1 h-px bg-gray-200" />
+          <Text className="text-sm text-gray-500 mx-4">または</Text>
+          <View className="flex-1 h-px bg-gray-200" />
         </View>
 
         {/* Social Login */}
-        <View style={styles.socialButtons}>
+        <View className="mb-8">
           <Button
             title="Googleでログイン"
             onPress={() => handleSocialLogin('google')}
@@ -137,8 +133,8 @@ export default function AuthScreen() {
         </View>
 
         {/* Toggle Auth Mode */}
-        <View style={styles.toggleContainer}>
-          <Text style={styles.toggleText}>
+        <View className="flex-row justify-center items-center mt-auto">
+          <Text className="text-sm text-gray-600">
             {isLogin
               ? 'アカウントをお持ちでない方は'
               : 'すでにアカウントをお持ちの方は'}
@@ -147,81 +143,10 @@ export default function AuthScreen() {
             title={isLogin ? 'アカウント作成' : 'ログイン'}
             onPress={() => setIsLogin(!isLogin)}
             variant="ghost"
-            style={styles.toggleButton}
+            className="p-0 min-h-0 ml-2"
           />
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.white,
-  },
-  scrollContent: {
-    flexGrow: 1,
-    paddingHorizontal: Layout.padding.lg,
-    paddingTop: Layout.padding.xl + 20,
-    paddingBottom: Layout.padding.lg,
-  },
-  header: {
-    marginBottom: Layout.spacing.xl,
-  },
-  title: {
-    ...Typography.h1,
-    color: Colors.gray[900],
-    marginBottom: Layout.spacing.sm,
-    textAlign: 'center',
-  },
-  subtitle: {
-    ...Typography.body1,
-    color: Colors.gray[600],
-    textAlign: 'center',
-    lineHeight: 22,
-  },
-  form: {
-    marginBottom: Layout.spacing.lg,
-  },
-  eyeButton: {
-    padding: 0,
-    minHeight: 'auto',
-  },
-  authButton: {
-    marginTop: Layout.spacing.md,
-  },
-  divider: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: Layout.spacing.lg,
-  },
-  dividerLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: Colors.gray[200],
-  },
-  dividerText: {
-    ...Typography.body2,
-    color: Colors.gray[500],
-    marginHorizontal: Layout.spacing.md,
-  },
-  socialButtons: {
-    marginBottom: Layout.spacing.xl,
-  },
-  toggleContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 'auto',
-  },
-  toggleText: {
-    ...Typography.body2,
-    color: Colors.gray[600],
-  },
-  toggleButton: {
-    padding: 0,
-    minHeight: 'auto',
-    marginLeft: Layout.spacing.xs,
-  },
-});

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   ScrollView,
   TouchableOpacity,
   SafeAreaView,
@@ -11,9 +10,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { Card } from '@/components/common/Card';
 import { Button } from '@/components/common/Button';
 import { Header } from '@/components/common/Header';
-import { Colors } from '@/constants/Colors';
-import { Typography } from '@/constants/Typography';
-import { Layout } from '@/constants/Layout';
 import { SharedRecord, EventPurpose } from '@/types';
 
 // Mock data
@@ -107,7 +103,7 @@ export default function RecordsScreen() {
           key={i}
           name="star"
           size={14}
-          color={Colors.accent[500]}
+          color="#f59e0b"
         />
       );
     }
@@ -118,7 +114,7 @@ export default function RecordsScreen() {
           key="half"
           name="star-half"
           size={14}
-          color={Colors.accent[500]}
+          color="#f59e0b"
         />
       );
     }
@@ -126,15 +122,15 @@ export default function RecordsScreen() {
     const emptyStars = 5 - Math.ceil(rating);
     for (let i = 0; i < emptyStars; i++) {
       stars.push(
-        <Ionicons key={`empty-${i}`} name="star-outline" size={14} color={Colors.gray[300]} />
+        <Ionicons key={`empty-${i}`} name="star-outline" size={14} color="#d1d5db" />
       );
     }
 
-    return <View style={styles.starsContainer}>{stars}</View>;
+    return <View className="flex-row gap-0.5">{stars}</View>;
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView className="flex-1 bg-gray-50">
       <Header
         title="みんなの記録"
         subtitle="他の幹事が共有した貴重な経験とナレッジ"
@@ -142,39 +138,39 @@ export default function RecordsScreen() {
 
       {!hasSharedRecord ? (
         <ScrollView
-          style={styles.content}
-          contentContainerStyle={styles.contentContainer}
+          className="flex-1"
+          contentContainerClassName="pt-6 px-6 pb-8"
           showsVerticalScrollIndicator={false}
         >
-          <View style={styles.unlockContent}>
-            <View style={styles.lockIcon}>
-              <Ionicons name="lock-closed-outline" size={48} color={Colors.gray[400]} />
+          <View className="items-center">
+            <View className="mb-6">
+              <Ionicons name="lock-closed-outline" size={48} color="#9ca3af" />
             </View>
 
-            <Text style={styles.unlockTitle}>記録を共有して、</Text>
-            <Text style={styles.unlockTitle}>他の幹事のナレッジを閲覧しよう</Text>
+            <Text className="text-xl font-semibold text-gray-900 text-center leading-7">記録を共有して、</Text>
+            <Text className="text-xl font-semibold text-gray-900 text-center leading-7">他の幹事のナレッジを閲覧しよう</Text>
 
-            <Text style={styles.unlockDescription}>
+            <Text className="text-base text-gray-600 text-center leading-6 my-6">
               あなたの終了済みイベントの記録を1つ以上共有すると、
               {'\n'}他の幹事が投稿した貴重な情報にアクセスできます。
             </Text>
 
-            <Card style={styles.benefitsCard}>
-              <View style={styles.benefitItem}>
-                <Ionicons name="star" size={20} color={Colors.accent[500]} />
-                <Text style={styles.benefitText}>お店の評価とレビュー</Text>
+            <Card className="w-full mb-8 p-6">
+              <View className="flex-row items-center gap-3 mb-4">
+                <Ionicons name="star" size={20} color="#f59e0b" />
+                <Text className="text-sm text-gray-700">お店の評価とレビュー</Text>
               </View>
-              <View style={styles.benefitItem}>
-                <Ionicons name="cash-outline" size={20} color={Colors.success[500]} />
-                <Text style={styles.benefitText}>予算と費用の参考情報</Text>
+              <View className="flex-row items-center gap-3 mb-4">
+                <Ionicons name="cash-outline" size={20} color="#10b981" />
+                <Text className="text-sm text-gray-700">予算と費用の参考情報</Text>
               </View>
-              <View style={styles.benefitItem}>
-                <Ionicons name="location-outline" size={20} color={Colors.primary[600]} />
-                <Text style={styles.benefitText}>エリア別のおすすめ店舗</Text>
+              <View className="flex-row items-center gap-3 mb-4">
+                <Ionicons name="location-outline" size={20} color="#3b82f6" />
+                <Text className="text-sm text-gray-700">エリア別のおすすめ店舗</Text>
               </View>
-              <View style={styles.benefitItem}>
-                <Ionicons name="share-social-outline" size={20} color={Colors.secondary[600]} />
-                <Text style={styles.benefitText}>イベント企画のコツ</Text>
+              <View className="flex-row items-center gap-3">
+                <Ionicons name="share-social-outline" size={20} color="#8b5cf6" />
+                <Text className="text-sm text-gray-700">イベント企画のコツ</Text>
               </View>
             </Card>
 
@@ -183,11 +179,11 @@ export default function RecordsScreen() {
               onPress={handleUnlock}
               size="lg"
               fullWidth
-              icon={<Ionicons name="lock-open-outline" size={20} color={Colors.white} />}
-              style={styles.unlockButton}
+              icon={<Ionicons name="lock-open-outline" size={20} color="white" />}
+              className="mb-6"
             />
 
-            <Text style={styles.privacyNote}>
+            <Text className="text-xs text-gray-500 text-center leading-4">
               共有する記録は、店舗情報と評価のみ表示され、
               {'\n'}個人情報は一切公開されません。
             </Text>
@@ -195,60 +191,60 @@ export default function RecordsScreen() {
         </ScrollView>
       ) : (
         <ScrollView
-          style={styles.content}
-          contentContainerStyle={styles.contentContainer}
+          className="flex-1"
+          contentContainerClassName="pt-6 px-6 pb-8"
           showsVerticalScrollIndicator={false}
         >
-          <View style={styles.recordsList}>
+          <View className="gap-4">
             {mockSharedRecords.map((record) => (
               <TouchableOpacity
                 key={record.id}
                 onPress={() => handleRecordPress(record)}
                 activeOpacity={0.7}
               >
-                <Card style={styles.recordCard}>
-                  <View style={styles.recordHeader}>
-                    <View style={styles.venueInfo}>
-                      <Text style={styles.venueName}>
+                <Card className="mb-4">
+                  <View className="flex-row justify-between items-start mb-3">
+                    <View className="flex-1 mr-3">
+                      <Text className="text-lg font-semibold text-gray-900 mb-1">
                         {record.eventLog.venue.name}
                       </Text>
-                      <View style={styles.ratingContainer}>
+                      <View className="flex-row items-center gap-2">
                         {renderStars(record.eventLog.rating)}
-                        <Text style={styles.ratingText}>
+                        <Text className="text-sm text-gray-600 font-semibold">
                           {record.eventLog.rating.toFixed(1)}
                         </Text>
                       </View>
                     </View>
 
-                    <View style={styles.purposeBadge}>
-                      <Text style={styles.purposeText}>
+                    <View className="bg-blue-50 px-3 py-1 rounded-md">
+                      <Text className="text-xs text-blue-700 font-semibold">
                         {getPurposeLabel(record.event.purpose)}
                       </Text>
                     </View>
                   </View>
 
-                  <Text style={styles.recordNotes} numberOfLines={2}>
+                  <Text className="text-sm text-gray-700 leading-5 mb-3" numberOfLines={2}>
                     {record.eventLog.notes}
                   </Text>
 
-                  <View style={styles.recordFooter}>
-                    <View style={styles.footerItem}>
-                      <Ionicons name="cash-outline" size={16} color={Colors.success[500]} />
-                      <Text style={styles.footerText}>
+                  <View className="flex-row gap-6 mb-3">
+                    <View className="flex-row items-center gap-2">
+                      <Ionicons name="cash-outline" size={16} color="#10b981" />
+                      <Text className="text-sm text-gray-600">
                         ¥{record.eventLog.costPerPerson.toLocaleString()}/人
                       </Text>
                     </View>
 
-                    <View style={styles.footerItem}>
-                      <Ionicons name="location-outline" size={16} color={Colors.gray[500]} />
-                      <Text style={styles.footerText}>
+                    <View className="flex-row items-center gap-2">
+                      <Ionicons name="location-outline" size={16} color="#6b7280" />
+                      <Text className="text-sm text-gray-600">
                         {record.eventLog.venue.address}
                       </Text>
                     </View>
                   </View>
 
-                  <View style={styles.organizerInfo}>
-                    <Text style={styles.organizerText}>
+                  <View className="pt-3 border-t border-gray-100">
+                    <Text className="text-xs text-gray-500 text-right">
                       {record.organizer.name}さんの記録
                     </Text>
                   </View>
@@ -262,141 +258,4 @@ export default function RecordsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.gray[50],
-  },
-  unlockContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: Layout.padding.lg,
-  },
-  unlockContent: {
-    alignItems: 'center',
-  },
-  lockIcon: {
-    marginBottom: Layout.spacing.lg,
-  },
-  unlockTitle: {
-    ...Typography.h3,
-    color: Colors.gray[900],
-    textAlign: 'center',
-    lineHeight: 28,
-  },
-  unlockDescription: {
-    ...Typography.body1,
-    color: Colors.gray[600],
-    textAlign: 'center',
-    lineHeight: 22,
-    marginVertical: Layout.spacing.lg,
-  },
-  benefitsCard: {
-    width: '100%',
-    marginBottom: Layout.spacing.xl,
-    padding: Layout.padding.lg,
-  },
-  benefitItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Layout.spacing.sm,
-    marginBottom: Layout.spacing.md,
-  },
-  benefitText: {
-    ...Typography.body2,
-    color: Colors.gray[700],
-  },
-  unlockButton: {
-    marginBottom: Layout.spacing.lg,
-  },
-  privacyNote: {
-    ...Typography.caption,
-    color: Colors.gray[500],
-    textAlign: 'center',
-    lineHeight: 16,
-  },
-  content: {
-    flex: 1,
-  },
-  contentContainer: {
-    paddingTop: Layout.padding.lg,
-    paddingHorizontal: Layout.padding.lg,
-    paddingBottom: Layout.padding.xl,
-  },
-  recordsList: {
-    gap: Layout.spacing.md,
-  },
-  recordCard: {
-    marginBottom: Layout.spacing.md,
-  },
-  recordHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: Layout.spacing.sm,
-  },
-  venueInfo: {
-    flex: 1,
-    marginRight: Layout.spacing.sm,
-  },
-  venueName: {
-    ...Typography.h4,
-    color: Colors.gray[900],
-    marginBottom: Layout.spacing.xs,
-  },
-  ratingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Layout.spacing.xs,
-  },
-  starsContainer: {
-    flexDirection: 'row',
-    gap: 2,
-  },
-  ratingText: {
-    ...Typography.body2,
-    color: Colors.gray[600],
-    fontWeight: '600',
-  },
-  purposeBadge: {
-    backgroundColor: Colors.primary[50],
-    paddingHorizontal: Layout.padding.sm,
-    paddingVertical: Layout.padding.xs,
-    borderRadius: Layout.borderRadius.md,
-  },
-  purposeText: {
-    ...Typography.caption,
-    color: Colors.primary[700],
-    fontWeight: '600',
-  },
-  recordNotes: {
-    ...Typography.body2,
-    color: Colors.gray[700],
-    lineHeight: 20,
-    marginBottom: Layout.spacing.sm,
-  },
-  recordFooter: {
-    flexDirection: 'row',
-    gap: Layout.spacing.lg,
-    marginBottom: Layout.spacing.sm,
-  },
-  footerItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Layout.spacing.xs,
-  },
-  footerText: {
-    ...Typography.body2,
-    color: Colors.gray[600],
-  },
-  organizerInfo: {
-    paddingTop: Layout.spacing.sm,
-    borderTopWidth: 1,
-    borderTopColor: Colors.gray[100],
-  },
-  organizerText: {
-    ...Typography.caption,
-    color: Colors.gray[500],
-    textAlign: 'right',
-  },
-});
+

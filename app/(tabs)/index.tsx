@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { View, ScrollView, SafeAreaView } from 'react-native';
 import { Header } from '@/components/common/Header';
 import { TabBar } from '@/components/common/TabBar';
 import { EventCard } from '@/components/common/EventCard';
 import { EmptyState } from '@/components/common/EmptyState';
 import { FloatingActionButton } from '@/components/common/FloatingActionButton';
-import { Colors } from '@/constants/Colors';
-import { Layout } from '@/constants/Layout';
 import { Event, EventStatus } from '@/types';
 import {
   EVENT_STATUS_TABS,
@@ -91,7 +88,7 @@ export default function EventsScreen() {
     }
 
     return (
-      <View style={styles.eventList}>
+      <View className="gap-4">
         {filteredEvents.map((event) => (
           <EventCard
             key={event.id}
@@ -105,7 +102,7 @@ export default function EventsScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView className="flex-1 bg-gray-50">
       <Header title="イベント管理" subtitle="あなたが主催するイベント一覧" />
 
       <TabBar
@@ -114,7 +111,7 @@ export default function EventsScreen() {
         onTabPress={setActiveTab}
       />
 
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView className="flex-1 p-6" showsVerticalScrollIndicator={false}>
         {renderEvents()}
       </ScrollView>
 
@@ -122,17 +119,3 @@ export default function EventsScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.gray[50],
-  },
-  content: {
-    flex: 1,
-    padding: Layout.padding.lg,
-  },
-  eventList: {
-    gap: Layout.spacing.md,
-  },
-});

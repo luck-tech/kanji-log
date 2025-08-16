@@ -1,10 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Card } from './Card';
-import { Colors } from '@/constants/Colors';
-import { Typography } from '@/constants/Typography';
-import { Layout } from '@/constants/Layout';
 import { Event } from '@/types';
 
 interface EventCardProps {
@@ -12,6 +9,7 @@ interface EventCardProps {
   onPress: (eventId: string) => void;
   statusIcon: React.ReactNode;
   style?: any;
+  className?: string;
 }
 
 export const EventCard: React.FC<EventCardProps> = ({
@@ -19,6 +17,7 @@ export const EventCard: React.FC<EventCardProps> = ({
   onPress,
   statusIcon,
   style,
+  className,
 }) => {
   const formatDate = (event: Event) => {
     if (event.date && event.time) {
@@ -45,27 +44,30 @@ export const EventCard: React.FC<EventCardProps> = ({
       onPress={() => onPress(event.id)}
       activeOpacity={0.7}
       style={style}
+      className={className}
     >
-      <Card style={styles.eventCard}>
-        <View style={styles.eventHeader}>
-          <Text style={styles.eventTitle}>{event.title}</Text>
-          <View style={styles.statusBadge}>{statusIcon}</View>
+      <Card className="mb-4">
+        <View className="flex-row justify-between items-start mb-3">
+          <Text className="text-lg font-semibold text-gray-900 flex-1 mr-3">
+            {event.title}
+          </Text>
+          <View className="p-2">{statusIcon}</View>
         </View>
 
-        <View style={styles.eventInfo}>
-          <View style={styles.infoItem}>
-            <Ionicons name="calendar-outline" size={16} color={Colors.gray[500]} />
-            <Text style={styles.infoText}>{formatDate(event)}</Text>
+        <View className="gap-3 mb-3">
+          <View className="flex-row items-center gap-2">
+            <Ionicons name="calendar-outline" size={16} color="#6b7280" />
+            <Text className="text-sm text-gray-600">{formatDate(event)}</Text>
           </View>
 
-          <View style={styles.infoItem}>
-            <Ionicons name="people-outline" size={16} color={Colors.gray[500]} />
-            <Text style={styles.infoText}>{event.members.length}名参加</Text>
+          <View className="flex-row items-center gap-2">
+            <Ionicons name="people-outline" size={16} color="#6b7280" />
+            <Text className="text-sm text-gray-600">{event.members.length}名参加</Text>
           </View>
         </View>
 
-        <View style={styles.eventFooter}>
-          <Text style={styles.eventPurpose}>
+        <View className="pt-3 border-t border-gray-100">
+          <Text className="text-xs text-gray-500">
             目的: {getPurposeLabel(event.purpose)}
           </Text>
         </View>
@@ -73,46 +75,3 @@ export const EventCard: React.FC<EventCardProps> = ({
     </TouchableOpacity>
   );
 };
-
-const styles = StyleSheet.create({
-  eventCard: {
-    marginBottom: Layout.spacing.md,
-  },
-  eventHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: Layout.spacing.sm,
-  },
-  eventTitle: {
-    ...Typography.h4,
-    color: Colors.gray[900],
-    flex: 1,
-    marginRight: Layout.spacing.sm,
-  },
-  statusBadge: {
-    padding: Layout.padding.xs,
-  },
-  eventInfo: {
-    gap: Layout.spacing.sm,
-    marginBottom: Layout.spacing.sm,
-  },
-  infoItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Layout.spacing.xs,
-  },
-  infoText: {
-    ...Typography.body2,
-    color: Colors.gray[600],
-  },
-  eventFooter: {
-    paddingTop: Layout.padding.sm,
-    borderTopWidth: 1,
-    borderTopColor: Colors.gray[100],
-  },
-  eventPurpose: {
-    ...Typography.caption,
-    color: Colors.gray[500],
-  },
-});

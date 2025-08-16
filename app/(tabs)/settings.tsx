@@ -2,7 +2,6 @@ import React from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   ScrollView,
   TouchableOpacity,
   SafeAreaView,
@@ -10,9 +9,6 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Card } from '@/components/common/Card';
-import { Colors } from '@/constants/Colors';
-import { Typography } from '@/constants/Typography';
-import { Layout } from '@/constants/Layout';
 
 interface SettingsItem {
   id: string;
@@ -62,7 +58,7 @@ export default function SettingsScreen() {
       id: 'notifications',
       title: '通知設定',
       description: 'イベントの更新やリマインダーの設定',
-      icon: <Ionicons name="notifications-outline" size={24} color={Colors.gray[600]} />,
+      icon: <Ionicons name="notifications-outline" size={24} color="#4b5563" />,
       onPress: handleNotifications,
       showArrow: true,
     },
@@ -70,7 +66,7 @@ export default function SettingsScreen() {
       id: 'privacy',
       title: 'プライバシー・セキュリティ',
       description: 'アカウントの安全性と情報の共有設定',
-      icon: <Ionicons name="shield-outline" size={24} color={Colors.gray[600]} />,
+      icon: <Ionicons name="shield-outline" size={24} color="#4b5563" />,
       onPress: handlePrivacy,
       showArrow: true,
     },
@@ -78,110 +74,107 @@ export default function SettingsScreen() {
       id: 'support',
       title: 'ヘルプ・サポート',
       description: '使い方や問題の解決方法',
-      icon: <Ionicons name="help-circle-outline" size={24} color={Colors.gray[600]} />,
+      icon: <Ionicons name="help-circle-outline" size={24} color="#4b5563" />,
       onPress: handleSupport,
       showArrow: true,
     },
     {
       id: 'logout',
       title: 'ログアウト',
-      icon: <Ionicons name="log-out-outline" size={24} color={Colors.error[500]} />,
+      icon: <Ionicons name="log-out-outline" size={24} color="#ef4444" />,
       onPress: handleLogout,
-      textColor: Colors.error[500],
+      textColor: "#ef4444",
     },
   ];
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView className="flex-1 bg-gray-50">
       {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>設定</Text>
-        <Text style={styles.headerSubtitle}>アカウントとアプリの設定管理</Text>
+      <View className="px-6 pt-4 pb-6 bg-white">
+        <Text className="text-2xl font-bold text-gray-900 mb-2">設定</Text>
+        <Text className="text-sm text-gray-600">アカウントとアプリの設定管理</Text>
       </View>
 
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView className="flex-1 p-6" showsVerticalScrollIndicator={false}>
         {/* Profile Section */}
-        <Card style={styles.profileCard}>
-          <View style={styles.profileHeader}>
-            <View style={styles.avatar}>
-              <Ionicons name="person" size={32} color={Colors.white} />
+        <Card className="mb-6">
+          <View className="flex-row items-center mb-4">
+            <View className="w-16 h-16 rounded-full bg-blue-600 justify-center items-center mr-4">
+              <Ionicons name="person" size={32} color="white" />
             </View>
-            <View style={styles.profileInfo}>
-              <Text style={styles.profileName}>山田太郎</Text>
-              <Text style={styles.profileTitle}>イベント管理者</Text>
+            <View className="flex-1">
+              <Text className="text-lg font-semibold text-gray-900 mb-1">山田太郎</Text>
+              <Text className="text-sm text-gray-600">イベント管理者</Text>
             </View>
             <TouchableOpacity
-              style={styles.editButton}
+              className="p-3"
               onPress={handleEditProfile}
             >
-              <Ionicons name="pencil" size={20} color={Colors.primary[600]} />
+              <Ionicons name="pencil" size={20} color="#3b82f6" />
             </TouchableOpacity>
           </View>
 
-          <View style={styles.profileDetails}>
-            <View style={styles.profileDetailItem}>
-              <Ionicons name="mail-outline" size={16} color={Colors.gray[500]} />
-              <Text style={styles.profileDetailText}>yamada@example.com</Text>
+          <View className="gap-2">
+            <View className="flex-row items-center gap-3">
+              <Ionicons name="mail-outline" size={16} color="#6b7280" />
+              <Text className="text-sm text-gray-600">yamada@example.com</Text>
             </View>
-            <View style={styles.profileDetailItem}>
-              <Ionicons name="call-outline" size={16} color={Colors.gray[500]} />
-              <Text style={styles.profileDetailText}>090-1234-5678</Text>
+            <View className="flex-row items-center gap-3">
+              <Ionicons name="call-outline" size={16} color="#6b7280" />
+              <Text className="text-sm text-gray-600">090-1234-5678</Text>
             </View>
           </View>
         </Card>
 
         {/* Stats Section */}
-        <Card style={styles.statsCard}>
-          <Text style={styles.sectionTitle}>利用統計</Text>
-          <View style={styles.statsContainer}>
-            <View style={styles.statItem}>
-              <Text style={styles.statNumber}>12</Text>
-              <Text style={styles.statLabel}>主催イベント</Text>
+        <Card className="mb-6">
+          <Text className="text-lg font-semibold text-gray-900 mb-4">利用統計</Text>
+          <View className="flex-row justify-around items-center">
+            <View className="items-center">
+              <Text className="text-2xl font-bold text-blue-600">12</Text>
+              <Text className="text-xs text-gray-600 mt-1">主催イベント</Text>
             </View>
-            <View style={styles.statDivider} />
-            <View style={styles.statItem}>
-              <Text style={styles.statNumber}>8</Text>
-              <Text style={styles.statLabel}>共有記録</Text>
+            <View className="w-px h-10 bg-gray-200" />
+            <View className="items-center">
+              <Text className="text-2xl font-bold text-blue-600">8</Text>
+              <Text className="text-xs text-gray-600 mt-1">共有記録</Text>
             </View>
-            <View style={styles.statDivider} />
-            <View style={styles.statItem}>
-              <Text style={styles.statNumber}>45</Text>
-              <Text style={styles.statLabel}>招待メンバー</Text>
+            <View className="w-px h-10 bg-gray-200" />
+            <View className="items-center">
+              <Text className="text-2xl font-bold text-blue-600">45</Text>
+              <Text className="text-xs text-gray-600 mt-1">招待メンバー</Text>
             </View>
           </View>
         </Card>
 
         {/* Settings List */}
-        <View style={styles.settingsList}>
+        <View className="gap-3 mb-8">
           {settingsItems.map((item) => (
             <TouchableOpacity
               key={item.id}
-              style={styles.settingsItem}
               onPress={item.onPress}
               activeOpacity={0.7}
             >
-              <Card style={styles.settingsCard} shadow={false}>
-                <View style={styles.settingsItemContent}>
-                  <View style={styles.settingsItemLeft}>
+              <Card shadow={false} className="border-gray-100">
+                <View className="flex-row items-center justify-between">
+                  <View className="flex-row items-center flex-1">
                     {item.icon}
-                    <View style={styles.settingsItemText}>
+                    <View className="ml-4 flex-1">
                       <Text
-                        style={[
-                          styles.settingsItemTitle,
-                          item.textColor && { color: item.textColor },
-                        ]}
+                        className="text-base text-gray-900 mb-1"
+                        style={item.textColor && { color: item.textColor }}
                       >
                         {item.title}
                       </Text>
                       {item.description && (
-                        <Text style={styles.settingsItemDescription}>
+                        <Text className="text-sm text-gray-600 leading-5">
                           {item.description}
                         </Text>
                       )}
                     </View>
                   </View>
                   {item.showArrow && (
-                    <Ionicons name="chevron-forward" size={20} color={Colors.gray[400]} />
+                    <Ionicons name="chevron-forward" size={20} color="#9ca3af" />
                   )}
                 </View>
               </Card>
@@ -190,10 +183,10 @@ export default function SettingsScreen() {
         </View>
 
         {/* App Info */}
-        <View style={styles.appInfo}>
-          <Text style={styles.appInfoTitle}>幹事ナビ</Text>
-          <Text style={styles.appInfoVersion}>バージョン 1.0.0</Text>
-          <Text style={styles.appInfoCopyright}>
+        <View className="items-center py-6">
+          <Text className="text-lg font-semibold text-blue-600 mb-2">幹事ナビ</Text>
+          <Text className="text-sm text-gray-600 mb-3">バージョン 1.0.0</Text>
+          <Text className="text-xs text-gray-500 text-center">
             © 2024 Event Organizer. All rights reserved.
           </Text>
         </View>
@@ -201,157 +194,3 @@ export default function SettingsScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.gray[50],
-  },
-  header: {
-    paddingHorizontal: Layout.padding.lg,
-    paddingTop: Layout.padding.md,
-    paddingBottom: Layout.padding.lg,
-    backgroundColor: Colors.white,
-  },
-  headerTitle: {
-    ...Typography.h2,
-    color: Colors.gray[900],
-    marginBottom: Layout.spacing.xs,
-  },
-  headerSubtitle: {
-    ...Typography.body2,
-    color: Colors.gray[600],
-  },
-  content: {
-    flex: 1,
-    padding: Layout.padding.lg,
-  },
-  profileCard: {
-    marginBottom: Layout.spacing.lg,
-  },
-  profileHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: Layout.spacing.md,
-  },
-  avatar: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: Colors.primary[600],
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: Layout.spacing.md,
-  },
-  profileInfo: {
-    flex: 1,
-  },
-  profileName: {
-    ...Typography.h4,
-    color: Colors.gray[900],
-    marginBottom: 2,
-  },
-  profileTitle: {
-    ...Typography.body2,
-    color: Colors.gray[600],
-  },
-  editButton: {
-    padding: Layout.padding.sm,
-  },
-  profileDetails: {
-    gap: Layout.spacing.xs,
-  },
-  profileDetailItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Layout.spacing.sm,
-  },
-  profileDetailText: {
-    ...Typography.body2,
-    color: Colors.gray[600],
-  },
-  statsCard: {
-    marginBottom: Layout.spacing.lg,
-  },
-  sectionTitle: {
-    ...Typography.h4,
-    color: Colors.gray[900],
-    marginBottom: Layout.spacing.md,
-  },
-  statsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-  },
-  statItem: {
-    alignItems: 'center',
-  },
-  statNumber: {
-    ...Typography.h2,
-    color: Colors.primary[600],
-    fontWeight: '700',
-  },
-  statLabel: {
-    ...Typography.caption,
-    color: Colors.gray[600],
-    marginTop: 2,
-  },
-  statDivider: {
-    width: 1,
-    height: 40,
-    backgroundColor: Colors.gray[200],
-  },
-  settingsList: {
-    gap: Layout.spacing.sm,
-    marginBottom: Layout.spacing.xl,
-  },
-  settingsItem: {
-    // No additional styles needed
-  },
-  settingsCard: {
-    borderColor: Colors.gray[100],
-  },
-  settingsItemContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  settingsItemLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-  },
-  settingsItemText: {
-    marginLeft: Layout.spacing.md,
-    flex: 1,
-  },
-  settingsItemTitle: {
-    ...Typography.body1,
-    color: Colors.gray[900],
-    marginBottom: 2,
-  },
-  settingsItemDescription: {
-    ...Typography.body2,
-    color: Colors.gray[600],
-    lineHeight: 18,
-  },
-  appInfo: {
-    alignItems: 'center',
-    paddingVertical: Layout.padding.lg,
-  },
-  appInfoTitle: {
-    ...Typography.h4,
-    color: Colors.primary[600],
-    marginBottom: Layout.spacing.xs,
-  },
-  appInfoVersion: {
-    ...Typography.body2,
-    color: Colors.gray[600],
-    marginBottom: Layout.spacing.sm,
-  },
-  appInfoCopyright: {
-    ...Typography.caption,
-    color: Colors.gray[500],
-    textAlign: 'center',
-  },
-});

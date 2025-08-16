@@ -3,14 +3,10 @@ import {
   View,
   TextInput,
   Text,
-  StyleSheet,
   TextInputProps,
   ViewStyle,
   TextStyle,
 } from 'react-native';
-import { Colors } from '@/constants/Colors';
-import { Typography } from '@/constants/Typography';
-import { Layout } from '@/constants/Layout';
 
 interface InputProps extends TextInputProps {
   label?: string;
@@ -20,6 +16,9 @@ interface InputProps extends TextInputProps {
   inputStyle?: TextStyle;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
+  className?: string;
+  inputClassName?: string;
+  labelClassName?: string;
 }
 
 export const Input: React.FC<InputProps> = ({
@@ -30,74 +29,65 @@ export const Input: React.FC<InputProps> = ({
   inputStyle,
   leftIcon,
   rightIcon,
+  className,
+  inputClassName,
+  labelClassName,
   ...props
 }) => {
   const [isFocused, setIsFocused] = useState(false);
 
-  const getInputContainerStyle = (): ViewStyle => ({
-    borderColor: error 
-      ? Colors.error[500] 
+  // Container classes
+  const containerClasses = [
+    "mb-4",
+    className
+  ].filter(Boolean).join(" ");
+
+  // Label classes  
+  const labelClasses = [
+    "text-base font-medium text-gray-700 mb-2",
+    labelClassName
+  ].filter(Boolean).join(" ");
+
+  // Input container classes
+  const inputContainerClasses = [
+    "flex-row items-center border rounded-lg bg-white min-h-12",
+    error 
+      ? "border-red-500" 
       : isFocused 
-        ? Colors.primary[600] 
-        : Colors.gray[300],
-  });
+        ? "border-blue-600" 
+        : "border-gray-300"
+  ].filter(Boolean).join(" ");
+
+  // Input classes
+  const inputClasses = [
+    "flex-1 text-base text-gray-900 px-4 py-3",
+    inputClassName
+  ].filter(Boolean).join(" ");
 
   return (
-    <View style={[styles.container, containerStyle]}>
+    <View className={containerClasses} style={containerStyle}>
       {label && (
-        <Text style={[styles.label, labelStyle]}>{label}</Text>
+        <Text className={labelClasses} style={labelStyle}>
+          {label}
+        </Text>
       )}
-      <View style={[styles.inputContainer, getInputContainerStyle()]}>
-        {leftIcon && <View style={styles.leftIcon}>{leftIcon}</View>}
+      <View className={inputContainerClasses}>
+        {leftIcon && <View className="pl-4">{leftIcon}</View>}
         <TextInput
-          style={[styles.input, inputStyle]}
+          className={inputClasses}
+          style={inputStyle}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
-          placeholderTextColor={Colors.gray[400]}
+          placeholderTextColor="#9ca3af"
           {...props}
         />
-        {rightIcon && <View style={styles.rightIcon}>{rightIcon}</View>}
+        {rightIcon && <View className="pr-4">{rightIcon}</View>}
       </View>
       {error && (
-        <Text style={styles.error}>{error}</Text>
+        <Text className="text-sm text-red-500 mt-2">
+          {error}
+        </Text>
       )}
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    marginBottom: Layout.spacing.md,
-  },
-  label: {
-    ...Typography.label,
-    color: Colors.gray[700],
-    marginBottom: Layout.spacing.xs,
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderRadius: Layout.borderRadius.lg,
-    backgroundColor: Colors.white,
-    minHeight: 48,
-  },
-  input: {
-    flex: 1,
-    ...Typography.body1,
-    color: Colors.gray[900],
-    paddingHorizontal: Layout.padding.md,
-    paddingVertical: Layout.padding.sm,
-  },
-  leftIcon: {
-    paddingLeft: Layout.padding.md,
-  },
-  rightIcon: {
-    paddingRight: Layout.padding.md,
-  },
-  error: {
-    ...Typography.caption,
-    color: Colors.error[500],
-    marginTop: Layout.spacing.xs,
-  },
-});

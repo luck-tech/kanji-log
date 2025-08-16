@@ -1,38 +1,18 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { Colors } from '@/constants/Colors';
-import { Typography } from '@/constants/Typography';
-import { Layout } from '@/constants/Layout';
+import { View, Text } from 'react-native';
 
 interface HeaderProps {
   title: string;
   subtitle?: string;
   style?: any;
+  className?: string;
 }
 
-export const Header: React.FC<HeaderProps> = ({ title, subtitle, style }) => {
+export const Header: React.FC<HeaderProps> = ({ title, subtitle, style, className }) => {
   return (
-    <View style={[styles.header, style]}>
-      <Text style={styles.title}>{title}</Text>
-      {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
+    <View className={`px-6 pt-4 pb-6 bg-white ${className || ''}`} style={style}>
+      <Text className="text-2xl font-bold text-gray-900 mb-2">{title}</Text>
+      {subtitle && <Text className="text-sm text-gray-600">{subtitle}</Text>}
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  header: {
-    paddingHorizontal: Layout.padding.lg,
-    paddingTop: Layout.padding.md,
-    paddingBottom: Layout.padding.lg,
-    backgroundColor: Colors.white,
-  },
-  title: {
-    ...Typography.h2,
-    color: Colors.gray[900],
-    marginBottom: Layout.spacing.xs,
-  },
-  subtitle: {
-    ...Typography.body2,
-    color: Colors.gray[600],
-  },
-});
