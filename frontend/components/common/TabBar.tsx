@@ -73,7 +73,7 @@ export function TabBar<T>({
   );
 
   const renderSegmentedTabs = () => (
-    <View className="bg-neutral-100 rounded-2xl p-1 flex-row">
+    <View className="bg-neutral-100 rounded-2xl p-1 flex-row mx-6">
       {tabs.map((tab) => {
         const isActive = activeTab === tab.key;
         return (
@@ -152,8 +152,11 @@ export function TabBar<T>({
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        className="px-6 py-4"
-        contentContainerStyle={variant === 'segmented' ? { paddingHorizontal: 0 } : undefined}
+        className={variant === 'segmented' ? 'py-4' : 'px-6 py-4'}
+        contentContainerStyle={variant === 'segmented' ? { 
+          justifyContent: 'center',
+          flexGrow: 1 
+        } : undefined}
       >
         {renderTabs()}
       </ScrollView>

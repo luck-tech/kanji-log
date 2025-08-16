@@ -156,7 +156,7 @@ export const Input: React.FC<InputProps> = ({
 
   // Input classes
   const inputClasses = [
-    `flex-1 ${text} text-neutral-900 ${padding}`,
+    `flex-1 ${text} text-neutral-900 ${padding} outline-none`,
     leftIcon && "pl-0",
     rightIcon && "pr-0",
     inputClassName
@@ -180,7 +180,6 @@ export const Input: React.FC<InputProps> = ({
           
           <TextInput
             className={inputClasses}
-            style={inputStyle}
             onFocus={handleFocus}
             onBlur={handleBlur}
             placeholderTextColor="#94a3b8"

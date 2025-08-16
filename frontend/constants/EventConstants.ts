@@ -4,17 +4,17 @@ import { EventStatus, EventPurpose } from '@/types';
 export const EVENT_STATUS_TABS = [
   {
     key: 'planning' as EventStatus,
-    label: '調整中',
+    label: '📅 日程調整中',
     color: Colors.warning[500],
   },
   {
     key: 'confirmed' as EventStatus,
-    label: '確定済み',
+    label: '✅ 日程確定',
     color: Colors.success[500],
   },
   {
     key: 'completed' as EventStatus,
-    label: '終了済み',
+    label: '🎉 開催済み',
     color: Colors.gray[500],
   },
 ];
@@ -30,15 +30,15 @@ export const EVENT_PURPOSE_LABELS: Record<EventPurpose, string> = {
 
 export const EMPTY_STATE_MESSAGES = {
   planning: {
-    title: '調整中のイベントはありません',
-    description: '新しいイベントを作成して、メンバーとの調整を開始しましょう',
+    title: '日程調整中のイベントはありません',
+    description: '新しいイベントを作成して、メンバーとの日程調整を開始しましょう',
   },
   confirmed: {
-    title: '確定済みのイベントはありません',
+    title: '日程確定のイベントはありません',
     description: '日程が確定したイベントがここに表示されます',
   },
   completed: {
-    title: '終了済みのイベントはありません',
+    title: '開催済みのイベントはありません',
     description: '完了したイベントの記録がここに表示されます',
   },
 };

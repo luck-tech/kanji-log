@@ -177,7 +177,7 @@ export default function MembersScreen() {
         {/* Search Bar with Add Button */}
         <View className="flex-row px-6 py-4 gap-3 bg-transparent">
           <Input
-            placeholder="名前、メール、部署で検索"
+            placeholder="名前、部署で検索"
             value={searchQuery}
             onChangeText={handleSearch}
             leftIcon={<Ionicons name="search-outline" size={20} color="#64748b" />}
