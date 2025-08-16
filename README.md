@@ -1,12 +1,13 @@
 ## kanji-log 技術スタック / プロジェクト概要
 
-このリポジトリは Expo（React Native）をベースに、`expo-router` を用いたファイルベースルーティングで画面遷移を実装したモバイル/ウェブ対応アプリです。共通 UI は React Native の `StyleSheet` とカスタムのデザイン定数（`Colors`/`Typography`/`Layout`）で統一されています。
+このリポジトリは Expo（React Native）をベースに、`expo-router` を用いたファイルベースルーティングで画面遷移を実装したモバイル/ウェブ対応アプリです。共通 UI は React Native の `StyleSheet` とカスタムのデザイン定数（`Colors`/`Typography`/`Layout`）に加えて、NativeWind v4（TailwindCSS for React Native）で統一されています。
 
 ### 主要バージョン
 - **Expo SDK**: 53
 - **React**: 19
 - **React Native**: 0.79
 - **TypeScript**: 5.8（`strict: true`）
+- **NativeWind**: 4.1.23（TailwindCSS for React Native）
 
 
 ## 技術スタック（カテゴリ別）
@@ -26,9 +27,15 @@
   - `constants/Colors.ts`: カラーパレット（`primary`/`secondary`/`accent`/`gray` 等）
   - `constants/Typography.ts`: 見出し/本文/ボタン/ラベルのタイポグラフィ
   - `constants/Layout.ts`: スペーシング・パディング・角丸・画面サイズ
+- **NativeWind v4** による TailwindCSS 統合
+  - `tailwind.config.js`: TailwindCSS 設定（NativeWind preset 使用）
+  - `global.css`: グローバルスタイル
+  - `react-native-css-interop`: CSS-in-JS と TailwindCSS の橋渡し
+  - `className` プロパティによる Tailwind スタイリング対応
 - 共通コンポーネント（`components/common`）
   - `Button`, `Card`, `Input`, `Header`, `TabBar`, `EmptyState`, `EventCard`, `FloatingActionButton`
   - シンプルな props 設計（variant/size/state など）とデザイン定数の一貫利用
+  - StyleSheet と className（NativeWind）のハイブリッド対応
 - **アイコン**
   - `@expo/vector-icons` をメインで使用
 
@@ -45,6 +52,10 @@
 - **TypeScript**: `strict: true`、パスエイリアス `@/*`（`tsconfig.json`）
 - **ESLint**: v9（Flat Config）+ `eslint-config-expo`
 - **パッケージマネージャ**: pnpm（`pnpm-lock.yaml` あり）
+- **NativeWind v4 設定**:
+  - `babel.config.js`: NativeWind babel preset 追加
+  - `metro.config.js`: NativeWind Metro 統合
+  - `tailwind.config.js`: コンテンツパス設定と NativeWind preset
 
 ### ディレクトリ構成（抜粋）
 ```
@@ -103,6 +114,7 @@ pnpm lint
 
 ## コーディング規約のポイント
 - デザイン定数（`Colors`/`Typography`/`Layout`）を経由してスタイルを適用
+- NativeWind v4 の `className` プロパティを活用した Tailwind スタイリング
 - 共通 UI を `components/common` に集約し、画面側では組み合わせる方針
 - TypeScript の型（`types/index.ts`）でドメイン構造を明確化（`Event`/`User` 等）
 - ファイルベースルーティング（`app/` 直下）に従う
@@ -111,3 +123,4 @@ pnpm lint
 ## 備考
 - `react-native-reanimated` は Expo により自動設定されます（Expo SDK 53 以降）
 - ルーティングは `expo-router` を第一級で採用。必要に応じて React Navigation の API を併用可能です。
+- NativeWind v4 により、TailwindCSS のクラスを React Native で使用可能です（`className` プロパティ）
