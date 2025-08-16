@@ -1,14 +1,20 @@
 import { Link, Stack } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
+import { Colors } from '@/constants/Colors';
+import { Typography } from '@/constants/Typography';
+import { Layout } from '@/constants/Layout';
 
 export default function NotFoundScreen() {
   return (
     <>
-      <Stack.Screen options={{ title: 'Oops!' }} />
+      <Stack.Screen options={{ title: 'ページが見つかりません' }} />
       <View style={styles.container}>
-        <Text style={styles.text}>This screen doesn't exist.</Text>
+        <Text style={styles.title}>ページが見つかりませんでした</Text>
+        <Text style={styles.description}>
+          お探しのページは存在しないか、移動された可能性があります。
+        </Text>
         <Link href="/" style={styles.link}>
-          <Text>Go to home screen!</Text>
+          <Text style={styles.linkText}>ホームに戻る</Text>
         </Link>
       </View>
     </>
@@ -20,14 +26,30 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 20,
+    padding: Layout.padding.lg,
+    backgroundColor: Colors.gray[50],
   },
-  text: {
-    fontSize: 20,
-    fontWeight: 600,
+  title: {
+    ...Typography.h2,
+    color: Colors.gray[900],
+    marginBottom: Layout.spacing.md,
+    textAlign: 'center',
+  },
+  description: {
+    ...Typography.body2,
+    color: Colors.gray[600],
+    textAlign: 'center',
+    marginBottom: Layout.spacing.xl,
+    lineHeight: 20,
   },
   link: {
-    marginTop: 15,
-    paddingVertical: 15,
+    paddingVertical: Layout.padding.md,
+    paddingHorizontal: Layout.padding.lg,
+    backgroundColor: Colors.primary[600],
+    borderRadius: Layout.borderRadius.md,
+  },
+  linkText: {
+    ...Typography.button,
+    color: Colors.white,
   },
 });

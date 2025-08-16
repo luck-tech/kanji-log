@@ -17,7 +17,9 @@ export default function WelcomeScreen() {
     <View style={styles.container}>
       {/* Background Image with Overlay */}
       <ImageBackground
-        source={{ uri: 'https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' }}
+        source={{
+          uri: 'https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+        }}
         style={styles.backgroundImage}
         resizeMode="cover"
       >
@@ -83,7 +85,7 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     paddingHorizontal: Layout.padding.lg,
-    paddingTop: Layout.padding.xxl + 20,
+    paddingTop: Layout.padding.xl + 20,
     paddingBottom: Layout.padding.lg,
   },
   header: {

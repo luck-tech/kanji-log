@@ -8,9 +8,18 @@ import {
   SafeAreaView,
   Alert,
 } from 'react-native';
-import { User, Bell, Shield, CircleHelp as HelpCircle, LogOut, ChevronRight, Mail, Phone, CreditCard as Edit } from 'lucide-react-native';
+import {
+  User,
+  Bell,
+  Shield,
+  CircleHelp as HelpCircle,
+  LogOut,
+  ChevronRight,
+  Mail,
+  Phone,
+  CreditCard as Edit,
+} from 'lucide-react-native';
 import { Card } from '@/components/common/Card';
-import { Button } from '@/components/common/Button';
 import { Colors } from '@/constants/Colors';
 import { Typography } from '@/constants/Typography';
 import { Layout } from '@/constants/Layout';
@@ -43,23 +52,19 @@ export default function SettingsScreen() {
   };
 
   const handleLogout = () => {
-    Alert.alert(
-      'ログアウト',
-      'アカウントからログアウトしますか？',
-      [
-        {
-          text: 'キャンセル',
-          style: 'cancel',
+    Alert.alert('ログアウト', 'アカウントからログアウトしますか？', [
+      {
+        text: 'キャンセル',
+        style: 'cancel',
+      },
+      {
+        text: 'ログアウト',
+        style: 'destructive',
+        onPress: () => {
+          console.log('Logout');
         },
-        {
-          text: 'ログアウト',
-          style: 'destructive',
-          onPress: () => {
-            console.log('Logout');
-          },
-        },
-      ]
-    );
+      },
+    ]);
   };
 
   const settingsItems: SettingsItem[] = [
@@ -101,9 +106,7 @@ export default function SettingsScreen() {
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>設定</Text>
-        <Text style={styles.headerSubtitle}>
-          アカウントとアプリの設定管理
-        </Text>
+        <Text style={styles.headerSubtitle}>アカウントとアプリの設定管理</Text>
       </View>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>

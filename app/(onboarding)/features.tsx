@@ -98,7 +98,10 @@ export default function FeaturesScreen() {
         {features.map((feature, index) => (
           <View key={feature.id} style={styles.featureContainer}>
             <Card
-              style={[styles.featureCard, { backgroundColor: feature.color }]}
+              style={{
+                ...styles.featureCard,
+                backgroundColor: feature.color,
+              }}
               shadow={false}
             >
               <View style={styles.iconContainer}>{feature.icon}</View>

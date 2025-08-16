@@ -2,7 +2,6 @@ import React from 'react';
 import {
   TouchableOpacity,
   Text,
-  StyleSheet,
   ActivityIndicator,
   ViewStyle,
   TextStyle,
@@ -131,7 +130,13 @@ export const Button: React.FC<ButtonProps> = ({
       )}
       {icon && !loading && <>{icon}</>}
       {title && (
-        <Text style={[getTextStyle(), textStyle, icon && { marginLeft: Layout.spacing.xs }]}>
+        <Text
+          style={[
+            getTextStyle(),
+            textStyle,
+            icon ? { marginLeft: Layout.spacing.xs } : undefined,
+          ]}
+        >
           {title}
         </Text>
       )}

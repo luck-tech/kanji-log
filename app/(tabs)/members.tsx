@@ -1,22 +1,11 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  SafeAreaView,
-} from 'react-native';
-import { 
-  Users, 
-  UserPlus, 
-  Mail,
-  Phone,
-  Search,
-} from 'lucide-react-native';
+import { View, Text, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
+import { Users, UserPlus, Mail, Phone, Search } from 'lucide-react-native';
 import { Card } from '@/components/common/Card';
 import { Input } from '@/components/common/Input';
 import { Button } from '@/components/common/Button';
+import { Header } from '@/components/common/Header';
+import { EmptyState } from '@/components/common/EmptyState';
 import { Colors } from '@/constants/Colors';
 import { Typography } from '@/constants/Typography';
 import { Layout } from '@/constants/Layout';
@@ -71,10 +60,11 @@ export default function MembersScreen() {
     if (query.trim() === '') {
       setFilteredMembers(mockMembers);
     } else {
-      const filtered = mockMembers.filter(member =>
-        member.name.toLowerCase().includes(query.toLowerCase()) ||
-        member.email.toLowerCase().includes(query.toLowerCase()) ||
-        member.department?.toLowerCase().includes(query.toLowerCase())
+      const filtered = mockMembers.filter(
+        (member) =>
+          member.name.toLowerCase().includes(query.toLowerCase()) ||
+          member.email.toLowerCase().includes(query.toLowerCase()) ||
+          member.department?.toLowerCase().includes(query.toLowerCase())
       );
       setFilteredMembers(filtered);
     }
@@ -82,21 +72,84 @@ export default function MembersScreen() {
 
   const handleAddMember = () => {
     console.log('Add member');
+    // TODO: Navigate to member creation page
   };
 
   const handleContactMember = (member: Member) => {
     console.log('Contact member:', member.name);
+    // TODO: Open contact options
+  };
+
+  const renderMembers = () => {
+    if (filteredMembers.length === 0) {
+      const title = searchQuery
+        ? '該当するメンバーが見つかりません'
+        : 'メンバーがいません';
+      const description = searchQuery
+        ? '検索条件を変更してお試しください'
+        : '新しいメンバーを追加してイベントに招待しましょう';
+
+      return (
+        <EmptyState icon={Users} title={title} description={description} />
+      );
+    }
+
+    return (
+      <View style={styles.memberList}>
+        {filteredMembers.map((member) => (
+          <Card key={member.id} style={styles.memberCard}>
+            <View style={styles.memberHeader}>
+              <View style={styles.avatar}>
+                <Text style={styles.avatarText}>{member.name.charAt(0)}</Text>
+              </View>
+              <View style={styles.memberInfo}>
+                <Text style={styles.memberName}>{member.name}</Text>
+                <Text style={styles.memberDepartment}>
+                  {member.department || '部署未設定'}
+                </Text>
+              </View>
+              <View style={styles.memberStats}>
+                <Text style={styles.participationCount}>
+                  {member.eventsParticipated}
+                </Text>
+                <Text style={styles.participationLabel}>参加</Text>
+              </View>
+            </View>
+
+            <View style={styles.memberDetails}>
+              <View style={styles.contactItem}>
+                <Mail size={16} color={Colors.gray[500]} />
+                <Text style={styles.contactText}>{member.email}</Text>
+              </View>
+              {member.phone && (
+                <View style={styles.contactItem}>
+                  <Phone size={16} color={Colors.gray[500]} />
+                  <Text style={styles.contactText}>{member.phone}</Text>
+                </View>
+              )}
+            </View>
+
+            <View style={styles.memberActions}>
+              <Button
+                title="連絡する"
+                onPress={() => handleContactMember(member)}
+                variant="outline"
+                size="sm"
+                style={styles.contactButton}
+              />
+            </View>
+          </Card>
+        ))}
+      </View>
+    );
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>メンバーリスト</Text>
-        <Text style={styles.headerSubtitle}>
-          イベントに参加可能なメンバー一覧
-        </Text>
-      </View>
+      <Header
+        title="メンバーリスト"
+        subtitle="イベントに参加可能なメンバー一覧"
+      />
 
       {/* Search and Add */}
       <View style={styles.searchContainer}>
@@ -130,77 +183,7 @@ export default function MembersScreen() {
 
       {/* Members List */}
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {filteredMembers.length > 0 ? (
-          <View style={styles.memberList}>
-            {filteredMembers.map((member) => (
-              <Card key={member.id} style={styles.memberCard}>
-                <View style={styles.memberHeader}>
-                  <View style={styles.avatar}>
-                    <Text style={styles.avatarText}>
-                      {member.name.charAt(0)}
-                    </Text>
-                  </View>
-                  <View style={styles.memberInfo}>
-                    <Text style={styles.memberName}>{member.name}</Text>
-                    <Text style={styles.memberDepartment}>
-                      {member.department || '部署未設定'}
-                    </Text>
-                  </View>
-                  <View style={styles.memberStats}>
-                    <Text style={styles.participationCount}>
-                      {member.eventsParticipated}
-                    </Text>
-                    <Text style={styles.participationLabel}>参加</Text>
-                  </View>
-                </View>
-
-                <View style={styles.memberDetails}>
-                  <View style={styles.contactItem}>
-                    <Mail size={16} color={Colors.gray[500]} />
-                    <Text style={styles.contactText}>{member.email}</Text>
-                  </View>
-                  {member.phone && (
-                    <View style={styles.contactItem}>
-                      <Phone size={16} color={Colors.gray[500]} />
-                      <Text style={styles.contactText}>{member.phone}</Text>
-                    </View>
-                  )}
-                </View>
-
-                <View style={styles.memberActions}>
-                  <Button
-                    title="連絡する"
-                    onPress={() => handleContactMember(member)}
-                    variant="outline"
-                    size="sm"
-                    style={styles.contactButton}
-                  />
-                </View>
-              </Card>
-            ))}
-          </View>
-        ) : (
-          <View style={styles.emptyState}>
-            <Users size={48} color={Colors.gray[400]} strokeWidth={1.5} />
-            <Text style={styles.emptyTitle}>
-              {searchQuery ? '該当するメンバーが見つかりません' : 'メンバーがいません'}
-            </Text>
-            <Text style={styles.emptyDescription}>
-              {searchQuery 
-                ? '検索条件を変更してお試しください' 
-                : '新しいメンバーを追加してイベントに招待しましょう'
-              }
-            </Text>
-            {!searchQuery && (
-              <Button
-                title="メンバーを追加"
-                onPress={handleAddMember}
-                style={styles.emptyActionButton}
-                icon={<UserPlus size={20} color={Colors.white} />}
-              />
-            )}
-          </View>
-        )}
+        {renderMembers()}
       </ScrollView>
     </SafeAreaView>
   );
@@ -211,21 +194,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.gray[50],
   },
-  header: {
-    paddingHorizontal: Layout.padding.lg,
-    paddingTop: Layout.padding.md,
-    paddingBottom: Layout.padding.lg,
-    backgroundColor: Colors.white,
-  },
-  headerTitle: {
-    ...Typography.h2,
-    color: Colors.gray[900],
-    marginBottom: Layout.spacing.xs,
-  },
-  headerSubtitle: {
-    ...Typography.body2,
-    color: Colors.gray[600],
-  },
   searchContainer: {
     flexDirection: 'row',
     paddingHorizontal: Layout.padding.lg,
@@ -233,24 +201,22 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     borderBottomWidth: 1,
     borderBottomColor: Colors.gray[100],
-    alignItems: 'flex-start',
     gap: Layout.spacing.sm,
   },
   searchInput: {
     flex: 1,
-    marginBottom: 0,
   },
   addButton: {
-    paddingHorizontal: Layout.padding.sm,
-    minWidth: 44,
-    marginTop: 24,
+    width: 44,
+    height: 44,
+    borderRadius: Layout.borderRadius.md,
   },
   statsContainer: {
     paddingHorizontal: Layout.padding.lg,
-    paddingTop: Layout.padding.md,
+    paddingVertical: Layout.padding.md,
   },
   statsCard: {
-    padding: Layout.padding.lg,
+    padding: Layout.padding.md,
   },
   statItem: {
     flexDirection: 'row',
@@ -258,11 +224,12 @@ const styles = StyleSheet.create({
     gap: Layout.spacing.md,
   },
   statText: {
-    alignItems: 'flex-start',
+    flex: 1,
   },
   statNumber: {
-    ...Typography.h2,
+    ...Typography.h3,
     color: Colors.gray[900],
+    marginBottom: Layout.spacing.xs,
   },
   statLabel: {
     ...Typography.body2,
@@ -276,25 +243,25 @@ const styles = StyleSheet.create({
     gap: Layout.spacing.md,
   },
   memberCard: {
-    marginBottom: Layout.spacing.md,
+    padding: Layout.padding.md,
   },
   memberHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: Layout.spacing.sm,
+    marginBottom: Layout.spacing.md,
   },
   avatar: {
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: Colors.primary[600],
+    backgroundColor: Colors.primary[100],
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: Layout.spacing.md,
   },
   avatarText: {
     ...Typography.h4,
-    color: Colors.white,
+    color: Colors.primary[600],
     fontWeight: '600',
   },
   memberInfo: {
@@ -303,7 +270,7 @@ const styles = StyleSheet.create({
   memberName: {
     ...Typography.h4,
     color: Colors.gray[900],
-    marginBottom: 2,
+    marginBottom: Layout.spacing.xs,
   },
   memberDepartment: {
     ...Typography.body2,
@@ -322,47 +289,22 @@ const styles = StyleSheet.create({
     color: Colors.gray[500],
   },
   memberDetails: {
-    gap: Layout.spacing.xs,
-    marginBottom: Layout.spacing.sm,
+    gap: Layout.spacing.sm,
+    marginBottom: Layout.spacing.md,
   },
   contactItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Layout.spacing.xs,
+    gap: Layout.spacing.sm,
   },
   contactText: {
     ...Typography.body2,
     color: Colors.gray[600],
   },
   memberActions: {
-    paddingTop: Layout.spacing.sm,
-    borderTopWidth: 1,
-    borderTopColor: Colors.gray[100],
+    alignItems: 'flex-end',
   },
   contactButton: {
-    alignSelf: 'flex-start',
-  },
-  emptyState: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: Layout.padding.xxl,
-  },
-  emptyTitle: {
-    ...Typography.h4,
-    color: Colors.gray[600],
-    marginTop: Layout.spacing.lg,
-    marginBottom: Layout.spacing.sm,
-    textAlign: 'center',
-  },
-  emptyDescription: {
-    ...Typography.body2,
-    color: Colors.gray[500],
-    textAlign: 'center',
-    lineHeight: 20,
-    marginBottom: Layout.spacing.lg,
-  },
-  emptyActionButton: {
-    marginTop: Layout.spacing.md,
+    minWidth: 80,
   },
 });

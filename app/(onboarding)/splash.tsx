@@ -31,7 +31,7 @@ export default function SplashScreen() {
     }, 2500);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [opacity, scale]);
 
   const animatedLogoStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],

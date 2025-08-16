@@ -7,7 +7,14 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from 'react-native';
-import { BookOpen, Star, MapPin, DollarSign, Lock, Share2, Clock as Unlock } from 'lucide-react-native';
+import {
+  Star,
+  MapPin,
+  DollarSign,
+  Lock,
+  Share2,
+  Clock as Unlock,
+} from 'lucide-react-native';
 import { Card } from '@/components/common/Card';
 import { Button } from '@/components/common/Button';
 import { Colors } from '@/constants/Colors';
@@ -24,7 +31,8 @@ const mockSharedRecords: SharedRecord[] = [
       eventId: '1',
       organizerId: '2',
       rating: 4.5,
-      notes: '雰囲気が良くて料理も美味しかった。予約が取りやすく、大人数でも対応してくれる。',
+      notes:
+        '雰囲気が良くて料理も美味しかった。予約が取りやすく、大人数でも対応してくれる。',
       totalCost: 25000,
       costPerPerson: 5000,
       venue: {
@@ -50,7 +58,8 @@ const mockSharedRecords: SharedRecord[] = [
       eventId: '2',
       organizerId: '3',
       rating: 4.0,
-      notes: 'コスパが良く、若手にも優しい価格帯。カジュアルな雰囲気で話しやすい。',
+      notes:
+        'コスパが良く、若手にも優しい価格帯。カジュアルな雰囲気で話しやすい。',
       totalCost: 18000,
       costPerPerson: 3600,
       venue: {
@@ -71,7 +80,7 @@ const mockSharedRecords: SharedRecord[] = [
 ];
 
 export default function RecordsScreen() {
-  const [hasSharedRecord, setHasSharedRecord] = useState(false);
+  const [hasSharedRecord] = useState(false);
 
   const handleUnlock = () => {
     console.log('Navigate to my events for sharing');
@@ -123,11 +132,7 @@ export default function RecordsScreen() {
     const emptyStars = 5 - Math.ceil(rating);
     for (let i = 0; i < emptyStars; i++) {
       stars.push(
-        <Star
-          key={`empty-${i}`}
-          size={14}
-          color={Colors.gray[300]}
-        />
+        <Star key={`empty-${i}`} size={14} color={Colors.gray[300]} />
       );
     }
 
@@ -151,10 +156,12 @@ export default function RecordsScreen() {
             <View style={styles.lockIcon}>
               <Lock size={48} color={Colors.gray[400]} strokeWidth={1.5} />
             </View>
-            
+
             <Text style={styles.unlockTitle}>記録を共有して、</Text>
-            <Text style={styles.unlockTitle}>他の幹事のナレッジを閲覧しよう</Text>
-            
+            <Text style={styles.unlockTitle}>
+              他の幹事のナレッジを閲覧しよう
+            </Text>
+
             <Text style={styles.unlockDescription}>
               あなたの終了済みイベントの記録を1つ以上共有すると、
               {'\n'}他の幹事が投稿した貴重な情報にアクセスできます。
@@ -220,7 +227,9 @@ export default function RecordsScreen() {
               <Card style={styles.recordCard}>
                 <View style={styles.recordHeader}>
                   <View style={styles.venueInfo}>
-                    <Text style={styles.venueName}>{record.eventLog.venue.name}</Text>
+                    <Text style={styles.venueName}>
+                      {record.eventLog.venue.name}
+                    </Text>
                     <View style={styles.ratingContainer}>
                       {renderStars(record.eventLog.rating)}
                       <Text style={styles.ratingText}>
@@ -228,7 +237,7 @@ export default function RecordsScreen() {
                       </Text>
                     </View>
                   </View>
-                  
+
                   <View style={styles.purposeBadge}>
                     <Text style={styles.purposeText}>
                       {getPurposeLabel(record.event.purpose)}
@@ -247,7 +256,7 @@ export default function RecordsScreen() {
                       ¥{record.eventLog.costPerPerson.toLocaleString()}/人
                     </Text>
                   </View>
-                  
+
                   <View style={styles.footerItem}>
                     <MapPin size={16} color={Colors.gray[500]} />
                     <Text style={styles.footerText}>
