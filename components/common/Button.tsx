@@ -11,7 +11,7 @@ import { Typography } from '@/constants/Typography';
 import { Layout } from '@/constants/Layout';
 
 interface ButtonProps {
-  title: string;
+  title?: string;
   onPress: () => void;
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
   size?: 'sm' | 'md' | 'lg';
@@ -128,7 +128,7 @@ export const Button: React.FC<ButtonProps> = ({
           style={[{ marginRight: icon || title ? Layout.spacing.xs : 0 }]}
         />
       )}
-      {icon && !loading && <>{icon}</>}
+      {icon && !loading && icon}
       {title && (
         <Text
           style={[

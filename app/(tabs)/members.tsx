@@ -161,7 +161,6 @@ export default function MembersScreen() {
           containerStyle={styles.searchInput}
         />
         <Button
-          title=""
           onPress={handleAddMember}
           icon={<Ionicons name="person-add-outline" size={20} color={Colors.white} />}
           style={styles.addButton}

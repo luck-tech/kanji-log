@@ -94,7 +94,6 @@ export default function AuthScreen() {
             leftIcon={<Ionicons name="lock-closed-outline" size={20} color={Colors.gray[400]} />}
             rightIcon={
               <Button
-                title=""
                 onPress={() => setShowPassword(!showPassword)}
                 variant="ghost"
                 style={styles.eyeButton}
