@@ -167,19 +167,6 @@ export default function MembersScreen() {
         />
       </View>
 
-      {/* Stats */}
-      <View style={styles.statsContainer}>
-        <Card style={styles.statsCard}>
-          <View style={styles.statItem}>
-            <Ionicons name="people-outline" size={24} color={Colors.primary[600]} />
-            <View style={styles.statText}>
-              <Text style={styles.statNumber}>{mockMembers.length}</Text>
-              <Text style={styles.statLabel}>総メンバー数</Text>
-            </View>
-          </View>
-        </Card>
-      </View>
-
       {/* Members List */}
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {renderMembers()}
@@ -209,30 +196,6 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: Layout.borderRadius.md,
-  },
-  statsContainer: {
-    paddingHorizontal: Layout.padding.lg,
-    paddingVertical: Layout.padding.md,
-  },
-  statsCard: {
-    padding: Layout.padding.md,
-  },
-  statItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Layout.spacing.md,
-  },
-  statText: {
-    flex: 1,
-  },
-  statNumber: {
-    ...Typography.h3,
-    color: Colors.gray[900],
-    marginBottom: Layout.spacing.xs,
-  },
-  statLabel: {
-    ...Typography.body2,
-    color: Colors.gray[600],
   },
   content: {
     flex: 1,
