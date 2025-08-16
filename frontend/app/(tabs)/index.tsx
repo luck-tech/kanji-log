@@ -148,11 +148,9 @@ export default function EventsScreen() {
       
       <SafeAreaView className="flex-1">
         <Header 
-          title="幹事ナビ" 
-          subtitle="飲み会の企画・管理をスマートに"
+          title="イベント" 
+          subtitle="飲み会の企画・管理"
           variant="gradient"
-          rightIcon="notifications-outline"
-          onRightPress={() => console.log('Notifications')}
         />
 
         <TabBar

@@ -256,7 +256,7 @@ export default function MembersScreen() {
       
       <SafeAreaView className="flex-1">
         <Header
-          title="メンバーリスト"
+          title="メンバー"
           subtitle="飲み会に参加可能なメンバー一覧"
           variant="gradient"
           rightIcon="person-add-outline"

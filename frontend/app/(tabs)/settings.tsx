@@ -104,8 +104,6 @@ export default function SettingsScreen() {
           title="設定"
           subtitle="アカウントとアプリ設定の管理"
           variant="gradient"
-          leftIcon="settings"
-          onLeftPress={() => console.log('Settings')}
         />
 
         <ScrollView 

@@ -145,8 +145,6 @@ export default function RecordsScreen() {
           title="みんなの記録"
           subtitle="他の幹事が共有した貴重な経験とナレッジ"
           variant="gradient"
-          leftIcon="book"
-          onLeftPress={() => console.log('Records')}
         />
 
         {!hasSharedRecord ? (

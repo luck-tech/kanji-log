@@ -28,7 +28,8 @@ export const Header: React.FC<HeaderProps> = ({
   onRightPress,
   animated = true
 }) => {
-  const baseClasses = `px-6 pt-safe-top pb-6 ${animated ? 'animate-fade-in' : ''}`;
+  const hasIcons = leftIcon || rightIcon;
+  const baseClasses = `${hasIcons ? 'px-6' : 'px-0'} p-6 ${animated ? 'animate-fade-in' : ''}`;
   
   const variantClasses = {
     default: 'bg-white',
@@ -37,8 +38,8 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   const headerContent = (
-    <View className="flex-row items-center justify-between">
-      {leftIcon ? (
+    <View className={hasIcons ? "flex-row items-center justify-between" : "items-center"}>
+      {leftIcon && (
         <TouchableOpacity
           onPress={onLeftPress}
           className="p-2 rounded-xl bg-neutral-100 mr-4"
@@ -46,11 +47,9 @@ export const Header: React.FC<HeaderProps> = ({
         >
           <Ionicons name={leftIcon as any} size={24} color="#334155" />
         </TouchableOpacity>
-      ) : (
-        <View className="w-8" />
       )}
       
-      <View className="flex-1 items-center">
+      <View className={hasIcons ? "flex-1 items-center" : "items-center"}>
         <Text className="text-3xl font-bold text-neutral-900 tracking-tight">
           {title}
         </Text>
@@ -61,7 +60,7 @@ export const Header: React.FC<HeaderProps> = ({
         )}
       </View>
       
-      {rightIcon ? (
+      {rightIcon && (
         <TouchableOpacity
           onPress={onRightPress}
           className="p-2 rounded-xl bg-neutral-100 ml-4"
@@ -69,8 +68,6 @@ export const Header: React.FC<HeaderProps> = ({
         >
           <Ionicons name={rightIcon as any} size={24} color="#334155" />
         </TouchableOpacity>
-      ) : (
-        <View className="w-8" />
       )}
     </View>
   );
@@ -84,8 +81,8 @@ export const Header: React.FC<HeaderProps> = ({
         className={`${baseClasses} ${className || ''}`}
         style={style}
       >
-        <View className="flex-row items-center justify-between">
-          {leftIcon ? (
+        <View className={hasIcons ? "flex-row items-center justify-between" : "items-center"}>
+          {leftIcon && (
             <TouchableOpacity
               onPress={onLeftPress}
               className="p-2 rounded-xl bg-white/20 mr-4"
@@ -93,11 +90,9 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <Ionicons name={leftIcon as any} size={24} color="#ffffff" />
             </TouchableOpacity>
-          ) : (
-            <View className="w-8" />
           )}
           
-          <View className="flex-1 items-center">
+          <View className={hasIcons ? "flex-1 items-center" : "items-center"}>
             <Text className="text-3xl font-bold text-white tracking-tight">
               {title}
             </Text>
@@ -108,7 +103,7 @@ export const Header: React.FC<HeaderProps> = ({
             )}
           </View>
           
-          {rightIcon ? (
+          {rightIcon && (
             <TouchableOpacity
               onPress={onRightPress}
               className="p-2 rounded-xl bg-white/20 ml-4"
@@ -116,8 +111,6 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <Ionicons name={rightIcon as any} size={24} color="#ffffff" />
             </TouchableOpacity>
-          ) : (
-            <View className="w-8" />
           )}
         </View>
       </LinearGradient>
