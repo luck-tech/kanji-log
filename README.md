@@ -1,6 +1,6 @@
 ## kanji-log 技術スタック / プロジェクト概要
 
-このリポジトリは Expo（React Native）をベースに、`expo-router` を用いたファイルベースルーティングで画面遷移を実装したモバイル/ウェブ対応アプリです。共通 UI は React Native の `StyleSheet` とカスタムのデザイン定数（`Colors`/`Typography`/`Layout`）に加えて、NativeWind v4（TailwindCSS for React Native）で統一されています。
+このリポジトリは Expo（React Native）をベースに、`expo-router` を用いたファイルベースルーティングで画面遷移を実装したモバイル/ウェブ対応アプリです。共通 UI は NativeWind v4（TailwindCSS for React Native）による `className` プロパティを用いたTailwindスタイリングで統一されています。
 
 ### 主要バージョン
 - **Expo SDK**: 53
@@ -23,19 +23,19 @@
   - expo-router が内部で React Navigation を利用（直接利用も可能）
 
 ### UI / スタイリング
-- **React Native StyleSheet** による設計
-  - `constants/Colors.ts`: カラーパレット（`primary`/`secondary`/`accent`/`gray` 等）
-  - `constants/Typography.ts`: 見出し/本文/ボタン/ラベルのタイポグラフィ
-  - `constants/Layout.ts`: スペーシング・パディング・角丸・画面サイズ
-- **NativeWind v4** による TailwindCSS 統合
+- **NativeWind v4** による TailwindCSS 統合（メインスタイリング）
   - `tailwind.config.js`: TailwindCSS 設定（NativeWind preset 使用）
   - `global.css`: グローバルスタイル
   - `react-native-css-interop`: CSS-in-JS と TailwindCSS の橋渡し
-  - `className` プロパティによる Tailwind スタイリング対応
+  - `className` プロパティによる Tailwind スタイリング
+- **デザイン定数**（一部コンポーネントで参照）
+  - `constants/Colors.ts`: カラーパレット（`primary`/`secondary`/`accent`/`gray` 等）
+  - `constants/Typography.ts`: 見出し/本文/ボタン/ラベルのタイポグラフィ定義
+  - `constants/Layout.ts`: スペーシング・パディング・角丸・画面サイズ
 - 共通コンポーネント（`components/common`）
   - `Button`, `Card`, `Input`, `Header`, `TabBar`, `EmptyState`, `EventCard`, `FloatingActionButton`
-  - シンプルな props 設計（variant/size/state など）とデザイン定数の一貫利用
-  - StyleSheet と className（NativeWind）のハイブリッド対応
+  - シンプルな props 設計（variant/size/state など）
+  - Tailwind `className` による統一されたスタイリング
 - **アイコン**
   - `@expo/vector-icons` をメインで使用
 
@@ -113,8 +113,8 @@ pnpm lint
 
 
 ## コーディング規約のポイント
-- デザイン定数（`Colors`/`Typography`/`Layout`）を経由してスタイルを適用
-- NativeWind v4 の `className` プロパティを活用した Tailwind スタイリング
+- **NativeWind v4** の `className` プロパティを活用した Tailwind スタイリングを主軸とする
+- デザイン定数（`Colors`/`Typography`/`Layout`）は必要に応じて参照
 - 共通 UI を `components/common` に集約し、画面側では組み合わせる方針
 - TypeScript の型（`types/index.ts`）でドメイン構造を明確化（`Event`/`User` 等）
 - ファイルベースルーティング（`app/` 直下）に従う
