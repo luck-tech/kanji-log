@@ -1,5 +1,5 @@
 import React from 'react';
-import { Clock, CircleCheck, Circle } from 'lucide-react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { Colors } from './Colors';
 import { EventStatus } from '@/types';
 
@@ -14,12 +14,12 @@ export const StatusIcon: React.FC<StatusIconProps> = ({
 }) => {
   switch (status) {
     case 'planning':
-      return <Clock size={size} color={Colors.warning[500]} />;
+      return <Ionicons name="time-outline" size={size} color={Colors.warning[500]} />;
     case 'confirmed':
-      return <CircleCheck size={size} color={Colors.success[500]} />;
+      return <Ionicons name="checkmark-circle-outline" size={size} color={Colors.success[500]} />;
     case 'completed':
-      return <Circle size={size} color={Colors.gray[500]} />;
+      return <Ionicons name="radio-button-off-outline" size={size} color={Colors.gray[500]} />;
     default:
-      return <Clock size={size} color={Colors.gray[500]} />;
+      return <Ionicons name="time-outline" size={size} color={Colors.gray[500]} />;
   }
 };

@@ -30,8 +30,7 @@
   - `Button`, `Card`, `Input`, `Header`, `TabBar`, `EmptyState`, `EventCard`, `FloatingActionButton`
   - シンプルな props 設計（variant/size/state など）とデザイン定数の一貫利用
 - **アイコン**
-  - `lucide-react-native` をメインで使用
-  - `@expo/vector-icons` も依存に含まれる（必要に応じて使用可能）
+  - `@expo/vector-icons` をメインで使用
 
 ### プラットフォーム / Expo モジュール
 - コア: `expo`, `expo-status-bar`, `expo-system-ui`, `expo-constants`, `expo-splash-screen`

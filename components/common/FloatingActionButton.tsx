@@ -1,11 +1,11 @@
 import React from 'react';
 import { TouchableOpacity, StyleSheet } from 'react-native';
-import { LucideIcon } from 'lucide-react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '@/constants/Colors';
 import { Layout } from '@/constants/Layout';
 
 interface FloatingActionButtonProps {
-  icon: LucideIcon;
+  icon: keyof typeof Ionicons.glyphMap;
   onPress: () => void;
   style?: any;
   size?: number;
@@ -13,7 +13,7 @@ interface FloatingActionButtonProps {
 }
 
 export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
-  icon: Icon,
+  icon,
   onPress,
   style,
   size = 24,
@@ -25,7 +25,7 @@ export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
       onPress={onPress}
       activeOpacity={0.8}
     >
-      <Icon size={size} color={color} strokeWidth={2} />
+      <Ionicons name={icon} size={size} color={color} />
     </TouchableOpacity>
   );
 };

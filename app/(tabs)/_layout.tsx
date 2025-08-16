@@ -1,10 +1,5 @@
 import { Tabs } from 'expo-router';
-import { 
-  Calendar,
-  Users,
-  BookOpen,
-  Settings,
-} from 'lucide-react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '@/constants/Colors';
 
 export default function TabLayout() {
@@ -34,7 +29,7 @@ export default function TabLayout() {
         options={{
           title: 'イベント',
           tabBarIcon: ({ size, color }) => (
-            <Calendar size={size} color={color} strokeWidth={2} />
+            <Ionicons name="calendar-outline" size={size} color={color} />
           ),
         }}
       />
@@ -43,7 +38,7 @@ export default function TabLayout() {
         options={{
           title: 'メンバー',
           tabBarIcon: ({ size, color }) => (
-            <Users size={size} color={color} strokeWidth={2} />
+            <Ionicons name="people-outline" size={size} color={color} />
           ),
         }}
       />
@@ -52,7 +47,7 @@ export default function TabLayout() {
         options={{
           title: 'みんなの記録',
           tabBarIcon: ({ size, color }) => (
-            <BookOpen size={size} color={color} strokeWidth={2} />
+            <Ionicons name="book-outline" size={size} color={color} />
           ),
         }}
       />
@@ -61,7 +56,7 @@ export default function TabLayout() {
         options={{
           title: '設定',
           tabBarIcon: ({ size, color }) => (
-            <Settings size={size} color={color} strokeWidth={2} />
+            <Ionicons name="settings-outline" size={size} color={color} />
           ),
         }}
       />

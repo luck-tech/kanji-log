@@ -7,14 +7,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from 'react-native';
-import {
-  Star,
-  MapPin,
-  DollarSign,
-  Lock,
-  Share2,
-  Clock as Unlock,
-} from 'lucide-react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { Card } from '@/components/common/Card';
 import { Button } from '@/components/common/Button';
 import { Header } from '@/components/common/Header';
@@ -110,22 +103,22 @@ export default function RecordsScreen() {
 
     for (let i = 0; i < fullStars; i++) {
       stars.push(
-        <Star
+        <Ionicons
           key={i}
+          name="star"
           size={14}
           color={Colors.accent[500]}
-          fill={Colors.accent[500]}
         />
       );
     }
 
     if (hasHalfStar) {
       stars.push(
-        <Star
+        <Ionicons
           key="half"
+          name="star-half"
           size={14}
           color={Colors.accent[500]}
-          fill={Colors.accent[200]}
         />
       );
     }
@@ -133,7 +126,7 @@ export default function RecordsScreen() {
     const emptyStars = 5 - Math.ceil(rating);
     for (let i = 0; i < emptyStars; i++) {
       stars.push(
-        <Star key={`empty-${i}`} size={14} color={Colors.gray[300]} />
+        <Ionicons key={`empty-${i}`} name="star-outline" size={14} color={Colors.gray[300]} />
       );
     }
 
@@ -155,7 +148,7 @@ export default function RecordsScreen() {
         >
           <View style={styles.unlockContent}>
             <View style={styles.lockIcon}>
-              <Lock size={48} color={Colors.gray[400]} strokeWidth={1.5} />
+              <Ionicons name="lock-closed-outline" size={48} color={Colors.gray[400]} />
             </View>
 
             <Text style={styles.unlockTitle}>記録を共有して、</Text>
@@ -168,19 +161,19 @@ export default function RecordsScreen() {
 
             <Card style={styles.benefitsCard}>
               <View style={styles.benefitItem}>
-                <Star size={20} color={Colors.accent[500]} />
+                <Ionicons name="star" size={20} color={Colors.accent[500]} />
                 <Text style={styles.benefitText}>お店の評価とレビュー</Text>
               </View>
               <View style={styles.benefitItem}>
-                <DollarSign size={20} color={Colors.success[500]} />
+                <Ionicons name="cash-outline" size={20} color={Colors.success[500]} />
                 <Text style={styles.benefitText}>予算と費用の参考情報</Text>
               </View>
               <View style={styles.benefitItem}>
-                <MapPin size={20} color={Colors.primary[600]} />
+                <Ionicons name="location-outline" size={20} color={Colors.primary[600]} />
                 <Text style={styles.benefitText}>エリア別のおすすめ店舗</Text>
               </View>
               <View style={styles.benefitItem}>
-                <Share2 size={20} color={Colors.secondary[600]} />
+                <Ionicons name="share-social-outline" size={20} color={Colors.secondary[600]} />
                 <Text style={styles.benefitText}>イベント企画のコツ</Text>
               </View>
             </Card>
@@ -190,7 +183,7 @@ export default function RecordsScreen() {
               onPress={handleUnlock}
               size="lg"
               fullWidth
-              icon={<Unlock size={20} color={Colors.white} />}
+              icon={<Ionicons name="lock-open-outline" size={20} color={Colors.white} />}
               style={styles.unlockButton}
             />
 
@@ -240,14 +233,14 @@ export default function RecordsScreen() {
 
                   <View style={styles.recordFooter}>
                     <View style={styles.footerItem}>
-                      <DollarSign size={16} color={Colors.success[500]} />
+                      <Ionicons name="cash-outline" size={16} color={Colors.success[500]} />
                       <Text style={styles.footerText}>
                         ¥{record.eventLog.costPerPerson.toLocaleString()}/人
                       </Text>
                     </View>
 
                     <View style={styles.footerItem}>
-                      <MapPin size={16} color={Colors.gray[500]} />
+                      <Ionicons name="location-outline" size={16} color={Colors.gray[500]} />
                       <Text style={styles.footerText}>
                         {record.eventLog.venue.address}
                       </Text>

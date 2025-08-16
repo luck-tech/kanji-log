@@ -8,17 +8,7 @@ import {
   SafeAreaView,
   Alert,
 } from 'react-native';
-import {
-  User,
-  Bell,
-  Shield,
-  CircleHelp as HelpCircle,
-  LogOut,
-  ChevronRight,
-  Mail,
-  Phone,
-  CreditCard as Edit,
-} from 'lucide-react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { Card } from '@/components/common/Card';
 import { Colors } from '@/constants/Colors';
 import { Typography } from '@/constants/Typography';
@@ -72,7 +62,7 @@ export default function SettingsScreen() {
       id: 'notifications',
       title: '通知設定',
       description: 'イベントの更新やリマインダーの設定',
-      icon: <Bell size={24} color={Colors.gray[600]} />,
+      icon: <Ionicons name="notifications-outline" size={24} color={Colors.gray[600]} />,
       onPress: handleNotifications,
       showArrow: true,
     },
@@ -80,7 +70,7 @@ export default function SettingsScreen() {
       id: 'privacy',
       title: 'プライバシー・セキュリティ',
       description: 'アカウントの安全性と情報の共有設定',
-      icon: <Shield size={24} color={Colors.gray[600]} />,
+      icon: <Ionicons name="shield-outline" size={24} color={Colors.gray[600]} />,
       onPress: handlePrivacy,
       showArrow: true,
     },
@@ -88,14 +78,14 @@ export default function SettingsScreen() {
       id: 'support',
       title: 'ヘルプ・サポート',
       description: '使い方や問題の解決方法',
-      icon: <HelpCircle size={24} color={Colors.gray[600]} />,
+      icon: <Ionicons name="help-circle-outline" size={24} color={Colors.gray[600]} />,
       onPress: handleSupport,
       showArrow: true,
     },
     {
       id: 'logout',
       title: 'ログアウト',
-      icon: <LogOut size={24} color={Colors.error[500]} />,
+      icon: <Ionicons name="log-out-outline" size={24} color={Colors.error[500]} />,
       onPress: handleLogout,
       textColor: Colors.error[500],
     },
@@ -114,7 +104,7 @@ export default function SettingsScreen() {
         <Card style={styles.profileCard}>
           <View style={styles.profileHeader}>
             <View style={styles.avatar}>
-              <User size={32} color={Colors.white} />
+              <Ionicons name="person" size={32} color={Colors.white} />
             </View>
             <View style={styles.profileInfo}>
               <Text style={styles.profileName}>山田太郎</Text>
@@ -124,17 +114,17 @@ export default function SettingsScreen() {
               style={styles.editButton}
               onPress={handleEditProfile}
             >
-              <Edit size={20} color={Colors.primary[600]} />
+              <Ionicons name="pencil" size={20} color={Colors.primary[600]} />
             </TouchableOpacity>
           </View>
 
           <View style={styles.profileDetails}>
             <View style={styles.profileDetailItem}>
-              <Mail size={16} color={Colors.gray[500]} />
+              <Ionicons name="mail-outline" size={16} color={Colors.gray[500]} />
               <Text style={styles.profileDetailText}>yamada@example.com</Text>
             </View>
             <View style={styles.profileDetailItem}>
-              <Phone size={16} color={Colors.gray[500]} />
+              <Ionicons name="call-outline" size={16} color={Colors.gray[500]} />
               <Text style={styles.profileDetailText}>090-1234-5678</Text>
             </View>
           </View>
@@ -191,7 +181,7 @@ export default function SettingsScreen() {
                     </View>
                   </View>
                   {item.showArrow && (
-                    <ChevronRight size={20} color={Colors.gray[400]} />
+                    <Ionicons name="chevron-forward" size={20} color={Colors.gray[400]} />
                   )}
                 </View>
               </Card>

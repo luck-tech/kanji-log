@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, ImageBackground } from 'react-native';
 import { router } from 'expo-router';
-import { Users, ArrowRight } from 'lucide-react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Button } from '@/components/common/Button';
 import { Colors } from '@/constants/Colors';
@@ -31,7 +31,7 @@ export default function WelcomeScreen() {
             {/* Header */}
             <View style={styles.header}>
               <View style={styles.iconContainer}>
-                <Users size={32} color={Colors.white} strokeWidth={2} />
+                <Ionicons name="people" size={32} color={Colors.white} />
               </View>
               <Text style={styles.appName}>幹事ナビ</Text>
             </View>
@@ -57,7 +57,7 @@ export default function WelcomeScreen() {
                 variant="secondary"
                 size="lg"
                 fullWidth
-                icon={<ArrowRight size={20} color={Colors.primary[600]} />}
+                icon={<Ionicons name="arrow-forward" size={20} color={Colors.primary[600]} />}
                 style={styles.startButton}
                 textStyle={styles.startButtonText}
               />

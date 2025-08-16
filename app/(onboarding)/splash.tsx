@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
-import { Calendar } from 'lucide-react-native';
+import { Ionicons } from '@expo/vector-icons';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -42,7 +42,7 @@ export default function SplashScreen() {
     <View style={styles.container}>
       <Animated.View style={[styles.logoContainer, animatedLogoStyle]}>
         <View style={styles.iconContainer}>
-          <Calendar size={48} color={Colors.white} strokeWidth={2} />
+          <Ionicons name="calendar" size={48} color={Colors.white} />
         </View>
         <Text style={styles.title}>幹事ナビ</Text>
         <Text style={styles.subtitle}>Event Organizer</Text>

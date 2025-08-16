@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
-import { Users, UserPlus, Mail, Phone, Search } from 'lucide-react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { Card } from '@/components/common/Card';
 import { Input } from '@/components/common/Input';
 import { Button } from '@/components/common/Button';
@@ -90,7 +90,7 @@ export default function MembersScreen() {
         : '新しいメンバーを追加してイベントに招待しましょう';
 
       return (
-        <EmptyState icon={Users} title={title} description={description} />
+        <EmptyState icon="people-outline" title={title} description={description} />
       );
     }
 
@@ -118,12 +118,12 @@ export default function MembersScreen() {
 
             <View style={styles.memberDetails}>
               <View style={styles.contactItem}>
-                <Mail size={16} color={Colors.gray[500]} />
+                <Ionicons name="mail-outline" size={16} color={Colors.gray[500]} />
                 <Text style={styles.contactText}>{member.email}</Text>
               </View>
               {member.phone && (
                 <View style={styles.contactItem}>
-                  <Phone size={16} color={Colors.gray[500]} />
+                  <Ionicons name="call-outline" size={16} color={Colors.gray[500]} />
                   <Text style={styles.contactText}>{member.phone}</Text>
                 </View>
               )}
@@ -157,13 +157,13 @@ export default function MembersScreen() {
           placeholder="名前、メール、部署で検索"
           value={searchQuery}
           onChangeText={handleSearch}
-          leftIcon={<Search size={20} color={Colors.gray[400]} />}
+          leftIcon={<Ionicons name="search-outline" size={20} color={Colors.gray[400]} />}
           containerStyle={styles.searchInput}
         />
         <Button
           title=""
           onPress={handleAddMember}
-          icon={<UserPlus size={20} color={Colors.white} />}
+          icon={<Ionicons name="person-add-outline" size={20} color={Colors.white} />}
           style={styles.addButton}
         />
       </View>
@@ -172,7 +172,7 @@ export default function MembersScreen() {
       <View style={styles.statsContainer}>
         <Card style={styles.statsCard}>
           <View style={styles.statItem}>
-            <Users size={24} color={Colors.primary[600]} />
+            <Ionicons name="people-outline" size={24} color={Colors.primary[600]} />
             <View style={styles.statText}>
               <Text style={styles.statNumber}>{mockMembers.length}</Text>
               <Text style={styles.statLabel}>総メンバー数</Text>

@@ -1,12 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import { router } from 'expo-router';
-import {
-  ArrowRight,
-  TrendingDown,
-  Database,
-  Share2,
-} from 'lucide-react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { Button } from '@/components/common/Button';
 import { Card } from '@/components/common/Card';
 import { Colors } from '@/constants/Colors';
@@ -27,7 +22,7 @@ const features: Feature[] = [
   {
     id: 1,
     icon: (
-      <TrendingDown size={32} color={Colors.primary[600]} strokeWidth={2} />
+      <Ionicons name="trending-down" size={32} color={Colors.primary[600]} />
     ),
     title: '負担削減',
     description:
@@ -36,7 +31,7 @@ const features: Feature[] = [
   },
   {
     id: 2,
-    icon: <Database size={32} color={Colors.secondary[600]} strokeWidth={2} />,
+    icon: <Ionicons name="server-outline" size={32} color={Colors.secondary[600]} />,
     title: 'ナレッジ蓄積',
     description:
       '過去のイベント情報を記録して、次回の企画に活かせるあなただけの幹事データベースを構築。',
@@ -44,7 +39,7 @@ const features: Feature[] = [
   },
   {
     id: 3,
-    icon: <Share2 size={32} color={Colors.accent[600]} strokeWidth={2} />,
+    icon: <Ionicons name="share-social-outline" size={32} color={Colors.accent[600]} />,
     title: '集合知',
     description:
       '他の幹事が共有した経験やおすすめ店舗情報にアクセスして、より良いイベントを企画。',
@@ -133,7 +128,7 @@ export default function FeaturesScreen() {
           onPress={handleNext}
           size="lg"
           fullWidth
-          icon={<ArrowRight size={20} color={Colors.white} />}
+          icon={<Ionicons name="arrow-forward" size={20} color={Colors.white} />}
         />
       </View>
     </View>

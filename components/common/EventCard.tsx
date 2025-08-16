@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Calendar, Users } from 'lucide-react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { Card } from './Card';
 import { Colors } from '@/constants/Colors';
 import { Typography } from '@/constants/Typography';
@@ -54,12 +54,12 @@ export const EventCard: React.FC<EventCardProps> = ({
 
         <View style={styles.eventInfo}>
           <View style={styles.infoItem}>
-            <Calendar size={16} color={Colors.gray[500]} />
+            <Ionicons name="calendar-outline" size={16} color={Colors.gray[500]} />
             <Text style={styles.infoText}>{formatDate(event)}</Text>
           </View>
 
           <View style={styles.infoItem}>
-            <Users size={16} color={Colors.gray[500]} />
+            <Ionicons name="people-outline" size={16} color={Colors.gray[500]} />
             <Text style={styles.infoText}>{event.members.length}名参加</Text>
           </View>
         </View>

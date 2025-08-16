@@ -8,7 +8,7 @@ import {
   ScrollView,
 } from 'react-native';
 import { router } from 'expo-router';
-import { Mail, Lock, Eye, EyeOff, User } from 'lucide-react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { Button } from '@/components/common/Button';
 import { Input } from '@/components/common/Input';
 import { Colors } from '@/constants/Colors';
@@ -71,7 +71,7 @@ export default function AuthScreen() {
               value={form.name}
               onChangeText={(text) => setForm({ ...form, name: text })}
               placeholder="山田太郎"
-              leftIcon={<User size={20} color={Colors.gray[400]} />}
+              leftIcon={<Ionicons name="person-outline" size={20} color={Colors.gray[400]} />}
             />
           )}
 
@@ -82,7 +82,7 @@ export default function AuthScreen() {
             placeholder="example@email.com"
             keyboardType="email-address"
             autoCapitalize="none"
-            leftIcon={<Mail size={20} color={Colors.gray[400]} />}
+            leftIcon={<Ionicons name="mail-outline" size={20} color={Colors.gray[400]} />}
           />
 
           <Input
@@ -91,7 +91,7 @@ export default function AuthScreen() {
             onChangeText={(text) => setForm({ ...form, password: text })}
             placeholder="8文字以上"
             secureTextEntry={!showPassword}
-            leftIcon={<Lock size={20} color={Colors.gray[400]} />}
+            leftIcon={<Ionicons name="lock-closed-outline" size={20} color={Colors.gray[400]} />}
             rightIcon={
               <Button
                 title=""
@@ -100,9 +100,9 @@ export default function AuthScreen() {
                 style={styles.eyeButton}
                 icon={
                   showPassword ? (
-                    <EyeOff size={20} color={Colors.gray[400]} />
+                    <Ionicons name="eye-off-outline" size={20} color={Colors.gray[400]} />
                   ) : (
-                    <Eye size={20} color={Colors.gray[400]} />
+                    <Ionicons name="eye-outline" size={20} color={Colors.gray[400]} />
                   )
                 }
               />

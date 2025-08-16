@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
-import { Plus, Calendar } from 'lucide-react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { Header } from '@/components/common/Header';
 import { TabBar } from '@/components/common/TabBar';
 import { EventCard } from '@/components/common/EventCard';
@@ -83,7 +83,7 @@ export default function EventsScreen() {
       const messages = EMPTY_STATE_MESSAGES[activeTab];
       return (
         <EmptyState
-          icon={Calendar}
+          icon="calendar-outline"
           title={messages.title}
           description={messages.description}
         />
@@ -118,7 +118,7 @@ export default function EventsScreen() {
         {renderEvents()}
       </ScrollView>
 
-      <FloatingActionButton icon={Plus} onPress={handleCreateEvent} />
+      <FloatingActionButton icon="add" onPress={handleCreateEvent} />
     </SafeAreaView>
   );
 }
