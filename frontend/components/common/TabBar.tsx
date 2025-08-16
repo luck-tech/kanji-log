@@ -59,13 +59,20 @@ export function TabBar<T>({
             onPress={() => handleTabPress(tab.key)}
             activeOpacity={0.8}
           >
-            <Text
-              className={`text-base font-semibold tracking-wide ${
-                isActive ? 'text-white' : 'text-neutral-600'
-              }`}
-            >
-              {tab.label}
-            </Text>
+            <View className="flex-row items-center">
+              {tab.icon && (
+                <Text className={`text-base mr-2 ${isActive ? '' : 'opacity-60'}`}>
+                  {tab.icon}
+                </Text>
+              )}
+              <Text
+                className={`text-base font-semibold tracking-wide ${
+                  isActive ? 'text-white' : 'text-neutral-600'
+                }`}
+              >
+                {tab.label}
+              </Text>
+            </View>
           </TouchableOpacity>
         );
       })}
@@ -90,15 +97,25 @@ export function TabBar<T>({
                 end={{ x: 1, y: 1 }}
                 className="py-3 px-4 rounded-xl"
               >
-                <Text className="text-base font-semibold text-white text-center tracking-wide">
-                  {tab.label}
-                </Text>
+                <View className="items-center">
+                  {tab.icon && (
+                    <Text className="text-lg mb-1">{tab.icon}</Text>
+                  )}
+                  <Text className="whitespace-nowrap text-xs font-semibold text-white text-center leading-tight">
+                    {tab.label}
+                  </Text>
+                </View>
               </LinearGradient>
             ) : (
-              <View className="py-3 px-4">
-                <Text className="text-base font-medium text-neutral-600 text-center">
-                  {tab.label}
-                </Text>
+              <View className="py-3 px-6">
+                <View className="items-center">
+                  {tab.icon && (
+                    <Text className="text-lg mb-1 opacity-60">{tab.icon}</Text>
+                  )}
+                  <Text className="whitespace-nowrap text-xs font-medium text-neutral-600 text-center leading-tight">
+                    {tab.label}
+                  </Text>
+                </View>
               </View>
             )}
           </TouchableOpacity>
@@ -122,13 +139,20 @@ export function TabBar<T>({
             onPress={() => handleTabPress(tab.key)}
             activeOpacity={0.8}
           >
-            <Text
-              className={`text-base font-medium ${
-                isActive ? 'text-primary-600 font-semibold' : 'text-neutral-600'
-              }`}
-            >
-              {tab.label}
-            </Text>
+            <View className="flex-row items-center">
+              {tab.icon && (
+                <Text className={`text-base mr-2 ${isActive ? '' : 'opacity-60'}`}>
+                  {tab.icon}
+                </Text>
+              )}
+              <Text
+                className={`text-base font-medium ${
+                  isActive ? 'text-primary-600 font-semibold' : 'text-neutral-600'
+                }`}
+              >
+                {tab.label}
+              </Text>
+            </View>
           </TouchableOpacity>
         );
       })}
