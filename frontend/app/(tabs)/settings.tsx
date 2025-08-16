@@ -124,7 +124,6 @@ export default function SettingsScreen() {
               </LinearGradient>
               <View className="flex-1">
                 <Text className="text-xl font-bold text-neutral-900 mb-1">幹事太郎</Text>
-                <Text className="text-base text-neutral-600">イベント企画・管理者</Text>
               </View>
               <TouchableOpacity
                 className="p-3 rounded-2xl bg-neutral-100"
@@ -173,7 +172,7 @@ export default function SettingsScreen() {
                 <View className="w-16 h-16 rounded-2xl bg-accent-100 justify-center items-center mb-2">
                   <Text className="text-2xl font-bold text-accent-700">45</Text>
                 </View>
-                <Text className="text-sm text-neutral-600 font-medium">招待メンバー</Text>
+                <Text className="text-sm text-neutral-600 font-medium">メンバー記録数</Text>
               </View>
             </View>
           </Card>
@@ -227,13 +226,13 @@ export default function SettingsScreen() {
             >
               <Ionicons name="wine" size={28} color="white" />
             </LinearGradient>
-            <Text className="text-2xl font-bold text-primary-600 mb-2">幹事ナビ</Text>
+            <Text className="text-2xl font-bold text-primary-600 mb-2">幹事ログ</Text>
             <Text className="text-base text-neutral-600 mb-3">バージョン 1.0.0</Text>
             <Text className="text-sm text-neutral-500 text-center max-w-xs">
               飲み会の企画・管理をスマートにサポートするアプリ
             </Text>
             <Text className="text-xs text-neutral-400 text-center mt-4">
-              © 2024 Kanji Navi. All rights reserved.
+              © 2025 幹事ログ. All rights reserved.
             </Text>
           </View>
         </ScrollView>

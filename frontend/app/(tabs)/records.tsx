@@ -11,9 +11,10 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Card } from '@/components/common/Card';
 import { Button } from '@/components/common/Button';
 import { Header } from '@/components/common/Header';
+import { TabBar } from '@/components/common/TabBar';
 import { SharedRecord, EventPurpose } from '@/types';
 
-// Mock data
+// Mock data with additional filter data
 const mockSharedRecords: SharedRecord[] = [
   {
     id: '1',
@@ -30,6 +31,8 @@ const mockSharedRecords: SharedRecord[] = [
         name: '居酒屋花月',
         address: '東京都渋谷区',
         phone: '03-1234-5678',
+        genre: '居酒屋',
+        area: '渋谷区',
       },
       isShared: true,
       createdAt: '2024-01-20',
@@ -56,6 +59,8 @@ const mockSharedRecords: SharedRecord[] = [
       venue: {
         name: 'イタリアン ROSSO',
         address: '東京都新宿区',
+        genre: 'イタリアン',
+        area: '新宿区',
       },
       isShared: true,
       createdAt: '2024-01-15',
@@ -68,10 +73,77 @@ const mockSharedRecords: SharedRecord[] = [
       name: '佐藤部長',
     },
   },
+  {
+    id: '3',
+    eventLog: {
+      id: '3',
+      eventId: '3',
+      organizerId: '4',
+      rating: 3.8,
+      notes:
+        'フレンドリーなスタッフで、歓迎会にピッタリ。食事も美味しくボリューム満点。',
+      totalCost: 15000,
+      costPerPerson: 3000,
+      venue: {
+        name: '中華料理 龍園',
+        address: '東京都港区',
+        genre: '中華料理',
+        area: '港区',
+      },
+      isShared: true,
+      createdAt: '2024-01-10',
+    },
+    event: {
+      title: '歓迎会',
+      purpose: 'welcome',
+    },
+    organizer: {
+      name: '鈴木課長',
+    },
+  },
+  {
+    id: '4',
+    eventLog: {
+      id: '4',
+      eventId: '4',
+      organizerId: '5',
+      rating: 4.2,
+      notes:
+        '送別会にふさわしい落ち着いた雰囲気。個室があり、ゆっくり話せる。',
+      totalCost: 30000,
+      costPerPerson: 6000,
+      venue: {
+        name: 'フレンチビストロ Le Petit',
+        address: '東京都千代田区',
+        genre: 'フレンチ',
+        area: '千代田区',
+      },
+      isShared: true,
+      createdAt: '2024-01-05',
+    },
+    event: {
+      title: '送別会',
+      purpose: 'farewell',
+    },
+    organizer: {
+      name: '山田部長',
+    },
+  },
+];
+
+// Filter tabs
+const filterTabs = [
+  { key: 'all', label: 'すべて' },
+  { key: 'purpose', label: '目的別' },
+  { key: 'area', label: 'エリア別' },
+  { key: 'genre', label: 'ジャンル別' },
+  { key: 'budget', label: '予算別' },
 ];
 
 export default function RecordsScreen() {
   const [hasSharedRecord] = useState(true); // Changed to true to show records by default
+  const [activeFilter, setActiveFilter] = useState('all');
+  const [filteredRecords, setFilteredRecords] = useState(mockSharedRecords);
 
   const handleUnlock = () => {
     console.log('Navigate to my events for sharing');
@@ -79,6 +151,12 @@ export default function RecordsScreen() {
 
   const handleRecordPress = (record: SharedRecord) => {
     console.log('View record details:', record.id);
+  };
+
+  const handleFilterChange = (filterKey: string) => {
+    setActiveFilter(filterKey);
+    // For now, just set all records. In real app, implement actual filtering
+    setFilteredRecords(mockSharedRecords);
   };
 
   const getPurposeLabel = (purpose: EventPurpose): string => {
@@ -224,13 +302,23 @@ export default function RecordsScreen() {
           </ScrollView>
         ) : (
           /* Records List */
-          <ScrollView
-            className="flex-1 px-6"
-            contentContainerStyle={{ paddingTop: 20, paddingBottom: 120 }}
-            showsVerticalScrollIndicator={false}
-          >
-            <View className="gap-4">
-              {mockSharedRecords.map((record, index) => (
+          <View className="flex-1">
+            <TabBar
+              tabs={filterTabs}
+              activeTab={activeFilter}
+              onTabPress={handleFilterChange}
+              variant="pills"
+              animated={true}
+              className="bg-transparent px-6"
+            />
+            
+            <ScrollView
+              className="flex-1 px-6"
+              contentContainerStyle={{ paddingTop: 16, paddingBottom: 120 }}
+              showsVerticalScrollIndicator={false}
+            >
+              <View className="gap-4">
+                {filteredRecords.map((record, index) => (
                 <TouchableOpacity
                   key={record.id}
                   onPress={() => handleRecordPress(record)}
@@ -291,13 +379,14 @@ export default function RecordsScreen() {
                     </View>
                   </Card>
                 </TouchableOpacity>
-              ))}
+                                ))}
+                </View>
+              </ScrollView>
             </View>
-          </ScrollView>
-        )}
-      </SafeAreaView>
-    </View>
-  );
-}
+          )}
+        </SafeAreaView>
+      </View>
+    );
+  }
 
 

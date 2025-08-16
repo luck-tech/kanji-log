@@ -22,9 +22,9 @@ const mockEvents: Event[] = [
     status: 'planning',
     organizerId: '1',
     members: [
-      { id: '1', name: '田中太郎', email: 'tanaka@example.com' },
-      { id: '2', name: '佐藤花子', email: 'sato@example.com' },
-      { id: '3', name: '鈴木次郎', email: 'suzuki@example.com' },
+      { id: '1', userId: '1', name: '田中太郎', email: 'tanaka@example.com', responseStatus: 'pending', dateResponses: [], joinedAt: '2024-01-15' },
+      { id: '2', userId: '2', name: '佐藤花子', email: 'sato@example.com', responseStatus: 'pending', dateResponses: [], joinedAt: '2024-01-15' },
+      { id: '3', userId: '3', name: '鈴木次郎', email: 'suzuki@example.com', responseStatus: 'pending', dateResponses: [], joinedAt: '2024-01-15' },
     ],
     createdAt: '2024-01-15',
     updatedAt: '2024-01-15',
@@ -52,10 +52,10 @@ const mockEvents: Event[] = [
     time: '18:30',
     organizerId: '1',
     members: [
-      { id: '1', name: '田中太郎', email: 'tanaka@example.com' },
-      { id: '4', name: '山田三郎', email: 'yamada@example.com' },
-      { id: '5', name: '高橋四郎', email: 'takahashi@example.com' },
-      { id: '6', name: '伊藤五郎', email: 'ito@example.com' },
+      { id: '1', userId: '1', name: '田中太郎', email: 'tanaka@example.com', responseStatus: 'accepted', dateResponses: [], joinedAt: '2024-01-10' },
+      { id: '4', userId: '4', name: '山田三郎', email: 'yamada@example.com', responseStatus: 'accepted', dateResponses: [], joinedAt: '2024-01-10' },
+      { id: '5', userId: '5', name: '高橋四郎', email: 'takahashi@example.com', responseStatus: 'accepted', dateResponses: [], joinedAt: '2024-01-10' },
+      { id: '6', userId: '6', name: '伊藤五郎', email: 'ito@example.com', responseStatus: 'accepted', dateResponses: [], joinedAt: '2024-01-10' },
     ],
     createdAt: '2024-01-10',
     updatedAt: '2024-01-20',
@@ -69,8 +69,8 @@ const mockEvents: Event[] = [
     time: '19:00',
     organizerId: '1',
     members: [
-      { id: '1', name: '田中太郎', email: 'tanaka@example.com' },
-      { id: '2', name: '佐藤花子', email: 'sato@example.com' },
+      { id: '1', userId: '1', name: '田中太郎', email: 'tanaka@example.com', responseStatus: 'accepted', dateResponses: [], joinedAt: '2024-01-05' },
+      { id: '2', userId: '2', name: '佐藤花子', email: 'sato@example.com', responseStatus: 'accepted', dateResponses: [], joinedAt: '2024-01-05' },
     ],
     createdAt: '2024-01-05',
     updatedAt: '2024-01-21',
@@ -127,7 +127,6 @@ export default function EventsScreen() {
             <EventCard
               event={event}
               onPress={handleEventPress}
-              statusIcon={<StatusIcon status={event.status} />}
               variant="elevated"
             />
           </View>
@@ -157,7 +156,7 @@ export default function EventsScreen() {
           tabs={EVENT_STATUS_TABS}
           activeTab={activeTab}
           onTabPress={setActiveTab}
-          variant="pills"
+          variant="segmented"
           animated={true}
           className="bg-transparent"
         />
@@ -184,7 +183,7 @@ export default function EventsScreen() {
           icon="add" 
           onPress={handleCreateEvent}
           variant="gradient"
-          size="lg"
+          size="md"
           animated={true}
         />
       </SafeAreaView>

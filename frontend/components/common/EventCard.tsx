@@ -8,7 +8,6 @@ import { Event } from '@/types';
 interface EventCardProps {
   event: Event;
   onPress: (eventId: string) => void;
-  statusIcon: React.ReactNode;
   style?: any;
   className?: string;
   variant?: 'default' | 'gradient' | 'elevated';
@@ -17,7 +16,6 @@ interface EventCardProps {
 export const EventCard: React.FC<EventCardProps> = ({
   event,
   onPress,
-  statusIcon,
   style,
   className,
   variant = 'elevated',
@@ -42,37 +40,15 @@ export const EventCard: React.FC<EventCardProps> = ({
     return purposeMap[purpose as keyof typeof purposeMap] || 'その他';
   };
 
-  const getStatusColor = (status: string) => {
-    const colorMap = {
-      planning: '#f59e0b',
-      confirmed: '#10b981',
-      completed: '#6b7280',
-      cancelled: '#ef4444'
-    };
-    return colorMap[status as keyof typeof colorMap] || '#6b7280';
-  };
+
 
   const CardContent = () => (
     <>
       {/* Header Section */}
-      <View className="flex-row justify-between items-start mb-4">
-        <View className="flex-1 mr-4">
-          <Text className="text-xl font-bold text-neutral-900 mb-1 leading-6">
-            {event.title}
-          </Text>
-          <View className="flex-row items-center">
-            <View 
-              className="w-2 h-2 rounded-full mr-2"
-              style={{ backgroundColor: getStatusColor(event.status) }}
-            />
-            <Text className="text-sm font-medium text-neutral-600 capitalize">
-              {event.status}
-            </Text>
-          </View>
-        </View>
-        <View className="p-3 rounded-2xl bg-primary-50">
-          {statusIcon}
-        </View>
+      <View className="mb-4">
+        <Text className="text-xl font-bold text-neutral-900 mb-1 leading-6">
+          {event.title}
+        </Text>
       </View>
 
       {/* Info Section */}

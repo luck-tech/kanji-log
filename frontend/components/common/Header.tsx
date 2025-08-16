@@ -29,7 +29,7 @@ export const Header: React.FC<HeaderProps> = ({
   animated = true
 }) => {
   const hasIcons = leftIcon || rightIcon;
-  const baseClasses = `${hasIcons ? 'px-6' : 'px-0'} p-6 ${animated ? 'animate-fade-in' : ''}`;
+  const baseClasses = `py-6 ${animated ? 'animate-fade-in' : ''}`;
   
   const variantClasses = {
     default: 'bg-white',

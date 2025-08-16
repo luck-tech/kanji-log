@@ -146,7 +146,7 @@ export const Input: React.FC<InputProps> = ({
           isFocused ? 'border-primary-500/50' : 'border-white/20'
         }`;
       default:
-        return `${baseClasses} bg-white rounded-2xl border-2 shadow-soft ${
+        return `${baseClasses} bg-white/90 backdrop-blur-sm rounded-2xl border-2 shadow-soft ${
           error ? 'border-error-500' : 
           success ? 'border-success-500' :
           isFocused ? 'border-primary-500' : 'border-neutral-200'
