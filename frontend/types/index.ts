@@ -66,6 +66,8 @@ export interface Venue {
   address: string;
   phone?: string;
   mapUrl?: string;
+  genre?: string;
+  area?: string;
 }
 
 export interface EventLog {
