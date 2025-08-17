@@ -20,6 +20,7 @@ export interface Event {
   dateOptions?: DateOption[];
   restaurantSuggestions?: Restaurant[];
   eventLog?: EventLog;
+  notes?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -78,6 +79,7 @@ export interface EventLog {
   notes: string;
   totalCost: number;
   costPerPerson: number;
+  attendees?: number;
   venue: Venue;
   isShared: boolean;
   createdAt: string;

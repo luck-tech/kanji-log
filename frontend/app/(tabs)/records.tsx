@@ -14,6 +14,7 @@ import { Header } from '@/components/common/Header';
 import { FilterModal, FilterOptions } from '@/components/common/FilterModal';
 import { ActiveFilters } from '@/components/common/ActiveFilters';
 import { SharedRecord, EventPurpose } from '@/types';
+import { RecordDetailModal } from '@/components/modals/RecordDetailModal';
 
 // Mock data with additional filter data
 const mockSharedRecords: SharedRecord[] = [
@@ -138,6 +139,7 @@ export default function RecordsScreen() {
 	const [hasSharedRecord] = useState(true); // Changed to true to show records by default
 	const [filteredRecords, setFilteredRecords] = useState(mockSharedRecords);
 	const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
+	const [selectedRecord, setSelectedRecord] = useState<SharedRecord | null>(null);
 	const [filters, setFilters] = useState<FilterOptions>({
 		areas: [],
 		purposes: [],
@@ -150,7 +152,7 @@ export default function RecordsScreen() {
 	};
 
 	const handleRecordPress = (record: SharedRecord) => {
-		console.log('View record details:', record.id);
+		setSelectedRecord(record);
 	};
 
 	const applyFilters = (newFilters: FilterOptions) => {
@@ -472,6 +474,13 @@ export default function RecordsScreen() {
 							onClose={() => setIsFilterModalVisible(false)}
 							onApply={applyFilters}
 							initialFilters={filters}
+						/>
+
+						{/* Record Detail Modal */}
+						<RecordDetailModal
+							isVisible={selectedRecord !== null}
+							onClose={() => setSelectedRecord(null)}
+							record={selectedRecord}
 						/>
 					</View>
 				)}
