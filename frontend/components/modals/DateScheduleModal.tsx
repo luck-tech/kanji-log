@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { Card } from '@/components/common/Card';
 import { Button } from '@/components/common/Button';
 import { Input } from '@/components/common/Input';
@@ -51,6 +52,9 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
 	]);
 	const [deadline, setDeadline] = useState('');
 	const [errors, setErrors] = useState<Record<string, string>>({});
+	const [showDatePicker, setShowDatePicker] = useState<string | null>(null);
+	const [showTimePicker, setShowTimePicker] = useState<string | null>(null);
+	const [showDeadlinePicker, setShowDeadlinePicker] = useState(false);
 
 	const resetForm = () => {
 		setTitle('');
@@ -130,6 +134,40 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
 		));
 	};
 
+	const handleDateChange = (id: string, event: any, selectedDate?: Date) => {
+		setShowDatePicker(null);
+		if (selectedDate) {
+			const dateString = selectedDate.toISOString().split('T')[0];
+			updateDateOption(id, 'date', dateString);
+		}
+	};
+
+	const handleTimeChange = (id: string, event: any, selectedTime?: Date) => {
+		setShowTimePicker(null);
+		if (selectedTime) {
+			const timeString = selectedTime.toTimeString().slice(0, 5);
+			updateDateOption(id, 'time', timeString);
+		}
+	};
+
+	const formatDate = (dateString: string) => {
+		if (!dateString) return '';
+		const date = new Date(dateString);
+		return date.toLocaleDateString('ja-JP', {
+			year: 'numeric',
+			month: '2-digit',
+			day: '2-digit'
+		});
+	};
+
+	const handleDeadlineChange = (event: any, selectedDate?: Date) => {
+		setShowDeadlinePicker(false);
+		if (selectedDate) {
+			const dateString = selectedDate.toISOString().split('T')[0];
+			setDeadline(dateString);
+		}
+	};
+
 	const generateSuggestedDates = () => {
 		const today = new Date();
 		const suggestions = [];
@@ -189,17 +227,17 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
 				<ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
 					<View className="p-6 gap-6">
 						{/* 説明 */}
-						<Card variant="gradient" shadow="large" animated={true}>
+						<Card variant="elevated" shadow="large" animated={true}>
 							<View className="gap-3">
 								<View className="flex-row items-center gap-3">
-									<View className="w-10 h-10 rounded-2xl bg-white/20 justify-center items-center">
-										<Ionicons name="calendar" size={20} color="white" />
+									<View className="w-10 h-10 rounded-2xl bg-orange-100 justify-center items-center">
+										<Ionicons name="calendar" size={20} color="#f59e0b" />
 									</View>
-									<Text className="text-lg font-bold text-white">
+									<Text className="text-lg font-bold text-neutral-900">
 										日程調整の設定
 									</Text>
 								</View>
-								<Text className="text-white/90 leading-6">
+								<Text className="text-neutral-700 leading-6">
 									メンバーに都合を聞くための候補日を設定します。
 									複数の候補日を用意して、最も多くの人が参加できる日程を見つけましょう。
 								</Text>
@@ -256,24 +294,7 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
 									<Text className="text-sm text-error-600">{errors.dateOptions}</Text>
 								)}
 
-								{/* 候補日の自動提案 */}
-								<View className="p-3 bg-orange-50 rounded-xl">
-									<View className="flex-row items-center justify-between mb-2">
-										<Text className="text-sm font-medium text-orange-900">
-											📅 おすすめ候補日
-										</Text>
-										<TouchableOpacity
-											onPress={applySuggestedDates}
-											className="px-3 py-1 bg-orange-200 rounded-full"
-											activeOpacity={0.7}
-										>
-											<Text className="text-xs font-bold text-orange-800">適用</Text>
-										</TouchableOpacity>
-									</View>
-									<Text className="text-sm text-orange-700 leading-5">
-										金曜日の夜を中心に、3つの候補日を自動設定します
-									</Text>
-								</View>
+
 
 								{/* 候補日リスト */}
 								<View className="gap-3">
@@ -294,34 +315,27 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
 											</View>
 
 											<View className="flex-row gap-3">
-												<Input
-													label="日付"
-													placeholder="2024-03-15"
-													value={option.date}
-													onChangeText={(value) => updateDateOption(option.id, 'date', value)}
-													className="flex-1"
-												/>
-												<View className="flex-1">
-													<Text className="text-sm font-medium text-neutral-700 mb-2">時間</Text>
-													<ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row gap-2">
-														{TIME_SLOTS.map((timeSlot) => (
-															<TouchableOpacity
-																key={timeSlot}
-																onPress={() => updateDateOption(option.id, 'time', timeSlot)}
-																className={`px-3 py-2 rounded-xl border ${option.time === timeSlot
-																		? 'border-orange-500 bg-orange-100'
-																		: 'border-neutral-200 bg-white'
-																	}`}
-																activeOpacity={0.7}
-															>
-																<Text className={`text-sm font-medium ${option.time === timeSlot ? 'text-orange-700' : 'text-neutral-600'
-																	}`}>
-																	{timeSlot}
-																</Text>
-															</TouchableOpacity>
-														))}
-													</ScrollView>
-												</View>
+												<TouchableOpacity
+													onPress={() => setShowDatePicker(option.id)}
+													className="flex-1 p-3 bg-white border border-neutral-200 rounded-xl"
+													activeOpacity={0.7}
+												>
+													<Text className="text-sm font-medium text-neutral-700 mb-1">日付</Text>
+													<Text className={`text-base ${option.date ? 'text-neutral-900' : 'text-neutral-400'}`}>
+														{option.date ? formatDate(option.date) : '日付を選択'}
+													</Text>
+												</TouchableOpacity>
+
+												<TouchableOpacity
+													onPress={() => setShowTimePicker(option.id)}
+													className="flex-1 p-3 bg-white border border-neutral-200 rounded-xl"
+													activeOpacity={0.7}
+												>
+													<Text className="text-sm font-medium text-neutral-700 mb-1">時間</Text>
+													<Text className="text-base text-neutral-900">
+														{option.time}
+													</Text>
+												</TouchableOpacity>
 											</View>
 										</View>
 									))}
@@ -352,12 +366,16 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
 									<Text className="text-sm text-neutral-500">（任意）</Text>
 								</View>
 
-								<Input
-									label="期限日"
-									placeholder="2024-03-10"
-									value={deadline}
-									onChangeText={setDeadline}
-								/>
+								<TouchableOpacity
+									onPress={() => setShowDeadlinePicker(true)}
+									className="p-3 bg-white border border-neutral-200 rounded-xl"
+									activeOpacity={0.7}
+								>
+									<Text className="text-sm font-medium text-neutral-700 mb-1">期限日</Text>
+									<Text className={`text-base ${deadline ? 'text-neutral-900' : 'text-neutral-400'}`}>
+										{deadline ? formatDate(deadline) : '期限を選択'}
+									</Text>
+								</TouchableOpacity>
 
 								<View className="p-3 bg-red-50 rounded-xl">
 									<Text className="text-sm text-red-800 leading-5">
@@ -381,6 +399,34 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
 						icon={<Ionicons name="send" size={20} color="white" />}
 					/>
 				</View>
+
+				{/* Date/Time Pickers */}
+				{showDatePicker && (
+					<DateTimePicker
+						value={new Date()}
+						mode="date"
+						display="default"
+						onChange={(event, date) => handleDateChange(showDatePicker, event, date)}
+					/>
+				)}
+
+				{showTimePicker && (
+					<DateTimePicker
+						value={new Date()}
+						mode="time"
+						display="default"
+						onChange={(event, time) => handleTimeChange(showTimePicker, event, time)}
+					/>
+				)}
+
+				{showDeadlinePicker && (
+					<DateTimePicker
+						value={new Date()}
+						mode="date"
+						display="default"
+						onChange={handleDeadlineChange}
+					/>
+				)}
 			</SafeAreaView>
 		</Modal>
 	);

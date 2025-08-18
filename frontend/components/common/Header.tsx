@@ -81,7 +81,7 @@ export const Header: React.FC<HeaderProps> = ({
 				className={`${baseClasses} ${className || ''}`}
 				style={style}
 			>
-				<View className={hasIcons ? "flex-row items-center justify-between" : "items-center"}>
+				<View className={`${hasIcons ? "flex-row items-center justify-between" : "items-center"} px-6`}>
 					{leftIcon && (
 						<TouchableOpacity
 							onPress={onLeftPress}

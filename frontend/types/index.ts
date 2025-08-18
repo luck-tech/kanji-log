@@ -18,6 +18,10 @@ export interface Event {
   organizerId: string;
   members: EventMember[];
   dateOptions?: DateOption[];
+  confirmedDate?: {
+    date: string;
+    time: string;
+  };
   restaurantSuggestions?: Restaurant[];
   eventLog?: EventLog;
   notes?: string;

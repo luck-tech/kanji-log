@@ -118,7 +118,7 @@ export const Input: React.FC<InputProps> = ({
 
 	// Label classes  
 	const labelClasses = [
-		"text-base font-semibold text-neutral-700 mb-2",
+		"text-sm font-medium text-neutral-700 mb-2",
 		labelClassName
 	].filter(Boolean).join(" ");
 
@@ -189,30 +189,17 @@ export const Input: React.FC<InputProps> = ({
 					)}
 				</View>
 
-				{/* Animated floating label */}
+				{/* Animated floating label - 常に左下表示 */}
 				{label && animated && (
 					<Animated.View
 						className="absolute left-4 pointer-events-none"
 						style={{
-							top: animatedLabelPosition.interpolate({
-								inputRange: [0, 1],
-								outputRange: [16, -10],
-							}),
+							top: 16,
 						}}
 					>
-						<Animated.View
-							className="px-2 bg-white rounded"
-							style={{
-								transform: [{
-									scale: animatedLabelPosition.interpolate({
-										inputRange: [0, 1],
-										outputRange: [1, 0.8],
-									})
-								}]
-							}}
-						>
+						<View className="px-2 bg-white rounded">
 							<Text
-								className={`font-medium ${error ? 'text-error-600' :
+								className={`text-sm font-medium ${error ? 'text-error-600' :
 									success ? 'text-success-600' :
 										isFocused ? 'text-primary-600' : 'text-neutral-600'
 									}`}
@@ -220,7 +207,7 @@ export const Input: React.FC<InputProps> = ({
 							>
 								{label}
 							</Text>
-						</Animated.View>
+						</View>
 					</Animated.View>
 				)}
 			</View>
