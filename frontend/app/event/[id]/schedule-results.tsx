@@ -290,19 +290,22 @@ export default function ScheduleResultsScreen() {
                     }
                     activeOpacity={0.8}
                   >
-                    <Card
-                      variant={isSelected ? 'gradient' : 'elevated'}
-                      shadow="large"
-                      animated={true}
-                    >
-                      <View className="gap-4">
+                    <Card variant="elevated" shadow="large" animated={true}>
+                      <View
+                        className={`gap-4 ${
+                          isSelected
+                            ? 'bg-blue-50 border border-blue-200 rounded-xl'
+                            : ''
+                        }`}
+                        style={isSelected ? { margin: -16, padding: 16 } : {}}
+                      >
                         {/* 日程ヘッダー */}
                         <View className="flex-row items-center justify-between">
                           <View className="flex-row items-center gap-3">
                             <View
                               className={`w-8 h-8 rounded-2xl justify-center items-center ${
                                 isSelected
-                                  ? 'bg-white/20'
+                                  ? 'bg-blue-500'
                                   : isBest
                                   ? 'bg-yellow-100'
                                   : 'bg-neutral-100'
@@ -325,7 +328,7 @@ export default function ScheduleResultsScreen() {
                                 <Text
                                   className={`text-lg font-bold ${
                                     isSelected
-                                      ? 'text-white'
+                                      ? 'text-blue-900'
                                       : 'text-neutral-900'
                                   }`}
                                 >
@@ -338,11 +341,18 @@ export default function ScheduleResultsScreen() {
                                     </Text>
                                   </View>
                                 )}
+                                {isSelected && (
+                                  <View className="bg-blue-100 rounded-full px-2 py-0.5">
+                                    <Text className="text-xs font-bold text-blue-700">
+                                      選択中
+                                    </Text>
+                                  </View>
+                                )}
                               </View>
                               <Text
                                 className={`text-sm ${
                                   isSelected
-                                    ? 'text-white/90'
+                                    ? 'text-blue-700'
                                     : 'text-neutral-600'
                                 }`}
                               >
@@ -351,7 +361,7 @@ export default function ScheduleResultsScreen() {
                             </View>
                           </View>
                           {isSelected && (
-                            <View className="w-6 h-6 rounded-full bg-white/20 justify-center items-center">
+                            <View className="w-6 h-6 rounded-full bg-blue-500 justify-center items-center">
                               <Ionicons
                                 name="checkmark"
                                 size={14}
@@ -366,7 +376,9 @@ export default function ScheduleResultsScreen() {
                           <View className="flex-row justify-between">
                             <Text
                               className={`text-sm font-medium ${
-                                isSelected ? 'text-white' : 'text-neutral-700'
+                                isSelected
+                                  ? 'text-blue-800'
+                                  : 'text-neutral-700'
                               }`}
                             >
                               回答状況
@@ -374,7 +386,7 @@ export default function ScheduleResultsScreen() {
                             <Text
                               className={`text-sm ${
                                 isSelected
-                                  ? 'text-white/90'
+                                  ? 'text-blue-700'
                                   : 'text-neutral-600'
                               }`}
                             >
@@ -384,7 +396,7 @@ export default function ScheduleResultsScreen() {
 
                           <View
                             className={`h-3 rounded-full overflow-hidden ${
-                              isSelected ? 'bg-white/20' : 'bg-neutral-200'
+                              isSelected ? 'bg-blue-100' : 'bg-neutral-200'
                             }`}
                           >
                             <View className="flex-row h-full">
@@ -426,7 +438,7 @@ export default function ScheduleResultsScreen() {
                               <Text
                                 className={`text-sm ${
                                   isSelected
-                                    ? 'text-white/90'
+                                    ? 'text-blue-700'
                                     : 'text-neutral-600'
                                 }`}
                               >
@@ -438,7 +450,7 @@ export default function ScheduleResultsScreen() {
                               <Text
                                 className={`text-sm ${
                                   isSelected
-                                    ? 'text-white/90'
+                                    ? 'text-blue-700'
                                     : 'text-neutral-600'
                                 }`}
                               >
@@ -450,7 +462,7 @@ export default function ScheduleResultsScreen() {
                               <Text
                                 className={`text-sm ${
                                   isSelected
-                                    ? 'text-white/90'
+                                    ? 'text-blue-700'
                                     : 'text-neutral-600'
                                 }`}
                               >
@@ -554,16 +566,16 @@ export default function ScheduleResultsScreen() {
                   {formatDate(
                     sortedDateOptions.find((o) => o.id === selectedDateId)
                       ?.date || ''
-                  )}{' '}
+                  )}
                   {sortedDateOptions.find((o) => o.id === selectedDateId)?.time}
                 </Text>
                 <Text className="text-blue-700 text-sm text-center">
-                  参加可能{' '}
+                  参加可能
                   {
                     sortedDateOptions.find((o) => o.id === selectedDateId)
                       ?.stats.available
                   }
-                  名 + おそらく参加{' '}
+                  名 + おそらく参加
                   {
                     sortedDateOptions.find((o) => o.id === selectedDateId)
                       ?.stats.maybe
