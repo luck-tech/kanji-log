@@ -106,8 +106,8 @@ export const AreaSelectionModal: React.FC<AreaSelectionModalProps> = ({
             >
               <Card
                 variant={selectionType === 'center' ? 'gradient' : 'elevated'}
-                shadow="large"
-                animated={true}
+                shadow="none"
+                animated={false}
               >
                 <View className="gap-4">
                   <View className="flex-row items-center gap-3">
@@ -180,8 +180,8 @@ export const AreaSelectionModal: React.FC<AreaSelectionModalProps> = ({
                 variant={
                   selectionType === 'specified' ? 'gradient' : 'elevated'
                 }
-                shadow="large"
-                animated={true}
+                shadow="none"
+                animated={false}
               >
                 <View className="gap-4">
                   <View className="flex-row items-center gap-3">

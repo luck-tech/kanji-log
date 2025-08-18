@@ -157,7 +157,7 @@ export default function RestaurantSuggestionsScreen() {
         <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
           <View className="p-6 gap-6">
             {/* 提案の説明 */}
-            <Card variant="elevated" shadow="large" animated={true}>
+            <Card variant="elevated" shadow="none" animated={false}>
               <View className="gap-3">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-purple-100 justify-center items-center">
@@ -182,7 +182,7 @@ export default function RestaurantSuggestionsScreen() {
                   key={restaurant.id}
                   onPress={() => handleRestaurantSelect(restaurant)}
                   activeOpacity={0.8}
-                  className="animate-fade-in"
+                  className=""
                   style={{ animationDelay: `${index * 150}ms` }}
                 >
                   <Card
@@ -191,8 +191,8 @@ export default function RestaurantSuggestionsScreen() {
                         ? 'elevated'
                         : 'elevated'
                     }
-                    shadow="large"
-                    animated={true}
+                    shadow="none"
+                    animated={false}
                     style={
                       selectedRestaurant?.id === restaurant.id
                         ? {

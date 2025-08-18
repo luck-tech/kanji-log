@@ -198,7 +198,7 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
         <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
           <View className="p-6 gap-6">
             {/* 基本情報 */}
-            <Card variant="elevated" shadow="large" animated={true}>
+            <Card variant="elevated" shadow="none" animated={false}>
               <View className="gap-4">
                 <View className="flex-row items-center gap-3 mb-2">
                   <View className="w-10 h-10 rounded-2xl bg-blue-100 justify-center items-center">
@@ -293,7 +293,7 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
             </Card>
 
             {/* 会社情報 */}
-            <Card variant="elevated" shadow="soft">
+            <Card variant="elevated" shadow="none">
               <View className="gap-4">
                 <View className="flex-row items-center gap-3 mb-2">
                   <View className="w-10 h-10 rounded-2xl bg-purple-100 justify-center items-center">
@@ -329,7 +329,7 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
             </Card>
 
             {/* 連絡先 */}
-            <Card variant="elevated" shadow="soft">
+            <Card variant="elevated" shadow="none">
               <View className="gap-4">
                 <View className="flex-row items-center gap-3 mb-2">
                   <View className="w-10 h-10 rounded-2xl bg-green-100 justify-center items-center">
@@ -352,7 +352,7 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
             </Card>
 
             {/* 希望予算設定 */}
-            <Card variant="elevated" shadow="soft">
+            <Card variant="elevated" shadow="none">
               <View className="gap-4">
                 <View className="flex-row items-center gap-3 mb-2">
                   <View className="w-10 h-10 rounded-2xl bg-orange-100 justify-center items-center">
@@ -402,7 +402,7 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
             </Card>
 
             {/* 通知設定 */}
-            <Card variant="elevated" shadow="soft">
+            <Card variant="elevated" shadow="none">
               <View className="gap-4">
                 <View className="flex-row items-center gap-3 mb-2">
                   <View className="w-10 h-10 rounded-2xl bg-yellow-100 justify-center items-center">
@@ -548,7 +548,7 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
             </Card>
 
             {/* プライバシー設定 */}
-            <Card variant="elevated" shadow="soft">
+            <Card variant="elevated" shadow="none">
               <View className="gap-4">
                 <View className="flex-row items-center gap-3 mb-2">
                   <View className="w-10 h-10 rounded-2xl bg-purple-100 justify-center items-center">

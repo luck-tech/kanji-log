@@ -146,7 +146,7 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({
         <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
           <View className="p-6 gap-6">
             {/* 店舗情報カード */}
-            <Card variant="elevated" shadow="large" animated={true}>
+            <Card variant="elevated" shadow="none" animated={false}>
               <View className="gap-4">
                 <View className="flex-row items-center gap-3">
                   <View className="w-12 h-12 rounded-2xl bg-primary-100 justify-center items-center">
@@ -157,7 +157,7 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({
                       {record.eventLog.venue?.name || 'レストラン名'}
                     </Text>
                     <Text className="text-neutral-600 text-base">
-                      {record.eventLog.venue?.genre || 'ジャンル'} •{' '}
+                      {record.eventLog.venue?.genre || 'ジャンル'} •
                       {record.eventLog.venue?.area || 'エリア'}
                     </Text>
                   </View>
@@ -198,7 +198,7 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({
             </Card>
 
             {/* イベント情報 */}
-            <Card variant="elevated" shadow="soft">
+            <Card variant="elevated" shadow="none">
               <View className="gap-4">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-blue-100 justify-center items-center">
@@ -255,7 +255,7 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({
             </Card>
 
             {/* 評価理由・記録メモ */}
-            <Card variant="elevated" shadow="soft">
+            <Card variant="elevated" shadow="none">
               <View className="gap-4">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-amber-100 justify-center items-center">
@@ -276,7 +276,7 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({
 
             {/* 画像 */}
             {record.images && record.images.length > 0 && (
-              <Card variant="elevated" shadow="soft">
+              <Card variant="elevated" shadow="none">
                 <View className="gap-4">
                   <View className="flex-row items-center gap-3">
                     <View className="w-10 h-10 rounded-2xl bg-purple-100 justify-center items-center">
@@ -311,7 +311,7 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({
             )}
 
             {/* アクションボタン */}
-            <Card variant="elevated" shadow="soft">
+            <Card variant="elevated" shadow="none">
               <View className="gap-4">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-green-100 justify-center items-center">

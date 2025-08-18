@@ -159,7 +159,7 @@ export const Input: React.FC<InputProps> = ({
             : 'border-white/20'
         }`;
       default:
-        return `${baseClasses} bg-white/90 backdrop-blur-sm rounded-2xl border-2 shadow-soft ${
+        return `${baseClasses} bg-white/90 backdrop-blur-sm rounded-2xl border-2 ${
           error
             ? 'border-error-500'
             : success

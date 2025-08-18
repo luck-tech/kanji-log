@@ -103,14 +103,13 @@ export const AccountDeleteModal: React.FC<AccountDeleteModalProps> = ({
         <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
           <View className="p-6 gap-6">
             {/* 警告メッセージ */}
-            <Card variant="elevated" shadow="large" animated={true}>
+            <Card variant="elevated" shadow="none" animated={false}>
               <View className="gap-4">
                 <View className="flex-row items-center gap-3">
                   <View className="w-12 h-12 rounded-2xl bg-error-100 justify-center items-center">
                     <Ionicons name="warning" size={24} color="#ef4444" />
                   </View>
                   <View className="flex-1">
-                    {' '}
                     <Text className="text-xl font-bold text-error-600 mb-1">
                       注意：この操作は取り消せません
                     </Text>
@@ -130,7 +129,7 @@ export const AccountDeleteModal: React.FC<AccountDeleteModalProps> = ({
             </Card>
 
             {/* アカウント情報 */}
-            <Card variant="elevated" shadow="soft">
+            <Card variant="elevated" shadow="none">
               <View className="gap-4">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-blue-100 justify-center items-center">
@@ -153,7 +152,7 @@ export const AccountDeleteModal: React.FC<AccountDeleteModalProps> = ({
             </Card>
 
             {/* 削除されるデータの詳細 */}
-            <Card variant="elevated" shadow="soft">
+            <Card variant="elevated" shadow="none">
               <View className="gap-4">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-purple-100 justify-center items-center">
@@ -196,7 +195,7 @@ export const AccountDeleteModal: React.FC<AccountDeleteModalProps> = ({
             </Card>
 
             {/* データ保護に関する説明 */}
-            <Card variant="elevated" shadow="soft">
+            <Card variant="elevated" shadow="none">
               <View className="gap-4">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-green-100 justify-center items-center">
@@ -236,7 +235,7 @@ export const AccountDeleteModal: React.FC<AccountDeleteModalProps> = ({
             </Card>
 
             {/* 削除の確認 */}
-            <Card variant="elevated" shadow="soft">
+            <Card variant="elevated" shadow="none">
               <View className="gap-4">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-error-100 justify-center items-center">

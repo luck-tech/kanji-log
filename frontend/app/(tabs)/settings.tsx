@@ -187,8 +187,8 @@ export default function SettingsScreen() {
           {/* Profile Section */}
           <Card
             variant="elevated"
-            shadow="large"
-            animated={true}
+            shadow="none"
+            animated={false}
             className="mb-6 mt-4"
           >
             <View className="flex-row items-center mb-4">
@@ -280,8 +280,8 @@ export default function SettingsScreen() {
           {/* Stats Section */}
           <Card
             variant="gradient"
-            shadow="large"
-            animated={true}
+            shadow="none"
+            animated={false}
             className="mb-6"
           >
             <Text className="text-xl font-bold text-neutral-900 mb-4">
@@ -326,10 +326,10 @@ export default function SettingsScreen() {
                 key={item.id}
                 onPress={item.onPress}
                 activeOpacity={0.8}
-                className="animate-fade-in"
+                className=""
                 style={{ animationDelay: `${index * 100}ms` }}
               >
-                <Card variant="elevated" shadow="medium" animated={true}>
+                <Card variant="elevated" shadow="none" animated={false}>
                   <View className="flex-row items-center justify-between">
                     <View className="flex-row items-center flex-1">
                       <View className="p-3 rounded-2xl bg-neutral-100 mr-4">

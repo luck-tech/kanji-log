@@ -32,9 +32,9 @@ export const Card: React.FC<CardProps> = ({
   // Shadow classes
   const shadowClasses = {
     none: '',
-    soft: 'shadow-soft',
-    medium: 'shadow-medium',
-    large: 'shadow-large',
+    soft: '',
+    medium: '',
+    large: '',
   };
 
   // Base classes with modern styling
@@ -50,7 +50,7 @@ export const Card: React.FC<CardProps> = ({
   };
 
   // Animation classes
-  const animationClasses = animated ? 'animate-scale-in' : '';
+  const animationClasses = '';
 
   // Combine classes
   const cardClasses = [

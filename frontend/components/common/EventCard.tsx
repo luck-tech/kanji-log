@@ -96,15 +96,15 @@ export const EventCard: React.FC<EventCardProps> = ({
           colors={['#ffffff', '#f8fafc']}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
-          className="rounded-2xl p-5 shadow-large border border-neutral-200"
+          className="rounded-2xl p-5 border border-neutral-200"
         >
           <CardContent />
         </LinearGradient>
       ) : (
         <Card
           variant={variant}
-          shadow="large"
-          animated={true}
+          shadow="none"
+          animated={false}
           className="border-0"
         >
           <CardContent />

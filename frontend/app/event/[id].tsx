@@ -302,7 +302,7 @@ export default function EventDetailScreen() {
         >
           <View className="p-6 gap-6">
             {/* イベント概要 */}
-            <Card variant="elevated" shadow="large" animated={true}>
+            <Card variant="elevated" shadow="none" animated={false}>
               <View className="gap-4">
                 <View className="flex-row items-center justify-between">
                   <View className="flex-row items-center gap-3">
@@ -343,7 +343,7 @@ export default function EventDetailScreen() {
                           day: 'numeric',
                           weekday: 'long',
                         }
-                      )}{' '}
+                      )}
                       {event.confirmedDate.time}
                     </Text>
                   </View>
@@ -413,7 +413,7 @@ export default function EventDetailScreen() {
                     onPress={handleCreateForm}
                     activeOpacity={0.8}
                   >
-                    <Card variant="elevated" shadow="medium" animated={true}>
+                    <Card variant="elevated" shadow="none" animated={false}>
                       <View className="flex-row items-center">
                         <LinearGradient
                           colors={['#0ea5e9', '#0284c7']}
@@ -451,7 +451,7 @@ export default function EventDetailScreen() {
                   onPress={handleScheduleSetup}
                   activeOpacity={0.8}
                 >
-                  <Card variant="elevated" shadow="medium" animated={true}>
+                  <Card variant="elevated" shadow="none" animated={false}>
                     <View className="flex-row items-center">
                       <View className="w-12 h-12 rounded-2xl bg-orange-100 justify-center items-center mr-4">
                         <Ionicons name="calendar" size={24} color="#f59e0b" />
@@ -482,7 +482,7 @@ export default function EventDetailScreen() {
                     onPress={handleViewScheduleResults}
                     activeOpacity={0.8}
                   >
-                    <Card variant="elevated" shadow="medium" animated={true}>
+                    <Card variant="elevated" shadow="none" animated={false}>
                       <View className="flex-row items-center">
                         <View className="w-12 h-12 rounded-2xl bg-green-100 justify-center items-center mr-4">
                           <Ionicons
@@ -516,7 +516,7 @@ export default function EventDetailScreen() {
                     onPress={handleAreaSelection}
                     activeOpacity={0.8}
                   >
-                    <Card variant="elevated" shadow="medium" animated={true}>
+                    <Card variant="elevated" shadow="none" animated={false}>
                       <View className="flex-row items-center">
                         <View className="w-12 h-12 rounded-2xl bg-red-100 justify-center items-center mr-4">
                           <Ionicons
@@ -549,7 +549,7 @@ export default function EventDetailScreen() {
                   onPress={() => console.log('Open event log')}
                   activeOpacity={0.8}
                 >
-                  <Card variant="elevated" shadow="medium" animated={true}>
+                  <Card variant="elevated" shadow="none" animated={false}>
                     <View className="flex-row items-center">
                       <View className="w-12 h-12 rounded-2xl bg-purple-100 justify-center items-center mr-4">
                         <Ionicons name="book" size={24} color="#8b5cf6" />
@@ -574,7 +574,7 @@ export default function EventDetailScreen() {
             </View>
 
             {/* メンバーリスト */}
-            <Card variant="elevated" shadow="large" animated={true}>
+            <Card variant="elevated" shadow="none" animated={false}>
               <View className="gap-4">
                 <View className="flex-row items-center justify-between">
                   <Text className="text-lg font-bold text-neutral-900">

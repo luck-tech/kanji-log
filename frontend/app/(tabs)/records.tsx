@@ -409,8 +409,8 @@ export default function RecordsScreen() {
 
               <Card
                 variant="gradient"
-                shadow="large"
-                animated={true}
+                shadow="none"
+                animated={false}
                 className="w-full mb-8"
               >
                 <Text className="text-lg font-bold text-neutral-900 mb-4">
@@ -486,7 +486,7 @@ export default function RecordsScreen() {
                 <TouchableOpacity
                   onPress={() => handleTabChange('all')}
                   className={`flex-1 py-2 px-4 rounded-xl ${
-                    activeTab === 'all' ? 'bg-white shadow-sm' : ''
+                    activeTab === 'all' ? 'bg-white' : ''
                   }`}
                   activeOpacity={0.8}
                 >
@@ -503,7 +503,7 @@ export default function RecordsScreen() {
                 <TouchableOpacity
                   onPress={() => handleTabChange('liked')}
                   className={`flex-1 py-2 px-4 rounded-xl ${
-                    activeTab === 'liked' ? 'bg-white shadow-sm' : ''
+                    activeTab === 'liked' ? 'bg-white' : ''
                   }`}
                   activeOpacity={0.8}
                 >
@@ -524,7 +524,7 @@ export default function RecordsScreen() {
             <View className="px-6 py-2">
               <TouchableOpacity
                 onPress={() => setIsFilterModalVisible(true)}
-                className="flex-row items-center justify-center py-3 px-4 bg-white rounded-2xl shadow-soft border border-neutral-200"
+                className="flex-row items-center justify-center py-3 px-4 bg-white rounded-2xl border border-neutral-200"
                 activeOpacity={0.8}
               >
                 <Ionicons name="options-outline" size={20} color="#0284c7" />
@@ -566,13 +566,11 @@ export default function RecordsScreen() {
                     key={record.id}
                     onPress={() => handleRecordPress(record)}
                     activeOpacity={0.8}
-                    className="animate-fade-in"
-                    style={{ animationDelay: `${index * 100}ms` }}
                   >
                     <Card
                       variant="elevated"
-                      shadow="large"
-                      animated={true}
+                      shadow="none"
+                      animated={false}
                       className={
                         record.organizer.isSameCompany
                           ? 'border-2 border-blue-200'

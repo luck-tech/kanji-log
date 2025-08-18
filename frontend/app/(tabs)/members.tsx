@@ -150,10 +150,8 @@ export default function MembersScreen() {
             key={member.id}
             onPress={() => handleMemberPress(member)}
             activeOpacity={0.8}
-            className="animate-fade-in"
-            style={{ animationDelay: `${index * 50}ms` }}
           >
-            <Card variant="elevated" shadow="medium" animated={true}>
+            <Card variant="elevated" shadow="none" animated={false}>
               <View className="flex-row items-center">
                 {/* Member Avatar */}
                 <View className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary-50 to-primary-100 justify-center items-center mr-4">
@@ -210,11 +208,11 @@ export default function MembersScreen() {
             leftIcon={
               <Ionicons name="search-outline" size={20} color="#64748b" />
             }
-            className="flex-1 backdrop-blur-sm border-0 shadow-soft"
+            className="flex-1 backdrop-blur-sm border-0"
           />
           <TouchableOpacity
             onPress={handleAddMember}
-            className="w-12 h-12 rounded-2xl bg-primary-600 justify-center items-center shadow-medium"
+            className="w-12 h-12 rounded-2xl bg-primary-600 justify-center items-center"
             activeOpacity={0.8}
           >
             <Ionicons name="person-add-outline" size={20} color="white" />

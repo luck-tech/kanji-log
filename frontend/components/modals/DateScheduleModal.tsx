@@ -34,8 +34,6 @@ interface DateOption {
   label?: string;
 }
 
-const TIME_SLOTS = ['18:00', '18:30', '19:00', '19:30', '20:00', '20:30'];
-
 export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
   isVisible,
   onClose,
@@ -171,43 +169,6 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
     }
   };
 
-  const generateSuggestedDates = () => {
-    const today = new Date();
-    const suggestions = [];
-
-    // 今週の金曜日
-    const friday = new Date(today);
-    friday.setDate(today.getDate() + (5 - today.getDay()));
-    if (friday > today) {
-      suggestions.push(friday.toISOString().split('T')[0]);
-    }
-
-    // 来週の金曜日
-    const nextFriday = new Date(friday);
-    nextFriday.setDate(friday.getDate() + 7);
-    suggestions.push(nextFriday.toISOString().split('T')[0]);
-
-    // 再来週の金曜日
-    const nextNextFriday = new Date(nextFriday);
-    nextNextFriday.setDate(nextFriday.getDate() + 7);
-    suggestions.push(nextNextFriday.toISOString().split('T')[0]);
-
-    return suggestions;
-  };
-
-  const applySuggestedDates = () => {
-    const suggestions = generateSuggestedDates();
-    const newOptions = suggestions
-      .slice(0, Math.min(3, suggestions.length))
-      .map((date, index) => ({
-        id: `suggested-${index}`,
-        date,
-        time: index === 0 ? '19:00' : index === 1 ? '19:30' : '18:30',
-      }));
-
-    setDateOptions(newOptions);
-  };
-
   const validOptionsCount = dateOptions.filter((option) =>
     option.date.trim()
   ).length;
@@ -236,7 +197,7 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
         <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
           <View className="p-6 gap-6">
             {/* 説明 */}
-            <Card variant="elevated" shadow="large" animated={true}>
+            <Card variant="elevated" shadow="none" animated={false}>
               <View className="gap-3">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-orange-100 justify-center items-center">
@@ -254,7 +215,7 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
             </Card>
 
             {/* 基本情報 */}
-            <Card variant="elevated" shadow="soft">
+            <Card variant="elevated" shadow="none">
               <View className="gap-4">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-blue-100 justify-center items-center">
@@ -289,7 +250,7 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
             </Card>
 
             {/* 候補日設定 */}
-            <Card variant="elevated" shadow="soft">
+            <Card variant="elevated" shadow="none">
               <View className="gap-4">
                 <View className="flex-row items-center justify-between">
                   <View className="flex-row items-center gap-3">
@@ -392,7 +353,7 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
             </Card>
 
             {/* 回答期限 */}
-            <Card variant="elevated" shadow="soft">
+            <Card variant="elevated" shadow="none">
               <View className="gap-4">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-red-100 justify-center items-center">

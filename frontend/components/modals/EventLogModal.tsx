@@ -162,7 +162,7 @@ export const EventLogModal: React.FC<EventLogModalProps> = ({
         <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
           <View className="p-6 gap-6">
             {/* イベント情報 */}
-            <Card variant="gradient" shadow="large" animated={true}>
+            <Card variant="gradient" shadow="none" animated={false}>
               <View className="gap-3">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-white/20 justify-center items-center">
@@ -179,7 +179,7 @@ export const EventLogModal: React.FC<EventLogModalProps> = ({
             </Card>
 
             {/* 店舗情報 */}
-            <Card variant="elevated" shadow="soft">
+            <Card variant="elevated" shadow="none">
               <View className="gap-4">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-red-100 justify-center items-center">
@@ -230,7 +230,7 @@ export const EventLogModal: React.FC<EventLogModalProps> = ({
             </Card>
 
             {/* 評価 */}
-            <Card variant="elevated" shadow="soft">
+            <Card variant="elevated" shadow="none">
               <View className="gap-4">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-yellow-100 justify-center items-center">
@@ -266,7 +266,7 @@ export const EventLogModal: React.FC<EventLogModalProps> = ({
             </Card>
 
             {/* 主観メモ */}
-            <Card variant="elevated" shadow="soft">
+            <Card variant="elevated" shadow="none">
               <View className="gap-4">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-blue-100 justify-center items-center">
@@ -297,7 +297,7 @@ export const EventLogModal: React.FC<EventLogModalProps> = ({
             </Card>
 
             {/* 会計情報 */}
-            <Card variant="elevated" shadow="soft">
+            <Card variant="elevated" shadow="none">
               <View className="gap-4">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-green-100 justify-center items-center">
@@ -341,7 +341,7 @@ export const EventLogModal: React.FC<EventLogModalProps> = ({
             </Card>
 
             {/* 共有設定 */}
-            <Card variant="elevated" shadow="soft">
+            <Card variant="elevated" shadow="none">
               <View className="gap-4">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-purple-100 justify-center items-center">

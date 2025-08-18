@@ -47,9 +47,7 @@ export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
     color || (variant === 'secondary' ? '#334155' : '#ffffff');
 
   // Base classes
-  const baseClasses = `absolute bottom-24 right-6 ${container} rounded-3xl justify-center items-center shadow-large ${
-    animated ? 'animate-scale-in' : ''
-  }`;
+  const baseClasses = `absolute bottom-24 right-6 ${container} rounded-3xl justify-center items-center`;
 
   const handlePress = () => {
     // Add haptic feedback for mobile

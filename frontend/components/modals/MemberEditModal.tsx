@@ -262,7 +262,7 @@ export const MemberEditModal: React.FC<MemberEditModalProps> = ({
         <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
           <View className="p-6 gap-6">
             {/* 基本情報 */}
-            <Card variant="elevated" shadow="large" animated={true}>
+            <Card variant="elevated" shadow="none" animated={false}>
               <View className="gap-4">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-blue-500 justify-center items-center">
@@ -295,7 +295,7 @@ export const MemberEditModal: React.FC<MemberEditModalProps> = ({
             </Card>
 
             {/* アルコール */}
-            <Card variant="elevated" shadow="soft">
+            <Card variant="elevated" shadow="none">
               <View className="gap-4">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-amber-100 justify-center items-center">
@@ -346,7 +346,7 @@ export const MemberEditModal: React.FC<MemberEditModalProps> = ({
             </Card>
 
             {/* 予算帯 */}
-            <Card variant="elevated" shadow="soft">
+            <Card variant="elevated" shadow="none">
               <View className="gap-4">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-green-100 justify-center items-center">
@@ -414,7 +414,7 @@ export const MemberEditModal: React.FC<MemberEditModalProps> = ({
             </Card>
 
             {/* 好きな料理ジャンル */}
-            <Card variant="elevated" shadow="soft">
+            <Card variant="elevated" shadow="none">
               <View className="gap-4">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-blue-100 justify-center items-center">
@@ -455,7 +455,7 @@ export const MemberEditModal: React.FC<MemberEditModalProps> = ({
             </Card>
 
             {/* アレルギー */}
-            <Card variant="elevated" shadow="soft">
+            <Card variant="elevated" shadow="none">
               <View className="gap-4">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-red-100 justify-center items-center">
@@ -545,7 +545,7 @@ export const MemberEditModal: React.FC<MemberEditModalProps> = ({
             </Card>
 
             {/* 食事制限 */}
-            <Card variant="elevated" shadow="soft">
+            <Card variant="elevated" shadow="none">
               <View className="gap-4">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-purple-100 justify-center items-center">
@@ -643,7 +643,7 @@ export const MemberEditModal: React.FC<MemberEditModalProps> = ({
             </Card>
 
             {/* メモ */}
-            <Card variant="elevated" shadow="soft">
+            <Card variant="elevated" shadow="none">
               <View className="gap-4">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-yellow-100 justify-center items-center">

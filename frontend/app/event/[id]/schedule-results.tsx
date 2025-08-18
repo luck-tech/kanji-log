@@ -219,7 +219,7 @@ export default function ScheduleResultsScreen() {
         <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
           <View className="p-6 gap-6">
             {/* 全体サマリー */}
-            <Card variant="elevated" shadow="large" animated={true}>
+            <Card variant="elevated" shadow="none" animated={false}>
               <View className="gap-4">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-blue-100 justify-center items-center">
@@ -265,7 +265,7 @@ export default function ScheduleResultsScreen() {
                     {formatDate(bestOption.date)} {bestOption.time}
                   </Text>
                   <Text className="text-yellow-700 text-sm">
-                    参加可能 {bestOption.stats.available}名 + おそらく参加{' '}
+                    参加可能 {bestOption.stats.available}名 + おそらく参加
                     {bestOption.stats.maybe}名
                   </Text>
                 </View>
@@ -290,7 +290,7 @@ export default function ScheduleResultsScreen() {
                     }
                     activeOpacity={0.8}
                   >
-                    <Card variant="elevated" shadow="large" animated={true}>
+                    <Card variant="elevated" shadow="none" animated={false}>
                       <View
                         className={`gap-4 ${
                           isSelected
@@ -479,7 +479,7 @@ export default function ScheduleResultsScreen() {
             </View>
 
             {/* 個別回答詳細 */}
-            <Card variant="elevated" shadow="large" animated={true}>
+            <Card variant="elevated" shadow="none" animated={false}>
               <View className="gap-4">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-purple-100 justify-center items-center">

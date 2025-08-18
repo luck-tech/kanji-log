@@ -99,7 +99,7 @@ export const MemberAddModal: React.FC<MemberAddModalProps> = ({
         <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
           <View className="p-6 gap-6">
             {/* 説明 */}
-            <Card variant="elevated" shadow="soft">
+            <Card variant="elevated" shadow="none">
               <View className="gap-3">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-blue-100 justify-center items-center">
@@ -117,7 +117,7 @@ export const MemberAddModal: React.FC<MemberAddModalProps> = ({
             </Card>
 
             {/* 基本情報 */}
-            <Card variant="elevated" shadow="soft">
+            <Card variant="elevated" shadow="none">
               <View className="gap-4">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-blue-100 justify-center items-center">
@@ -151,7 +151,7 @@ export const MemberAddModal: React.FC<MemberAddModalProps> = ({
             </Card>
 
             {/* 補足情報 */}
-            <Card variant="elevated" shadow="soft">
+            <Card variant="elevated" shadow="none">
               <View className="gap-4">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-green-100 justify-center items-center">
@@ -191,7 +191,7 @@ export const MemberAddModal: React.FC<MemberAddModalProps> = ({
             </Card>
 
             {/* プライバシー情報 */}
-            <Card variant="elevated" shadow="soft">
+            <Card variant="elevated" shadow="none">
               <View className="gap-3">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-purple-100 justify-center items-center">

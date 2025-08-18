@@ -1,20 +1,21 @@
 ## kanji-log 技術スタック / プロジェクト概要
 
-このリポジトリは Expo（React Native）をベースに、`expo-router` を用いたファイルベースルーティングで画面遷移を実装したモバイル/ウェブ対応アプリです。共通 UI は NativeWind v4（TailwindCSS for React Native）による `className` プロパティを用いたTailwindスタイリングで統一されています。
+このリポジトリは Expo（React Native）をベースに、`expo-router` を用いたファイルベースルーティングで画面遷移を実装したモバイル/ウェブ対応アプリです。共通 UI は NativeWind v4（TailwindCSS for React Native）による `className` プロパティを用いた Tailwind スタイリングで統一されています。
 
-プロジェクト構造は、**フロントエンド**（モバイル画面）を `frontend/` ディレクトリに集約し、将来的なAPI実装やAWS管理などの**バックエンド**機能との分離を考慮した設計になっています。
+プロジェクト構造は、**フロントエンド**（モバイル画面）を `frontend/` ディレクトリに集約し、将来的な API 実装や AWS 管理などの**バックエンド**機能との分離を考慮した設計になっています。
 
 ### 主要バージョン
+
 - **Expo SDK**: 53
 - **React**: 19
 - **React Native**: 0.79
 - **TypeScript**: 5.8（`strict: true`）
 - **NativeWind**: 4.1.23（TailwindCSS for React Native）
 
-
 ## 技術スタック（カテゴリ別）
 
 ### ルーティング / ナビゲーション
+
 - **expo-router**: `~5.0.2`
   - ルーティングエントリ: `package.json` の `main: "expo-router/entry"`
   - 画面スタック: `Stack`（`app/_layout.tsx`、`app/(onboarding)/_layout.tsx`）
@@ -25,11 +26,17 @@
   - expo-router が内部で React Navigation を利用（直接利用も可能）
 
 ### UI / スタイリング
+
 - **NativeWind v4** による TailwindCSS 統合（メインスタイリング）
   - `tailwind.config.js`: TailwindCSS 設定（NativeWind preset 使用）
   - `global.css`: グローバルスタイル
   - `react-native-css-interop`: CSS-in-JS と TailwindCSS の橋渡し
   - `className` プロパティによる Tailwind スタイリング
+  - ⚠️ **重要**: Tailwind アニメーションクラス（`animate-*`）は使用禁止
+- **React Native Reanimated** によるアニメーション実装
+  - パフォーマンス重視のネイティブアニメーション
+  - `useSharedValue`, `useAnimatedStyle`, `Animated.View` などを活用
+  - コンポーネントレンダリング中の shared value アクセスを避ける
 - **デザイン定数**（一部コンポーネントで参照）
   - `constants/Colors.ts`: カラーパレット（`primary`/`secondary`/`accent`/`gray` 等）
   - `constants/Typography.ts`: 見出し/本文/ボタン/ラベルのタイポグラフィ定義
@@ -42,6 +49,7 @@
   - `@expo/vector-icons` をメインで使用
 
 ### プラットフォーム / Expo モジュール
+
 - コア: `expo`, `expo-status-bar`, `expo-system-ui`, `expo-constants`, `expo-splash-screen`
 - UI/体験: `expo-linear-gradient`, `expo-blur`, `expo-haptics`
 - デバイス: `expo-camera`
@@ -51,6 +59,7 @@
 - 新アーキテクチャ: `app.json` の `newArchEnabled: true`
 
 ### 型 / ビルド / Lint
+
 - **TypeScript**: `strict: true`、パスエイリアス `@/*`（`tsconfig.json`）
 - **ESLint**: v9（Flat Config）+ `eslint-config-expo`
 - **パッケージマネージャ**: pnpm（`pnpm-lock.yaml` あり）
@@ -60,6 +69,7 @@
   - `tailwind.config.js`: コンテンツパス設定と NativeWind preset
 
 ### ディレクトリ構成
+
 ```
 kanji-log/                    // プロジェクトルート
 ├── frontend/                 // モバイルアプリ（フロントエンド）部分
@@ -102,8 +112,8 @@ kanji-log/                    // プロジェクトルート
 // └── infrastructure/        // インフラ設定
 ```
 
-
 ## ルーティング設計の要点
+
 - 画面スタックは `frontend/app/_layout.tsx` の `Stack` で定義し、`(onboarding)`・`(tabs)` を子として読み込み
 - タブは `frontend/app/(tabs)/_layout.tsx` の `Tabs` で構成（`index`, `members`, `records`, `settings`）
 - Onboarding は `frontend/app/(onboarding)/_layout.tsx` の `Stack`
@@ -113,14 +123,14 @@ kanji-log/                    // プロジェクトルート
 - `app.json` の `experiments.typedRoutes: true` によりルートの型補完を有効化
 - Deep Link スキーム: `scheme: "myapp"`（`app.json`）
 
-
 ## 権限・プラットフォーム設定（`app.json`）
+
 - iOS: `NSCameraUsageDescription`, `NSPhotoLibraryUsageDescription`
 - Android: `CAMERA`, `READ_EXTERNAL_STORAGE`, `WRITE_EXTERNAL_STORAGE`
 - Web: `bundler: "metro"`, `output: "single"`
 
-
 ## 開発・ビルド・Lint
+
 ```bash
 # 開発サーバ（QR で実機/エミュレータ、Web も可）
 pnpm dev
@@ -134,18 +144,44 @@ pnpm lint
 
 **注意**: すべてのフロントエンド関連ファイルは `frontend/` ディレクトリに配置されており、ルートの `package.json` スクリプトが適切にパスを指定します。
 
-
 ## コーディング規約のポイント
+
 - **NativeWind v4** の `className` プロパティを活用した Tailwind スタイリングを主軸とする
+- **アニメーション**: React Native Reanimated を直接使用し、Tailwind アニメーションクラスは使用禁止
 - デザイン定数（`frontend/constants/` の `Colors`/`Typography`/`Layout`）は必要に応じて参照
 - 共通 UI を `frontend/components/common` に集約し、画面側では組み合わせる方針
 - TypeScript の型（`frontend/types/index.ts`）でドメイン構造を明確化（`Event`/`User` 等）
 - ファイルベースルーティング（`frontend/app/` 直下）に従う
 - **フロントエンド**（モバイル画面）は `frontend/` 配下で管理
-- **バックエンド**（API、AWS管理等）は将来的に別ディレクトリで分離予定
-
+- **バックエンド**（API、AWS 管理等）は将来的に別ディレクトリで分離予定
 
 ## 備考
+
 - `react-native-reanimated` は Expo により自動設定されます（Expo SDK 53 以降）
 - ルーティングは `expo-router` を第一級で採用。必要に応じて React Navigation の API を併用可能です。
 - NativeWind v4 により、TailwindCSS のクラスを React Native で使用可能です（`className` プロパティ）
+
+### アニメーション実装例（React Native Reanimated）
+
+```tsx
+import Animated, {
+  FadeIn,
+  useSharedValue,
+  useAnimatedStyle,
+} from 'react-native-reanimated';
+
+// フェードインアニメーション
+<Animated.View entering={FadeIn.delay(100)}>
+  <Card>内容</Card>
+</Animated.View>;
+
+// カスタムアニメーション
+const opacity = useSharedValue(0);
+const animatedStyle = useAnimatedStyle(() => ({
+  opacity: opacity.value,
+}));
+
+<Animated.View style={animatedStyle}>
+  <Content />
+</Animated.View>;
+```

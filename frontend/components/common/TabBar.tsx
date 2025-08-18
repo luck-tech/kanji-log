@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 export interface TabItem<T = string> {
@@ -49,19 +44,16 @@ export function TabBar<T>({
           <TouchableOpacity
             key={String(tab.key)}
             className={`px-6 py-3 mr-3 rounded-2xl ${
-              isActive 
-                ? 'bg-primary-600 shadow-medium' 
-                : 'bg-neutral-100'
-            } ${animated ? 'animate-scale-in' : ''}`}
-            style={{ 
-              animationDelay: animated ? `${index * 100}ms` : undefined 
-            }}
+              isActive ? 'bg-primary-600' : 'bg-neutral-100'
+            }`}
             onPress={() => handleTabPress(tab.key)}
             activeOpacity={0.8}
           >
             <View className="flex-row items-center">
               {tab.icon && (
-                <Text className={`text-base mr-2 ${isActive ? '' : 'opacity-60'}`}>
+                <Text
+                  className={`text-base mr-2 ${isActive ? '' : 'opacity-60'}`}
+                >
                   {tab.icon}
                 </Text>
               )}
@@ -98,9 +90,7 @@ export function TabBar<T>({
                 className="py-3 px-4 rounded-xl"
               >
                 <View className="items-center">
-                  {tab.icon && (
-                    <Text className="text-lg mb-1">{tab.icon}</Text>
-                  )}
+                  {tab.icon && <Text className="text-lg mb-1">{tab.icon}</Text>}
                   <Text className="whitespace-nowrap text-xs font-semibold text-white text-center leading-tight">
                     {tab.label}
                   </Text>
@@ -132,22 +122,24 @@ export function TabBar<T>({
           <TouchableOpacity
             key={String(tab.key)}
             className={`px-6 py-4 mr-4 border-b-2 ${
-              isActive 
-                ? 'border-primary-600' 
-                : 'border-transparent'
+              isActive ? 'border-primary-600' : 'border-transparent'
             }`}
             onPress={() => handleTabPress(tab.key)}
             activeOpacity={0.8}
           >
             <View className="flex-row items-center">
               {tab.icon && (
-                <Text className={`text-base mr-2 ${isActive ? '' : 'opacity-60'}`}>
+                <Text
+                  className={`text-base mr-2 ${isActive ? '' : 'opacity-60'}`}
+                >
                   {tab.icon}
                 </Text>
               )}
               <Text
                 className={`text-base font-medium ${
-                  isActive ? 'text-primary-600 font-semibold' : 'text-neutral-600'
+                  isActive
+                    ? 'text-primary-600 font-semibold'
+                    : 'text-neutral-600'
                 }`}
               >
                 {tab.label}
@@ -177,10 +169,14 @@ export function TabBar<T>({
         horizontal
         showsHorizontalScrollIndicator={false}
         className={variant === 'segmented' ? 'py-4' : 'px-6 py-4'}
-        contentContainerStyle={variant === 'segmented' ? { 
-          justifyContent: 'center',
-          flexGrow: 1 
-        } : undefined}
+        contentContainerStyle={
+          variant === 'segmented'
+            ? {
+                justifyContent: 'center',
+                flexGrow: 1,
+              }
+            : undefined
+        }
       >
         {renderTabs()}
       </ScrollView>

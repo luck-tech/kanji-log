@@ -233,11 +233,7 @@ export default function EventsScreen() {
     return (
       <View className="gap-2">
         {filteredEvents.map((event, index) => (
-          <View
-            key={event.id}
-            className="animate-fade-in"
-            style={{ animationDelay: `${index * 100}ms` }}
-          >
+          <View key={event.id}>
             <EventCard
               event={event}
               onPress={handleEventPress}
@@ -271,7 +267,7 @@ export default function EventsScreen() {
           activeTab={activeTab}
           onTabPress={setActiveTab}
           variant="segmented"
-          animated={true}
+          animated={false}
           className="bg-transparent"
         />
 
@@ -295,7 +291,7 @@ export default function EventsScreen() {
           onPress={handleCreateEvent}
           variant="gradient"
           size="md"
-          animated={true}
+          animated={false}
         />
 
         <EventCreateModal

@@ -206,7 +206,7 @@ ${reservationInfo.event.title}
         >
           <View className="p-6 gap-6">
             {/* イベント概要 */}
-            <Card variant="gradient" shadow="large" animated={true}>
+            <Card variant="gradient" shadow="none" animated={false}>
               <View className="gap-3">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-white/20 justify-center items-center">
@@ -238,7 +238,7 @@ ${reservationInfo.event.title}
             </Card>
 
             {/* 選択された店舗情報 */}
-            <Card variant="elevated" shadow="large" animated={true}>
+            <Card variant="elevated" shadow="none" animated={false}>
               <View className="gap-4">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-red-100 justify-center items-center">
@@ -293,7 +293,7 @@ ${reservationInfo.event.title}
             </Card>
 
             {/* 予約アクション */}
-            <Card variant="elevated" shadow="large" animated={true}>
+            <Card variant="elevated" shadow="none" animated={false}>
               <View className="gap-4">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-green-100 justify-center items-center">
@@ -357,7 +357,7 @@ ${reservationInfo.event.title}
             </Card>
 
             {/* 予約完了報告 */}
-            <Card variant="elevated" shadow="large" animated={true}>
+            <Card variant="elevated" shadow="none" animated={false}>
               <View className="gap-4">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-purple-100 justify-center items-center">
@@ -439,7 +439,7 @@ ${reservationInfo.event.title}
             </Card>
 
             {/* 予約のコツ */}
-            <Card variant="elevated" shadow="soft">
+            <Card variant="elevated" shadow="none">
               <View className="gap-3">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-amber-100 justify-center items-center">
@@ -456,7 +456,7 @@ ${reservationInfo.event.title}
                   </Text>
                   <View className="pl-4 gap-1">
                     <Text className="text-sm text-neutral-600">
-                      • 日時: {formatDate(reservationInfo.event.date)}{' '}
+                      • 日時: {formatDate(reservationInfo.event.date)}
                       {reservationInfo.event.time}〜
                     </Text>
                     <Text className="text-sm text-neutral-600">

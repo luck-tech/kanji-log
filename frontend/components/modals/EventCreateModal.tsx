@@ -195,7 +195,7 @@ export const EventCreateModal: React.FC<EventCreateModalProps> = ({
         <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
           <View className="p-6 gap-6">
             {/* イベント名 */}
-            <Card variant="elevated" shadow="soft">
+            <Card variant="elevated" shadow="none">
               <View className="gap-4">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-blue-100 justify-center items-center">
@@ -231,7 +231,7 @@ export const EventCreateModal: React.FC<EventCreateModalProps> = ({
             </Card>
 
             {/* 目的選択 */}
-            <Card variant="elevated" shadow="soft">
+            <Card variant="elevated" shadow="none">
               <View className="gap-4">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-orange-100 justify-center items-center">
@@ -275,7 +275,7 @@ export const EventCreateModal: React.FC<EventCreateModalProps> = ({
             </Card>
 
             {/* 日程設定 */}
-            <Card variant="elevated" shadow="soft">
+            <Card variant="elevated" shadow="none">
               <View className="gap-4">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-green-100 justify-center items-center">

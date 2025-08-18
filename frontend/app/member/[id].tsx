@@ -109,7 +109,7 @@ export default function MemberDetailScreen() {
         <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
           <View className="p-6 gap-6">
             {/* プロフィール概要 */}
-            <Card variant="elevated" shadow="large" animated={true}>
+            <Card variant="elevated" shadow="none" animated={false}>
               <View className="gap-4">
                 <View className="flex-row items-center gap-4">
                   <View className="w-16 h-16 rounded-2xl bg-blue-100 justify-center items-center">
@@ -131,7 +131,7 @@ export default function MemberDetailScreen() {
 
             {/* 好み・制限事項 */}
             {member.preferences && (
-              <Card variant="elevated" shadow="soft">
+              <Card variant="elevated" shadow="none">
                 <View className="gap-4">
                   <View className="flex-row items-center gap-3">
                     <View className="w-10 h-10 rounded-2xl bg-orange-100 justify-center items-center">
@@ -232,7 +232,7 @@ export default function MemberDetailScreen() {
                         <View className="px-3 py-2 bg-green-100 rounded-xl">
                           <Text className="text-green-700 font-medium">
                             ¥
-                            {member.preferences.budgetRange.min.toLocaleString()}{' '}
+                            {member.preferences.budgetRange.min.toLocaleString()}
                             - ¥
                             {member.preferences.budgetRange.max.toLocaleString()}
                           </Text>
@@ -246,7 +246,7 @@ export default function MemberDetailScreen() {
 
             {/* メモ */}
             {member.notes && (
-              <Card variant="elevated" shadow="soft">
+              <Card variant="elevated" shadow="none">
                 <View className="gap-4">
                   <View className="flex-row items-center gap-3">
                     <View className="w-10 h-10 rounded-2xl bg-purple-100 justify-center items-center">
@@ -271,7 +271,7 @@ export default function MemberDetailScreen() {
             )}
 
             {/* アクション */}
-            <Card variant="elevated" shadow="soft">
+            <Card variant="elevated" shadow="none">
               <View className="gap-4">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-amber-100 justify-center items-center">

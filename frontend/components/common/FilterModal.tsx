@@ -187,7 +187,7 @@ export const FilterModal: React.FC<FilterModalProps> = ({
         <ScrollView className="flex-1">
           <View className="p-6 gap-4">
             {/* エリア別フィルター */}
-            <Card variant="elevated" shadow="soft">
+            <Card variant="elevated" shadow="none">
               <TouchableOpacity
                 onPress={() => toggleSection('areas')}
                 className="flex-row justify-between items-center"
@@ -218,7 +218,7 @@ export const FilterModal: React.FC<FilterModalProps> = ({
             </Card>
 
             {/* 目的別フィルター */}
-            <Card variant="elevated" shadow="soft">
+            <Card variant="elevated" shadow="none">
               <TouchableOpacity
                 onPress={() => toggleSection('purposes')}
                 className="flex-row justify-between items-center"
@@ -246,7 +246,7 @@ export const FilterModal: React.FC<FilterModalProps> = ({
             </Card>
 
             {/* ジャンル別フィルター */}
-            <Card variant="elevated" shadow="soft">
+            <Card variant="elevated" shadow="none">
               <TouchableOpacity
                 onPress={() => toggleSection('genres')}
                 className="flex-row justify-between items-center"
@@ -277,7 +277,7 @@ export const FilterModal: React.FC<FilterModalProps> = ({
             </Card>
 
             {/* 価格帯フィルター */}
-            <Card variant="elevated" shadow="soft">
+            <Card variant="elevated" shadow="none">
               <TouchableOpacity
                 onPress={() => toggleSection('price')}
                 className="flex-row justify-between items-center"

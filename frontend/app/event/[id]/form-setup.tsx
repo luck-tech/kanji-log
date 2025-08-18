@@ -200,7 +200,7 @@ export default function FormSetupScreen() {
         <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
           <View className="p-6 gap-6">
             {/* 新規参加者追加 */}
-            <Card variant="elevated" shadow="large" animated={true}>
+            <Card variant="elevated" shadow="none" animated={false}>
               <View className="gap-4">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-blue-100 justify-center items-center">
@@ -274,7 +274,7 @@ export default function FormSetupScreen() {
             </Card>
 
             {/* 質問項目設定 */}
-            <Card variant="elevated" shadow="large" animated={true}>
+            <Card variant="elevated" shadow="none" animated={false}>
               <View className="gap-4">
                 <View className="flex-row items-center gap-3">
                   <View className="w-10 h-10 rounded-2xl bg-orange-100 justify-center items-center">
@@ -432,7 +432,7 @@ export default function FormSetupScreen() {
                 disabled={enabledQuestionCount === 0}
               />
             ) : (
-              <Card variant="elevated" shadow="large" animated={true}>
+              <Card variant="elevated" shadow="none" animated={false}>
                 <View className="gap-4">
                   <View className="flex-row items-center gap-3">
                     <View className="w-10 h-10 rounded-2xl bg-success-100 justify-center items-center">

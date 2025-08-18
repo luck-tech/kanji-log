@@ -42,14 +42,24 @@ applyTo: "**"
 - デザイン定数（`constants/Colors.ts`等）は必要に応じて参照
 - カスタムスタイルは`global.css`で Tailwind ユーティリティとして定義
 
-### 3. ファイル命名・構造規約
+### 3. アニメーション規約
+
+- **Tailwind のアニメーションクラスは React Native Reanimated と競合するため使用禁止**
+  - `animate-*`クラス（`animate-fade-in`, `animate-scale-in`, `animate-spin`等）は使用しない
+  - `shadow-*`クラスも同様の理由で慎重に使用する
+- **React Native Reanimated**を直接使用してアニメーションを実装
+  - `Animated.View`や`useSharedValue`、`useAnimatedStyle`等を活用
+  - コンポーネントレンダリング中の shared value アクセスを避ける
+- パフォーマンスを重視したネイティブアニメーションの実装を心がける
+
+### 4. ファイル命名・構造規約
 
 - **PascalCase**: コンポーネントファイル（例：`EventCard.tsx`）
 - **camelCase**: フック、ユーティリティ関数（例：`useFrameworkReady.ts`）
 - **kebab-case**: 画面ファイル（expo-router 規約に従う）
 - **snake_case**: 定数ファイル（例：`EVENT_STATUS_TABS`）
 
-### 4. テスト戦略
+### 5. テスト戦略
 
 - 都度 lint を実行し、通ることを確認する
 - 新しいカスタムフックや関数を追加した場合は、jest でテストを作成し、実行して通ることを確認する
