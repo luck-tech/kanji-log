@@ -40,8 +40,6 @@ export const EventCard: React.FC<EventCardProps> = ({
     return purposeMap[purpose as keyof typeof purposeMap] || 'その他';
   };
 
-
-
   const CardContent = () => (
     <>
       {/* Header Section */}
@@ -103,7 +101,7 @@ export const EventCard: React.FC<EventCardProps> = ({
           <CardContent />
         </LinearGradient>
       ) : (
-        <Card 
+        <Card
           variant={variant}
           shadow="large"
           animated={true}

@@ -23,35 +23,35 @@ export const Card: React.FC<CardProps> = ({
 }) => {
   // Padding classes with expanded options
   const paddingClasses = {
-    sm: "p-3",
-    md: "p-5", 
-    lg: "p-6",
-    xl: "p-8"
+    sm: 'p-3',
+    md: 'p-5',
+    lg: 'p-6',
+    xl: 'p-8',
   };
-  
+
   // Shadow classes
   const shadowClasses = {
-    none: "",
-    soft: "shadow-soft",
-    medium: "shadow-medium",
-    large: "shadow-large"
+    none: '',
+    soft: 'shadow-soft',
+    medium: 'shadow-medium',
+    large: 'shadow-large',
   };
-  
+
   // Base classes with modern styling
-  const baseClasses = "rounded-2xl";
-  
+  const baseClasses = 'rounded-2xl';
+
   // Variant classes
   const variantClasses = {
-    default: "bg-white border border-neutral-200",
-    elevated: "bg-white",
-    outline: "bg-transparent border-2 border-neutral-300",
-    glass: "glass",
-    gradient: ""
+    default: 'bg-white border border-neutral-200',
+    elevated: 'bg-white',
+    outline: 'bg-transparent border-2 border-neutral-300',
+    glass: 'glass',
+    gradient: '',
   };
-  
+
   // Animation classes
-  const animationClasses = animated ? "animate-scale-in" : "";
-  
+  const animationClasses = animated ? 'animate-scale-in' : '';
+
   // Combine classes
   const cardClasses = [
     baseClasses,
@@ -59,8 +59,10 @@ export const Card: React.FC<CardProps> = ({
     variant !== 'gradient' && variantClasses[variant],
     shadow !== 'none' && shadowClasses[shadow],
     animationClasses,
-    className
-  ].filter(Boolean).join(" ");
+    className,
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   if (variant === 'gradient') {
     return (
@@ -77,10 +79,7 @@ export const Card: React.FC<CardProps> = ({
   }
 
   return (
-    <View
-      className={cardClasses}
-      style={style}
-    >
+    <View className={cardClasses} style={style}>
       {children}
     </View>
   );

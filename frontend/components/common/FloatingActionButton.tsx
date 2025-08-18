@@ -26,28 +26,31 @@ export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
 }) => {
   // Size configurations
   const sizeConfig = {
-    sm: { 
+    sm: {
       container: 'w-12 h-12',
-      iconSize: 20
+      iconSize: 20,
     },
-    md: { 
+    md: {
       container: 'w-16 h-16',
-      iconSize: 24
+      iconSize: 24,
     },
-    lg: { 
+    lg: {
       container: 'w-20 h-20',
-      iconSize: 28
-    }
+      iconSize: 28,
+    },
   };
 
   const { container, iconSize } = sizeConfig[size];
-  
+
   // Default color based on variant
-  const defaultColor = color || (variant === 'secondary' ? '#334155' : '#ffffff');
-  
+  const defaultColor =
+    color || (variant === 'secondary' ? '#334155' : '#ffffff');
+
   // Base classes
-  const baseClasses = `absolute bottom-24 right-6 ${container} rounded-3xl justify-center items-center shadow-large ${animated ? 'animate-scale-in' : ''}`;
-  
+  const baseClasses = `absolute bottom-24 right-6 ${container} rounded-3xl justify-center items-center shadow-large ${
+    animated ? 'animate-scale-in' : ''
+  }`;
+
   const handlePress = () => {
     // Add haptic feedback for mobile
     if (typeof navigator !== 'undefined' && navigator.vibrate) {
@@ -81,7 +84,7 @@ export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
   const variantClasses = {
     primary: 'bg-primary-600',
     secondary: 'bg-neutral-100 border-2 border-neutral-200',
-    gradient: '' // handled above
+    gradient: '', // handled above
   };
 
   return (
