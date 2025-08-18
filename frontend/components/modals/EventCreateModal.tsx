@@ -7,6 +7,7 @@ import {
 	ScrollView,
 	SafeAreaView,
 	Alert,
+	Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -14,6 +15,7 @@ import { Card } from '@/components/common/Card';
 import { Button } from '@/components/common/Button';
 import { Input } from '@/components/common/Input';
 import { EventPurpose } from '@/types';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 interface EventCreateModalProps {
 	isVisible: boolean;
@@ -51,6 +53,14 @@ export const EventCreateModal: React.FC<EventCreateModalProps> = ({
 		notes: '',
 	});
 	const [errors, setErrors] = useState<Record<string, string>>({});
+	const [showDatePicker, setShowDatePicker] = useState(false);
+	const [showTimePicker, setShowTimePicker] = useState(false);
+	const [selectedDate, setSelectedDate] = useState(new Date());
+	const [selectedTime, setSelectedTime] = useState(() => {
+		const defaultTime = new Date();
+		defaultTime.setHours(19, 0, 0, 0); // 初期値19:00
+		return defaultTime;
+	});
 
 	const resetForm = () => {
 		setFormData({
@@ -60,6 +70,10 @@ export const EventCreateModal: React.FC<EventCreateModalProps> = ({
 			notes: '',
 		});
 		setErrors({});
+		setSelectedDate(new Date());
+		const defaultTime = new Date();
+		defaultTime.setHours(19, 0, 0, 0);
+		setSelectedTime(defaultTime);
 	};
 
 	const handleClose = () => {
@@ -97,13 +111,29 @@ export const EventCreateModal: React.FC<EventCreateModalProps> = ({
 		}));
 	};
 
+	const formatDate = (date: Date) => {
+		return date.toLocaleDateString('ja-JP', {
+			year: 'numeric',
+			month: '2-digit',
+			day: '2-digit'
+		}).replace(/\//g, '-');
+	};
+
+	const formatTime = (time: Date) => {
+		return time.toLocaleTimeString('ja-JP', {
+			hour: '2-digit',
+			minute: '2-digit',
+			hour12: false
+		});
+	};
+
 	const handleDateTimeOption = (option: 'now' | 'later') => {
 		if (option === 'now') {
 			setFormData(prev => ({
 				...prev,
 				hasScheduling: false,
-				date: new Date().toISOString().split('T')[0],
-				time: '19:00',
+				date: formatDate(selectedDate),
+				time: formatTime(selectedTime),
 			}));
 		} else {
 			setFormData(prev => ({
@@ -111,6 +141,32 @@ export const EventCreateModal: React.FC<EventCreateModalProps> = ({
 				hasScheduling: true,
 				date: undefined,
 				time: undefined,
+			}));
+		}
+	};
+
+	const handleDateChange = (event: any, date?: Date) => {
+		if (Platform.OS === 'android') {
+			setShowDatePicker(false);
+		}
+		if (date) {
+			setSelectedDate(date);
+			setFormData(prev => ({
+				...prev,
+				date: formatDate(date)
+			}));
+		}
+	};
+
+	const handleTimeChange = (event: any, time?: Date) => {
+		if (Platform.OS === 'android') {
+			setShowTimePicker(false);
+		}
+		if (time) {
+			setSelectedTime(time);
+			setFormData(prev => ({
+				...prev,
+				time: formatTime(time)
 			}));
 		}
 	};
@@ -185,8 +241,8 @@ export const EventCreateModal: React.FC<EventCreateModalProps> = ({
 												key={option.key}
 												onPress={() => handlePurposeSelect(option.key as EventPurpose)}
 												className={`flex-row items-center px-3 py-2 rounded-2xl border ${isSelected
-														? 'bg-primary-100 border-primary-500'
-														: 'bg-neutral-50 border-neutral-200'
+													? 'bg-primary-100 border-primary-500'
+													: 'bg-neutral-50 border-neutral-200'
 													}`}
 												activeOpacity={0.7}
 											>
@@ -222,15 +278,15 @@ export const EventCreateModal: React.FC<EventCreateModalProps> = ({
 									<TouchableOpacity
 										onPress={() => handleDateTimeOption('now')}
 										className={`p-4 rounded-2xl border-2 ${!formData.hasScheduling
-												? 'border-primary-500 bg-primary-50'
-												: 'border-neutral-200 bg-white'
+											? 'border-primary-500 bg-primary-50'
+											: 'border-neutral-200 bg-white'
 											}`}
 										activeOpacity={0.7}
 									>
 										<View className="flex-row items-center gap-3">
 											<View className={`w-6 h-6 rounded-full border-2 ${!formData.hasScheduling
-													? 'border-primary-500 bg-primary-500'
-													: 'border-neutral-300'
+												? 'border-primary-500 bg-primary-500'
+												: 'border-neutral-300'
 												} justify-center items-center`}>
 												{!formData.hasScheduling && (
 													<View className="w-2 h-2 rounded-full bg-white" />
@@ -249,15 +305,15 @@ export const EventCreateModal: React.FC<EventCreateModalProps> = ({
 									<TouchableOpacity
 										onPress={() => handleDateTimeOption('later')}
 										className={`p-4 rounded-2xl border-2 ${formData.hasScheduling
-												? 'border-primary-500 bg-primary-50'
-												: 'border-neutral-200 bg-white'
+											? 'border-primary-500 bg-primary-50'
+											: 'border-neutral-200 bg-white'
 											}`}
 										activeOpacity={0.7}
 									>
 										<View className="flex-row items-center gap-3">
 											<View className={`w-6 h-6 rounded-full border-2 ${formData.hasScheduling
-													? 'border-primary-500 bg-primary-500'
-													: 'border-neutral-300'
+												? 'border-primary-500 bg-primary-500'
+												: 'border-neutral-300'
 												} justify-center items-center`}>
 												{formData.hasScheduling && (
 													<View className="w-2 h-2 rounded-full bg-white" />
@@ -277,20 +333,39 @@ export const EventCreateModal: React.FC<EventCreateModalProps> = ({
 								{!formData.hasScheduling && (
 									<View className="gap-3 mt-4 p-4 bg-primary-50 rounded-2xl">
 										<View className="flex-row gap-3">
-											<Input
-												label="開催日"
-												placeholder="2024-03-15"
-												value={formData.date}
-												onChangeText={(text) => setFormData(prev => ({ ...prev, date: text }))}
+											<TouchableOpacity
+												onPress={() => setShowDatePicker(true)}
 												className="flex-1"
-											/>
-											<Input
-												label="開始時間"
-												placeholder="19:00"
-												value={formData.time}
-												onChangeText={(text) => setFormData(prev => ({ ...prev, time: text }))}
+											>
+												<View className="mb-4">
+													<Text className="text-base font-semibold text-neutral-700 mb-2">
+														開催日
+													</Text>
+													<View className="flex-row items-center min-h-12 px-4 py-3 bg-white/90 backdrop-blur-sm rounded-2xl border-2 border-neutral-200">
+														<Ionicons name="calendar" size={20} color="#64748b" />
+														<Text className="ml-3 text-base text-neutral-900">
+															{formData.date || formatDate(selectedDate)}
+														</Text>
+													</View>
+												</View>
+											</TouchableOpacity>
+
+											<TouchableOpacity
+												onPress={() => setShowTimePicker(true)}
 												className="flex-1"
-											/>
+											>
+												<View className="mb-4">
+													<Text className="text-base font-semibold text-neutral-700 mb-2">
+														開始時間
+													</Text>
+													<View className="flex-row items-center min-h-12 px-4 py-3 bg-white/90 backdrop-blur-sm rounded-2xl border-2 border-neutral-200">
+														<Ionicons name="time" size={20} color="#64748b" />
+														<Text className="ml-3 text-base text-neutral-900">
+															{formData.time || formatTime(selectedTime)}
+														</Text>
+													</View>
+												</View>
+											</TouchableOpacity>
 										</View>
 									</View>
 								)}
@@ -312,6 +387,27 @@ export const EventCreateModal: React.FC<EventCreateModalProps> = ({
 					/>
 				</View>
 			</SafeAreaView>
+
+			{/* Date Picker */}
+			{showDatePicker && (
+				<DateTimePicker
+					value={selectedDate}
+					mode="date"
+					display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+					onChange={handleDateChange}
+					minimumDate={new Date()}
+				/>
+			)}
+
+			{/* Time Picker */}
+			{showTimePicker && (
+				<DateTimePicker
+					value={selectedTime}
+					mode="time"
+					display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+					onChange={handleTimeChange}
+				/>
+			)}
 		</Modal>
 	);
 };
