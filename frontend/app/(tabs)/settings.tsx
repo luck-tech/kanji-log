@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Alert,
+  StyleSheet,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -16,6 +17,8 @@ import {
   ProfileEditModal,
   ProfileEditData,
 } from '@/components/modals/ProfileEditModal';
+import { Colors } from '@/constants/Colors';
+import { Layout } from '@/constants/Layout';
 
 interface SettingsItem {
   id: string;
@@ -163,16 +166,16 @@ export default function SettingsScreen() {
   ];
 
   return (
-    <View className="flex-1">
+    <View style={styles.container}>
       {/* Background */}
       <LinearGradient
         colors={['#f8fafc', '#f1f5f9']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
-        className="absolute inset-0"
+        style={styles.background}
       />
 
-      <SafeAreaView className="flex-1">
+      <SafeAreaView style={styles.safeArea}>
         <Header
           title="設定"
           subtitle="アカウントとアプリ設定の管理"
@@ -180,34 +183,29 @@ export default function SettingsScreen() {
         />
 
         <ScrollView
-          className="flex-1 px-6"
+          style={styles.scrollView}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 120 }}
+          contentContainerStyle={styles.scrollViewContent}
         >
           {/* Profile Section */}
-          <Card
-            variant="elevated"
-            shadow="none"
-            animated={false}
-            className="mb-6 mt-4"
-          >
-            <View className="flex-row items-center mb-4">
+          <Card variant="elevated" shadow="none">
+            <View style={styles.profileHeader}>
               <LinearGradient
                 colors={['#0ea5e9', '#0284c7']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
-                className="w-20 h-20 rounded-3xl justify-center items-center mr-4"
+                style={styles.avatarGradient}
               >
                 <Ionicons name="person" size={36} color="white" />
               </LinearGradient>
-              <View className="flex-1">
-                <Text className="text-xl font-bold text-neutral-900 mb-1">
+              <View style={styles.profileInfo}>
+                <Text style={styles.profileName}>
                   {userData.name}
                 </Text>
               </View>
               {isOwnProfile ? (
                 <TouchableOpacity
-                  className="p-3 rounded-2xl bg-neutral-100"
+                  style={styles.editButton}
                   onPress={handleEditProfile}
                   activeOpacity={0.7}
                 >
@@ -215,16 +213,18 @@ export default function SettingsScreen() {
                 </TouchableOpacity>
               ) : (
                 <TouchableOpacity
-                  className={`px-4 py-2 rounded-2xl ${
-                    isFollowing ? 'bg-neutral-100' : 'bg-primary-600'
-                  }`}
+                  style={[
+                    styles.followButton,
+                    isFollowing ? styles.followingButton : styles.notFollowingButton
+                  ]}
                   onPress={handleFollowToggle}
                   activeOpacity={0.7}
                 >
                   <Text
-                    className={`font-medium ${
-                      isFollowing ? 'text-neutral-700' : 'text-white'
-                    }`}
+                    style={[
+                      styles.followButtonText,
+                      isFollowing ? styles.followingText : styles.notFollowingText
+                    ]}
                   >
                     {isFollowing ? 'フォロー中' : 'フォロー'}
                   </Text>
@@ -232,87 +232,82 @@ export default function SettingsScreen() {
               )}
             </View>
 
-            <View className="gap-3 pt-4 border-t border-neutral-200">
-              <View className="flex-row items-center gap-3">
-                <View className="p-2 rounded-xl bg-neutral-100">
+            <View style={styles.profileDetails}>
+              <View style={styles.profileDetailItem}>
+                <View style={styles.profileDetailIcon}>
                   <Ionicons name="person-outline" size={16} color="#64748b" />
                 </View>
-                <Text className="text-base text-neutral-700">
+                <Text style={styles.profileDetailText}>
                   {userData.gender}
                 </Text>
               </View>
-              <View className="flex-row items-center gap-3">
-                <View className="p-2 rounded-xl bg-neutral-100">
+              <View style={styles.profileDetailItem}>
+                <View style={styles.profileDetailIcon}>
                   <Ionicons name="location-outline" size={16} color="#64748b" />
                 </View>
-                <Text className="text-base text-neutral-700">
+                <Text style={styles.profileDetailText}>
                   {userData.prefecture}
                 </Text>
               </View>
-              <View className="flex-row items-center gap-3">
-                <View className="p-2 rounded-xl bg-neutral-100">
+              <View style={styles.profileDetailItem}>
+                <View style={styles.profileDetailIcon}>
                   <Ionicons name="calendar-outline" size={16} color="#64748b" />
                 </View>
-                <Text className="text-base text-neutral-700">
+                <Text style={styles.profileDetailText}>
                   {userData.joinDate}から利用開始
                 </Text>
               </View>
             </View>
 
             {/* フォロー/フォロワー情報 */}
-            <View className="flex-row justify-around pt-4 mt-4 border-t border-neutral-200">
-              <View className="items-center">
-                <Text className="text-lg font-bold text-neutral-900">
+            <View style={styles.followStats}>
+              <View style={styles.followStatItem}>
+                <Text style={styles.followStatNumber}>
                   {userData.followCount}
                 </Text>
-                <Text className="text-sm text-neutral-600">フォロー</Text>
+                <Text style={styles.followStatLabel}>フォロー</Text>
               </View>
-              <View className="w-px h-10 bg-neutral-200" />
-              <View className="items-center">
-                <Text className="text-lg font-bold text-neutral-900">
+              <View style={styles.followStatSeparator} />
+              <View style={styles.followStatItem}>
+                <Text style={styles.followStatNumber}>
                   {userData.followerCount}
                 </Text>
-                <Text className="text-sm text-neutral-600">フォロワー</Text>
+                <Text style={styles.followStatLabel}>フォロワー</Text>
               </View>
             </View>
           </Card>
 
           {/* Stats Section */}
-          <Card
-            variant="gradient"
-            shadow="none"
-            animated={false}
-            className="mb-6"
-          >
-            <Text className="text-xl font-bold text-neutral-900 mb-4">
+          <Card variant="gradient" shadow="none">
+            <Text style={styles.sectionTitle}>
               幹事統計
             </Text>
-            <View className="flex-row justify-around items-center">
-              <View className="items-center">
-                <View className="w-16 h-16 rounded-2xl bg-primary-100 justify-center items-center mb-2">
-                  <Text className="text-2xl font-bold text-primary-700">
+            <View style={styles.statsContainer}>
+              <View style={styles.statItem}>
+                <View style={[styles.statIcon, styles.primaryStat]}>
+                  <Text style={styles.statNumber}>
                     12
                   </Text>
                 </View>
-                <Text className="text-sm text-neutral-600 font-medium">
+                <Text style={styles.statLabel}>
                   主催イベント
                 </Text>
               </View>
-              <View className="w-px h-16 bg-neutral-200" />
-              <View className="items-center">
-                <View className="w-16 h-16 rounded-2xl bg-success-100 justify-center items-center mb-2">
-                  <Text className="text-2xl font-bold text-success-700">8</Text>
+              <View style={styles.statSeparator} />
+              <View style={styles.statItem}>
+                <View style={[styles.statIcon, styles.successStat]}>
+                  <Text style={styles.statNumberSuccess}>8</Text>
                 </View>
-                <Text className="text-sm text-neutral-600 font-medium">
+                <Text style={styles.statLabel}>
                   共有記録
                 </Text>
               </View>
-              <View className="w-px h-16 bg-neutral-200" />
-              <View className="items-center">
-                <View className="w-16 h-16 rounded-2xl bg-accent-100 justify-center items-center mb-2">
-                  <Text className="text-2xl font-bold text-accent-700">45</Text>
+              <View style={styles.statSeparator} />
+              <View style={styles.statItem}>
+                <View style={[styles.statIcon, styles.accentStat]}>
+                  <Text style={styles.statNumberAccent}>45</Text>
                 </View>
-                <Text className="text-sm text-neutral-600 font-medium">
+                <Text style={styles.statLabel}>
                   メンバー記録数
                 </Text>
               </View>
@@ -320,30 +315,30 @@ export default function SettingsScreen() {
           </Card>
 
           {/* Settings List */}
-          <View className="gap-3 mb-8">
+          <View style={styles.settingsList}>
             {settingsItems.map((item, index) => (
               <TouchableOpacity
                 key={item.id}
                 onPress={item.onPress}
                 activeOpacity={0.8}
-                className=""
-                style={{ animationDelay: `${index * 100}ms` }}
               >
-                <Card variant="elevated" shadow="none" animated={false}>
-                  <View className="flex-row items-center justify-between">
-                    <View className="flex-row items-center flex-1">
-                      <View className="p-3 rounded-2xl bg-neutral-100 mr-4">
+                <Card variant="elevated" shadow="none">
+                  <View style={styles.settingsItem}>
+                    <View style={styles.settingsItemContent}>
+                      <View style={styles.settingsItemIcon}>
                         {item.icon}
                       </View>
-                      <View className="flex-1">
+                      <View style={styles.settingsItemText}>
                         <Text
-                          className="text-lg font-semibold text-neutral-900 mb-1"
-                          style={item.textColor && { color: item.textColor }}
+                          style={[
+                            styles.settingsItemTitle,
+                            item.textColor && { color: item.textColor }
+                          ]}
                         >
                           {item.title}
                         </Text>
                         {item.description && (
-                          <Text className="text-sm text-neutral-600 leading-5">
+                          <Text style={styles.settingsItemDescription}>
                             {item.description}
                           </Text>
                         )}
@@ -363,25 +358,25 @@ export default function SettingsScreen() {
           </View>
 
           {/* App Info */}
-          <View className="items-center py-8">
+          <View style={styles.appInfo}>
             <LinearGradient
               colors={['#0ea5e9', '#0284c7']}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
-              className="w-16 h-16 rounded-3xl justify-center items-center mb-4"
+              style={styles.appIcon}
             >
               <Ionicons name="wine" size={28} color="white" />
             </LinearGradient>
-            <Text className="text-2xl font-bold text-primary-600 mb-2">
+            <Text style={styles.appTitle}>
               幹事ログ
             </Text>
-            <Text className="text-base text-neutral-600 mb-3">
+            <Text style={styles.appVersion}>
               バージョン 1.0.0
             </Text>
-            <Text className="text-sm text-neutral-500 text-center max-w-xs">
+            <Text style={styles.appDescription}>
               飲み会の企画・管理をスマートにサポートするアプリ
             </Text>
-            <Text className="text-xs text-neutral-400 text-center mt-4">
+            <Text style={styles.copyright}>
               © 2025 幹事ログ. All rights reserved.
             </Text>
           </View>
@@ -406,3 +401,243 @@ export default function SettingsScreen() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  background: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  safeArea: {
+    flex: 1,
+  },
+  scrollView: {
+    flex: 1,
+    paddingHorizontal: Layout.padding.lg,
+  },
+  scrollViewContent: {
+    paddingBottom: 120,
+  },
+  profileHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: Layout.spacing.md,
+  },
+  avatarGradient: {
+    width: 80,
+    height: 80,
+    borderRadius: Layout.borderRadius.xl,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: Layout.spacing.md,
+  },
+  profileInfo: {
+    flex: 1,
+  },
+  profileName: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: Colors.neutral[900],
+    marginBottom: Layout.spacing.xs,
+  },
+  editButton: {
+    padding: Layout.spacing.sm,
+    borderRadius: Layout.borderRadius.lg,
+    backgroundColor: Colors.neutral[100],
+  },
+  followButton: {
+    paddingHorizontal: Layout.spacing.md,
+    paddingVertical: Layout.spacing.sm,
+    borderRadius: Layout.borderRadius.lg,
+  },
+  followingButton: {
+    backgroundColor: Colors.neutral[100],
+  },
+  notFollowingButton: {
+    backgroundColor: Colors.primary[600],
+  },
+  followButtonText: {
+    fontWeight: '500',
+  },
+  followingText: {
+    color: Colors.neutral[700],
+  },
+  notFollowingText: {
+    color: Colors.white,
+  },
+  profileDetails: {
+    gap: Layout.spacing.sm,
+    paddingTop: Layout.spacing.md,
+    borderTopWidth: 1,
+    borderTopColor: Colors.neutral[200],
+  },
+  profileDetailItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Layout.spacing.sm,
+  },
+  profileDetailIcon: {
+    padding: Layout.spacing.sm,
+    borderRadius: Layout.borderRadius.md,
+    backgroundColor: Colors.neutral[100],
+  },
+  profileDetailText: {
+    fontSize: 16,
+    color: Colors.neutral[700],
+  },
+  followStats: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingTop: Layout.spacing.md,
+    marginTop: Layout.spacing.md,
+    borderTopWidth: 1,
+    borderTopColor: Colors.neutral[200],
+  },
+  followStatItem: {
+    alignItems: 'center',
+  },
+  followStatNumber: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: Colors.neutral[900],
+  },
+  followStatLabel: {
+    fontSize: 14,
+    color: Colors.neutral[600],
+  },
+  followStatSeparator: {
+    width: 1,
+    height: 40,
+    backgroundColor: Colors.neutral[200],
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: Colors.neutral[900],
+    marginBottom: Layout.spacing.md,
+  },
+  statsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  statItem: {
+    alignItems: 'center',
+  },
+  statIcon: {
+    width: 64,
+    height: 64,
+    borderRadius: Layout.borderRadius.lg,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: Layout.spacing.sm,
+  },
+  primaryStat: {
+    backgroundColor: Colors.primary[100],
+  },
+  successStat: {
+    backgroundColor: Colors.success[100],
+  },
+  accentStat: {
+    backgroundColor: Colors.accent[100],
+  },
+  statNumber: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: Colors.primary[700],
+  },
+  statNumberSuccess: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: Colors.success[700],
+  },
+  statNumberAccent: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: Colors.accent[700],
+  },
+  statLabel: {
+    fontSize: 14,
+    color: Colors.neutral[600],
+    fontWeight: '500',
+  },
+  statSeparator: {
+    width: 1,
+    height: 64,
+    backgroundColor: Colors.neutral[200],
+  },
+  settingsList: {
+    gap: Layout.spacing.sm,
+    marginBottom: Layout.spacing.xl,
+  },
+  settingsItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  settingsItemContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  settingsItemIcon: {
+    padding: Layout.spacing.sm,
+    borderRadius: Layout.borderRadius.lg,
+    backgroundColor: Colors.neutral[100],
+    marginRight: Layout.spacing.md,
+  },
+  settingsItemText: {
+    flex: 1,
+  },
+  settingsItemTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: Colors.neutral[900],
+    marginBottom: Layout.spacing.xs,
+  },
+  settingsItemDescription: {
+    fontSize: 14,
+    color: Colors.neutral[600],
+    lineHeight: 20,
+  },
+  appInfo: {
+    alignItems: 'center',
+    paddingVertical: Layout.spacing.xl,
+  },
+  appIcon: {
+    width: 64,
+    height: 64,
+    borderRadius: Layout.borderRadius.xl,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: Layout.spacing.md,
+  },
+  appTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: Colors.primary[600],
+    marginBottom: Layout.spacing.sm,
+  },
+  appVersion: {
+    fontSize: 16,
+    color: Colors.neutral[600],
+    marginBottom: Layout.spacing.sm,
+  },
+  appDescription: {
+    fontSize: 14,
+    color: Colors.neutral[500],
+    textAlign: 'center',
+    maxWidth: 300,
+  },
+  copyright: {
+    fontSize: 12,
+    color: Colors.neutral[400],
+    textAlign: 'center',
+    marginTop: Layout.spacing.md,
+  },
+});

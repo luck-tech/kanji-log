@@ -6,12 +6,15 @@ import {
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
+  StyleSheet,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Card } from '@/components/common/Card';
 import { Button } from '@/components/common/Button';
 import { Input } from '@/components/common/Input';
+import { Colors } from '@/constants/Colors';
+import { Layout } from '@/constants/Layout';
 
 interface AreaSelectionModalProps {
   isVisible: boolean;
@@ -75,25 +78,25 @@ export const AreaSelectionModal: React.FC<AreaSelectionModalProps> = ({
       presentationStyle="pageSheet"
       onRequestClose={handleClose}
     >
-      <SafeAreaView className="flex-1 bg-neutral-50">
+      <SafeAreaView style={styles.container}>
         {/* Header */}
-        <View className="px-6 py-4 bg-white border-b border-neutral-200">
-          <View className="flex-row justify-between items-center">
-            <TouchableOpacity onPress={handleClose} className="p-2 -ml-2">
+        <View style={styles.header}>
+          <View style={styles.headerContent}>
+            <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
               <Ionicons name="close" size={24} color="#64748b" />
             </TouchableOpacity>
-            <Text className="text-lg font-bold text-neutral-900">
+            <Text style={styles.headerTitle}>
               エリア選択
             </Text>
-            <View className="w-10" />
+            <View style={styles.headerSpacer} />
           </View>
         </View>
 
-        <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
-          <View className="p-6 gap-6">
+        <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+          <View style={styles.content}>
             {/* 説明 */}
-            <View className="items-center">
-              <Text className="text-base text-neutral-600 text-center leading-6 mb-4">
+            <View style={styles.description}>
+              <Text style={styles.descriptionText}>
                 レストランを探すエリアを選択してください。{'\n'}
                 メンバーの利便性を考慮して最適なエリアを提案します。
               </Text>
@@ -107,61 +110,60 @@ export const AreaSelectionModal: React.FC<AreaSelectionModalProps> = ({
               <Card
                 variant={selectionType === 'center' ? 'gradient' : 'elevated'}
                 shadow="none"
-                animated={false}
               >
-                <View className="gap-4">
-                  <View className="flex-row items-center gap-3">
+                <View style={styles.optionContainer}>
+                  <View style={styles.optionHeader}>
                     <LinearGradient
                       colors={['#0ea5e9', '#0284c7']}
                       start={{ x: 0, y: 0 }}
                       end={{ x: 1, y: 1 }}
-                      className="w-12 h-12 rounded-2xl justify-center items-center"
+                      style={styles.centerIcon}
                     >
-                      <Text className="text-xl">{RECOMMENDED_CENTER.icon}</Text>
+                      <Text style={styles.centerIconText}>{RECOMMENDED_CENTER.icon}</Text>
                     </LinearGradient>
-                    <View className="flex-1">
-                      <View className="flex-row items-center gap-2">
-                        <Text className="text-lg font-bold text-neutral-900">
+                    <View style={styles.optionInfo}>
+                      <View style={styles.optionTitleRow}>
+                        <Text style={styles.optionTitle}>
                           みんなの中心エリア
                         </Text>
-                        <View className="bg-success-100 rounded-full px-2 py-1">
-                          <Text className="text-xs font-bold text-success-700">
+                        <View style={styles.recommendedBadge}>
+                          <Text style={styles.recommendedBadgeText}>
                             推奨
                           </Text>
                         </View>
                       </View>
-                      <Text className="text-sm text-neutral-600 mt-1">
+                      <Text style={styles.optionSubtitle}>
                         AIが最適なエリアを自動選択
                       </Text>
                     </View>
                     {selectionType === 'center' && (
-                      <View className="w-6 h-6 rounded-full bg-primary-500 justify-center items-center">
+                      <View style={styles.checkmark}>
                         <Ionicons name="checkmark" size={14} color="white" />
                       </View>
                     )}
                   </View>
 
                   {/* 推奨エリア詳細 */}
-                  <View className="p-4 bg-blue-50 rounded-xl">
-                    <View className="flex-row items-center gap-3 mb-3">
+                  <View style={styles.centerDetails}>
+                    <View style={styles.centerDetailsHeader}>
                       <Ionicons name="location" size={20} color="#0284c7" />
-                      <Text className="text-lg font-bold text-blue-900">
+                      <Text style={styles.centerStationName}>
                         {RECOMMENDED_CENTER.station}周辺
                       </Text>
                     </View>
-                    <Text className="text-sm text-blue-800 leading-5 mb-3">
+                    <Text style={styles.centerReason}>
                       {RECOMMENDED_CENTER.reason}
                     </Text>
-                    <View className="flex-row items-center gap-4">
-                      <View className="flex-row items-center gap-2">
+                    <View style={styles.centerStats}>
+                      <View style={styles.centerStat}>
                         <Ionicons name="time" size={16} color="#0284c7" />
-                        <Text className="text-sm font-medium text-blue-800">
+                        <Text style={styles.centerStatText}>
                           平均移動時間: {RECOMMENDED_CENTER.averageTime}
                         </Text>
                       </View>
-                      <View className="flex-row items-center gap-2">
+                      <View style={styles.centerStat}>
                         <Ionicons name="people" size={16} color="#0284c7" />
-                        <Text className="text-sm font-medium text-blue-800">
+                        <Text style={styles.centerStatText}>
                           全員アクセス良好
                         </Text>
                       </View>
@@ -181,49 +183,48 @@ export const AreaSelectionModal: React.FC<AreaSelectionModalProps> = ({
                   selectionType === 'specified' ? 'gradient' : 'elevated'
                 }
                 shadow="none"
-                animated={false}
               >
-                <View className="gap-4">
-                  <View className="flex-row items-center gap-3">
-                    <View className="w-12 h-12 rounded-2xl bg-orange-100 justify-center items-center">
+                <View style={styles.optionContainer}>
+                  <View style={styles.optionHeader}>
+                    <View style={styles.specifiedIcon}>
                       <Ionicons name="map" size={24} color="#f59e0b" />
                     </View>
-                    <View className="flex-1">
-                      <Text className="text-lg font-bold text-neutral-900">
+                    <View style={styles.optionInfo}>
+                      <Text style={styles.optionTitle}>
                         指定エリアで探す
                       </Text>
-                      <Text className="text-sm text-neutral-600 mt-1">
+                      <Text style={styles.optionSubtitle}>
                         特定のエリアや駅を指定
                       </Text>
                     </View>
                     {selectionType === 'specified' && (
-                      <View className="w-6 h-6 rounded-full bg-primary-500 justify-center items-center">
+                      <View style={styles.checkmark}>
                         <Ionicons name="checkmark" size={14} color="white" />
                       </View>
                     )}
                   </View>
 
                   {selectionType === 'specified' && (
-                    <View className="gap-4">
+                    <View style={styles.specifiedOptions}>
                       {/* 人気エリア */}
-                      <View>
-                        <Text className="text-base font-semibold text-neutral-900 mb-3">
+                      <View style={styles.popularAreas}>
+                        <Text style={styles.sectionTitle}>
                           人気エリア
                         </Text>
-                        <View className="flex-row flex-wrap gap-2">
+                        <View style={styles.areasList}>
                           {POPULAR_AREAS.map((area) => (
                             <TouchableOpacity
                               key={area.id}
                               onPress={() =>
                                 handleSpecifiedAreaSelect(area.name)
                               }
-                              className="flex-row items-center px-3 py-2 rounded-2xl bg-orange-100 border border-orange-200"
+                              style={styles.areaChip}
                               activeOpacity={0.7}
                             >
-                              <Text className="text-base mr-2">
+                              <Text style={styles.areaIcon}>
                                 {area.icon}
                               </Text>
-                              <Text className="text-sm font-medium text-orange-700">
+                              <Text style={styles.areaName}>
                                 {area.name}
                               </Text>
                             </TouchableOpacity>
@@ -232,20 +233,21 @@ export const AreaSelectionModal: React.FC<AreaSelectionModalProps> = ({
                       </View>
 
                       {/* カスタムエリア入力 */}
-                      <View>
-                        <Text className="text-base font-semibold text-neutral-900 mb-3">
+                      <View style={styles.customArea}>
+                        <Text style={styles.sectionTitle}>
                           その他のエリア・駅名
                         </Text>
-                        <View className="flex-row gap-3">
-                          <Input
-                            placeholder="例：恵比寿、表参道、秋葉原"
-                            value={customArea}
-                            onChangeText={setCustomArea}
-                            className="flex-1"
-                          />
+                        <View style={styles.inputRow}>
+                          <View style={styles.inputContainer}>
+                            <Input
+                              placeholder="例：恵比寿、表参道、秋葉原"
+                              value={customArea}
+                              onChangeText={setCustomArea}
+                            />
+                          </View>
                           <TouchableOpacity
                             onPress={handleCustomAreaSelect}
-                            className="w-12 h-12 rounded-2xl bg-orange-600 justify-center items-center"
+                            style={styles.submitButton}
                             activeOpacity={0.8}
                           >
                             <Ionicons
@@ -266,7 +268,7 @@ export const AreaSelectionModal: React.FC<AreaSelectionModalProps> = ({
 
         {/* Footer */}
         {selectionType === 'center' && (
-          <View className="px-6 py-4 bg-white border-t border-neutral-200">
+          <View style={styles.footer}>
             <Button
               title="中心エリアで探す"
               onPress={handleCenterAreaSelect}
@@ -281,3 +283,208 @@ export const AreaSelectionModal: React.FC<AreaSelectionModalProps> = ({
     </Modal>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.neutral[50],
+  },
+  header: {
+    paddingHorizontal: Layout.padding.lg,
+    paddingVertical: Layout.padding.md,
+    backgroundColor: Colors.white,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.neutral[200],
+  },
+  headerContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  closeButton: {
+    padding: Layout.spacing.sm,
+    marginLeft: -Layout.spacing.sm,
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: Colors.neutral[900],
+  },
+  headerSpacer: {
+    width: 40,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  content: {
+    padding: Layout.padding.lg,
+    gap: Layout.spacing.lg,
+  },
+  description: {
+    alignItems: 'center',
+  },
+  descriptionText: {
+    fontSize: 16,
+    color: Colors.neutral[600],
+    textAlign: 'center',
+    lineHeight: 24,
+    marginBottom: Layout.spacing.md,
+  },
+  optionContainer: {
+    gap: Layout.spacing.md,
+  },
+  optionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Layout.spacing.sm,
+  },
+  centerIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: Layout.borderRadius.lg,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  centerIconText: {
+    fontSize: 20,
+  },
+  specifiedIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: Layout.borderRadius.lg,
+    backgroundColor: '#fef3c7',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  optionInfo: {
+    flex: 1,
+  },
+  optionTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Layout.spacing.sm,
+  },
+  optionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: Colors.neutral[900],
+  },
+  recommendedBadge: {
+    backgroundColor: Colors.success[100],
+    borderRadius: Layout.borderRadius.full,
+    paddingHorizontal: Layout.spacing.sm,
+    paddingVertical: Layout.spacing.xs,
+  },
+  recommendedBadgeText: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: Colors.success[700],
+  },
+  optionSubtitle: {
+    fontSize: 14,
+    color: Colors.neutral[600],
+    marginTop: Layout.spacing.xs,
+  },
+  checkmark: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: Colors.primary[500],
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  centerDetails: {
+    padding: Layout.spacing.md,
+    backgroundColor: Colors.primary[50],
+    borderRadius: Layout.borderRadius.md,
+  },
+  centerDetailsHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Layout.spacing.sm,
+    marginBottom: Layout.spacing.sm,
+  },
+  centerStationName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: Colors.primary[900],
+  },
+  centerReason: {
+    fontSize: 14,
+    color: Colors.primary[800],
+    lineHeight: 20,
+    marginBottom: Layout.spacing.sm,
+  },
+  centerStats: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Layout.spacing.md,
+  },
+  centerStat: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Layout.spacing.sm,
+  },
+  centerStatText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: Colors.primary[800],
+  },
+  specifiedOptions: {
+    gap: Layout.spacing.md,
+  },
+  popularAreas: {},
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: Colors.neutral[900],
+    marginBottom: Layout.spacing.sm,
+  },
+  areasList: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: Layout.spacing.sm,
+  },
+  areaChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: Layout.spacing.sm,
+    paddingVertical: Layout.spacing.sm,
+    borderRadius: Layout.borderRadius.lg,
+    backgroundColor: '#fef3c7',
+    borderWidth: 1,
+    borderColor: '#fbbf24',
+  },
+  areaIcon: {
+    fontSize: 16,
+    marginRight: Layout.spacing.sm,
+  },
+  areaName: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#d97706',
+  },
+  customArea: {},
+  inputRow: {
+    flexDirection: 'row',
+    gap: Layout.spacing.sm,
+  },
+  inputContainer: {
+    flex: 1,
+  },
+  submitButton: {
+    width: 48,
+    height: 48,
+    borderRadius: Layout.borderRadius.lg,
+    backgroundColor: '#ea580c',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  footer: {
+    paddingHorizontal: Layout.padding.lg,
+    paddingVertical: Layout.padding.md,
+    backgroundColor: Colors.white,
+    borderTopWidth: 1,
+    borderTopColor: Colors.neutral[200],
+  },
+});

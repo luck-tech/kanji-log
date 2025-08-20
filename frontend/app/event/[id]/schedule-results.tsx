@@ -6,12 +6,14 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Alert,
+  StyleSheet,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Card } from '@/components/common/Card';
 import { Button } from '@/components/common/Button';
 import { Header } from '@/components/common/Header';
+import { Colors } from '@/constants';
 
 interface ScheduleResponse {
   userId: string;
@@ -168,13 +170,13 @@ export default function ScheduleResultsScreen() {
   const getResponseColor = (response: string) => {
     switch (response) {
       case 'available':
-        return 'text-success-600';
+        return styles.successText;
       case 'maybe':
-        return 'text-warning-600';
+        return styles.warningText;
       case 'unavailable':
-        return 'text-error-600';
+        return styles.errorText;
       default:
-        return 'text-neutral-600';
+        return styles.neutralText;
     }
   };
 
@@ -206,8 +208,8 @@ export default function ScheduleResultsScreen() {
   const responseRate = Math.round((responses.length / 11) * 100); // Assuming 11 total members
 
   return (
-    <View className="flex-1 bg-neutral-50">
-      <SafeAreaView className="flex-1">
+    <View style={styles.container}>
+      <SafeAreaView style={styles.safeArea}>
         <Header
           title="日程調整結果"
           subtitle="メンバーの回答状況と最適日程"
@@ -216,55 +218,55 @@ export default function ScheduleResultsScreen() {
           onLeftPress={handleBackPress}
         />
 
-        <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
-          <View className="p-6 gap-6">
+        <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+          <View style={styles.content}>
             {/* 全体サマリー */}
-            <Card variant="elevated" shadow="none" animated={false}>
-              <View className="gap-4">
-                <View className="flex-row items-center gap-3">
-                  <View className="w-10 h-10 rounded-2xl bg-blue-100 justify-center items-center">
+            <Card variant="elevated" shadow="none">
+              <View style={styles.card}>
+                <View style={styles.cardHeader}>
+                  <View style={[styles.iconContainer, styles.blueIcon]}>
                     <Ionicons name="analytics" size={20} color="#3b82f6" />
                   </View>
-                  <Text className="text-lg font-bold text-neutral-900">
+                  <Text style={styles.cardTitle}>
                     調整結果サマリー
                   </Text>
                 </View>
 
-                <View className="flex-row gap-4">
-                  <View className="flex-1 p-3 bg-blue-50 rounded-xl border border-blue-200">
-                    <Text className="text-2xl font-bold text-blue-700 text-center">
+                <View style={styles.statsRow}>
+                  <View style={[styles.statCard, styles.blueStatCard]}>
+                    <Text style={[styles.statValue, styles.blueStatValue]}>
                       {responseRate}%
                     </Text>
-                    <Text className="text-blue-600 text-center text-sm">
+                    <Text style={[styles.statLabel, styles.blueStatLabel]}>
                       回答率
                     </Text>
                   </View>
-                  <View className="flex-1 p-3 bg-green-50 rounded-xl border border-green-200">
-                    <Text className="text-2xl font-bold text-green-700 text-center">
+                  <View style={[styles.statCard, styles.greenStatCard]}>
+                    <Text style={[styles.statValue, styles.greenStatValue]}>
                       {responses.length}/11
                     </Text>
-                    <Text className="text-green-600 text-center text-sm">
+                    <Text style={[styles.statLabel, styles.greenStatLabel]}>
                       回答済み
                     </Text>
                   </View>
-                  <View className="flex-1 p-3 bg-purple-50 rounded-xl border border-purple-200">
-                    <Text className="text-2xl font-bold text-purple-700 text-center">
+                  <View style={[styles.statCard, styles.purpleStatCard]}>
+                    <Text style={[styles.statValue, styles.purpleStatValue]}>
                       {bestOption.stats.percentage}%
                     </Text>
-                    <Text className="text-purple-600 text-center text-sm">
+                    <Text style={[styles.statLabel, styles.purpleStatLabel]}>
                       最高スコア
                     </Text>
                   </View>
                 </View>
 
-                <View className="p-4 bg-yellow-50 rounded-xl border border-yellow-200">
-                  <Text className="text-yellow-800 font-medium mb-1">
+                <View style={styles.bestOptionCard}>
+                  <Text style={styles.bestOptionTitle}>
                     🏆 最適日程
                   </Text>
-                  <Text className="text-yellow-900 text-lg font-bold">
+                  <Text style={styles.bestOptionDate}>
                     {formatDate(bestOption.date)} {bestOption.time}
                   </Text>
-                  <Text className="text-yellow-700 text-sm">
+                  <Text style={styles.bestOptionDetails}>
                     参加可能 {bestOption.stats.available}名 + おそらく参加
                     {bestOption.stats.maybe}名
                   </Text>
@@ -273,8 +275,8 @@ export default function ScheduleResultsScreen() {
             </Card>
 
             {/* 候補日ごとの結果 */}
-            <View className="gap-4">
-              <Text className="text-xl font-bold text-neutral-900 px-2">
+            <View style={styles.dateOptionsContainer}>
+              <Text style={styles.sectionTitle}>
                 候補日の詳細結果
               </Text>
 
@@ -290,78 +292,80 @@ export default function ScheduleResultsScreen() {
                     }
                     activeOpacity={0.8}
                   >
-                    <Card variant="elevated" shadow="none" animated={false}>
+                    <Card variant="elevated" shadow="none">
                       <View
-                        className={`gap-4 ${
-                          isSelected
-                            ? 'bg-blue-50 border border-blue-200 rounded-xl'
-                            : ''
-                        }`}
-                        style={isSelected ? { margin: -16, padding: 16 } : {}}
+                        style={[
+                          styles.dateOptionCard,
+                          isSelected && styles.selectedDateCard,
+                        ]}
                       >
                         {/* 日程ヘッダー */}
-                        <View className="flex-row items-center justify-between">
-                          <View className="flex-row items-center gap-3">
+                        <View style={styles.dateHeader}>
+                          <View style={styles.dateHeaderLeft}>
                             <View
-                              className={`w-8 h-8 rounded-2xl justify-center items-center ${
+                              style={[
+                                styles.dateIndex,
                                 isSelected
-                                  ? 'bg-blue-500'
+                                  ? styles.selectedDateIndex
                                   : isBest
-                                  ? 'bg-yellow-100'
-                                  : 'bg-neutral-100'
-                              }`}
+                                  ? styles.bestDateIndex
+                                  : styles.normalDateIndex,
+                              ]}
                             >
                               <Text
-                                className={`text-sm font-bold ${
+                                style={[
+                                  styles.dateIndexText,
                                   isSelected
-                                    ? 'text-white'
+                                    ? styles.selectedDateIndexText
                                     : isBest
-                                    ? 'text-yellow-700'
-                                    : 'text-neutral-600'
-                                }`}
+                                    ? styles.bestDateIndexText
+                                    : styles.normalDateIndexText,
+                                ]}
                               >
                                 {index + 1}
                               </Text>
                             </View>
                             <View>
-                              <View className="flex-row items-center gap-2">
+                              <View style={styles.dateInfo}>
                                 <Text
-                                  className={`text-lg font-bold ${
+                                  style={[
+                                    styles.dateTitle,
                                     isSelected
-                                      ? 'text-blue-900'
-                                      : 'text-neutral-900'
-                                  }`}
+                                      ? styles.selectedDateTitle
+                                      : styles.normalDateTitle,
+                                  ]}
                                 >
                                   {formatDate(option.date)} {option.time}
                                 </Text>
                                 {isBest && !isSelected && (
-                                  <View className="bg-yellow-100 rounded-full px-2 py-0.5">
-                                    <Text className="text-xs font-bold text-yellow-700">
+                                  <View style={[styles.badge, styles.bestBadge]}>
+                                    <Text style={[styles.badgeText, styles.bestBadgeText]}>
                                       最適
                                     </Text>
                                   </View>
                                 )}
                                 {isSelected && (
-                                  <View className="bg-blue-100 rounded-full px-2 py-0.5">
-                                    <Text className="text-xs font-bold text-blue-700">
+                                  <View style={[styles.badge, styles.selectedBadge]}>
+                                    <Text style={[styles.badgeText, styles.selectedBadgeText]}>
                                       選択中
                                     </Text>
                                   </View>
                                 )}
                               </View>
                               <Text
-                                className={`text-sm ${
+                                style={[
+                                  styles.dateSubtitle,
                                   isSelected
-                                    ? 'text-blue-700'
-                                    : 'text-neutral-600'
-                                }`}
+                                    ? styles.selectedDateSubtitle
+                                    : styles.normalDateSubtitle,
+                                ]}
                               >
                                 参加率 {option.stats.percentage}%
                               </Text>
                             </View>
                           </View>
                           {isSelected && (
-                            <View className="w-6 h-6 rounded-full bg-blue-500 justify-center items-center">
+                            <View style={styles.checkIcon}>
                               <Ionicons
                                 name="checkmark"
                                 size={14}
@@ -372,99 +376,111 @@ export default function ScheduleResultsScreen() {
                         </View>
 
                         {/* 統計バー */}
-                        <View className="gap-2">
-                          <View className="flex-row justify-between">
+                        <View style={styles.statsSection}>
+                          <View style={styles.statsHeader}>
                             <Text
-                              className={`text-sm font-medium ${
+                              style={[
+                                styles.statsLabel,
                                 isSelected
-                                  ? 'text-blue-800'
-                                  : 'text-neutral-700'
-                              }`}
+                                  ? styles.selectedStatsLabel
+                                  : styles.normalStatsLabel,
+                              ]}
                             >
                               回答状況
                             </Text>
                             <Text
-                              className={`text-sm ${
+                              style={[
+                                styles.statsCount,
                                 isSelected
-                                  ? 'text-blue-700'
-                                  : 'text-neutral-600'
-                              }`}
+                                  ? styles.selectedStatsCount
+                                  : styles.normalStatsCount,
+                              ]}
                             >
                               {option.stats.total}名中
                             </Text>
                           </View>
 
                           <View
-                            className={`h-3 rounded-full overflow-hidden ${
-                              isSelected ? 'bg-blue-100' : 'bg-neutral-200'
-                            }`}
+                            style={[
+                              styles.progressBar,
+                              isSelected ? styles.selectedProgressBar : styles.normalProgressBar,
+                            ]}
                           >
-                            <View className="flex-row h-full">
+                            <View style={styles.progressBarContent}>
                               <View
-                                className="bg-success-500"
-                                style={{
-                                  width: `${
-                                    (option.stats.available /
-                                      option.stats.total) *
-                                    100
-                                  }%`,
-                                }}
+                                style={[
+                                  styles.availableProgress,
+                                  {
+                                    width: `${
+                                      (option.stats.available /
+                                        option.stats.total) *
+                                      100
+                                    }%`,
+                                  },
+                                ]}
                               />
                               <View
-                                className="bg-warning-500"
-                                style={{
-                                  width: `${
-                                    (option.stats.maybe / option.stats.total) *
-                                    100
-                                  }%`,
-                                }}
+                                style={[
+                                  styles.maybeProgress,
+                                  {
+                                    width: `${
+                                      (option.stats.maybe / option.stats.total) *
+                                      100
+                                    }%`,
+                                  },
+                                ]}
                               />
                               <View
-                                className="bg-error-500"
-                                style={{
-                                  width: `${
-                                    (option.stats.unavailable /
-                                      option.stats.total) *
-                                    100
-                                  }%`,
-                                }}
+                                style={[
+                                  styles.unavailableProgress,
+                                  {
+                                    width: `${
+                                      (option.stats.unavailable /
+                                        option.stats.total) *
+                                      100
+                                    }%`,
+                                  },
+                                ]}
                               />
                             </View>
                           </View>
 
-                          <View className="flex-row gap-4">
-                            <View className="flex-row items-center gap-1">
-                              <View className="w-3 h-3 bg-success-500 rounded-full" />
+                          <View style={styles.legendRow}>
+                            <View style={styles.legendItem}>
+                              <View style={[styles.legendDot, styles.availableDot]} />
                               <Text
-                                className={`text-sm ${
+                                style={[
+                                  styles.legendText,
                                   isSelected
-                                    ? 'text-blue-700'
-                                    : 'text-neutral-600'
-                                }`}
+                                    ? styles.selectedLegendText
+                                    : styles.normalLegendText,
+                                ]}
                               >
                                 参加可能 {option.stats.available}
                               </Text>
                             </View>
-                            <View className="flex-row items-center gap-1">
-                              <View className="w-3 h-3 bg-warning-500 rounded-full" />
+                            <View style={styles.legendItem}>
+                              <View style={[styles.legendDot, styles.maybeDot]} />
                               <Text
-                                className={`text-sm ${
+                                style={[
+                                  styles.legendText,
                                   isSelected
-                                    ? 'text-blue-700'
-                                    : 'text-neutral-600'
-                                }`}
+                                    ? styles.selectedLegendText
+                                    : styles.normalLegendText,
+                                ]}
                               >
                                 おそらく {option.stats.maybe}
                               </Text>
                             </View>
-                            <View className="flex-row items-center gap-1">
-                              <View className="w-3 h-3 bg-error-500 rounded-full" />
+                            <View style={styles.legendItem}>
+                              <View style={[styles.legendDot, styles.unavailableDot]} />
                               <Text
-                                className={`text-sm ${
+                                style={[
+                                  styles.legendText,
                                   isSelected
-                                    ? 'text-blue-700'
-                                    : 'text-neutral-600'
-                                }`}
+                                    ? styles.selectedLegendText
+                                    : styles.normalLegendText,
+                                ]}
                               >
                                 不可 {option.stats.unavailable}
                               </Text>
@@ -479,32 +495,32 @@ export default function ScheduleResultsScreen() {
             </View>
 
             {/* 個別回答詳細 */}
-            <Card variant="elevated" shadow="none" animated={false}>
-              <View className="gap-4">
-                <View className="flex-row items-center gap-3">
-                  <View className="w-10 h-10 rounded-2xl bg-purple-100 justify-center items-center">
+            <Card variant="elevated" shadow="none">
+              <View style={styles.responseSection}>
+                <View style={styles.responseHeader}>
+                  <View style={[styles.iconContainer, styles.purpleIcon]}>
                     <Ionicons name="people" size={20} color="#7c3aed" />
                   </View>
-                  <Text className="text-lg font-semibold text-neutral-900">
+                  <Text style={styles.responseTitle}>
                     個別回答状況
                   </Text>
                 </View>
 
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                  <View className="gap-3">
+                  <View style={styles.responseTable}>
                     {/* ヘッダー */}
-                    <View className="flex-row gap-3">
-                      <View className="w-24">
-                        <Text className="text-sm font-medium text-neutral-700">
+                    <View style={styles.tableHeader}>
+                      <View style={styles.memberColumn}>
+                        <Text style={styles.memberHeaderText}>
                           メンバー
                         </Text>
                       </View>
                       {sortedDateOptions.map((option) => (
-                        <View key={option.id} className="w-20">
-                          <Text className="text-xs font-medium text-neutral-600 text-center">
+                        <View key={option.id} style={styles.dateColumn}>
+                          <Text style={styles.dateHeaderText}>
                             {formatDate(option.date)}
                           </Text>
-                          <Text className="text-xs text-neutral-500 text-center">
+                          <Text style={styles.dateTimeText}>
                             {option.time}
                           </Text>
                         </View>
@@ -513,12 +529,9 @@ export default function ScheduleResultsScreen() {
 
                     {/* 回答データ */}
                     {responses.map((response) => (
-                      <View
-                        key={response.userId}
-                        className="flex-row gap-3 py-2 border-b border-neutral-100"
-                      >
-                        <View className="w-24">
-                          <Text className="text-sm font-medium text-neutral-900">
+                      <View key={response.userId} style={styles.responseRow}>
+                        <View style={styles.memberColumn}>
+                          <Text style={styles.memberName}>
                             {response.userName}
                           </Text>
                         </View>
@@ -530,14 +543,15 @@ export default function ScheduleResultsScreen() {
                             userResponse?.response || 'unavailable';
 
                           return (
-                            <View key={option.id} className="w-20 items-center">
-                              <Text className="text-lg">
+                            <View key={option.id} style={styles.responseCell}>
+                              <Text style={styles.responseIcon}>
                                 {getResponseIcon(responseType)}
                               </Text>
                               <Text
-                                className={`text-xs ${getResponseColor(
-                                  responseType
-                                )}`}
+                                style={[
+                                  styles.responseText,
+                                  getResponseColor(responseType),
+                                ]}
                               >
                                 {getResponseLabel(responseType)}
                               </Text>
@@ -554,22 +568,23 @@ export default function ScheduleResultsScreen() {
         </ScrollView>
 
         {/* Footer - 日程確定と操作ボタン */}
-        <View className="px-6 py-4 bg-white border-t border-neutral-200">
+        <View style={styles.footer}>
           {selectedDateId ? (
-            <View className="gap-3">
+            <View style={styles.footerContent}>
               {/* 選択された日程の情報 */}
-              <View className="p-3 bg-blue-50 rounded-xl border border-blue-200">
-                <Text className="text-blue-800 font-medium text-center">
+              <View style={styles.selectedDateInfo}>
+                <Text style={styles.selectedDateLabel}>
                   確定予定の日程
                 </Text>
-                <Text className="text-blue-900 text-lg font-bold text-center">
+                <Text style={styles.selectedDateInfoTitle}>
                   {formatDate(
                     sortedDateOptions.find((o) => o.id === selectedDateId)
                       ?.date || ''
                   )}
+                  {' '}
                   {sortedDateOptions.find((o) => o.id === selectedDateId)?.time}
                 </Text>
-                <Text className="text-blue-700 text-sm text-center">
+                <Text style={styles.selectedDateStats}>
                   参加可能
                   {
                     sortedDateOptions.find((o) => o.id === selectedDateId)
@@ -585,7 +600,7 @@ export default function ScheduleResultsScreen() {
               </View>
 
               {/* ボタン */}
-              <View className="flex-row gap-3">
+              <View style={styles.buttonRow}>
                 <Button
                   title="選択を解除"
                   onPress={() => setSelectedDateId(null)}
@@ -606,7 +621,7 @@ export default function ScheduleResultsScreen() {
               </View>
             </View>
           ) : (
-            <View className="gap-3">
+            <View style={styles.footerButtons}>
               {/* 推奨日程での自動確定ボタン */}
               <Button
                 title={`最適日程で確定: ${formatDate(bestOption.date)} ${
@@ -623,7 +638,7 @@ export default function ScheduleResultsScreen() {
               />
 
               {/* 手動選択の案内 */}
-              <Text className="text-neutral-600 text-sm text-center">
+              <Text style={styles.footerNote}>
                 または上記の候補日をタップして手動で選択してください
               </Text>
             </View>
@@ -633,3 +648,431 @@ export default function ScheduleResultsScreen() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.neutral[50],
+  },
+  safeArea: {
+    flex: 1,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  content: {
+    padding: 24,
+    gap: 24,
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: Colors.neutral[900],
+    paddingHorizontal: 8,
+  },
+  card: {
+    gap: 16,
+  },
+  cardHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  iconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  blueIcon: {
+    backgroundColor: Colors.primary[100],
+  },
+  purpleIcon: {
+    backgroundColor: Colors.secondary[100],
+  },
+  cardTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: Colors.neutral[900],
+  },
+  statsRow: {
+    flexDirection: 'row',
+    gap: 16,
+  },
+  statCard: {
+    flex: 1,
+    padding: 12,
+    borderRadius: 12,
+    borderWidth: 1,
+  },
+  blueStatCard: {
+    backgroundColor: Colors.primary[50],
+    borderColor: Colors.primary[200],
+  },
+  greenStatCard: {
+    backgroundColor: Colors.success[50],
+    borderColor: Colors.success[200],
+  },
+  purpleStatCard: {
+    backgroundColor: Colors.secondary[50],
+    borderColor: Colors.secondary[200],
+  },
+  statValue: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  blueStatValue: {
+    color: Colors.primary[700],
+  },
+  greenStatValue: {
+    color: Colors.success[700],
+  },
+  purpleStatValue: {
+    color: Colors.secondary[700],
+  },
+  statLabel: {
+    textAlign: 'center',
+    fontSize: 12,
+  },
+  blueStatLabel: {
+    color: Colors.primary[600],
+  },
+  greenStatLabel: {
+    color: Colors.success[600],
+  },
+  purpleStatLabel: {
+    color: Colors.secondary[600],
+  },
+  bestOptionCard: {
+    padding: 16,
+    backgroundColor: Colors.warning[50],
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: Colors.warning[200],
+  },
+  bestOptionTitle: {
+    color: Colors.warning[800],
+    fontWeight: '500',
+    marginBottom: 4,
+  },
+  bestOptionDate: {
+    color: Colors.warning[900],
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  bestOptionDetails: {
+    color: Colors.warning[700],
+    fontSize: 12,
+  },
+  dateOptionsContainer: {
+    gap: 16,
+  },
+  dateOptionCard: {
+    gap: 16,
+  },
+  selectedDateCard: {
+    backgroundColor: Colors.primary[50],
+    borderWidth: 1,
+    borderColor: Colors.primary[200],
+    borderRadius: 12,
+    margin: -16,
+    padding: 16,
+  },
+  dateHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  dateHeaderLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  dateIndex: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  normalDateIndex: {
+    backgroundColor: Colors.neutral[100],
+  },
+  bestDateIndex: {
+    backgroundColor: Colors.warning[100],
+  },
+  selectedDateIndex: {
+    backgroundColor: Colors.primary[500],
+  },
+  dateIndexText: {
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
+  normalDateIndexText: {
+    color: Colors.neutral[600],
+  },
+  bestDateIndexText: {
+    color: Colors.warning[700],
+  },
+  selectedDateIndexText: {
+    color: Colors.white,
+  },
+  dateInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  dateTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  normalDateTitle: {
+    color: Colors.neutral[900],
+  },
+  selectedDateTitle: {
+    color: Colors.primary[900],
+  },
+  badge: {
+    borderRadius: 9999,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+  },
+  bestBadge: {
+    backgroundColor: Colors.warning[100],
+  },
+  selectedBadge: {
+    backgroundColor: Colors.primary[100],
+  },
+  badgeText: {
+    fontSize: 10,
+    fontWeight: 'bold',
+  },
+  bestBadgeText: {
+    color: Colors.warning[700],
+  },
+  selectedBadgeText: {
+    color: Colors.primary[700],
+  },
+  dateSubtitle: {
+    fontSize: 12,
+  },
+  normalDateSubtitle: {
+    color: Colors.neutral[600],
+  },
+  selectedDateSubtitle: {
+    color: Colors.primary[700],
+  },
+  checkIcon: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: Colors.primary[500],
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  statsSection: {
+    gap: 8,
+  },
+  statsHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  statsLabel: {
+    fontSize: 12,
+    fontWeight: '500',
+  },
+  normalStatsLabel: {
+    color: Colors.neutral[700],
+  },
+  selectedStatsLabel: {
+    color: Colors.primary[800],
+  },
+  statsCount: {
+    fontSize: 12,
+  },
+  normalStatsCount: {
+    color: Colors.neutral[600],
+  },
+  selectedStatsCount: {
+    color: Colors.primary[700],
+  },
+  progressBar: {
+    height: 12,
+    borderRadius: 6,
+    overflow: 'hidden',
+  },
+  normalProgressBar: {
+    backgroundColor: Colors.neutral[200],
+  },
+  selectedProgressBar: {
+    backgroundColor: Colors.primary[100],
+  },
+  progressBarContent: {
+    flexDirection: 'row',
+    height: '100%',
+  },
+  availableProgress: {
+    backgroundColor: Colors.success[500],
+  },
+  maybeProgress: {
+    backgroundColor: Colors.warning[500],
+  },
+  unavailableProgress: {
+    backgroundColor: Colors.error[500],
+  },
+  legendRow: {
+    flexDirection: 'row',
+    gap: 16,
+  },
+  legendItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  legendDot: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+  },
+  availableDot: {
+    backgroundColor: Colors.success[500],
+  },
+  maybeDot: {
+    backgroundColor: Colors.warning[500],
+  },
+  unavailableDot: {
+    backgroundColor: Colors.error[500],
+  },
+  legendText: {
+    fontSize: 12,
+  },
+  normalLegendText: {
+    color: Colors.neutral[600],
+  },
+  selectedLegendText: {
+    color: Colors.primary[700],
+  },
+  responseSection: {
+    gap: 16,
+  },
+  responseHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  responseTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: Colors.neutral[900],
+  },
+  responseTable: {
+    gap: 12,
+  },
+  tableHeader: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  memberColumn: {
+    width: 96,
+  },
+  dateColumn: {
+    width: 80,
+  },
+  memberHeaderText: {
+    fontSize: 12,
+    fontWeight: '500',
+    color: Colors.neutral[700],
+  },
+  dateHeaderText: {
+    fontSize: 10,
+    fontWeight: '500',
+    color: Colors.neutral[600],
+    textAlign: 'center',
+  },
+  dateTimeText: {
+    fontSize: 10,
+    color: Colors.neutral[500],
+    textAlign: 'center',
+  },
+  responseRow: {
+    flexDirection: 'row',
+    gap: 12,
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.neutral[100],
+  },
+  memberName: {
+    fontSize: 12,
+    fontWeight: '500',
+    color: Colors.neutral[900],
+  },
+  responseCell: {
+    alignItems: 'center',
+    width: 80,
+  },
+  responseIcon: {
+    fontSize: 18,
+  },
+  responseText: {
+    fontSize: 10,
+  },
+  successText: {
+    color: Colors.success[600],
+  },
+  warningText: {
+    color: Colors.warning[600],
+  },
+  errorText: {
+    color: Colors.error[600],
+  },
+  neutralText: {
+    color: Colors.neutral[600],
+  },
+  footer: {
+    paddingHorizontal: 24,
+    paddingVertical: 16,
+    backgroundColor: Colors.white,
+    borderTopWidth: 1,
+    borderTopColor: Colors.neutral[200],
+  },
+  footerContent: {
+    gap: 12,
+  },
+  selectedDateInfo: {
+    padding: 12,
+    backgroundColor: Colors.primary[50],
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: Colors.primary[200],
+  },
+  selectedDateLabel: {
+    color: Colors.primary[800],
+    fontWeight: '500',
+    textAlign: 'center',
+  },
+  selectedDateInfoTitle: {
+    color: Colors.primary[900],
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  selectedDateStats: {
+    color: Colors.primary[700],
+    fontSize: 12,
+    textAlign: 'center',
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  footerButtons: {
+    gap: 12,
+  },
+  footerNote: {
+    color: Colors.neutral[600],
+    fontSize: 12,
+    textAlign: 'center',
+  },
+});

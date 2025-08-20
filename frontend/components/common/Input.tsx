@@ -8,7 +8,9 @@ import {
   TextStyle,
   Animated,
   TouchableOpacity,
+  StyleSheet,
 } from 'react-native';
+import { Colors } from '@/constants';
 
 interface InputProps extends TextInputProps {
   label?: string;
@@ -19,9 +21,6 @@ interface InputProps extends TextInputProps {
   inputStyle?: TextStyle;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
-  className?: string;
-  inputClassName?: string;
-  labelClassName?: string;
   variant?: 'default' | 'filled' | 'outlined' | 'glass';
   size?: 'sm' | 'md' | 'lg';
   animated?: boolean;
@@ -36,9 +35,6 @@ export const Input: React.FC<InputProps> = ({
   inputStyle,
   leftIcon,
   rightIcon,
-  className,
-  inputClassName,
-  labelClassName,
   variant = 'default',
   size = 'md',
   animated = false,
@@ -49,30 +45,6 @@ export const Input: React.FC<InputProps> = ({
     new Animated.Value(props.value ? 1 : 0)
   ).current;
   const animatedBorderColor = useRef(new Animated.Value(0)).current;
-
-  // Size configurations
-  const sizeConfig = {
-    sm: {
-      container: 'min-h-10',
-      text: 'text-sm',
-      padding: 'px-3 py-2',
-      iconPadding: 'px-3',
-    },
-    md: {
-      container: 'min-h-12',
-      text: 'text-base',
-      padding: 'px-4 py-3',
-      iconPadding: 'px-4',
-    },
-    lg: {
-      container: 'min-h-14',
-      text: 'text-lg',
-      padding: 'px-5 py-4',
-      iconPadding: 'px-5',
-    },
-  };
-
-  const { container, text, padding, iconPadding } = sizeConfig[size];
 
   const handleFocus = () => {
     setIsFocused(true);
@@ -112,122 +84,70 @@ export const Input: React.FC<InputProps> = ({
     props.onBlur?.({} as any);
   };
 
-  // Container classes
-  const containerClasses = ['mb-4', className].filter(Boolean).join(' ');
+  // スタイル計算
+  const getContainerStyle = () => {
+    let borderColor: string = Colors.neutral[200]; // default
 
-  // Label classes
-  const labelClasses = [
-    'text-sm font-medium text-neutral-700 mb-2',
-    labelClassName,
-  ]
-    .filter(Boolean)
-    .join(' ');
-
-  // Input container classes based on variant
-  const getInputContainerClasses = () => {
-    const baseClasses = `flex-row items-center ${container}`;
-
-    switch (variant) {
-      case 'filled':
-        return `${baseClasses} bg-neutral-100 rounded-2xl border-2 border-transparent ${
-          error
-            ? 'border-error-500 bg-error-50'
-            : success
-            ? 'border-success-500 bg-success-50'
-            : isFocused
-            ? 'border-primary-500 bg-white'
-            : ''
-        }`;
-      case 'outlined':
-        return `${baseClasses} bg-transparent rounded-2xl border-2 ${
-          error
-            ? 'border-error-500'
-            : success
-            ? 'border-success-500'
-            : isFocused
-            ? 'border-primary-500'
-            : 'border-neutral-300'
-        }`;
-      case 'glass':
-        return `${baseClasses} glass rounded-2xl border ${
-          error
-            ? 'border-error-500/50'
-            : success
-            ? 'border-success-500/50'
-            : isFocused
-            ? 'border-primary-500/50'
-            : 'border-white/20'
-        }`;
-      default:
-        return `${baseClasses} bg-white/90 backdrop-blur-sm rounded-2xl border-2 ${
-          error
-            ? 'border-error-500'
-            : success
-            ? 'border-success-500'
-            : isFocused
-            ? 'border-primary-500'
-            : 'border-neutral-200'
-        }`;
+    if (error) {
+      borderColor = Colors.error[500];
+    } else if (success) {
+      borderColor = Colors.success[500];
+    } else if (isFocused) {
+      borderColor = Colors.primary[500];
     }
+
+    return [
+      styles.inputContainer,
+      styles[variant],
+      styles[`size_${size}`],
+      { borderColor },
+    ];
   };
 
-  // Input classes
-  const inputClasses = [
-    `flex-1 ${text} text-neutral-900 ${padding} outline-none`,
-    leftIcon && 'pl-0',
-    rightIcon && 'pr-0',
-    inputClassName,
-  ]
-    .filter(Boolean)
-    .join(' ');
-
   return (
-    <View className={containerClasses} style={containerStyle}>
-      {label && (
-        <Text className={labelClasses} style={labelStyle}>
-          {label}
-        </Text>
+    <View style={[styles.container, containerStyle]}>
+      {label && !animated && (
+        <Text style={[styles.label, labelStyle]}>{label}</Text>
       )}
 
-      <View className="relative">
-        <View className={getInputContainerClasses()}>
-          {leftIcon && <View className={iconPadding}>{leftIcon}</View>}
+      <View style={styles.relative}>
+        <View style={getContainerStyle()}>
+          {leftIcon && <View style={styles.iconContainer}>{leftIcon}</View>}
 
           <TextInput
-            className={inputClasses}
+            style={[styles.input, styles[`textSize_${size}`], inputStyle]}
             onFocus={handleFocus}
             onBlur={handleBlur}
-            placeholderTextColor="#94a3b8"
+            placeholderTextColor={Colors.neutral[400]}
             {...props}
           />
 
           {rightIcon && (
-            <TouchableOpacity className={iconPadding}>
+            <TouchableOpacity style={styles.iconContainer}>
               {rightIcon}
             </TouchableOpacity>
           )}
         </View>
 
-        {/* Animated floating label - 常に左下表示 */}
+        {/* Animated floating label */}
         {label && animated && (
           <Animated.View
-            className="absolute left-4 pointer-events-none"
-            style={{
-              top: 16,
-            }}
+            style={[
+              styles.floatingLabel,
+              {
+                top: 16,
+              },
+            ]}
           >
-            <View className="px-2 bg-white rounded">
+            <View style={styles.floatingLabelBackground}>
               <Text
-                className={`text-sm font-medium ${
-                  error
-                    ? 'text-error-600'
-                    : success
-                    ? 'text-success-600'
-                    : isFocused
-                    ? 'text-primary-600'
-                    : 'text-neutral-600'
-                }`}
-                style={labelStyle}
+                style={[
+                  styles.floatingLabelText,
+                  error && styles.errorText,
+                  success && styles.successText,
+                  isFocused && styles.focusedText,
+                  labelStyle,
+                ]}
               >
                 {label}
               </Text>
@@ -236,15 +156,124 @@ export const Input: React.FC<InputProps> = ({
         )}
       </View>
 
-      {error && (
-        <Text className="text-sm text-error-600 mt-2 font-medium">{error}</Text>
-      )}
+      {error && <Text style={styles.errorMessage}>{error}</Text>}
 
       {success && !error && (
-        <Text className="text-sm text-success-600 mt-2 font-medium">
-          入力が正常です
-        </Text>
+        <Text style={styles.successMessage}>入力が正常です</Text>
       )}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    marginBottom: 16,
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: Colors.neutral[700],
+    marginBottom: 8,
+  },
+  relative: {
+    position: 'relative',
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderRadius: 16,
+  },
+  input: {
+    flex: 1,
+    color: Colors.neutral[900],
+  },
+  iconContainer: {
+    paddingHorizontal: 12,
+  },
+
+  // Variants
+  default: {
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderColor: Colors.neutral[200],
+  },
+  filled: {
+    backgroundColor: Colors.neutral[100],
+    borderColor: Colors.transparent,
+  },
+  outlined: {
+    backgroundColor: Colors.transparent,
+    borderColor: Colors.neutral[300],
+  },
+  glass: {
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    borderColor: 'rgba(255, 255, 255, 0.2)',
+  },
+
+  // Sizes
+  size_sm: {
+    minHeight: 40,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+  },
+  size_md: {
+    minHeight: 48,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+  },
+  size_lg: {
+    minHeight: 56,
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+  },
+
+  textSize_sm: {
+    fontSize: 14,
+  },
+  textSize_md: {
+    fontSize: 16,
+  },
+  textSize_lg: {
+    fontSize: 18,
+  },
+
+  // Floating label
+  floatingLabel: {
+    position: 'absolute',
+    left: 16,
+    pointerEvents: 'none',
+  },
+  floatingLabelBackground: {
+    paddingHorizontal: 8,
+    backgroundColor: Colors.white,
+    borderRadius: 4,
+  },
+  floatingLabelText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: Colors.neutral[600],
+  },
+  focusedText: {
+    color: Colors.primary[600],
+  },
+  errorText: {
+    color: Colors.error[600],
+  },
+  successText: {
+    color: Colors.success[600],
+  },
+
+  // Messages
+  errorMessage: {
+    fontSize: 14,
+    color: Colors.error[600],
+    marginTop: 8,
+    fontWeight: '500',
+  },
+  successMessage: {
+    fontSize: 14,
+    color: Colors.success[600],
+    marginTop: 8,
+    fontWeight: '500',
+  },
+});

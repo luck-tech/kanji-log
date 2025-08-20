@@ -5,6 +5,7 @@ import {
   ScrollView,
   TouchableOpacity,
   SafeAreaView,
+  StyleSheet,
 } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -17,6 +18,7 @@ import {
   ScheduleData,
 } from '@/components/modals/DateScheduleModal';
 import { Event } from '@/types';
+import { Colors } from '@/constants';
 
 // Mock data - 実際のアプリではAPIから取得
 const getMockEvent = (id: string): Event => {
@@ -283,8 +285,8 @@ export default function EventDetailScreen() {
   const responseStats = getResponseStats();
 
   return (
-    <View className="flex-1 bg-neutral-50">
-      <SafeAreaView className="flex-1">
+    <View style={styles.container}>
+      <SafeAreaView style={styles.safeArea}>
         <Header
           title={event.title}
           subtitle={getPurposeLabel(event.purpose)}
@@ -296,26 +298,28 @@ export default function EventDetailScreen() {
         />
 
         <ScrollView
-          className="flex-1"
+          style={styles.scrollView}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 120 }}
+          contentContainerStyle={styles.scrollContent}
         >
-          <View className="p-6 gap-6">
+          <View style={styles.content}>
             {/* イベント概要 */}
-            <Card variant="elevated" shadow="none" animated={false}>
-              <View className="gap-4">
-                <View className="flex-row items-center justify-between">
-                  <View className="flex-row items-center gap-3">
+            <Card variant="elevated" shadow="none">
+              <View style={styles.overviewCard}>
+                <View style={styles.statusRow}>
+                  <View style={styles.statusIndicator}>
                     <View
-                      className="w-3 h-3 rounded-full"
-                      style={{ backgroundColor: getStatusColor(event.status) }}
+                      style={[
+                        styles.statusDot,
+                        { backgroundColor: getStatusColor(event.status) },
+                      ]}
                     />
-                    <Text className="text-lg font-bold text-neutral-900">
+                    <Text style={styles.statusLabel}>
                       {getStatusLabel(event.status)}
                     </Text>
                   </View>
-                  <View className="px-3 py-1 rounded-full bg-primary-100">
-                    <Text className="text-sm font-semibold text-primary-700">
+                  <View style={styles.purposeBadge}>
+                    <Text style={styles.purposeText}>
                       {getPurposeLabel(event.purpose)}
                     </Text>
                   </View>
@@ -323,18 +327,18 @@ export default function EventDetailScreen() {
 
                 {/* 確定日程の表示 */}
                 {event.status === 'confirmed' && event.confirmedDate && (
-                  <View className="p-3 bg-green-50 rounded-xl border border-green-200">
-                    <View className="flex-row items-center gap-2 mb-2">
+                  <View style={styles.confirmedDateCard}>
+                    <View style={styles.confirmedHeader}>
                       <Ionicons
                         name="checkmark-circle"
                         size={20}
                         color="#10b981"
                       />
-                      <Text className="text-base font-semibold text-green-800">
+                      <Text style={styles.confirmedTitle}>
                         確定日程
                       </Text>
                     </View>
-                    <Text className="text-base text-green-700 leading-6">
+                    <Text style={styles.confirmedDate}>
                       {new Date(event.confirmedDate.date).toLocaleDateString(
                         'ja-JP',
                         {
@@ -343,7 +347,7 @@ export default function EventDetailScreen() {
                           day: 'numeric',
                           weekday: 'long',
                         }
-                      )}
+                      )}{' '}
                       {event.confirmedDate.time}
                     </Text>
                   </View>
@@ -351,21 +355,21 @@ export default function EventDetailScreen() {
 
                 {/* 会場情報 - 開催済みのみで表示 */}
                 {event.status === 'completed' && event.venue && (
-                  <View className="p-3 bg-blue-50 rounded-xl border border-blue-200">
-                    <View className="flex-row items-center gap-2 mb-2">
+                  <View style={styles.venueCard}>
+                    <View style={styles.venueHeader}>
                       <Ionicons name="location" size={20} color="#0284c7" />
-                      <Text className="text-base font-semibold text-blue-800">
+                      <Text style={styles.venueTitle}>
                         開催会場
                       </Text>
                     </View>
-                    <Text className="text-base text-blue-700 leading-6 mb-1">
+                    <Text style={styles.venueName}>
                       {event.venue.name}
                     </Text>
-                    <Text className="text-sm text-blue-600 leading-5">
+                    <Text style={styles.venueAddress}>
                       {event.venue.address}
                     </Text>
                     {event.venue.phone && (
-                      <Text className="text-sm text-blue-600 leading-5">
+                      <Text style={styles.venuePhone}>
                         {event.venue.phone}
                       </Text>
                     )}
@@ -373,27 +377,27 @@ export default function EventDetailScreen() {
                 )}
 
                 {event.notes && (
-                  <View className="p-3 bg-neutral-50 rounded-xl">
-                    <Text className="text-base text-neutral-700 leading-6">
+                  <View style={styles.notesCard}>
+                    <Text style={styles.notesText}>
                       {event.notes}
                     </Text>
                   </View>
                 )}
 
-                <View className="flex-row items-center gap-4">
-                  <View className="flex-row items-center gap-2">
+                <View style={styles.statsRow}>
+                  <View style={styles.statItem}>
                     <Ionicons name="people-outline" size={18} color="#0284c7" />
-                    <Text className="text-base text-neutral-700 font-medium">
+                    <Text style={styles.statText}>
                       {event.members.length}名招待
                     </Text>
                   </View>
-                  <View className="flex-row items-center gap-2">
+                  <View style={styles.statItem}>
                     <Ionicons
                       name="checkmark-circle-outline"
                       size={18}
                       color="#10b981"
                     />
-                    <Text className="text-base text-neutral-700 font-medium">
+                    <Text style={styles.statText}>
                       {responseStats.responded}/{responseStats.total}名回答済み
                     </Text>
                   </View>
@@ -402,7 +406,7 @@ export default function EventDetailScreen() {
             </Card>
 
             {/* アクションカード */}
-            <View className="gap-4">
+            <View style={styles.actionsContainer}>
               {/* Webフォーム作成 - 開催済み以外で表示、かつ日程確定済みの場合は全員回答済みでない場合のみ表示 */}
               {event.status !== 'completed' &&
                 !(
@@ -413,13 +417,13 @@ export default function EventDetailScreen() {
                     onPress={handleCreateForm}
                     activeOpacity={0.8}
                   >
-                    <Card variant="elevated" shadow="none" animated={false}>
-                      <View className="flex-row items-center">
+                    <Card variant="elevated" shadow="none">
+                      <View style={styles.actionCard}>
                         <LinearGradient
                           colors={['#0ea5e9', '#0284c7']}
                           start={{ x: 0, y: 0 }}
                           end={{ x: 1, y: 1 }}
-                          className="w-12 h-12 rounded-2xl justify-center items-center mr-4"
+                          style={styles.gradientIcon}
                         >
                           <Ionicons
                             name="document-text"
@@ -427,11 +431,11 @@ export default function EventDetailScreen() {
                             color="white"
                           />
                         </LinearGradient>
-                        <View className="flex-1">
-                          <Text className="text-lg font-bold text-neutral-900 mb-1">
+                        <View style={styles.actionContent}>
+                          <Text style={styles.actionTitle}>
                             Webフォームを作成
                           </Text>
-                          <Text className="text-sm text-neutral-600">
+                          <Text style={styles.actionDescription}>
                             メンバーの好みやアレルギー情報を収集
                           </Text>
                         </View>
@@ -451,16 +455,16 @@ export default function EventDetailScreen() {
                   onPress={handleScheduleSetup}
                   activeOpacity={0.8}
                 >
-                  <Card variant="elevated" shadow="none" animated={false}>
-                    <View className="flex-row items-center">
-                      <View className="w-12 h-12 rounded-2xl bg-orange-100 justify-center items-center mr-4">
+                  <Card variant="elevated" shadow="none">
+                    <View style={styles.actionCard}>
+                      <View style={[styles.iconContainer, styles.orangeIcon]}>
                         <Ionicons name="calendar" size={24} color="#f59e0b" />
                       </View>
-                      <View className="flex-1">
-                        <Text className="text-lg font-bold text-neutral-900 mb-1">
+                      <View style={styles.actionContent}>
+                        <Text style={styles.actionTitle}>
                           日程調整を設定
                         </Text>
-                        <Text className="text-sm text-neutral-600">
+                        <Text style={styles.actionDescription}>
                           複数の候補日でメンバーの都合を確認
                         </Text>
                       </View>
@@ -482,20 +486,20 @@ export default function EventDetailScreen() {
                     onPress={handleViewScheduleResults}
                     activeOpacity={0.8}
                   >
-                    <Card variant="elevated" shadow="none" animated={false}>
-                      <View className="flex-row items-center">
-                        <View className="w-12 h-12 rounded-2xl bg-green-100 justify-center items-center mr-4">
+                    <Card variant="elevated" shadow="none">
+                      <View style={styles.actionCard}>
+                        <View style={[styles.iconContainer, styles.greenIcon]}>
                           <Ionicons
                             name="bar-chart"
                             size={24}
                             color="#10b981"
                           />
                         </View>
-                        <View className="flex-1">
-                          <Text className="text-lg font-bold text-neutral-900 mb-1">
+                        <View style={styles.actionContent}>
+                          <Text style={styles.actionTitle}>
                             日程調整の結果
                           </Text>
-                          <Text className="text-sm text-neutral-600">
+                          <Text style={styles.actionDescription}>
                             メンバーの回答状況を確認して日程を確定
                           </Text>
                         </View>
@@ -516,20 +520,20 @@ export default function EventDetailScreen() {
                     onPress={handleAreaSelection}
                     activeOpacity={0.8}
                   >
-                    <Card variant="elevated" shadow="none" animated={false}>
-                      <View className="flex-row items-center">
-                        <View className="w-12 h-12 rounded-2xl bg-red-100 justify-center items-center mr-4">
+                    <Card variant="elevated" shadow="none">
+                      <View style={styles.actionCard}>
+                        <View style={[styles.iconContainer, styles.redIcon]}>
                           <Ionicons
                             name="restaurant"
                             size={24}
                             color="#ef4444"
                           />
                         </View>
-                        <View className="flex-1">
-                          <Text className="text-lg font-bold text-neutral-900 mb-1">
+                        <View style={styles.actionContent}>
+                          <Text style={styles.actionTitle}>
                             お店を探す
                           </Text>
-                          <Text className="text-sm text-neutral-600">
+                          <Text style={styles.actionDescription}>
                             AIがメンバー情報を元に最適なお店を提案
                           </Text>
                         </View>
@@ -549,16 +553,16 @@ export default function EventDetailScreen() {
                   onPress={() => console.log('Open event log')}
                   activeOpacity={0.8}
                 >
-                  <Card variant="elevated" shadow="none" animated={false}>
-                    <View className="flex-row items-center">
-                      <View className="w-12 h-12 rounded-2xl bg-purple-100 justify-center items-center mr-4">
+                  <Card variant="elevated" shadow="none">
+                    <View style={styles.actionCard}>
+                      <View style={[styles.iconContainer, styles.purpleIcon]}>
                         <Ionicons name="book" size={24} color="#8b5cf6" />
                       </View>
-                      <View className="flex-1">
-                        <Text className="text-lg font-bold text-neutral-900 mb-1">
+                      <View style={styles.actionContent}>
+                        <Text style={styles.actionTitle}>
                           イベント記録を作成
                         </Text>
-                        <Text className="text-sm text-neutral-600">
+                        <Text style={styles.actionDescription}>
                           開催後の感想や費用を記録して次回に活かす
                         </Text>
                       </View>
@@ -574,58 +578,60 @@ export default function EventDetailScreen() {
             </View>
 
             {/* メンバーリスト */}
-            <Card variant="elevated" shadow="none" animated={false}>
-              <View className="gap-4">
-                <View className="flex-row items-center justify-between">
-                  <Text className="text-lg font-bold text-neutral-900">
+            <Card variant="elevated" shadow="none">
+              <View style={styles.membersCard}>
+                <View style={styles.membersHeader}>
+                  <Text style={styles.membersTitle}>
                     {event.status === 'completed' ? '参加者' : '参加メンバー'} (
                     {event.members.length}名)
                   </Text>
                   {event.status !== 'completed' && (
-                    <TouchableOpacity className="p-2 rounded-xl bg-primary-100">
+                    <TouchableOpacity style={styles.addMemberButton}>
                       <Ionicons name="person-add" size={18} color="#0284c7" />
                     </TouchableOpacity>
                   )}
                 </View>
 
-                <View className="gap-3">
+                <View style={styles.membersList}>
                   {event.members.map((member, index) => (
                     <TouchableOpacity
                       key={member.id}
                       onPress={() => handleMemberPress(member.id)}
                       activeOpacity={0.7}
-                      className="flex-row items-center gap-3 p-2 rounded-xl"
+                      style={styles.memberRow}
                     >
-                      <View className="w-10 h-10 rounded-2xl bg-primary-100 justify-center items-center">
-                        <Text className="text-sm font-bold text-primary-700">
+                      <View style={styles.memberAvatar}>
+                        <Text style={styles.memberAvatarText}>
                           {member.name.charAt(0)}
                         </Text>
                       </View>
-                      <View className="flex-1">
-                        <Text className="text-base font-medium text-neutral-900">
+                      <View style={styles.memberInfo}>
+                        <Text style={styles.memberName}>
                           {member.name}
                         </Text>
-                        <Text className="text-sm text-neutral-500">
+                        <Text style={styles.memberEmail}>
                           {member.email}
                         </Text>
                       </View>
                       <View
-                        className={`px-2 py-1 rounded-full ${
+                        style={[
+                          styles.memberStatusBadge,
                           member.responseStatus === 'accepted'
-                            ? 'bg-success-100'
+                            ? styles.memberStatusAccepted
                             : member.responseStatus === 'declined'
-                            ? 'bg-error-100'
-                            : 'bg-neutral-100'
-                        }`}
+                            ? styles.memberStatusDeclined
+                            : styles.memberStatusPending,
+                        ]}
                       >
                         <Text
-                          className={`text-xs font-medium ${
+                          style={[
+                            styles.memberStatusText,
                             member.responseStatus === 'accepted'
-                              ? 'text-success-700'
+                              ? styles.memberStatusTextAccepted
                               : member.responseStatus === 'declined'
-                              ? 'text-error-700'
-                              : 'text-neutral-600'
-                          }`}
+                              ? styles.memberStatusTextDeclined
+                              : styles.memberStatusTextPending,
+                          ]}
                         >
                           {event.status === 'completed'
                             ? '参加'
@@ -665,3 +671,267 @@ export default function EventDetailScreen() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.neutral[50],
+  },
+  safeArea: {
+    flex: 1,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    paddingBottom: 120,
+  },
+  content: {
+    padding: 24,
+    gap: 24,
+  },
+  overviewCard: {
+    gap: 16,
+  },
+  statusRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  statusIndicator: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  statusDot: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+  },
+  statusLabel: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: Colors.neutral[900],
+  },
+  purposeBadge: {
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 20,
+    backgroundColor: Colors.primary[100],
+  },
+  purposeText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: Colors.primary[700],
+  },
+  confirmedDateCard: {
+    padding: 12,
+    backgroundColor: Colors.success[50],
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: Colors.success[200],
+  },
+  confirmedHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 8,
+  },
+  confirmedTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: Colors.success[800],
+  },
+  confirmedDate: {
+    fontSize: 16,
+    color: Colors.success[700],
+    lineHeight: 24,
+  },
+  venueCard: {
+    padding: 12,
+    backgroundColor: Colors.primary[50],
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: Colors.primary[200],
+  },
+  venueHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 8,
+  },
+  venueTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: Colors.primary[800],
+  },
+  venueName: {
+    fontSize: 16,
+    color: Colors.primary[700],
+    lineHeight: 24,
+    marginBottom: 4,
+  },
+  venueAddress: {
+    fontSize: 14,
+    color: Colors.primary[600],
+    lineHeight: 20,
+  },
+  venuePhone: {
+    fontSize: 14,
+    color: Colors.primary[600],
+    lineHeight: 20,
+  },
+  notesCard: {
+    padding: 12,
+    backgroundColor: Colors.neutral[50],
+    borderRadius: 12,
+  },
+  notesText: {
+    fontSize: 16,
+    color: Colors.neutral[700],
+    lineHeight: 24,
+  },
+  statsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
+  },
+  statItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  statText: {
+    fontSize: 16,
+    color: Colors.neutral[700],
+    fontWeight: '500',
+  },
+  actionsContainer: {
+    gap: 16,
+  },
+  actionCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  gradientIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 16,
+  },
+  iconContainer: {
+    width: 48,
+    height: 48,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 16,
+  },
+  orangeIcon: {
+    backgroundColor: Colors.warning[100],
+  },
+  greenIcon: {
+    backgroundColor: Colors.success[100],
+  },
+  redIcon: {
+    backgroundColor: Colors.error[100],
+  },
+  purpleIcon: {
+    backgroundColor: Colors.secondary[100],
+  },
+  actionContent: {
+    flex: 1,
+  },
+  actionTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: Colors.neutral[900],
+    marginBottom: 4,
+  },
+  actionDescription: {
+    fontSize: 14,
+    color: Colors.neutral[600],
+  },
+  membersCard: {
+    gap: 16,
+  },
+  membersHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  membersTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: Colors.neutral[900],
+  },
+  addMemberButton: {
+    padding: 8,
+    borderRadius: 12,
+    backgroundColor: Colors.primary[100],
+  },
+  membersList: {
+    gap: 12,
+  },
+  memberRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    padding: 8,
+    borderRadius: 12,
+  },
+  memberAvatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 16,
+    backgroundColor: Colors.primary[100],
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  memberAvatarText: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: Colors.primary[700],
+  },
+  memberInfo: {
+    flex: 1,
+  },
+  memberName: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: Colors.neutral[900],
+  },
+  memberEmail: {
+    fontSize: 14,
+    color: Colors.neutral[500],
+  },
+  memberStatusBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 20,
+  },
+  memberStatusAccepted: {
+    backgroundColor: Colors.success[100],
+  },
+  memberStatusDeclined: {
+    backgroundColor: Colors.error[100],
+  },
+  memberStatusPending: {
+    backgroundColor: Colors.neutral[100],
+  },
+  memberStatusText: {
+    fontSize: 12,
+    fontWeight: '500',
+  },
+  memberStatusTextAccepted: {
+    color: Colors.success[700],
+  },
+  memberStatusTextDeclined: {
+    color: Colors.error[700],
+  },
+  memberStatusTextPending: {
+    color: Colors.neutral[600],
+  },
+});

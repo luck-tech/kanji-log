@@ -1,6 +1,6 @@
 ## kanji-log 技術スタック / プロジェクト概要
 
-このリポジトリは Expo（React Native）をベースに、`expo-router` を用いたファイルベースルーティングで画面遷移を実装したモバイル/ウェブ対応アプリです。共通 UI は NativeWind v4（TailwindCSS for React Native）による `className` プロパティを用いた Tailwind スタイリングで統一されています。
+このリポジトリは Expo（React Native）をベースに、`expo-router` を用いたファイルベースルーティングで画面遷移を実装したモバイル/ウェブ対応アプリです。StyleSheet スタイリングで統一されています。
 
 プロジェクト構造は、**フロントエンド**（モバイル画面）を `frontend/` ディレクトリに集約し、将来的な API 実装や AWS 管理などの**バックエンド**機能との分離を考慮した設計になっています。
 
@@ -27,12 +27,6 @@
 
 ### UI / スタイリング
 
-- **NativeWind v4** による TailwindCSS 統合（メインスタイリング）
-  - `tailwind.config.js`: TailwindCSS 設定（NativeWind preset 使用）
-  - `global.css`: グローバルスタイル
-  - `react-native-css-interop`: CSS-in-JS と TailwindCSS の橋渡し
-  - `className` プロパティによる Tailwind スタイリング
-  - ⚠️ **重要**: Tailwind アニメーションクラス（`animate-*`）は使用禁止
 - **React Native Reanimated** によるアニメーション実装
   - パフォーマンス重視のネイティブアニメーション
   - `useSharedValue`, `useAnimatedStyle`, `Animated.View` などを活用
@@ -44,7 +38,6 @@
 - 共通コンポーネント（`components/common`）
   - `Button`, `Card`, `Input`, `Header`, `TabBar`, `EmptyState`, `EventCard`, `FloatingActionButton`
   - シンプルな props 設計（variant/size/state など）
-  - Tailwind `className` による統一されたスタイリング
 - **アイコン**
   - `@expo/vector-icons` をメインで使用
 
@@ -146,7 +139,7 @@ pnpm lint
 
 ## コーディング規約のポイント
 
-- **NativeWind v4** の `className` プロパティを活用した Tailwind スタイリングを主軸とする
+- StyleSheet スタイリングを主軸とする
 - **アニメーション**: React Native Reanimated を直接使用し、Tailwind アニメーションクラスは使用禁止
 - デザイン定数（`frontend/constants/` の `Colors`/`Typography`/`Layout`）は必要に応じて参照
 - 共通 UI を `frontend/components/common` に集約し、画面側では組み合わせる方針
@@ -159,7 +152,6 @@ pnpm lint
 
 - `react-native-reanimated` は Expo により自動設定されます（Expo SDK 53 以降）
 - ルーティングは `expo-router` を第一級で採用。必要に応じて React Navigation の API を併用可能です。
-- NativeWind v4 により、TailwindCSS のクラスを React Native で使用可能です（`className` プロパティ）
 
 ### アニメーション実装例（React Native Reanimated）
 

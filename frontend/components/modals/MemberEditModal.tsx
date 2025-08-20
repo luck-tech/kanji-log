@@ -6,11 +6,13 @@ import {
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
+  StyleSheet,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Card } from '@/components/common/Card';
 import { Button } from '@/components/common/Button';
 import { Input } from '@/components/common/Input';
+import { Colors } from '@/constants';
 
 interface MemberEditModalProps {
   isVisible: boolean;
@@ -120,7 +122,7 @@ export const MemberEditModal: React.FC<MemberEditModalProps> = ({
     onClose();
   };
 
-  const validateForm = () => {
+  const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
 
     if (!formData.name.trim()) {
@@ -131,8 +133,7 @@ export const MemberEditModal: React.FC<MemberEditModalProps> = ({
       formData.preferences.budgetRange.min >=
       formData.preferences.budgetRange.max
     ) {
-      newErrors.budgetRange =
-        '最低予算は最高予算より小さい値を入力してください';
+      newErrors.budget = '予算の最小値は最大値より小さくしてください';
     }
 
     setErrors(newErrors);
@@ -143,8 +144,7 @@ export const MemberEditModal: React.FC<MemberEditModalProps> = ({
     if (!validateForm()) return;
 
     onSave(formData);
-    resetForm();
-    onClose();
+    handleClose();
   };
 
   const toggleGenre = (genre: string) => {
@@ -159,29 +159,17 @@ export const MemberEditModal: React.FC<MemberEditModalProps> = ({
     }));
   };
 
-  const toggleAllergy = (allergy: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      preferences: {
-        ...prev.preferences,
-        allergies: prev.preferences.allergies.includes(allergy)
-          ? prev.preferences.allergies.filter((a) => a !== allergy)
-          : [...prev.preferences.allergies, allergy],
-      },
-    }));
-  };
-
   const addCustomAllergy = () => {
-    if (!newAllergy.trim()) return;
-
-    setFormData((prev) => ({
-      ...prev,
-      preferences: {
-        ...prev.preferences,
-        allergies: [...prev.preferences.allergies, newAllergy.trim()],
-      },
-    }));
-    setNewAllergy('');
+    if (newAllergy.trim() && !formData.preferences.allergies.includes(newAllergy.trim())) {
+      setFormData((prev) => ({
+        ...prev,
+        preferences: {
+          ...prev.preferences,
+          allergies: [...prev.preferences.allergies, newAllergy.trim()],
+        },
+      }));
+      setNewAllergy('');
+    }
   };
 
   const removeAllergy = (allergy: string) => {
@@ -194,256 +182,128 @@ export const MemberEditModal: React.FC<MemberEditModalProps> = ({
     }));
   };
 
-  const toggleDietaryRestriction = (restriction: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      preferences: {
-        ...prev.preferences,
-        dietaryRestrictions: prev.preferences.dietaryRestrictions.includes(
-          restriction
-        )
-          ? prev.preferences.dietaryRestrictions.filter(
-              (d) => d !== restriction
-            )
-          : [...prev.preferences.dietaryRestrictions, restriction],
-      },
-    }));
-  };
-
   const addCustomDietary = () => {
-    if (!newDietary.trim()) return;
-
-    setFormData((prev) => ({
-      ...prev,
-      preferences: {
-        ...prev.preferences,
-        dietaryRestrictions: [
-          ...prev.preferences.dietaryRestrictions,
-          newDietary.trim(),
-        ],
-      },
-    }));
-    setNewDietary('');
+    if (newDietary.trim() && !formData.preferences.dietaryRestrictions.includes(newDietary.trim())) {
+      setFormData((prev) => ({
+        ...prev,
+        preferences: {
+          ...prev.preferences,
+          dietaryRestrictions: [...prev.preferences.dietaryRestrictions, newDietary.trim()],
+        },
+      }));
+      setNewDietary('');
+    }
   };
 
-  const removeDietary = (restriction: string) => {
+  const removeDietary = (dietary: string) => {
     setFormData((prev) => ({
       ...prev,
       preferences: {
         ...prev.preferences,
         dietaryRestrictions: prev.preferences.dietaryRestrictions.filter(
-          (d) => d !== restriction
+          (d) => d !== dietary
         ),
       },
     }));
   };
 
+  const toggleDietary = (dietary: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      preferences: {
+        ...prev.preferences,
+        dietaryRestrictions: prev.preferences.dietaryRestrictions.includes(dietary)
+          ? prev.preferences.dietaryRestrictions.filter((d) => d !== dietary)
+          : [...prev.preferences.dietaryRestrictions, dietary],
+      },
+    }));
+  };
+
   return (
-    <Modal
-      visible={isVisible}
-      animationType="slide"
-      presentationStyle="pageSheet"
-      onRequestClose={handleClose}
-    >
-      <SafeAreaView className="flex-1 bg-neutral-50">
+    <Modal visible={isVisible} animationType="slide" presentationStyle="pageSheet">
+      <SafeAreaView style={styles.container}>
         {/* Header */}
-        <View className="px-6 py-4 bg-white border-b border-neutral-200">
-          <View className="flex-row justify-between items-center">
-            <TouchableOpacity onPress={handleClose} className="p-2 -ml-2">
-              <Ionicons name="close" size={24} color="#64748b" />
+        <View style={styles.header}>
+          <View style={styles.headerContent}>
+            <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
+              <Ionicons name="close" size={24} color={Colors.neutral[900]} />
             </TouchableOpacity>
-            <Text className="text-lg font-bold text-neutral-900">
+            <Text style={styles.title}>
               {initialData ? 'メンバー編集' : 'メンバー追加'}
             </Text>
-            <View className="w-10" />
+            <View style={styles.placeholder} />
           </View>
         </View>
 
-        <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
-          <View className="p-6 gap-6">
+        <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+          <View style={styles.content}>
             {/* 基本情報 */}
-            <Card variant="elevated" shadow="none" animated={false}>
-              <View className="gap-4">
-                <View className="flex-row items-center gap-3">
-                  <View className="w-10 h-10 rounded-2xl bg-blue-500 justify-center items-center">
-                    <Ionicons name="person" size={20} color="white" />
-                  </View>
-                  <Text className="text-lg font-bold text-neutral-900">
-                    基本情報
-                  </Text>
-                </View>
-
-                <Input
-                  label="お名前 *"
-                  placeholder="例：田中太郎"
-                  value={formData.name}
-                  onChangeText={(text) =>
-                    setFormData((prev) => ({ ...prev, name: text }))
-                  }
-                  error={errors.name}
-                />
-
-                <Input
-                  label="部署・所属"
-                  placeholder="例：営業部"
-                  value={formData.department}
-                  onChangeText={(text) =>
-                    setFormData((prev) => ({ ...prev, department: text }))
-                  }
-                />
-              </View>
-            </Card>
-
-            {/* アルコール */}
             <Card variant="elevated" shadow="none">
-              <View className="gap-4">
-                <View className="flex-row items-center gap-3">
-                  <View className="w-10 h-10 rounded-2xl bg-amber-100 justify-center items-center">
-                    <Ionicons name="wine" size={20} color="#f59e0b" />
+              <View style={styles.section}>
+                <View style={styles.sectionHeader}>
+                  <View style={[styles.iconContainer, styles.blueIcon]}>
+                    <Ionicons name="person" size={20} color="#3b82f6" />
                   </View>
-                  <Text className="text-lg font-semibold text-neutral-900">
-                    アルコール
-                  </Text>
+                  <Text style={styles.sectionTitle}>基本情報</Text>
                 </View>
 
-                <View className="flex-row gap-3">
-                  {[
-                    { key: 'yes', label: '飲める', color: 'success' },
-                    { key: 'sometimes', label: 'たまに', color: 'warning' },
-                    { key: 'no', label: '飲めない', color: 'error' },
-                  ].map((option) => (
-                    <TouchableOpacity
-                      key={option.key}
-                      onPress={() =>
-                        setFormData((prev) => ({
-                          ...prev,
-                          preferences: {
-                            ...prev.preferences,
-                            alcoholPreference: option.key as any,
-                          },
-                        }))
-                      }
-                      className={`flex-1 p-3 rounded-xl border-2 ${
-                        formData.preferences.alcoholPreference === option.key
-                          ? `border-${option.color}-500 bg-${option.color}-50`
-                          : 'border-neutral-200 bg-white'
-                      }`}
-                      activeOpacity={0.7}
-                    >
-                      <Text
-                        className={`text-center font-medium ${
-                          formData.preferences.alcoholPreference === option.key
-                            ? `text-${option.color}-700`
-                            : 'text-neutral-600'
-                        }`}
-                      >
-                        {option.label}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              </View>
-            </Card>
-
-            {/* 予算帯 */}
-            <Card variant="elevated" shadow="none">
-              <View className="gap-4">
-                <View className="flex-row items-center gap-3">
-                  <View className="w-10 h-10 rounded-2xl bg-green-100 justify-center items-center">
-                    <Ionicons name="cash" size={20} color="#10b981" />
-                  </View>
-                  <Text className="text-lg font-semibold text-neutral-900">
-                    希望予算帯
-                  </Text>
-                </View>
-
-                <View className="flex-row gap-3">
+                <View style={styles.formFields}>
                   <Input
-                    label="最低予算"
-                    placeholder="3000"
-                    value={formData.preferences.budgetRange.min.toString()}
+                    label="名前 *"
+                    value={formData.name}
                     onChangeText={(text) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        preferences: {
-                          ...prev.preferences,
-                          budgetRange: {
-                            ...prev.preferences.budgetRange,
-                            min: parseInt(text) || 0,
-                          },
-                        },
-                      }))
+                      setFormData((prev) => ({ ...prev, name: text }))
                     }
-                    keyboardType="numeric"
-                    className="flex-1"
+                    placeholder="田中太郎"
+                    error={errors.name}
+                    leftIcon={
+                      <Ionicons name="person-outline" size={20} color="#9ca3af" />
+                    }
                   />
+
                   <Input
-                    label="最高予算"
-                    placeholder="5000"
-                    value={formData.preferences.budgetRange.max.toString()}
+                    label="部署"
+                    value={formData.department || ''}
                     onChangeText={(text) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        preferences: {
-                          ...prev.preferences,
-                          budgetRange: {
-                            ...prev.preferences.budgetRange,
-                            max: parseInt(text) || 0,
-                          },
-                        },
-                      }))
+                      setFormData((prev) => ({ ...prev, department: text }))
                     }
-                    keyboardType="numeric"
-                    className="flex-1"
+                    placeholder="営業部"
+                    leftIcon={
+                      <Ionicons name="business-outline" size={20} color="#9ca3af" />
+                    }
                   />
                 </View>
-
-                {errors.budgetRange && (
-                  <Text className="text-sm text-error-600">
-                    {errors.budgetRange}
-                  </Text>
-                )}
-
-                <View className="p-3 bg-green-50 rounded-xl">
-                  <Text className="text-green-800 text-center font-medium">
-                    ¥{formData.preferences.budgetRange.min.toLocaleString()} - ¥
-                    {formData.preferences.budgetRange.max.toLocaleString()}
-                  </Text>
-                </View>
               </View>
             </Card>
 
-            {/* 好きな料理ジャンル */}
+            {/* 好みのジャンル */}
             <Card variant="elevated" shadow="none">
-              <View className="gap-4">
-                <View className="flex-row items-center gap-3">
-                  <View className="w-10 h-10 rounded-2xl bg-blue-100 justify-center items-center">
-                    <Ionicons name="restaurant" size={20} color="#0284c7" />
+              <View style={styles.section}>
+                <View style={styles.sectionHeader}>
+                  <View style={[styles.iconContainer, styles.orangeIcon]}>
+                    <Ionicons name="restaurant" size={20} color="#ea580c" />
                   </View>
-                  <Text className="text-lg font-semibold text-neutral-900">
-                    好きな料理ジャンル
-                  </Text>
+                  <Text style={styles.sectionTitle}>好みのジャンル</Text>
                 </View>
 
-                <View className="flex-row flex-wrap gap-2">
+                <View style={styles.chipsContainer}>
                   {GENRE_OPTIONS.map((genre) => {
-                    const isSelected =
-                      formData.preferences.favoriteGenres.includes(genre);
+                    const isSelected = formData.preferences.favoriteGenres.includes(genre);
                     return (
                       <TouchableOpacity
                         key={genre}
                         onPress={() => toggleGenre(genre)}
-                        className={`px-3 py-2 rounded-2xl border ${
-                          isSelected
-                            ? 'bg-blue-100 border-blue-500'
-                            : 'bg-neutral-50 border-neutral-200'
-                        }`}
+                        style={[
+                          styles.chip,
+                          isSelected ? styles.chipSelected : styles.chipUnselected,
+                        ]}
                         activeOpacity={0.7}
                       >
                         <Text
-                          className={`text-sm font-medium ${
-                            isSelected ? 'text-blue-700' : 'text-neutral-600'
-                          }`}
+                          style={[
+                            styles.chipText,
+                            isSelected ? styles.chipTextSelected : styles.chipTextUnselected,
+                          ]}
                         >
                           {genre}
                         </Text>
@@ -454,246 +314,619 @@ export const MemberEditModal: React.FC<MemberEditModalProps> = ({
               </View>
             </Card>
 
-            {/* アレルギー */}
+            {/* 予算設定 */}
             <Card variant="elevated" shadow="none">
-              <View className="gap-4">
-                <View className="flex-row items-center gap-3">
-                  <View className="w-10 h-10 rounded-2xl bg-red-100 justify-center items-center">
-                    <Ionicons name="warning" size={20} color="#ef4444" />
+              <View style={styles.section}>
+                <View style={styles.sectionHeader}>
+                  <View style={[styles.iconContainer, styles.greenIcon]}>
+                    <Ionicons name="cash" size={20} color="#16a34a" />
                   </View>
-                  <Text className="text-lg font-semibold text-neutral-900">
-                    アレルギー
-                  </Text>
+                  <Text style={styles.sectionTitle}>予算設定</Text>
                 </View>
 
-                <View className="flex-row flex-wrap gap-2">
-                  {ALLERGY_OPTIONS.map((allergy) => {
-                    const isSelected =
-                      formData.preferences.allergies.includes(allergy);
+                <View style={styles.budgetContainer}>
+                  <View style={styles.budgetRow}>
+                    <Input
+                      label="最小金額"
+                      value={formData.preferences.budgetRange.min.toString()}
+                      onChangeText={(text) => {
+                        const value = parseInt(text) || 0;
+                        setFormData((prev) => ({
+                          ...prev,
+                          preferences: {
+                            ...prev.preferences,
+                            budgetRange: {
+                              ...prev.preferences.budgetRange,
+                              min: value,
+                            },
+                          },
+                        }));
+                      }}
+                      keyboardType="numeric"
+                      placeholder="3000"
+                      style={styles.budgetInput}
+                      rightIcon={<Text style={styles.currencyText}>円</Text>}
+                    />
+                    <Input
+                      label="最大金額"
+                      value={formData.preferences.budgetRange.max.toString()}
+                      onChangeText={(text) => {
+                        const value = parseInt(text) || 0;
+                        setFormData((prev) => ({
+                          ...prev,
+                          preferences: {
+                            ...prev.preferences,
+                            budgetRange: {
+                              ...prev.preferences.budgetRange,
+                              max: value,
+                            },
+                          },
+                        }));
+                      }}
+                      keyboardType="numeric"
+                      placeholder="5000"
+                      style={styles.budgetInput}
+                      rightIcon={<Text style={styles.currencyText}>円</Text>}
+                    />
+                  </View>
+                  {errors.budget && (
+                    <Text style={styles.errorText}>{errors.budget}</Text>
+                  )}
+                </View>
+              </View>
+            </Card>
+
+            {/* アルコール */}
+            <Card variant="elevated" shadow="none">
+              <View style={styles.section}>
+                <View style={styles.sectionHeader}>
+                  <View style={[styles.iconContainer, styles.purpleIcon]}>
+                    <Ionicons name="wine" size={20} color="#7c3aed" />
+                  </View>
+                  <Text style={styles.sectionTitle}>アルコール</Text>
+                </View>
+
+                <View style={styles.alcoholOptions}>
+                  {[
+                    { value: 'yes', label: '飲む', icon: '🍺' },
+                    { value: 'sometimes', label: 'たまに飲む', icon: '🍷' },
+                    { value: 'no', label: '飲まない', icon: '🚫' },
+                  ].map((option) => {
+                    const isSelected = formData.preferences.alcoholPreference === option.value;
                     return (
                       <TouchableOpacity
-                        key={allergy}
-                        onPress={() => toggleAllergy(allergy)}
-                        className={`px-3 py-2 rounded-2xl border ${
-                          isSelected
-                            ? 'bg-red-100 border-red-500'
-                            : 'bg-neutral-50 border-neutral-200'
-                        }`}
+                        key={option.value}
+                        onPress={() =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            preferences: {
+                              ...prev.preferences,
+                              alcoholPreference: option.value as 'yes' | 'no' | 'sometimes',
+                            },
+                          }))
+                        }
+                        style={[
+                          styles.alcoholOption,
+                          isSelected ? styles.alcoholOptionSelected : styles.alcoholOptionUnselected,
+                        ]}
                         activeOpacity={0.7}
                       >
+                        <Text style={styles.alcoholIcon}>{option.icon}</Text>
                         <Text
-                          className={`text-sm font-medium ${
-                            isSelected ? 'text-red-700' : 'text-neutral-600'
-                          }`}
+                          style={[
+                            styles.alcoholText,
+                            isSelected ? styles.alcoholTextSelected : styles.alcoholTextUnselected,
+                          ]}
                         >
-                          {allergy}
+                          {option.label}
                         </Text>
                       </TouchableOpacity>
                     );
                   })}
                 </View>
+              </View>
+            </Card>
 
-                {/* カスタムアレルギー追加 */}
-                <View className="gap-3">
-                  <Text className="text-base font-medium text-neutral-900">
-                    その他のアレルギー
-                  </Text>
-                  <View className="flex-row gap-3">
-                    <Input
-                      placeholder="例：ピーナッツ"
-                      value={newAllergy}
-                      onChangeText={setNewAllergy}
-                      className="flex-1"
-                    />
-                    <TouchableOpacity
-                      onPress={addCustomAllergy}
-                      className="w-12 h-12 rounded-2xl bg-red-600 justify-center items-center"
-                      activeOpacity={0.8}
-                    >
-                      <Ionicons name="add" size={20} color="white" />
-                    </TouchableOpacity>
+            {/* アレルギー */}
+            <Card variant="elevated" shadow="none">
+              <View style={styles.section}>
+                <View style={styles.sectionHeader}>
+                  <View style={[styles.iconContainer, styles.redIcon]}>
+                    <Ionicons name="warning" size={20} color="#dc2626" />
                   </View>
+                  <Text style={styles.sectionTitle}>アレルギー・苦手食材</Text>
                 </View>
 
-                {/* 選択されたアレルギー */}
-                {formData.preferences.allergies.length > 0 && (
-                  <View className="gap-2">
-                    <Text className="text-sm font-medium text-neutral-700">
-                      選択中のアレルギー:
-                    </Text>
-                    <View className="flex-row flex-wrap gap-2">
-                      {formData.preferences.allergies.map((allergy, index) => (
-                        <View
-                          key={index}
-                          className="flex-row items-center bg-red-100 rounded-full pl-3 pr-1 py-1"
-                        >
-                          <Text className="text-red-700 font-medium text-sm mr-2">
-                            {allergy}
-                          </Text>
+                <View style={styles.allergySection}>
+                  {/* 現在のアレルギー */}
+                  {formData.preferences.allergies.length > 0 && (
+                    <View style={styles.currentAllergies}>
+                      <Text style={styles.subsectionTitle}>現在の設定</Text>
+                      <View style={styles.allergyList}>
+                        {formData.preferences.allergies.map((allergy) => (
+                          <View key={allergy} style={styles.allergyTag}>
+                            <Text style={styles.allergyTagText}>{allergy}</Text>
+                            <TouchableOpacity
+                              onPress={() => removeAllergy(allergy)}
+                              style={styles.removeButton}
+                            >
+                              <Ionicons name="close" size={16} color={Colors.error[600]} />
+                            </TouchableOpacity>
+                          </View>
+                        ))}
+                      </View>
+                    </View>
+                  )}
+
+                  {/* よくあるアレルギー */}
+                  <View style={styles.commonAllergies}>
+                    <Text style={styles.subsectionTitle}>よくあるアレルギー</Text>
+                    <View style={styles.chipsContainer}>
+                      {ALLERGY_OPTIONS.map((allergy) => {
+                        const isSelected = formData.preferences.allergies.includes(allergy);
+                        return (
                           <TouchableOpacity
-                            onPress={() => removeAllergy(allergy)}
-                            className="w-5 h-5 rounded-full bg-red-200 justify-center items-center"
+                            key={allergy}
+                            onPress={() => {
+                              if (isSelected) {
+                                removeAllergy(allergy);
+                              } else {
+                                setFormData((prev) => ({
+                                  ...prev,
+                                  preferences: {
+                                    ...prev.preferences,
+                                    allergies: [...prev.preferences.allergies, allergy],
+                                  },
+                                }));
+                              }
+                            }}
+                            style={[
+                              styles.chip,
+                              isSelected ? styles.chipDangerSelected : styles.chipUnselected,
+                            ]}
+                            activeOpacity={0.7}
                           >
-                            <Ionicons name="close" size={12} color="#ef4444" />
+                            <Text
+                              style={[
+                                styles.chipText,
+                                isSelected ? styles.chipTextDangerSelected : styles.chipTextUnselected,
+                              ]}
+                            >
+                              {allergy}
+                            </Text>
                           </TouchableOpacity>
-                        </View>
-                      ))}
+                        );
+                      })}
                     </View>
                   </View>
-                )}
+
+                  {/* カスタムアレルギー追加 */}
+                  <View style={styles.customAllergy}>
+                    <Text style={styles.subsectionTitle}>その他のアレルギー</Text>
+                    <View style={styles.inputWithButton}>
+                      <Input
+                        value={newAllergy}
+                        onChangeText={setNewAllergy}
+                        placeholder="カスタムアレルギーを入力"
+                        style={styles.customInput}
+                      />
+                      <Button
+                        title="追加"
+                        onPress={addCustomAllergy}
+                        variant="outline"
+                        size="sm"
+                        disabled={!newAllergy.trim()}
+                      />
+                    </View>
+                  </View>
+                </View>
               </View>
             </Card>
 
             {/* 食事制限 */}
             <Card variant="elevated" shadow="none">
-              <View className="gap-4">
-                <View className="flex-row items-center gap-3">
-                  <View className="w-10 h-10 rounded-2xl bg-purple-100 justify-center items-center">
-                    <Ionicons name="leaf" size={20} color="#7c3aed" />
+              <View style={styles.section}>
+                <View style={styles.sectionHeader}>
+                  <View style={[styles.iconContainer, styles.tealIcon]}>
+                    <Ionicons name="leaf" size={20} color="#0d9488" />
                   </View>
-                  <Text className="text-lg font-semibold text-neutral-900">
-                    食事制限・特別対応
-                  </Text>
+                  <Text style={styles.sectionTitle}>食事制限・配慮事項</Text>
                 </View>
 
-                <View className="flex-row flex-wrap gap-2">
-                  {DIETARY_OPTIONS.map((restriction) => {
-                    const isSelected =
-                      formData.preferences.dietaryRestrictions.includes(
-                        restriction
-                      );
-                    return (
-                      <TouchableOpacity
-                        key={restriction}
-                        onPress={() => toggleDietaryRestriction(restriction)}
-                        className={`px-3 py-2 rounded-2xl border ${
-                          isSelected
-                            ? 'bg-purple-100 border-purple-500'
-                            : 'bg-neutral-50 border-neutral-200'
-                        }`}
-                        activeOpacity={0.7}
-                      >
-                        <Text
-                          className={`text-sm font-medium ${
-                            isSelected ? 'text-purple-700' : 'text-neutral-600'
-                          }`}
-                        >
-                          {restriction}
-                        </Text>
-                      </TouchableOpacity>
-                    );
-                  })}
-                </View>
-
-                {/* カスタム食事制限追加 */}
-                <View className="gap-3">
-                  <Text className="text-base font-medium text-neutral-900">
-                    その他の特別対応
-                  </Text>
-                  <View className="flex-row gap-3">
-                    <Input
-                      placeholder="例：低カロリー希望"
-                      value={newDietary}
-                      onChangeText={setNewDietary}
-                      className="flex-1"
-                    />
-                    <TouchableOpacity
-                      onPress={addCustomDietary}
-                      className="w-12 h-12 rounded-2xl bg-purple-600 justify-center items-center"
-                      activeOpacity={0.8}
-                    >
-                      <Ionicons name="add" size={20} color="white" />
-                    </TouchableOpacity>
-                  </View>
-                </View>
-
-                {/* 選択された食事制限 */}
-                {formData.preferences.dietaryRestrictions.length > 0 && (
-                  <View className="gap-2">
-                    <Text className="text-sm font-medium text-neutral-700">
-                      選択中の特別対応:
-                    </Text>
-                    <View className="flex-row flex-wrap gap-2">
-                      {formData.preferences.dietaryRestrictions.map(
-                        (restriction, index) => (
-                          <View
-                            key={index}
-                            className="flex-row items-center bg-purple-100 rounded-full pl-3 pr-1 py-1"
-                          >
-                            <Text className="text-purple-700 font-medium text-sm mr-2">
-                              {restriction}
-                            </Text>
+                <View style={styles.dietarySection}>
+                  {/* 現在の制限 */}
+                  {formData.preferences.dietaryRestrictions.length > 0 && (
+                    <View style={styles.currentDietary}>
+                      <Text style={styles.subsectionTitle}>現在の設定</Text>
+                      <View style={styles.dietaryList}>
+                        {formData.preferences.dietaryRestrictions.map((dietary) => (
+                          <View key={dietary} style={styles.dietaryTag}>
+                            <Text style={styles.dietaryTagText}>{dietary}</Text>
                             <TouchableOpacity
-                              onPress={() => removeDietary(restriction)}
-                              className="w-5 h-5 rounded-full bg-purple-200 justify-center items-center"
+                              onPress={() => removeDietary(dietary)}
+                              style={styles.removeButton}
                             >
-                              <Ionicons
-                                name="close"
-                                size={12}
-                                color="#7c3aed"
-                              />
+                              <Ionicons name="close" size={16} color={Colors.secondary[600]} />
                             </TouchableOpacity>
                           </View>
-                        )
-                      )}
+                        ))}
+                      </View>
+                    </View>
+                  )}
+
+                  {/* よくある制限 */}
+                  <View style={styles.commonDietary}>
+                    <Text style={styles.subsectionTitle}>よくある配慮事項</Text>
+                    <View style={styles.chipsContainer}>
+                      {DIETARY_OPTIONS.map((dietary) => {
+                        const isSelected = formData.preferences.dietaryRestrictions.includes(dietary);
+                        return (
+                          <TouchableOpacity
+                            key={dietary}
+                            onPress={() => toggleDietary(dietary)}
+                            style={[
+                              styles.chip,
+                              isSelected ? styles.chipInfoSelected : styles.chipUnselected,
+                            ]}
+                            activeOpacity={0.7}
+                          >
+                            <Text
+                              style={[
+                                styles.chipText,
+                                isSelected ? styles.chipTextInfoSelected : styles.chipTextUnselected,
+                              ]}
+                            >
+                              {dietary}
+                            </Text>
+                          </TouchableOpacity>
+                        );
+                      })}
                     </View>
                   </View>
-                )}
+
+                  {/* カスタム制限追加 */}
+                  <View style={styles.customDietary}>
+                    <Text style={styles.subsectionTitle}>その他の配慮事項</Text>
+                    <View style={styles.inputWithButton}>
+                      <Input
+                        value={newDietary}
+                        onChangeText={setNewDietary}
+                        placeholder="カスタム配慮事項を入力"
+                        style={styles.customInput}
+                      />
+                      <Button
+                        title="追加"
+                        onPress={addCustomDietary}
+                        variant="outline"
+                        size="sm"
+                        disabled={!newDietary.trim()}
+                      />
+                    </View>
+                  </View>
+                </View>
               </View>
             </Card>
 
             {/* メモ */}
             <Card variant="elevated" shadow="none">
-              <View className="gap-4">
-                <View className="flex-row items-center gap-3">
-                  <View className="w-10 h-10 rounded-2xl bg-yellow-100 justify-center items-center">
-                    <Ionicons name="document-text" size={20} color="#f59e0b" />
+              <View style={styles.section}>
+                <View style={styles.sectionHeader}>
+                  <View style={[styles.iconContainer, styles.yellowIcon]}>
+                    <Ionicons name="document-text" size={20} color="#d97706" />
                   </View>
-                  <Text className="text-lg font-semibold text-neutral-900">
-                    メモ・備考
-                  </Text>
+                  <Text style={styles.sectionTitle}>メモ</Text>
                 </View>
 
                 <Input
-                  placeholder="例：辛い物が苦手、静かな店舗を希望"
-                  value={formData.notes}
+                  label="その他メモ"
+                  value={formData.notes || ''}
                   onChangeText={(text) =>
                     setFormData((prev) => ({ ...prev, notes: text }))
                   }
+                  placeholder="その他の特記事項や備考があれば入力してください"
                   multiline
                   numberOfLines={3}
+                  style={styles.memoInput}
                 />
-
-                <View className="p-3 bg-yellow-50 rounded-xl">
-                  <Text className="text-yellow-800 text-sm leading-5">
-                    💡
-                    メンバーの個人的な要望や特記事項を記録できます。レストラン提案時の参考情報として活用されます。
-                  </Text>
-                </View>
               </View>
             </Card>
           </View>
         </ScrollView>
 
         {/* Footer */}
-        <View className="px-6 py-4 bg-white border-t border-neutral-200">
-          <Button
-            title={initialData ? '変更を保存' : 'メンバーを追加'}
-            onPress={handleSave}
-            variant="gradient"
-            size="lg"
-            fullWidth
-            disabled={!formData.name.trim()}
-            icon={
-              <Ionicons
-                name={initialData ? 'save' : 'person-add'}
-                size={20}
-                color="white"
-              />
-            }
-          />
+        <View style={styles.footer}>
+          <View style={styles.buttonContainer}>
+            <Button
+              title="キャンセル"
+              onPress={handleClose}
+              variant="outline"
+              size="lg"
+              style={styles.cancelButton}
+            />
+            <Button
+              title={initialData ? '更新' : '追加'}
+              onPress={handleSave}
+              variant="gradient"
+              size="lg"
+              style={styles.saveButton}
+            />
+          </View>
         </View>
       </SafeAreaView>
     </Modal>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.neutral[50],
+  },
+  header: {
+    paddingHorizontal: 24,
+    paddingVertical: 16,
+    backgroundColor: Colors.white,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.neutral[200],
+  },
+  headerContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  closeButton: {
+    padding: 8,
+    marginLeft: -8,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: Colors.neutral[900],
+  },
+  placeholder: {
+    width: 40,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  content: {
+    padding: 24,
+    gap: 24,
+  },
+  section: {
+    gap: 16,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  iconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  blueIcon: {
+    backgroundColor: Colors.primary[100],
+  },
+  orangeIcon: {
+    backgroundColor: Colors.accent[100],
+  },
+  greenIcon: {
+    backgroundColor: Colors.success[100],
+  },
+  purpleIcon: {
+    backgroundColor: Colors.secondary[100],
+  },
+  redIcon: {
+    backgroundColor: Colors.error[100],
+  },
+  tealIcon: {
+    backgroundColor: '#e6fffa',
+  },
+  yellowIcon: {
+    backgroundColor: Colors.warning[100],
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: Colors.neutral[900],
+  },
+  formFields: {
+    gap: 16,
+  },
+  chipsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  chip: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 20,
+    borderWidth: 1,
+  },
+  chipUnselected: {
+    backgroundColor: Colors.white,
+    borderColor: Colors.neutral[200],
+  },
+  chipSelected: {
+    backgroundColor: Colors.primary[100],
+    borderColor: Colors.primary[300],
+  },
+  chipDangerSelected: {
+    backgroundColor: Colors.error[100],
+    borderColor: Colors.error[300],
+  },
+  chipInfoSelected: {
+    backgroundColor: '#e0f2fe',
+    borderColor: '#7dd3fc',
+  },
+  chipText: {
+    fontSize: 12,
+    fontWeight: '500',
+  },
+  chipTextUnselected: {
+    color: Colors.neutral[700],
+  },
+  chipTextSelected: {
+    color: Colors.primary[700],
+  },
+  chipTextDangerSelected: {
+    color: Colors.error[700],
+  },
+  chipTextInfoSelected: {
+    color: '#0369a1',
+  },
+  budgetContainer: {
+    gap: 12,
+  },
+  budgetRow: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  budgetInput: {
+    flex: 1,
+  },
+  currencyText: {
+    color: Colors.neutral[600],
+    fontSize: 14,
+  },
+  errorText: {
+    color: Colors.error[600],
+    fontSize: 12,
+    marginTop: 4,
+  },
+  alcoholOptions: {
+    gap: 12,
+  },
+  alcoholOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    padding: 12,
+    borderRadius: 12,
+    borderWidth: 1,
+  },
+  alcoholOptionUnselected: {
+    backgroundColor: Colors.white,
+    borderColor: Colors.neutral[200],
+  },
+  alcoholOptionSelected: {
+    backgroundColor: Colors.primary[50],
+    borderColor: Colors.primary[300],
+  },
+  alcoholIcon: {
+    fontSize: 24,
+  },
+  alcoholText: {
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  alcoholTextUnselected: {
+    color: Colors.neutral[700],
+  },
+  alcoholTextSelected: {
+    color: Colors.primary[700],
+  },
+  allergySection: {
+    gap: 16,
+  },
+  currentAllergies: {
+    gap: 8,
+  },
+  subsectionTitle: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: Colors.neutral[700],
+  },
+  allergyList: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  allergyTag: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    backgroundColor: Colors.error[100],
+    borderRadius: 12,
+  },
+  allergyTagText: {
+    fontSize: 12,
+    color: Colors.error[700],
+    fontWeight: '500',
+  },
+  removeButton: {
+    padding: 2,
+  },
+  commonAllergies: {
+    gap: 8,
+  },
+  customAllergy: {
+    gap: 8,
+  },
+  inputWithButton: {
+    flexDirection: 'row',
+    gap: 12,
+    alignItems: 'flex-end',
+  },
+  customInput: {
+    flex: 1,
+  },
+  dietarySection: {
+    gap: 16,
+  },
+  currentDietary: {
+    gap: 8,
+  },
+  dietaryList: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  dietaryTag: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    backgroundColor: '#e0f2fe',
+    borderRadius: 12,
+  },
+  dietaryTagText: {
+    fontSize: 12,
+    color: '#0369a1',
+    fontWeight: '500',
+  },
+  commonDietary: {
+    gap: 8,
+  },
+  customDietary: {
+    gap: 8,
+  },
+  memoInput: {
+    minHeight: 80,
+  },
+  footer: {
+    paddingHorizontal: 24,
+    paddingVertical: 16,
+    backgroundColor: Colors.white,
+    borderTopWidth: 1,
+    borderTopColor: Colors.neutral[200],
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  cancelButton: {
+    flex: 1,
+  },
+  saveButton: {
+    flex: 2,
+  },
+});

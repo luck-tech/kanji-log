@@ -5,6 +5,7 @@ import {
   ScrollView,
   SafeAreaView,
   TouchableOpacity,
+  StyleSheet,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -14,6 +15,7 @@ import { Header } from '@/components/common/Header';
 import { EmptyState } from '@/components/common/EmptyState';
 import { MemberAddModal, MemberData } from '@/components/modals/MemberAddModal';
 import { useRouter } from 'expo-router';
+import { Colors } from '@/constants/Colors';
 
 interface Member {
   id: string;
@@ -133,7 +135,7 @@ export default function MembersScreen() {
         : '新しいメンバーを追加してメモしましょう';
 
       return (
-        <View className="flex-1 justify-center items-center py-16">
+        <View style={styles.emptyContainer}>
           <EmptyState
             icon="people-outline"
             title={title}
@@ -144,36 +146,36 @@ export default function MembersScreen() {
     }
 
     return (
-      <View className="gap-3">
+      <View style={styles.membersList}>
         {filteredMembers.map((member, index) => (
           <TouchableOpacity
             key={member.id}
             onPress={() => handleMemberPress(member)}
             activeOpacity={0.8}
           >
-            <Card variant="elevated" shadow="none" animated={false}>
-              <View className="flex-row items-center">
+            <Card variant="elevated" shadow="none">
+              <View style={styles.memberCard}>
                 {/* Member Avatar */}
-                <View className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary-50 to-primary-100 justify-center items-center mr-4">
-                  <Text className="text-lg font-bold text-primary-700">
+                <View style={styles.memberAvatar}>
+                  <Text style={styles.memberAvatarText}>
                     {member.name.charAt(0)}
                   </Text>
                 </View>
 
                 {/* Member Info */}
-                <View className="flex-1">
-                  <Text className="text-lg font-bold text-neutral-900 mb-1">
+                <View style={styles.memberInfo}>
+                  <Text style={styles.memberName}>
                     {member.name}
                   </Text>
                   {member.department && (
-                    <Text className="text-sm text-neutral-600">
+                    <Text style={styles.memberDepartment}>
                       {member.department}
                     </Text>
                   )}
                 </View>
 
                 {/* Arrow */}
-                <Ionicons name="chevron-forward" size={20} color="#94a3b8" />
+                <Ionicons name="chevron-forward" size={20} color={Colors.neutral[400]} />
               </View>
             </Card>
           </TouchableOpacity>
@@ -183,16 +185,16 @@ export default function MembersScreen() {
   };
 
   return (
-    <View className="flex-1">
+    <View style={styles.container}>
       {/* Background */}
       <LinearGradient
-        colors={['#f8fafc', '#f1f5f9']}
+        colors={[Colors.neutral[50], Colors.neutral[100]]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
-        className="absolute inset-0"
+        style={styles.background}
       />
 
-      <SafeAreaView className="flex-1">
+      <SafeAreaView style={styles.safeArea}>
         <Header
           title="メンバー"
           subtitle="飲み会に参加可能なメンバー一覧"
@@ -200,19 +202,19 @@ export default function MembersScreen() {
         />
 
         {/* Search Bar with Add Button */}
-        <View className="flex-row px-6 py-4 gap-3 bg-transparent">
+        <View style={styles.searchContainer}>
           <Input
             placeholder="名前、部署で検索"
             value={searchQuery}
             onChangeText={handleSearch}
             leftIcon={
-              <Ionicons name="search-outline" size={20} color="#64748b" />
+              <Ionicons name="search-outline" size={20} color={Colors.neutral[500]} />
             }
-            className="flex-1 backdrop-blur-sm border-0"
+            style={styles.searchInput}
           />
           <TouchableOpacity
             onPress={handleAddMember}
-            className="w-12 h-12 rounded-2xl bg-primary-600 justify-center items-center"
+            style={styles.addButton}
             activeOpacity={0.8}
           >
             <Ionicons name="person-add-outline" size={20} color="white" />
@@ -221,9 +223,9 @@ export default function MembersScreen() {
 
         {/* Members List */}
         <ScrollView
-          className="flex-1 px-6"
+          style={styles.scrollView}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 120 }}
+          contentContainerStyle={styles.scrollContent}
         >
           {renderMembers()}
         </ScrollView>
@@ -237,3 +239,85 @@ export default function MembersScreen() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  background: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  safeArea: {
+    flex: 1,
+  },
+  searchContainer: {
+    flexDirection: 'row',
+    paddingHorizontal: 24,
+    paddingVertical: 16,
+    gap: 12,
+    backgroundColor: 'transparent',
+  },
+  searchInput: {
+    flex: 1,
+    borderWidth: 0,
+  },
+  addButton: {
+    width: 48,
+    height: 48,
+    borderRadius: 16,
+    backgroundColor: Colors.primary[600],
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  scrollView: {
+    flex: 1,
+    paddingHorizontal: 24,
+  },
+  scrollContent: {
+    paddingBottom: 120,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 64,
+  },
+  membersList: {
+    gap: 12,
+  },
+  memberCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  memberAvatar: {
+    width: 48,
+    height: 48,
+    borderRadius: 16,
+    backgroundColor: Colors.primary[100],
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 16,
+  },
+  memberAvatarText: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: Colors.primary[700],
+  },
+  memberInfo: {
+    flex: 1,
+  },
+  memberName: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: Colors.neutral[900],
+    marginBottom: 4,
+  },
+  memberDepartment: {
+    fontSize: 14,
+    color: Colors.neutral[600],
+  },
+});

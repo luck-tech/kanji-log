@@ -1,13 +1,13 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { Colors } from '@/constants/Colors';
 
 interface EmptyStateProps {
   icon: keyof typeof Ionicons.glyphMap;
   title: string;
   description: string;
   style?: any;
-  className?: string;
 }
 
 export const EmptyState: React.FC<EmptyStateProps> = ({
@@ -15,17 +15,35 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   title,
   description,
   style,
-  className,
 }) => {
   return (
-    <View className={`flex-1 justify-center items-center py-8 ${className || ''}`} style={style}>
-      <Ionicons name={icon} size={48} color="#9ca3af" />
-      <Text className="text-lg font-semibold text-gray-600 mt-6 mb-3 text-center">
-        {title}
-      </Text>
-      <Text className="text-sm text-gray-500 text-center leading-5">
-        {description}
-      </Text>
+    <View style={[styles.container, style]}>
+      <Ionicons name={icon} size={48} color={Colors.gray[400]} />
+      <Text style={styles.title}>{title}</Text>
+      <Text style={styles.description}>{description}</Text>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 32,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: Colors.gray[600],
+    marginTop: 24,
+    marginBottom: 12,
+    textAlign: 'center',
+  },
+  description: {
+    fontSize: 14,
+    color: Colors.gray[500],
+    textAlign: 'center',
+    lineHeight: 20,
+  },
+});

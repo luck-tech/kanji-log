@@ -7,12 +7,15 @@ import {
   ScrollView,
   SafeAreaView,
   Alert,
+  StyleSheet,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Card } from '@/components/common/Card';
 import { Button } from '@/components/common/Button';
 import { Input } from '@/components/common/Input';
+import { Colors } from '@/constants/Colors';
+import { Layout } from '@/constants/Layout';
 
 interface DateScheduleModalProps {
   isVisible: boolean;
@@ -180,34 +183,34 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
       presentationStyle="pageSheet"
       onRequestClose={handleClose}
     >
-      <SafeAreaView className="flex-1 bg-neutral-50">
+      <SafeAreaView style={styles.container}>
         {/* Header */}
-        <View className="px-6 py-4 bg-white border-b border-neutral-200">
-          <View className="flex-row justify-between items-center">
-            <TouchableOpacity onPress={handleClose} className="p-2 -ml-2">
+        <View style={styles.header}>
+          <View style={styles.headerContent}>
+            <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
               <Ionicons name="close" size={24} color="#64748b" />
             </TouchableOpacity>
-            <Text className="text-lg font-bold text-neutral-900">
+            <Text style={styles.headerTitle}>
               日程調整設定
             </Text>
-            <View className="w-10" />
+            <View style={styles.headerSpacer} />
           </View>
         </View>
 
-        <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
-          <View className="p-6 gap-6">
+        <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+          <View style={styles.content}>
             {/* 説明 */}
-            <Card variant="elevated" shadow="none" animated={false}>
-              <View className="gap-3">
-                <View className="flex-row items-center gap-3">
-                  <View className="w-10 h-10 rounded-2xl bg-orange-100 justify-center items-center">
+            <Card variant="elevated" shadow="none">
+              <View style={styles.section}>
+                <View style={styles.sectionHeader}>
+                  <View style={[styles.sectionIcon, styles.calendarIcon]}>
                     <Ionicons name="calendar" size={20} color="#f59e0b" />
                   </View>
-                  <Text className="text-lg font-bold text-neutral-900">
+                  <Text style={styles.sectionTitle}>
                     日程調整の設定
                   </Text>
                 </View>
-                <Text className="text-neutral-700 leading-6">
+                <Text style={styles.sectionDescription}>
                   メンバーに都合を聞くための候補日を設定します。
                   複数の候補日を用意して、最も多くの人が参加できる日程を見つけましょう。
                 </Text>
@@ -216,16 +219,16 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
 
             {/* 基本情報 */}
             <Card variant="elevated" shadow="none">
-              <View className="gap-4">
-                <View className="flex-row items-center gap-3">
-                  <View className="w-10 h-10 rounded-2xl bg-blue-100 justify-center items-center">
+              <View style={styles.section}>
+                <View style={styles.sectionHeader}>
+                  <View style={[styles.sectionIcon, styles.infoIcon]}>
                     <Ionicons
                       name="information-circle"
                       size={20}
                       color="#0284c7"
                     />
                   </View>
-                  <Text className="text-lg font-semibold text-neutral-900">
+                  <Text style={styles.sectionTitle}>
                     基本情報
                   </Text>
                 </View>
@@ -251,44 +254,44 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
 
             {/* 候補日設定 */}
             <Card variant="elevated" shadow="none">
-              <View className="gap-4">
-                <View className="flex-row items-center justify-between">
-                  <View className="flex-row items-center gap-3">
-                    <View className="w-10 h-10 rounded-2xl bg-orange-100 justify-center items-center">
+              <View style={styles.section}>
+                <View style={styles.candidatesHeader}>
+                  <View style={styles.sectionHeader}>
+                    <View style={[styles.sectionIcon, styles.timeIcon]}>
                       <Ionicons name="time" size={20} color="#f59e0b" />
                     </View>
-                    <Text className="text-lg font-semibold text-neutral-900">
+                    <Text style={styles.sectionTitle}>
                       候補日設定
                     </Text>
                   </View>
-                  <View className="bg-orange-100 rounded-full px-3 py-1">
-                    <Text className="text-xs font-bold text-orange-700">
+                  <View style={styles.candidatesCounter}>
+                    <Text style={styles.candidatesCounterText}>
                       {validOptionsCount}候補
                     </Text>
                   </View>
                 </View>
 
                 {errors.dateOptions && (
-                  <Text className="text-sm text-error-600">
+                  <Text style={styles.errorText}>
                     {errors.dateOptions}
                   </Text>
                 )}
 
                 {/* 候補日リスト */}
-                <View className="gap-3">
+                <View style={styles.candidatesList}>
                   {dateOptions.map((option, index) => (
                     <View
                       key={option.id}
-                      className="p-4 bg-neutral-50 rounded-xl"
+                      style={styles.candidateItem}
                     >
-                      <View className="flex-row items-center justify-between mb-3">
-                        <Text className="text-base font-medium text-neutral-900">
+                      <View style={styles.candidateHeader}>
+                        <Text style={styles.candidateLabel}>
                           候補 {index + 1}
                         </Text>
                         {dateOptions.length > 2 && (
                           <TouchableOpacity
                             onPress={() => removeDateOption(option.id)}
-                            className="p-1"
+                            style={styles.deleteButton}
                           >
                             <Ionicons
                               name="trash-outline"
@@ -299,21 +302,20 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
                         )}
                       </View>
 
-                      <View className="flex-row gap-3">
+                      <View style={styles.candidateFields}>
                         <TouchableOpacity
                           onPress={() => setShowDatePicker(option.id)}
-                          className="flex-1 p-3 bg-white border border-neutral-200 rounded-xl"
+                          style={styles.candidateField}
                           activeOpacity={0.7}
                         >
-                          <Text className="text-sm font-medium text-neutral-700 mb-1">
+                          <Text style={styles.fieldLabel}>
                             日付
                           </Text>
                           <Text
-                            className={`text-base ${
-                              option.date
-                                ? 'text-neutral-900'
-                                : 'text-neutral-400'
-                            }`}
+                            style={[
+                              styles.fieldValue,
+                              option.date ? styles.fieldValueSet : styles.fieldValuePlaceholder
+                            ]}
                           >
                             {option.date
                               ? formatDate(option.date)
@@ -323,13 +325,13 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
 
                         <TouchableOpacity
                           onPress={() => setShowTimePicker(option.id)}
-                          className="flex-1 p-3 bg-white border border-neutral-200 rounded-xl"
+                          style={styles.candidateField}
                           activeOpacity={0.7}
                         >
-                          <Text className="text-sm font-medium text-neutral-700 mb-1">
+                          <Text style={styles.fieldLabel}>
                             時間
                           </Text>
-                          <Text className="text-base text-neutral-900">
+                          <Text style={[styles.fieldValue, styles.fieldValueSet]}>
                             {option.time}
                           </Text>
                         </TouchableOpacity>
@@ -341,11 +343,11 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
                 {/* 候補日追加ボタン */}
                 <TouchableOpacity
                   onPress={addDateOption}
-                  className="flex-row items-center justify-center py-3 border border-dashed border-orange-300 rounded-xl"
+                  style={styles.addButton}
                   activeOpacity={0.7}
                 >
                   <Ionicons name="add" size={20} color="#f59e0b" />
-                  <Text className="ml-2 text-base font-medium text-orange-600">
+                  <Text style={styles.addButtonText}>
                     候補日を追加
                   </Text>
                 </TouchableOpacity>
@@ -354,36 +356,37 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
 
             {/* 回答期限 */}
             <Card variant="elevated" shadow="none">
-              <View className="gap-4">
-                <View className="flex-row items-center gap-3">
-                  <View className="w-10 h-10 rounded-2xl bg-red-100 justify-center items-center">
+              <View style={styles.section}>
+                <View style={styles.sectionHeader}>
+                  <View style={[styles.sectionIcon, styles.deadlineIcon]}>
                     <Ionicons name="alarm" size={20} color="#ef4444" />
                   </View>
-                  <Text className="text-lg font-semibold text-neutral-900">
+                  <Text style={styles.sectionTitle}>
                     回答期限
                   </Text>
-                  <Text className="text-sm text-neutral-500">（任意）</Text>
+                  <Text style={styles.optionalLabel}>（任意）</Text>
                 </View>
 
                 <TouchableOpacity
                   onPress={() => setShowDeadlinePicker(true)}
-                  className="p-3 bg-white border border-neutral-200 rounded-xl"
+                  style={styles.deadlineField}
                   activeOpacity={0.7}
                 >
-                  <Text className="text-sm font-medium text-neutral-700 mb-1">
+                  <Text style={styles.fieldLabel}>
                     期限日
                   </Text>
                   <Text
-                    className={`text-base ${
-                      deadline ? 'text-neutral-900' : 'text-neutral-400'
-                    }`}
+                    style={[
+                      styles.fieldValue,
+                      deadline ? styles.fieldValueSet : styles.fieldValuePlaceholder
+                    ]}
                   >
                     {deadline ? formatDate(deadline) : '期限を選択'}
                   </Text>
                 </TouchableOpacity>
 
-                <View className="p-3 bg-red-50 rounded-xl">
-                  <Text className="text-sm text-red-800 leading-5">
+                <View style={styles.deadlineTip}>
+                  <Text style={styles.deadlineTipText}>
                     💡
                     期限を設定すると、メンバーにより早めの回答を促すことができます
                   </Text>
@@ -394,7 +397,7 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
         </ScrollView>
 
         {/* Footer */}
-        <View className="px-6 py-4 bg-white border-t border-neutral-200">
+        <View style={styles.footer}>
           <Button
             title="日程調整を開始"
             onPress={handleSetup}
@@ -441,3 +444,190 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
     </Modal>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.neutral[50],
+  },
+  header: {
+    paddingHorizontal: Layout.padding.lg,
+    paddingVertical: Layout.padding.md,
+    backgroundColor: Colors.white,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.neutral[200],
+  },
+  headerContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  closeButton: {
+    padding: Layout.spacing.sm,
+    marginLeft: -Layout.spacing.sm,
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: Colors.neutral[900],
+  },
+  headerSpacer: {
+    width: 40,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  content: {
+    padding: Layout.padding.lg,
+    gap: Layout.spacing.lg,
+  },
+  section: {
+    gap: Layout.spacing.md,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Layout.spacing.sm,
+  },
+  sectionIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: Layout.borderRadius.lg,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  calendarIcon: {
+    backgroundColor: '#fef3c7',
+  },
+  infoIcon: {
+    backgroundColor: Colors.primary[100],
+  },
+  timeIcon: {
+    backgroundColor: '#fef3c7',
+  },
+  deadlineIcon: {
+    backgroundColor: '#fee2e2',
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: Colors.neutral[900],
+  },
+  sectionDescription: {
+    color: Colors.neutral[700],
+    lineHeight: 24,
+  },
+  optionalLabel: {
+    fontSize: 14,
+    color: Colors.neutral[500],
+  },
+  candidatesHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  candidatesCounter: {
+    backgroundColor: '#fef3c7',
+    borderRadius: Layout.borderRadius.full,
+    paddingHorizontal: Layout.spacing.sm,
+    paddingVertical: Layout.spacing.xs,
+  },
+  candidatesCounterText: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: '#92400e',
+  },
+  errorText: {
+    fontSize: 14,
+    color: Colors.error[600],
+  },
+  candidatesList: {
+    gap: Layout.spacing.sm,
+  },
+  candidateItem: {
+    padding: Layout.spacing.md,
+    backgroundColor: Colors.neutral[50],
+    borderRadius: Layout.borderRadius.md,
+  },
+  candidateHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: Layout.spacing.sm,
+  },
+  candidateLabel: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: Colors.neutral[900],
+  },
+  deleteButton: {
+    padding: Layout.spacing.xs,
+  },
+  candidateFields: {
+    flexDirection: 'row',
+    gap: Layout.spacing.sm,
+  },
+  candidateField: {
+    flex: 1,
+    padding: Layout.spacing.sm,
+    backgroundColor: Colors.white,
+    borderWidth: 1,
+    borderColor: Colors.neutral[200],
+    borderRadius: Layout.borderRadius.md,
+  },
+  fieldLabel: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: Colors.neutral[700],
+    marginBottom: Layout.spacing.xs,
+  },
+  fieldValue: {
+    fontSize: 16,
+  },
+  fieldValueSet: {
+    color: Colors.neutral[900],
+  },
+  fieldValuePlaceholder: {
+    color: Colors.neutral[400],
+  },
+  addButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: Layout.spacing.sm,
+    borderWidth: 1,
+    borderStyle: 'dashed',
+    borderColor: '#fbbf24',
+    borderRadius: Layout.borderRadius.md,
+  },
+  addButtonText: {
+    marginLeft: Layout.spacing.sm,
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#d97706',
+  },
+  deadlineField: {
+    padding: Layout.spacing.sm,
+    backgroundColor: Colors.white,
+    borderWidth: 1,
+    borderColor: Colors.neutral[200],
+    borderRadius: Layout.borderRadius.md,
+  },
+  deadlineTip: {
+    padding: Layout.spacing.sm,
+    backgroundColor: '#fee2e2',
+    borderRadius: Layout.borderRadius.md,
+  },
+  deadlineTipText: {
+    fontSize: 14,
+    color: '#991b1b',
+    lineHeight: 20,
+  },
+  footer: {
+    paddingHorizontal: Layout.padding.lg,
+    paddingVertical: Layout.padding.md,
+    backgroundColor: Colors.white,
+    borderTopWidth: 1,
+    borderTopColor: Colors.neutral[200],
+  },
+});

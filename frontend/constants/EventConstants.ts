@@ -34,7 +34,8 @@ export const EVENT_PURPOSE_LABELS: Record<EventPurpose, string> = {
 export const EMPTY_STATE_MESSAGES = {
   planning: {
     title: '調整中のイベントはありません',
-    description: '新しいイベントを作成して、メンバーとの日程調整を開始しましょう',
+    description:
+      '新しいイベントを作成して、メンバーとの日程調整を開始しましょう',
   },
   confirmed: {
     title: '確定済みのイベントはありません',

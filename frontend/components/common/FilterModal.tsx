@@ -6,12 +6,13 @@ import {
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
+  StyleSheet,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import { Card } from './Card';
 import { Button } from './Button';
 import { PriceRangeSlider } from './PriceRangeSlider';
+import { Colors } from '@/constants/Colors';
 
 export interface FilterOptions {
   areas: string[];
@@ -27,7 +28,14 @@ interface FilterModalProps {
   initialFilters: FilterOptions;
 }
 
-const AVAILABLE_AREAS = ['渋谷区', '新宿区', '港区', '千代田区', '中央区', '品川区'];
+const AVAILABLE_AREAS = [
+  '渋谷区',
+  '新宿区',
+  '港区',
+  '千代田区',
+  '中央区',
+  '品川区',
+];
 const AVAILABLE_PURPOSES = [
   { key: 'celebration', label: 'お祝い' },
   { key: 'farewell', label: '送別会' },
@@ -36,7 +44,14 @@ const AVAILABLE_PURPOSES = [
   { key: 'casual', label: '親睦会' },
   { key: 'other', label: 'その他' },
 ];
-const AVAILABLE_GENRES = ['居酒屋', 'イタリアン', 'フレンチ', '中華料理', '和食', 'カフェ'];
+const AVAILABLE_GENRES = [
+  '居酒屋',
+  'イタリアン',
+  'フレンチ',
+  '中華料理',
+  '和食',
+  'カフェ',
+];
 
 export const FilterModal: React.FC<FilterModalProps> = ({
   isVisible,
@@ -53,23 +68,26 @@ export const FilterModal: React.FC<FilterModalProps> = ({
   });
 
   const toggleSection = (section: keyof typeof expandedSections) => {
-    setExpandedSections(prev => ({
+    setExpandedSections((prev) => ({
       ...prev,
       [section]: !prev[section],
     }));
   };
 
-  const toggleFilter = (type: 'areas' | 'purposes' | 'genres', value: string) => {
-    setFilters(prev => ({
+  const toggleFilter = (
+    type: 'areas' | 'purposes' | 'genres',
+    value: string
+  ) => {
+    setFilters((prev) => ({
       ...prev,
       [type]: prev[type].includes(value)
-        ? prev[type].filter(item => item !== value)
+        ? prev[type].filter((item) => item !== value)
         : [...prev[type], value],
     }));
   };
 
   const updatePriceRange = (min: number, max: number) => {
-    setFilters(prev => ({
+    setFilters((prev) => ({
       ...prev,
       priceRange: { min, max },
     }));
@@ -85,8 +103,12 @@ export const FilterModal: React.FC<FilterModalProps> = ({
   };
 
   const getActiveFilterCount = () => {
-    return filters.areas.length + filters.purposes.length + filters.genres.length +
-      (filters.priceRange.min > 0 || filters.priceRange.max < 10000 ? 1 : 0);
+    return (
+      filters.areas.length +
+      filters.purposes.length +
+      filters.genres.length +
+      (filters.priceRange.min > 0 || filters.priceRange.max < 10000 ? 1 : 0)
+    );
   };
 
   const handleApply = () => {
@@ -99,26 +121,29 @@ export const FilterModal: React.FC<FilterModalProps> = ({
     selectedItems: string[],
     onToggle: (item: string) => void
   ) => (
-    <View className="flex-row flex-wrap gap-2 mt-3">
+    <View style={styles.chipsContainer}>
       {items.map((item) => {
         const isSelected = selectedItems.includes(item);
         return (
           <TouchableOpacity
             key={item}
             onPress={() => onToggle(item)}
-            className={`px-3 py-2 rounded-full border ${
-              isSelected
-                ? 'bg-primary-100 border-primary-500'
-                : 'bg-neutral-50 border-neutral-200'
-            }`}
+            style={[
+              styles.chip,
+              isSelected ? styles.chipSelected : styles.chipUnselected,
+            ]}
             activeOpacity={0.7}
           >
             <Text
-              className={`text-sm font-medium ${
-                isSelected ? 'text-primary-700' : 'text-neutral-600'
-              }`}
+              style={[
+                styles.chipText,
+                isSelected
+                  ? styles.chipTextSelected
+                  : styles.chipTextUnselected,
+              ]}
             >
-              {isSelected ? '✓ ' : ''}{item}
+              {isSelected ? '✓ ' : ''}
+              {item}
             </Text>
           </TouchableOpacity>
         );
@@ -127,26 +152,29 @@ export const FilterModal: React.FC<FilterModalProps> = ({
   );
 
   const renderPurposeChips = () => (
-    <View className="flex-row flex-wrap gap-2 mt-3">
+    <View style={styles.chipsContainer}>
       {AVAILABLE_PURPOSES.map((purpose) => {
         const isSelected = filters.purposes.includes(purpose.key);
         return (
           <TouchableOpacity
             key={purpose.key}
             onPress={() => toggleFilter('purposes', purpose.key)}
-            className={`px-3 py-2 rounded-full border ${
-              isSelected
-                ? 'bg-primary-100 border-primary-500'
-                : 'bg-neutral-50 border-neutral-200'
-            }`}
+            style={[
+              styles.chip,
+              isSelected ? styles.chipSelected : styles.chipUnselected,
+            ]}
             activeOpacity={0.7}
           >
             <Text
-              className={`text-sm font-medium ${
-                isSelected ? 'text-primary-700' : 'text-neutral-600'
-              }`}
+              style={[
+                styles.chipText,
+                isSelected
+                  ? styles.chipTextSelected
+                  : styles.chipTextUnselected,
+              ]}
             >
-              {isSelected ? '✓ ' : ''}{purpose.label}
+              {isSelected ? '✓ ' : ''}
+              {purpose.label}
             </Text>
           </TouchableOpacity>
         );
@@ -161,45 +189,48 @@ export const FilterModal: React.FC<FilterModalProps> = ({
       presentationStyle="pageSheet"
       onRequestClose={onClose}
     >
-      <SafeAreaView className="flex-1 bg-neutral-50">
+      <SafeAreaView style={styles.container}>
         {/* Header */}
-        <View className="px-6 py-4 bg-white border-b border-neutral-200">
-          <View className="flex-row justify-between items-center">
-            <TouchableOpacity onPress={onClose} className="p-2 -ml-2">
-              <Ionicons name="close" size={24} color="#64748b" />
+        <View style={styles.header}>
+          <View style={styles.headerContent}>
+            <TouchableOpacity onPress={onClose} style={styles.headerButton}>
+              <Ionicons name="close" size={24} color={Colors.neutral[500]} />
             </TouchableOpacity>
-            <View className="flex-row items-center gap-2">
-              <Text className="text-lg font-bold text-neutral-900">フィルター</Text>
+            <View style={styles.headerCenter}>
+              <Text style={styles.headerTitle}>フィルター</Text>
               {getActiveFilterCount() > 0 && (
-                <View className="bg-primary-600 rounded-full px-2 py-1 min-w-6 justify-center items-center">
-                  <Text className="text-xs font-bold text-white">
+                <View style={styles.headerBadge}>
+                  <Text style={styles.headerBadgeText}>
                     {getActiveFilterCount()}
                   </Text>
                 </View>
               )}
             </View>
-            <TouchableOpacity onPress={clearAllFilters} className="p-2 -mr-2">
-              <Text className="text-primary-600 font-semibold">クリア</Text>
+            <TouchableOpacity
+              onPress={clearAllFilters}
+              style={styles.headerButton}
+            >
+              <Text style={styles.clearButtonText}>クリア</Text>
             </TouchableOpacity>
           </View>
         </View>
 
-        <ScrollView className="flex-1">
-          <View className="p-6 gap-4">
+        <ScrollView style={styles.scrollView}>
+          <View style={styles.content}>
             {/* エリア別フィルター */}
             <Card variant="elevated" shadow="none">
               <TouchableOpacity
                 onPress={() => toggleSection('areas')}
-                className="flex-row justify-between items-center"
+                style={styles.sectionHeader}
               >
-                <View className="flex-row items-center gap-3">
-                  <View className="w-10 h-10 rounded-2xl bg-blue-100 justify-center items-center">
-                    <Text className="text-lg">📍</Text>
+                <View style={styles.sectionHeaderLeft}>
+                  <View style={[styles.sectionIcon, styles.blueIcon]}>
+                    <Text style={styles.sectionEmoji}>📍</Text>
                   </View>
-                  <Text className="text-lg font-semibold text-neutral-900">エリア別</Text>
+                  <Text style={styles.sectionTitle}>エリア別</Text>
                   {filters.areas.length > 0 && (
-                    <View className="bg-primary-100 rounded-full px-2 py-1">
-                      <Text className="text-xs font-bold text-primary-700">
+                    <View style={styles.sectionBadge}>
+                      <Text style={styles.sectionBadgeText}>
                         {filters.areas.length}
                       </Text>
                     </View>
@@ -208,7 +239,7 @@ export const FilterModal: React.FC<FilterModalProps> = ({
                 <Ionicons
                   name={expandedSections.areas ? 'chevron-up' : 'chevron-down'}
                   size={20}
-                  color="#64748b"
+                  color={Colors.neutral[500]}
                 />
               </TouchableOpacity>
               {expandedSections.areas &&
@@ -221,25 +252,27 @@ export const FilterModal: React.FC<FilterModalProps> = ({
             <Card variant="elevated" shadow="none">
               <TouchableOpacity
                 onPress={() => toggleSection('purposes')}
-                className="flex-row justify-between items-center"
+                style={styles.sectionHeader}
               >
-                <View className="flex-row items-center gap-3">
-                  <View className="w-10 h-10 rounded-2xl bg-orange-100 justify-center items-center">
-                    <Text className="text-lg">🎯</Text>
+                <View style={styles.sectionHeaderLeft}>
+                  <View style={[styles.sectionIcon, styles.orangeIcon]}>
+                    <Text style={styles.sectionEmoji}>🎯</Text>
                   </View>
-                  <Text className="text-lg font-semibold text-neutral-900">目的別</Text>
+                  <Text style={styles.sectionTitle}>目的別</Text>
                   {filters.purposes.length > 0 && (
-                    <View className="bg-primary-100 rounded-full px-2 py-1">
-                      <Text className="text-xs font-bold text-primary-700">
+                    <View style={styles.sectionBadge}>
+                      <Text style={styles.sectionBadgeText}>
                         {filters.purposes.length}
                       </Text>
                     </View>
                   )}
                 </View>
                 <Ionicons
-                  name={expandedSections.purposes ? 'chevron-up' : 'chevron-down'}
+                  name={
+                    expandedSections.purposes ? 'chevron-up' : 'chevron-down'
+                  }
                   size={20}
-                  color="#64748b"
+                  color={Colors.neutral[500]}
                 />
               </TouchableOpacity>
               {expandedSections.purposes && renderPurposeChips()}
@@ -249,16 +282,16 @@ export const FilterModal: React.FC<FilterModalProps> = ({
             <Card variant="elevated" shadow="none">
               <TouchableOpacity
                 onPress={() => toggleSection('genres')}
-                className="flex-row justify-between items-center"
+                style={styles.sectionHeader}
               >
-                <View className="flex-row items-center gap-3">
-                  <View className="w-10 h-10 rounded-2xl bg-green-100 justify-center items-center">
-                    <Text className="text-lg">🍽️</Text>
+                <View style={styles.sectionHeaderLeft}>
+                  <View style={[styles.sectionIcon, styles.greenIcon]}>
+                    <Text style={styles.sectionEmoji}>🍽️</Text>
                   </View>
-                  <Text className="text-lg font-semibold text-neutral-900">ジャンル別</Text>
+                  <Text style={styles.sectionTitle}>ジャンル別</Text>
                   {filters.genres.length > 0 && (
-                    <View className="bg-primary-100 rounded-full px-2 py-1">
-                      <Text className="text-xs font-bold text-primary-700">
+                    <View style={styles.sectionBadge}>
+                      <Text style={styles.sectionBadgeText}>
                         {filters.genres.length}
                       </Text>
                     </View>
@@ -267,7 +300,7 @@ export const FilterModal: React.FC<FilterModalProps> = ({
                 <Ionicons
                   name={expandedSections.genres ? 'chevron-up' : 'chevron-down'}
                   size={20}
-                  color="#64748b"
+                  color={Colors.neutral[500]}
                 />
               </TouchableOpacity>
               {expandedSections.genres &&
@@ -280,27 +313,28 @@ export const FilterModal: React.FC<FilterModalProps> = ({
             <Card variant="elevated" shadow="none">
               <TouchableOpacity
                 onPress={() => toggleSection('price')}
-                className="flex-row justify-between items-center"
+                style={styles.sectionHeader}
               >
-                <View className="flex-row items-center gap-3">
-                  <View className="w-10 h-10 rounded-2xl bg-yellow-100 justify-center items-center">
-                    <Text className="text-lg">💰</Text>
+                <View style={styles.sectionHeaderLeft}>
+                  <View style={[styles.sectionIcon, styles.yellowIcon]}>
+                    <Text style={styles.sectionEmoji}>💰</Text>
                   </View>
-                  <Text className="text-lg font-semibold text-neutral-900">価格帯</Text>
-                  {(filters.priceRange.min > 0 || filters.priceRange.max < 10000) && (
-                    <View className="bg-primary-100 rounded-full px-2 py-1">
-                      <Text className="text-xs font-bold text-primary-700">設定済み</Text>
+                  <Text style={styles.sectionTitle}>価格帯</Text>
+                  {(filters.priceRange.min > 0 ||
+                    filters.priceRange.max < 10000) && (
+                    <View style={styles.sectionBadge}>
+                      <Text style={styles.sectionBadgeText}>設定済み</Text>
                     </View>
                   )}
                 </View>
                 <Ionicons
                   name={expandedSections.price ? 'chevron-up' : 'chevron-down'}
                   size={20}
-                  color="#64748b"
+                  color={Colors.neutral[500]}
                 />
               </TouchableOpacity>
               {expandedSections.price && (
-                <View className="mt-4">
+                <View style={styles.priceRangeContainer}>
                   <PriceRangeSlider
                     min={filters.priceRange.min}
                     max={filters.priceRange.max}
@@ -313,7 +347,7 @@ export const FilterModal: React.FC<FilterModalProps> = ({
         </ScrollView>
 
         {/* Footer */}
-        <View className="px-6 py-4 bg-white border-t border-neutral-200">
+        <View style={styles.footer}>
           <Button
             title={`フィルターを適用 (${getActiveFilterCount()})`}
             onPress={handleApply}
@@ -327,3 +361,149 @@ export const FilterModal: React.FC<FilterModalProps> = ({
     </Modal>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.neutral[50],
+  },
+  header: {
+    paddingHorizontal: 24,
+    paddingVertical: 16,
+    backgroundColor: Colors.white,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.neutral[200],
+  },
+  headerContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  headerButton: {
+    padding: 8,
+    marginHorizontal: -8,
+  },
+  headerCenter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: Colors.neutral[900],
+  },
+  headerBadge: {
+    backgroundColor: Colors.primary[600],
+    borderRadius: 12,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    minWidth: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  headerBadgeText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: Colors.white,
+  },
+  clearButtonText: {
+    color: Colors.primary[600],
+    fontWeight: '600',
+  },
+  scrollView: {
+    flex: 1,
+  },
+  content: {
+    padding: 24,
+    gap: 16,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  sectionHeaderLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  sectionIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  blueIcon: {
+    backgroundColor: '#dbeafe',
+  },
+  orangeIcon: {
+    backgroundColor: '#fed7aa',
+  },
+  greenIcon: {
+    backgroundColor: '#dcfce7',
+  },
+  yellowIcon: {
+    backgroundColor: '#fef3c7',
+  },
+  sectionEmoji: {
+    fontSize: 18,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: Colors.neutral[900],
+  },
+  sectionBadge: {
+    backgroundColor: Colors.primary[100],
+    borderRadius: 12,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  sectionBadgeText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: Colors.primary[700],
+  },
+  chipsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+    marginTop: 12,
+  },
+  chip: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 20,
+    borderWidth: 1,
+  },
+  chipSelected: {
+    backgroundColor: Colors.primary[100],
+    borderColor: Colors.primary[500],
+  },
+  chipUnselected: {
+    backgroundColor: Colors.neutral[50],
+    borderColor: Colors.neutral[200],
+  },
+  chipText: {
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  chipTextSelected: {
+    color: Colors.primary[700],
+  },
+  chipTextUnselected: {
+    color: Colors.neutral[600],
+  },
+  priceRangeContainer: {
+    marginTop: 16,
+  },
+  footer: {
+    paddingHorizontal: 24,
+    paddingVertical: 16,
+    backgroundColor: Colors.white,
+    borderTopWidth: 1,
+    borderTopColor: Colors.neutral[200],
+  },
+});

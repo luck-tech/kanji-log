@@ -37,10 +37,8 @@ applyTo: "**"
 
 ### 2. スタイリング規約
 
-- **NativeWind（TailwindCSS）**を第一選択として使用
-- `className`プロパティによる統一されたスタイリング
+- `StyleSheet`による統一されたスタイリング
 - デザイン定数（`constants/Colors.ts`等）は必要に応じて参照
-- カスタムスタイルは`global.css`で Tailwind ユーティリティとして定義
 
 ### 3. アニメーション規約
 

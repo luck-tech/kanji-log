@@ -1,15 +1,15 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Card } from './Card';
 import { Event } from '@/types';
+import { Colors } from '@/constants';
 
 interface EventCardProps {
   event: Event;
   onPress: (eventId: string) => void;
   style?: any;
-  className?: string;
   variant?: 'default' | 'gradient' | 'elevated';
 }
 
@@ -17,7 +17,6 @@ export const EventCard: React.FC<EventCardProps> = ({
   event,
   onPress,
   style,
-  className,
   variant = 'elevated',
 }) => {
   const formatDate = (event: Event) => {
@@ -43,42 +42,48 @@ export const EventCard: React.FC<EventCardProps> = ({
   const CardContent = () => (
     <>
       {/* Header Section */}
-      <View className="mb-4">
-        <Text className="text-xl font-bold text-neutral-900 mb-1 leading-6">
-          {event.title}
-        </Text>
+      <View style={styles.headerSection}>
+        <Text style={styles.title}>{event.title}</Text>
       </View>
 
       {/* Info Section */}
-      <View className="space-y-3 mb-4">
-        <View className="flex-row items-center">
-          <View className="p-2 rounded-xl bg-neutral-100 mr-3">
-            <Ionicons name="calendar-outline" size={18} color="#0284c7" />
+      <View style={styles.infoSection}>
+        <View style={styles.infoRow}>
+          <View style={styles.iconContainer}>
+            <Ionicons
+              name="calendar-outline"
+              size={18}
+              color={Colors.primary[600]}
+            />
           </View>
-          <Text className="text-base text-neutral-700 font-medium">
-            {formatDate(event)}
-          </Text>
+          <Text style={styles.infoText}>{formatDate(event)}</Text>
         </View>
 
-        <View className="flex-row items-center">
-          <View className="p-2 rounded-xl bg-neutral-100 mr-3">
-            <Ionicons name="people-outline" size={18} color="#0284c7" />
+        <View style={styles.infoRow}>
+          <View style={styles.iconContainer}>
+            <Ionicons
+              name="people-outline"
+              size={18}
+              color={Colors.primary[600]}
+            />
           </View>
-          <Text className="text-base text-neutral-700 font-medium">
-            {event.members.length}名参加
-          </Text>
+          <Text style={styles.infoText}>{event.members.length}名参加</Text>
         </View>
       </View>
 
       {/* Purpose Badge */}
-      <View className="pt-4 border-t border-neutral-200">
-        <View className="flex-row items-center justify-between">
-          <View className="px-3 py-1.5 rounded-full bg-accent-100">
-            <Text className="text-sm font-medium text-accent-800">
+      <View style={styles.footerSection}>
+        <View style={styles.footerRow}>
+          <View style={styles.badge}>
+            <Text style={styles.badgeText}>
               {getPurposeLabel(event.purpose)}
             </Text>
           </View>
-          <Ionicons name="chevron-forward" size={20} color="#94a3b8" />
+          <Ionicons
+            name="chevron-forward"
+            size={20}
+            color={Colors.neutral[400]}
+          />
         </View>
       </View>
     </>
@@ -88,28 +93,84 @@ export const EventCard: React.FC<EventCardProps> = ({
     <TouchableOpacity
       onPress={() => onPress(event.id)}
       activeOpacity={0.8}
-      style={style}
-      className={`mb-4 ${className || ''}`}
+      style={[styles.container, style]}
     >
       {variant === 'gradient' ? (
         <LinearGradient
-          colors={['#ffffff', '#f8fafc']}
+          colors={[Colors.white, Colors.neutral[50]]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
-          className="rounded-2xl p-5 border border-neutral-200"
+          style={styles.gradientCard}
         >
           <CardContent />
         </LinearGradient>
       ) : (
-        <Card
-          variant={variant}
-          shadow="none"
-          animated={false}
-          className="border-0"
-        >
+        <Card variant={variant} shadow="none">
           <CardContent />
         </Card>
       )}
     </TouchableOpacity>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    marginBottom: 16,
+  },
+  headerSection: {
+    marginBottom: 16,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: Colors.neutral[900],
+    marginBottom: 4,
+    lineHeight: 24,
+  },
+  infoSection: {
+    marginBottom: 16,
+  },
+  infoRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  iconContainer: {
+    padding: 8,
+    borderRadius: 12,
+    backgroundColor: Colors.neutral[100],
+    marginRight: 12,
+  },
+  infoText: {
+    fontSize: 16,
+    color: Colors.neutral[700],
+    fontWeight: '500',
+  },
+  footerSection: {
+    paddingTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: Colors.neutral[200],
+  },
+  footerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  badge: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
+    backgroundColor: Colors.accent[100],
+  },
+  badgeText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: Colors.accent[800],
+  },
+  gradientCard: {
+    borderRadius: 16,
+    padding: 20,
+    borderWidth: 1,
+    borderColor: Colors.neutral[200],
+  },
+});

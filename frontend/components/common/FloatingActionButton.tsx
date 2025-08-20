@@ -1,7 +1,8 @@
 import React from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Colors } from '@/constants';
 
 interface FloatingActionButtonProps {
   icon: keyof typeof Ionicons.glyphMap;
@@ -9,9 +10,7 @@ interface FloatingActionButtonProps {
   style?: any;
   size?: 'sm' | 'md' | 'lg';
   color?: string;
-  className?: string;
   variant?: 'primary' | 'gradient' | 'secondary';
-  animated?: boolean;
 }
 
 export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
@@ -20,34 +19,20 @@ export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
   style,
   size = 'md',
   color,
-  className,
   variant = 'gradient',
-  animated = true,
 }) => {
   // Size configurations
-  const sizeConfig = {
-    sm: {
-      container: 'w-12 h-12',
-      iconSize: 20,
-    },
-    md: {
-      container: 'w-16 h-16',
-      iconSize: 24,
-    },
-    lg: {
-      container: 'w-20 h-20',
-      iconSize: 28,
-    },
+  const iconSizes = {
+    sm: 20,
+    md: 24,
+    lg: 28,
   };
 
-  const { container, iconSize } = sizeConfig[size];
+  const iconSize = iconSizes[size];
 
   // Default color based on variant
   const defaultColor =
-    color || (variant === 'secondary' ? '#334155' : '#ffffff');
-
-  // Base classes
-  const baseClasses = `absolute bottom-24 right-6 ${container} rounded-3xl justify-center items-center`;
+    color || (variant === 'secondary' ? Colors.neutral[700] : Colors.white);
 
   const handlePress = () => {
     // Add haptic feedback for mobile
@@ -62,16 +47,15 @@ export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
       <TouchableOpacity
         onPress={handlePress}
         activeOpacity={0.8}
-        style={style}
-        className={className}
+        style={[styles.container, styles[size], style]}
       >
         <LinearGradient
-          colors={['#0ea5e9', '#0284c7']}
+          colors={[Colors.primary[500], Colors.primary[600]]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
-          className={baseClasses}
+          style={[styles.button, styles[size]]}
         >
-          <View className="p-1">
+          <View style={styles.iconContainer}>
             <Ionicons name={icon} size={iconSize} color={defaultColor} />
           </View>
         </LinearGradient>
@@ -79,22 +63,66 @@ export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
     );
   }
 
-  const variantClasses = {
-    primary: 'bg-primary-600',
-    secondary: 'bg-neutral-100 border-2 border-neutral-200',
-    gradient: '', // handled above
-  };
-
   return (
     <TouchableOpacity
-      className={`${baseClasses} ${variantClasses[variant]} ${className || ''}`}
-      style={style}
+      style={[styles.container, styles[size], styles[variant], style]}
       onPress={handlePress}
       activeOpacity={0.8}
     >
-      <View className="p-1">
+      <View style={styles.iconContainer}>
         <Ionicons name={icon} size={iconSize} color={defaultColor} />
       </View>
     </TouchableOpacity>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    position: 'absolute',
+    bottom: 96,
+    right: 24,
+    borderRadius: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 4,
+    shadowColor: Colors.black,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+  },
+  button: {
+    borderRadius: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  iconContainer: {
+    padding: 4,
+  },
+
+  // Sizes
+  sm: {
+    width: 48,
+    height: 48,
+  },
+  md: {
+    width: 64,
+    height: 64,
+  },
+  lg: {
+    width: 80,
+    height: 80,
+  },
+
+  // Variants
+  primary: {
+    backgroundColor: Colors.primary[600],
+  },
+  secondary: {
+    backgroundColor: Colors.neutral[100],
+    borderWidth: 2,
+    borderColor: Colors.neutral[200],
+  },
+});

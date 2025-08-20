@@ -7,10 +7,12 @@ import {
   ScrollView,
   SafeAreaView,
   Share,
+  StyleSheet,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Card } from '@/components/common/Card';
 import { SharedRecord } from '@/types';
+import { Colors } from '@/constants';
 
 // Extended SharedRecord type for the modal
 interface ExtendedSharedRecord extends SharedRecord {
@@ -119,7 +121,7 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({
       );
     }
 
-    return <View className="flex-row gap-0.5">{stars}</View>;
+    return <View style={styles.starsContainer}>{stars}</View>;
   };
 
   return (
@@ -129,68 +131,68 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({
       presentationStyle="pageSheet"
       onRequestClose={onClose}
     >
-      <SafeAreaView className="flex-1 bg-neutral-50">
+      <SafeAreaView style={styles.container}>
         {/* Header */}
-        <View className="px-6 py-4 bg-white border-b border-neutral-200">
-          <View className="flex-row justify-between items-center">
-            <TouchableOpacity onPress={onClose} className="p-2 -ml-2">
+        <View style={styles.header}>
+          <View style={styles.headerContent}>
+            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
               <Ionicons name="close" size={24} color="#64748b" />
             </TouchableOpacity>
-            <Text className="text-lg font-bold text-neutral-900">記録詳細</Text>
-            <TouchableOpacity onPress={handleShare} className="p-2 -mr-2">
+            <Text style={styles.headerTitle}>記録詳細</Text>
+            <TouchableOpacity onPress={handleShare} style={styles.closeButton}>
               <Ionicons name="share-outline" size={24} color="#64748b" />
             </TouchableOpacity>
           </View>
         </View>
 
-        <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
-          <View className="p-6 gap-6">
+        <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+          <View style={styles.content}>
             {/* 店舗情報カード */}
-            <Card variant="elevated" shadow="none" animated={false}>
-              <View className="gap-4">
-                <View className="flex-row items-center gap-3">
-                  <View className="w-12 h-12 rounded-2xl bg-primary-100 justify-center items-center">
+            <Card variant="elevated" shadow="none">
+              <View style={styles.cardContent}>
+                <View style={styles.venueHeader}>
+                  <View style={[styles.iconContainer, styles.primaryIcon]}>
                     <Ionicons name="restaurant" size={24} color="#0284c7" />
                   </View>
-                  <View className="flex-1">
-                    <Text className="text-xl font-bold text-neutral-900 mb-1">
+                  <View style={styles.venueInfo}>
+                    <Text style={styles.venueName}>
                       {record.eventLog.venue?.name || 'レストラン名'}
                     </Text>
-                    <Text className="text-neutral-600 text-base">
-                      {record.eventLog.venue?.genre || 'ジャンル'} •
+                    <Text style={styles.venueGenre}>
+                      {record.eventLog.venue?.genre || 'ジャンル'} •{' '}
                       {record.eventLog.venue?.area || 'エリア'}
                     </Text>
                   </View>
                 </View>
 
-                <View className="flex-row items-center justify-between">
-                  <View className="flex-row items-center gap-3">
+                <View style={styles.ratingContainer}>
+                  <View style={styles.starsRow}>
                     {renderStars(record.eventLog.rating)}
-                    <Text className="text-neutral-900 font-bold text-lg">
+                    <Text style={styles.ratingNumber}>
                       {record.eventLog.rating}
                     </Text>
                   </View>
-                  <View className="bg-primary-100 rounded-full px-3 py-1">
-                    <Text className="text-primary-700 font-bold text-sm">
+                  <View style={styles.ratingBadge}>
+                    <Text style={styles.ratingLabel}>
                       {getRatingLabel(record.eventLog.rating)}
                     </Text>
                   </View>
                 </View>
 
                 {/* 住所 */}
-                <View className="p-3 bg-neutral-50 rounded-xl">
-                  <Text className="text-neutral-600 text-sm mb-1">住所</Text>
-                  <Text className="text-neutral-900 font-medium text-base">
+                <View style={styles.infoCard}>
+                  <Text style={styles.infoCardLabel}>住所</Text>
+                  <Text style={styles.infoCardValue}>
                     {record.eventLog.venue?.address || '住所情報なし'}
                   </Text>
                 </View>
 
                 {/* 予算 */}
-                <View className="p-3 bg-success-50 rounded-xl">
-                  <Text className="text-success-600 text-sm mb-1">
+                <View style={styles.budgetCard}>
+                  <Text style={styles.budgetLabel}>
                     予算（一人あたり）
                   </Text>
-                  <Text className="text-success-900 font-bold text-xl">
+                  <Text style={styles.budgetValue}>
                     ¥{record.eventLog.costPerPerson?.toLocaleString() || '不明'}
                   </Text>
                 </View>
@@ -199,32 +201,32 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({
 
             {/* イベント情報 */}
             <Card variant="elevated" shadow="none">
-              <View className="gap-4">
-                <View className="flex-row items-center gap-3">
-                  <View className="w-10 h-10 rounded-2xl bg-blue-100 justify-center items-center">
+              <View style={styles.cardContent}>
+                <View style={styles.sectionHeader}>
+                  <View style={[styles.iconContainer, styles.blueIcon]}>
                     <Ionicons name="calendar" size={20} color="#0284c7" />
                   </View>
-                  <Text className="text-lg font-semibold text-neutral-900">
+                  <Text style={styles.sectionTitle}>
                     イベント情報
                   </Text>
                 </View>
 
-                <View className="gap-3">
-                  <View className="flex-row justify-between items-center p-3 bg-blue-50 rounded-xl">
-                    <Text className="text-blue-700 font-medium">目的</Text>
-                    <Text className="text-blue-900 font-bold">
+                <View style={styles.eventInfo}>
+                  <View style={styles.eventInfoRow}>
+                    <Text style={styles.eventInfoLabel}>目的</Text>
+                    <Text style={styles.eventInfoValue}>
                       {getPurposeLabel(record.event.purpose)}
                     </Text>
                   </View>
 
-                  <View className="flex-row justify-between items-center p-3 bg-neutral-50 rounded-xl">
-                    <Text className="text-neutral-600 font-medium">幹事名</Text>
-                    <TouchableOpacity
-                      onPress={onUserPress}
-                      className="flex-row items-center gap-2"
-                      activeOpacity={0.7}
-                    >
-                      <Text className="text-primary-600 font-bold underline">
+                  <TouchableOpacity
+                    onPress={onUserPress}
+                    style={styles.organizerRow}
+                    activeOpacity={0.7}
+                  >
+                    <Text style={styles.eventInfoLabel}>幹事名</Text>
+                    <View style={styles.organizerInfo}>
+                      <Text style={styles.organizerName}>
                         {record.organizer.name}さん
                       </Text>
                       <Ionicons
@@ -232,21 +234,21 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({
                         size={16}
                         color="#0284c7"
                       />
-                    </TouchableOpacity>
-                  </View>
+                    </View>
+                  </TouchableOpacity>
 
-                  <View className="flex-row justify-between items-center p-3 bg-neutral-50 rounded-xl">
-                    <Text className="text-neutral-600 font-medium">
+                  <View style={styles.eventInfoRowNeutral}>
+                    <Text style={styles.eventInfoLabel}>
                       参加者数
                     </Text>
-                    <Text className="text-neutral-900 font-bold">
+                    <Text style={styles.eventInfoValueNeutral}>
                       {record.participantCount}名
                     </Text>
                   </View>
 
-                  <View className="flex-row justify-between items-center p-3 bg-neutral-50 rounded-xl">
-                    <Text className="text-neutral-600 font-medium">開催日</Text>
-                    <Text className="text-neutral-900 font-bold">
+                  <View style={styles.eventInfoRowNeutral}>
+                    <Text style={styles.eventInfoLabel}>開催日</Text>
+                    <Text style={styles.eventInfoValueNeutral}>
                       {formatDate(record.eventDate)}
                     </Text>
                   </View>
@@ -256,18 +258,18 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({
 
             {/* 評価理由・記録メモ */}
             <Card variant="elevated" shadow="none">
-              <View className="gap-4">
-                <View className="flex-row items-center gap-3">
-                  <View className="w-10 h-10 rounded-2xl bg-amber-100 justify-center items-center">
+              <View style={styles.cardContent}>
+                <View style={styles.sectionHeader}>
+                  <View style={[styles.iconContainer, styles.amberIcon]}>
                     <Ionicons name="star" size={20} color="#f59e0b" />
                   </View>
-                  <Text className="text-lg font-semibold text-neutral-900">
+                  <Text style={styles.sectionTitle}>
                     評価理由・記録メモ
                   </Text>
                 </View>
 
-                <View className="p-4 bg-amber-50 rounded-xl">
-                  <Text className="text-neutral-700 leading-6">
+                <View style={styles.notesCard}>
+                  <Text style={styles.notesText}>
                     {record.eventLog.notes || '特記事項なし'}
                   </Text>
                 </View>
@@ -277,22 +279,22 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({
             {/* 画像 */}
             {record.images && record.images.length > 0 && (
               <Card variant="elevated" shadow="none">
-                <View className="gap-4">
-                  <View className="flex-row items-center gap-3">
-                    <View className="w-10 h-10 rounded-2xl bg-purple-100 justify-center items-center">
+                <View style={styles.cardContent}>
+                  <View style={styles.sectionHeader}>
+                    <View style={[styles.iconContainer, styles.purpleIcon]}>
                       <Ionicons name="images" size={20} color="#8b5cf6" />
                     </View>
-                    <Text className="text-lg font-semibold text-neutral-900">
+                    <Text style={styles.sectionTitle}>
                       お店の写真
                     </Text>
                   </View>
 
                   {/* 画像プレースホルダー（実際の画像表示機能は別途実装） */}
-                  <View className="flex-row gap-2">
+                  <View style={styles.imagesRow}>
                     {record.images.slice(0, 3).map((_, index) => (
                       <View
                         key={index}
-                        className="flex-1 h-24 bg-neutral-200 rounded-xl justify-center items-center"
+                        style={styles.imagePlaceholder}
                       >
                         <Ionicons
                           name="image-outline"
@@ -303,7 +305,7 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({
                     ))}
                   </View>
 
-                  <Text className="text-xs text-neutral-500 text-center">
+                  <Text style={styles.imageNote}>
                     画像表示機能は開発中です
                   </Text>
                 </View>
@@ -312,29 +314,28 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({
 
             {/* アクションボタン */}
             <Card variant="elevated" shadow="none">
-              <View className="gap-4">
-                <View className="flex-row items-center gap-3">
-                  <View className="w-10 h-10 rounded-2xl bg-green-100 justify-center items-center">
+              <View style={styles.cardContent}>
+                <View style={styles.sectionHeader}>
+                  <View style={[styles.iconContainer, styles.greenIcon]}>
                     <Ionicons name="heart" size={20} color="#10b981" />
                   </View>
-                  <Text className="text-lg font-semibold text-neutral-900">
+                  <Text style={styles.sectionTitle}>
                     この記録を活用
                   </Text>
                 </View>
 
-                <Text className="text-neutral-600 text-sm leading-6">
+                <Text style={styles.actionDescription}>
                   この記録は他の幹事の実体験に基づいています。
                   同じエリアや目的のイベントを企画する際の参考にしてください。
                 </Text>
 
-                <View className="flex-row gap-3">
+                <View style={styles.actionButtons}>
                   <TouchableOpacity
                     onPress={onLike}
-                    className={`flex-1 flex-row items-center justify-center gap-2 py-3 px-4 rounded-xl border ${
-                      record.isLiked
-                        ? 'bg-red-50 border-red-200'
-                        : 'bg-white border-neutral-200'
-                    }`}
+                    style={[
+                      styles.likeButton,
+                      record.isLiked ? styles.likeButtonActive : styles.likeButtonInactive,
+                    ]}
                     activeOpacity={0.8}
                   >
                     <Ionicons
@@ -343,9 +344,7 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({
                       color={record.isLiked ? '#ef4444' : '#94a3b8'}
                     />
                     <Text
-                      className={`font-semibold ${
-                        record.isLiked ? 'text-red-500' : 'text-neutral-600'
-                      }`}
+                      style={record.isLiked ? styles.likeTextActive : styles.likeTextInactive}
                     >
                       {record.likeCount}
                     </Text>
@@ -353,11 +352,11 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({
 
                   <TouchableOpacity
                     onPress={handleShare}
-                    className="flex-1 flex-row items-center justify-center gap-2 py-3 px-4 bg-primary-500 rounded-xl"
+                    style={styles.shareButton}
                     activeOpacity={0.8}
                   >
                     <Ionicons name="share-outline" size={20} color="white" />
-                    <Text className="font-semibold text-white">共有する</Text>
+                    <Text style={styles.shareButtonText}>共有する</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -368,3 +367,285 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({
     </Modal>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.neutral[50],
+  },
+  header: {
+    paddingHorizontal: 24,
+    paddingVertical: 16,
+    backgroundColor: 'white',
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.neutral[200],
+  },
+  headerContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  closeButton: {
+    padding: 8,
+    marginLeft: -8,
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: Colors.neutral[900],
+  },
+  scrollView: {
+    flex: 1,
+  },
+  content: {
+    padding: 24,
+    gap: 24,
+  },
+  cardContent: {
+    gap: 16,
+  },
+  venueHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  iconContainer: {
+    width: 48,
+    height: 48,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  primaryIcon: {
+    backgroundColor: Colors.primary[100],
+  },
+  blueIcon: {
+    backgroundColor: Colors.primary[100],
+    width: 40,
+    height: 40,
+  },
+  amberIcon: {
+    backgroundColor: Colors.warning[100],
+    width: 40,
+    height: 40,
+  },
+  purpleIcon: {
+    backgroundColor: Colors.secondary[100],
+    width: 40,
+    height: 40,
+  },
+  greenIcon: {
+    backgroundColor: Colors.success[100],
+    width: 40,
+    height: 40,
+  },
+  venueInfo: {
+    flex: 1,
+  },
+  venueName: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: Colors.neutral[900],
+    marginBottom: 4,
+  },
+  venueGenre: {
+    color: Colors.neutral[600],
+    fontSize: 16,
+  },
+  ratingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  starsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  starsContainer: {
+    flexDirection: 'row',
+    gap: 2,
+  },
+  ratingNumber: {
+    color: Colors.neutral[900],
+    fontWeight: '700',
+    fontSize: 18,
+  },
+  ratingBadge: {
+    backgroundColor: Colors.primary[100],
+    borderRadius: 20,
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+  },
+  ratingLabel: {
+    color: Colors.primary[700],
+    fontWeight: '700',
+    fontSize: 14,
+  },
+  infoCard: {
+    padding: 12,
+    backgroundColor: Colors.neutral[50],
+    borderRadius: 12,
+  },
+  infoCardLabel: {
+    color: Colors.neutral[600],
+    fontSize: 14,
+    marginBottom: 4,
+  },
+  infoCardValue: {
+    color: Colors.neutral[900],
+    fontWeight: '500',
+    fontSize: 16,
+  },
+  budgetCard: {
+    padding: 12,
+    backgroundColor: Colors.success[50],
+    borderRadius: 12,
+  },
+  budgetLabel: {
+    color: Colors.success[600],
+    fontSize: 14,
+    marginBottom: 4,
+  },
+  budgetValue: {
+    color: Colors.success[900],
+    fontWeight: '700',
+    fontSize: 20,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: Colors.neutral[900],
+  },
+  eventInfo: {
+    gap: 12,
+  },
+  eventInfoRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 12,
+    backgroundColor: Colors.primary[50],
+    borderRadius: 12,
+  },
+  eventInfoRowNeutral: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 12,
+    backgroundColor: Colors.neutral[50],
+    borderRadius: 12,
+  },
+  organizerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 12,
+    backgroundColor: Colors.neutral[50],
+    borderRadius: 12,
+  },
+  eventInfoLabel: {
+    color: Colors.primary[700],
+    fontWeight: '500',
+  },
+  eventInfoValue: {
+    color: Colors.primary[900],
+    fontWeight: '700',
+  },
+  eventInfoValueNeutral: {
+    color: Colors.neutral[900],
+    fontWeight: '700',
+  },
+  organizerInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  organizerName: {
+    color: Colors.primary[600],
+    fontWeight: '700',
+    textDecorationLine: 'underline',
+  },
+  notesCard: {
+    padding: 16,
+    backgroundColor: Colors.warning[50],
+    borderRadius: 12,
+  },
+  notesText: {
+    color: Colors.neutral[700],
+    lineHeight: 24,
+  },
+  imagesRow: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  imagePlaceholder: {
+    flex: 1,
+    height: 96,
+    backgroundColor: Colors.neutral[200],
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imageNote: {
+    fontSize: 12,
+    color: Colors.neutral[500],
+    textAlign: 'center',
+  },
+  actionDescription: {
+    color: Colors.neutral[600],
+    fontSize: 14,
+    lineHeight: 24,
+  },
+  actionButtons: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  likeButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 12,
+    borderWidth: 1,
+  },
+  likeButtonActive: {
+    backgroundColor: Colors.error[50],
+    borderColor: Colors.error[200],
+  },
+  likeButtonInactive: {
+    backgroundColor: 'white',
+    borderColor: Colors.neutral[200],
+  },
+  likeTextActive: {
+    fontWeight: '600',
+    color: Colors.error[500],
+  },
+  likeTextInactive: {
+    fontWeight: '600',
+    color: Colors.neutral[600],
+  },
+  shareButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    backgroundColor: Colors.primary[500],
+    borderRadius: 12,
+  },
+  shareButtonText: {
+    fontWeight: '600',
+    color: 'white',
+  },
+});

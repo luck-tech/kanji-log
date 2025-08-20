@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, SafeAreaView, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  SafeAreaView,
+  Alert,
+  StyleSheet,
+} from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Card } from '@/components/common/Card';
@@ -9,6 +16,7 @@ import {
   MemberEditModal,
   MemberEditData,
 } from '@/components/modals/MemberEditModal';
+import { Colors } from '@/constants/Colors';
 
 interface MemberDetail {
   id: string;
@@ -93,9 +101,32 @@ export default function MemberDetailScreen() {
     );
   };
 
+  const getAlcoholPreferenceStyle = (preference: string) => {
+    switch (preference) {
+      case 'yes':
+        return {
+          container: styles.successContainer,
+          text: styles.successText,
+          label: '飲める',
+        };
+      case 'no':
+        return {
+          container: styles.errorContainer,
+          text: styles.errorText,
+          label: '飲めない',
+        };
+      default:
+        return {
+          container: styles.warningContainer,
+          text: styles.warningText,
+          label: 'たまに飲む',
+        };
+    }
+  };
+
   return (
-    <View className="flex-1 bg-neutral-50">
-      <SafeAreaView className="flex-1">
+    <View style={styles.container}>
+      <SafeAreaView style={styles.safeArea}>
         <Header
           title={member.name}
           subtitle={member.department || 'メンバー詳細'}
@@ -106,22 +137,23 @@ export default function MemberDetailScreen() {
           onRightPress={handleEditMember}
         />
 
-        <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
-          <View className="p-6 gap-6">
+        <ScrollView
+          style={styles.scrollView}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.content}>
             {/* プロフィール概要 */}
-            <Card variant="elevated" shadow="none" animated={false}>
-              <View className="gap-4">
-                <View className="flex-row items-center gap-4">
-                  <View className="w-16 h-16 rounded-2xl bg-blue-100 justify-center items-center">
-                    <Text className="text-2xl font-bold text-blue-700">
+            <Card variant="elevated" shadow="none">
+              <View style={styles.cardContent}>
+                <View style={styles.profileHeader}>
+                  <View style={styles.avatar}>
+                    <Text style={styles.avatarText}>
                       {member.name.charAt(0)}
                     </Text>
                   </View>
-                  <View className="flex-1">
-                    <Text className="text-xl font-bold text-neutral-900 mb-1">
-                      {member.name}
-                    </Text>
-                    <Text className="text-neutral-600 text-base">
+                  <View style={styles.profileInfo}>
+                    <Text style={styles.memberName}>{member.name}</Text>
+                    <Text style={styles.memberDepartment}>
                       {member.department || '部署未設定'}
                     </Text>
                   </View>
@@ -132,64 +164,46 @@ export default function MemberDetailScreen() {
             {/* 好み・制限事項 */}
             {member.preferences && (
               <Card variant="elevated" shadow="none">
-                <View className="gap-4">
-                  <View className="flex-row items-center gap-3">
-                    <View className="w-10 h-10 rounded-2xl bg-orange-100 justify-center items-center">
-                      <Ionicons name="restaurant" size={20} color="#f59e0b" />
+                <View style={styles.cardContent}>
+                  <View style={styles.sectionHeader}>
+                    <View style={[styles.sectionIcon, styles.orangeIcon]}>
+                      <Ionicons
+                        name="restaurant"
+                        size={20}
+                        color={Colors.warning[500]}
+                      />
                     </View>
-                    <Text className="text-lg font-semibold text-neutral-900">
-                      食事の好み・制限
-                    </Text>
+                    <Text style={styles.sectionTitle}>食事の好み・制限</Text>
                   </View>
 
-                  <View className="gap-4">
+                  <View style={styles.preferencesContent}>
                     {/* アルコール */}
-                    <View>
-                      <Text className="text-sm font-medium text-neutral-700 mb-2">
-                        アルコール
-                      </Text>
-                      <View
-                        className={`px-3 py-2 rounded-xl ${
-                          member.preferences.alcoholPreference === 'yes'
-                            ? 'bg-success-100'
-                            : member.preferences.alcoholPreference === 'no'
-                            ? 'bg-error-100'
-                            : 'bg-warning-100'
-                        }`}
-                      >
-                        <Text
-                          className={`font-medium ${
-                            member.preferences.alcoholPreference === 'yes'
-                              ? 'text-success-700'
-                              : member.preferences.alcoholPreference === 'no'
-                              ? 'text-error-700'
-                              : 'text-warning-700'
-                          }`}
-                        >
-                          {member.preferences.alcoholPreference === 'yes'
-                            ? '飲める'
-                            : member.preferences.alcoholPreference === 'no'
-                            ? '飲めない'
-                            : 'たまに飲む'}
-                        </Text>
-                      </View>
+                    <View style={styles.preferenceSection}>
+                      <Text style={styles.preferenceLabel}>アルコール</Text>
+                      {(() => {
+                        const alcoholStyle = getAlcoholPreferenceStyle(
+                          member.preferences!.alcoholPreference || 'yes'
+                        );
+                        return (
+                          <View style={alcoholStyle.container}>
+                            <Text style={alcoholStyle.text}>
+                              {alcoholStyle.label}
+                            </Text>
+                          </View>
+                        );
+                      })()}
                     </View>
 
                     {/* アレルギー */}
                     {member.preferences.allergies &&
                       member.preferences.allergies.length > 0 && (
-                        <View>
-                          <Text className="text-sm font-medium text-neutral-700 mb-2">
-                            アレルギー
-                          </Text>
-                          <View className="flex-row flex-wrap gap-2">
+                        <View style={styles.preferenceSection}>
+                          <Text style={styles.preferenceLabel}>アレルギー</Text>
+                          <View style={styles.tagsContainer}>
                             {member.preferences.allergies.map(
                               (allergy, index) => (
-                                <View
-                                  key={index}
-                                  className="px-3 py-1 bg-error-100 rounded-full"
-                                >
-                                  <Text className="text-error-700 font-medium text-sm">
+                                <View key={index} style={styles.allergyTag}>
+                                  <Text style={styles.allergyTagText}>
                                     {allergy}
                                   </Text>
                                 </View>
@@ -202,18 +216,15 @@ export default function MemberDetailScreen() {
                     {/* 好きなジャンル */}
                     {member.preferences.favoriteGenres &&
                       member.preferences.favoriteGenres.length > 0 && (
-                        <View>
-                          <Text className="text-sm font-medium text-neutral-700 mb-2">
+                        <View style={styles.preferenceSection}>
+                          <Text style={styles.preferenceLabel}>
                             好きな料理ジャンル
                           </Text>
-                          <View className="flex-row flex-wrap gap-2">
+                          <View style={styles.tagsContainer}>
                             {member.preferences.favoriteGenres.map(
                               (genre, index) => (
-                                <View
-                                  key={index}
-                                  className="px-3 py-1 bg-blue-100 rounded-full"
-                                >
-                                  <Text className="text-blue-700 font-medium text-sm">
+                                <View key={index} style={styles.genreTag}>
+                                  <Text style={styles.genreTagText}>
                                     {genre}
                                   </Text>
                                 </View>
@@ -225,12 +236,10 @@ export default function MemberDetailScreen() {
 
                     {/* 予算帯 */}
                     {member.preferences.budgetRange && (
-                      <View>
-                        <Text className="text-sm font-medium text-neutral-700 mb-2">
-                          希望予算帯
-                        </Text>
-                        <View className="px-3 py-2 bg-green-100 rounded-xl">
-                          <Text className="text-green-700 font-medium">
+                      <View style={styles.preferenceSection}>
+                        <Text style={styles.preferenceLabel}>希望予算帯</Text>
+                        <View style={styles.budgetContainer}>
+                          <Text style={styles.budgetText}>
                             ¥
                             {member.preferences.budgetRange.min.toLocaleString()}
                             - ¥
@@ -247,24 +256,20 @@ export default function MemberDetailScreen() {
             {/* メモ */}
             {member.notes && (
               <Card variant="elevated" shadow="none">
-                <View className="gap-4">
-                  <View className="flex-row items-center gap-3">
-                    <View className="w-10 h-10 rounded-2xl bg-purple-100 justify-center items-center">
+                <View style={styles.cardContent}>
+                  <View style={styles.sectionHeader}>
+                    <View style={[styles.sectionIcon, styles.accentIcon]}>
                       <Ionicons
                         name="document-text"
                         size={20}
-                        color="#7c3aed"
+                        color={Colors.accent[600]}
                       />
                     </View>
-                    <Text className="text-lg font-semibold text-neutral-900">
-                      メモ
-                    </Text>
+                    <Text style={styles.sectionTitle}>メモ</Text>
                   </View>
 
-                  <View className="p-4 bg-purple-50 rounded-xl">
-                    <Text className="text-purple-800 leading-6">
-                      {member.notes}
-                    </Text>
+                  <View style={styles.notesContainer}>
+                    <Text style={styles.notesText}>{member.notes}</Text>
                   </View>
                 </View>
               </Card>
@@ -272,17 +277,19 @@ export default function MemberDetailScreen() {
 
             {/* アクション */}
             <Card variant="elevated" shadow="none">
-              <View className="gap-4">
-                <View className="flex-row items-center gap-3">
-                  <View className="w-10 h-10 rounded-2xl bg-amber-100 justify-center items-center">
-                    <Ionicons name="settings" size={20} color="#f59e0b" />
+              <View style={styles.cardContent}>
+                <View style={styles.sectionHeader}>
+                  <View style={[styles.sectionIcon, styles.warningIcon]}>
+                    <Ionicons
+                      name="settings"
+                      size={20}
+                      color={Colors.warning[500]}
+                    />
                   </View>
-                  <Text className="text-lg font-semibold text-neutral-900">
-                    アクション
-                  </Text>
+                  <Text style={styles.sectionTitle}>アクション</Text>
                 </View>
 
-                <View className="gap-3">
+                <View style={styles.actionsContainer}>
                   <Button
                     title="プロフィールを編集"
                     onPress={handleEditMember}
@@ -300,12 +307,11 @@ export default function MemberDetailScreen() {
                     variant="outline"
                     size="md"
                     fullWidth
-                    className="border-error-500"
                     icon={
                       <Ionicons
                         name="trash-outline"
                         size={18}
-                        color="#ef4444"
+                        color={Colors.error[500]}
                       />
                     }
                   />
@@ -325,3 +331,170 @@ export default function MemberDetailScreen() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.neutral[50],
+  },
+  safeArea: {
+    flex: 1,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  content: {
+    padding: 24,
+    gap: 24,
+  },
+  cardContent: {
+    gap: 16,
+  },
+  profileHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
+  },
+  avatar: {
+    width: 64,
+    height: 64,
+    borderRadius: 16,
+    backgroundColor: Colors.primary[100],
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  avatarText: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: Colors.primary[700],
+  },
+  profileInfo: {
+    flex: 1,
+  },
+  memberName: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: Colors.neutral[900],
+    marginBottom: 4,
+  },
+  memberDepartment: {
+    color: Colors.neutral[600],
+    fontSize: 16,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  sectionIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  orangeIcon: {
+    backgroundColor: Colors.warning[100],
+  },
+  accentIcon: {
+    backgroundColor: Colors.accent[100],
+  },
+  warningIcon: {
+    backgroundColor: Colors.warning[100],
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: Colors.neutral[900],
+  },
+  preferencesContent: {
+    gap: 16,
+  },
+  preferenceSection: {
+    gap: 8,
+  },
+  preferenceLabel: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: Colors.neutral[700],
+  },
+  successContainer: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    backgroundColor: Colors.success[100],
+    borderRadius: 12,
+  },
+  successText: {
+    fontWeight: '500',
+    color: Colors.success[700],
+  },
+  errorContainer: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    backgroundColor: Colors.error[100],
+    borderRadius: 12,
+  },
+  errorText: {
+    fontWeight: '500',
+    color: Colors.error[700],
+  },
+  warningContainer: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    backgroundColor: Colors.warning[100],
+    borderRadius: 12,
+  },
+  warningText: {
+    fontWeight: '500',
+    color: Colors.warning[700],
+  },
+  tagsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  allergyTag: {
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    backgroundColor: Colors.error[100],
+    borderRadius: 20,
+  },
+  allergyTagText: {
+    color: Colors.error[700],
+    fontWeight: '500',
+    fontSize: 14,
+  },
+  genreTag: {
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    backgroundColor: Colors.primary[100],
+    borderRadius: 20,
+  },
+  genreTagText: {
+    color: Colors.primary[700],
+    fontWeight: '500',
+    fontSize: 14,
+  },
+  budgetContainer: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    backgroundColor: Colors.success[100],
+    borderRadius: 12,
+  },
+  budgetText: {
+    color: Colors.success[700],
+    fontWeight: '500',
+  },
+  notesContainer: {
+    padding: 16,
+    backgroundColor: Colors.accent[50],
+    borderRadius: 12,
+  },
+  notesText: {
+    color: Colors.accent[800],
+    lineHeight: 24,
+  },
+  actionsContainer: {
+    gap: 12,
+  },
+});

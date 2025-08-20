@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { View, ScrollView, SafeAreaView, RefreshControl } from 'react-native';
+import {
+  View,
+  ScrollView,
+  SafeAreaView,
+  RefreshControl,
+  StyleSheet,
+} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Header } from '@/components/common/Header';
 import { TabBar } from '@/components/common/TabBar';
@@ -220,7 +226,7 @@ export default function EventsScreen() {
     if (filteredEvents.length === 0) {
       const messages = EMPTY_STATE_MESSAGES[activeTab];
       return (
-        <View className="flex-1 justify-center items-center py-16">
+        <View style={styles.emptyContainer}>
           <EmptyState
             icon="calendar-outline"
             title={messages.title}
@@ -231,7 +237,7 @@ export default function EventsScreen() {
     }
 
     return (
-      <View className="gap-2">
+      <View style={styles.eventList}>
         {filteredEvents.map((event, index) => (
           <View key={event.id}>
             <EventCard
@@ -246,16 +252,16 @@ export default function EventsScreen() {
   };
 
   return (
-    <View className="flex-1">
+    <View style={styles.container}>
       {/* Background Gradient */}
       <LinearGradient
         colors={['#f8fafc', '#f1f5f9']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
-        className="absolute inset-0"
+        style={styles.gradient}
       />
 
-      <SafeAreaView className="flex-1">
+      <SafeAreaView style={styles.safeArea}>
         <Header
           title="イベント"
           subtitle="飲み会の企画・管理"
@@ -267,12 +273,10 @@ export default function EventsScreen() {
           activeTab={activeTab}
           onTabPress={setActiveTab}
           variant="segmented"
-          animated={false}
-          className="bg-transparent"
         />
 
         <ScrollView
-          className="flex-1 px-6"
+          style={styles.scrollView}
           showsVerticalScrollIndicator={false}
           refreshControl={
             <RefreshControl
@@ -283,7 +287,7 @@ export default function EventsScreen() {
             />
           }
         >
-          <View className="mt-4">{renderEvents()}</View>
+          <View style={styles.content}>{renderEvents()}</View>
         </ScrollView>
 
         <FloatingActionButton
@@ -291,7 +295,6 @@ export default function EventsScreen() {
           onPress={handleCreateEvent}
           variant="gradient"
           size="md"
-          animated={false}
         />
 
         <EventCreateModal
@@ -303,3 +306,35 @@ export default function EventsScreen() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  gradient: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  safeArea: {
+    flex: 1,
+  },
+  scrollView: {
+    flex: 1,
+    paddingHorizontal: 24,
+  },
+  content: {
+    marginTop: 16,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 64,
+  },
+  eventList: {
+    gap: 8,
+  },
+});

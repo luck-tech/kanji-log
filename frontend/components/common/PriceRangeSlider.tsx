@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Colors } from '@/constants/Colors';
 
 interface PriceRangeSliderProps {
   min: number;
@@ -33,45 +34,39 @@ export const PriceRangeSlider: React.FC<PriceRangeSliderProps> = ({
   };
 
   return (
-    <View className="py-4">
-      <View className="flex-row justify-between mb-6">
-        <View className="items-center">
-          <Text className="text-sm text-neutral-500 mb-1">最低価格</Text>
-          <Text className="text-lg font-bold text-neutral-900">
-            ¥{min.toLocaleString()}
-          </Text>
+    <View style={styles.container}>
+      <View style={styles.priceDisplay}>
+        <View style={styles.priceItem}>
+          <Text style={styles.priceLabel}>最低価格</Text>
+          <Text style={styles.priceValue}>¥{min.toLocaleString()}</Text>
         </View>
-        <View className="items-center">
-          <Text className="text-sm text-neutral-500 mb-1">最高価格</Text>
-          <Text className="text-lg font-bold text-neutral-900">
-            ¥{max.toLocaleString()}
-          </Text>
+        <View style={styles.priceItem}>
+          <Text style={styles.priceLabel}>最高価格</Text>
+          <Text style={styles.priceValue}>¥{max.toLocaleString()}</Text>
         </View>
       </View>
 
       {/* Min Price Selection */}
-      <View className="mb-4">
-        <Text className="text-sm font-medium text-neutral-700 mb-2">
-          最低価格を選択
-        </Text>
-        <View className="flex-row flex-wrap gap-2">
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>最低価格を選択</Text>
+        <View style={styles.optionsContainer}>
           {priceOptions
             .filter((price) => price < max)
             .map((price) => (
               <TouchableOpacity
                 key={`min-${price}`}
                 onPress={() => handleMinChange(price)}
-                className={`px-3 py-2 rounded-full border ${
-                  min === price
-                    ? 'bg-primary-100 border-primary-500'
-                    : 'bg-neutral-50 border-neutral-200'
-                }`}
+                style={[
+                  styles.priceOption,
+                  min === price ? styles.activeOption : styles.inactiveOption,
+                ]}
                 activeOpacity={0.7}
               >
                 <Text
-                  className={`text-sm font-medium ${
-                    min === price ? 'text-primary-700' : 'text-neutral-600'
-                  }`}
+                  style={[
+                    styles.optionText,
+                    min === price ? styles.activeText : styles.inactiveText,
+                  ]}
                 >
                   ¥{price.toLocaleString()}
                 </Text>
@@ -82,27 +77,25 @@ export const PriceRangeSlider: React.FC<PriceRangeSliderProps> = ({
 
       {/* Max Price Selection */}
       <View>
-        <Text className="text-sm font-medium text-neutral-700 mb-2">
-          最高価格を選択
-        </Text>
-        <View className="flex-row flex-wrap gap-2">
+        <Text style={styles.sectionTitle}>最高価格を選択</Text>
+        <View style={styles.optionsContainer}>
           {priceOptions
             .filter((price) => price > min)
             .map((price) => (
               <TouchableOpacity
                 key={`max-${price}`}
                 onPress={() => handleMaxChange(price)}
-                className={`px-3 py-2 rounded-full border ${
-                  max === price
-                    ? 'bg-primary-100 border-primary-500'
-                    : 'bg-neutral-50 border-neutral-200'
-                }`}
+                style={[
+                  styles.priceOption,
+                  max === price ? styles.activeOption : styles.inactiveOption,
+                ]}
                 activeOpacity={0.7}
               >
                 <Text
-                  className={`text-sm font-medium ${
-                    max === price ? 'text-primary-700' : 'text-neutral-600'
-                  }`}
+                  style={[
+                    styles.optionText,
+                    max === price ? styles.activeText : styles.inactiveText,
+                  ]}
                 >
                   {price === 10000 ? '¥10,000+' : `¥${price.toLocaleString()}`}
                 </Text>
@@ -113,3 +106,65 @@ export const PriceRangeSlider: React.FC<PriceRangeSliderProps> = ({
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    paddingVertical: 16,
+  },
+  priceDisplay: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 24,
+  },
+  priceItem: {
+    alignItems: 'center',
+  },
+  priceLabel: {
+    fontSize: 14,
+    color: Colors.gray[500],
+    marginBottom: 4,
+  },
+  priceValue: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: Colors.gray[900],
+  },
+  section: {
+    marginBottom: 16,
+  },
+  sectionTitle: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: Colors.gray[700],
+    marginBottom: 8,
+  },
+  optionsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  priceOption: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 20,
+    borderWidth: 1,
+  },
+  activeOption: {
+    backgroundColor: Colors.primary[100],
+    borderColor: Colors.primary[500],
+  },
+  inactiveOption: {
+    backgroundColor: Colors.gray[50],
+    borderColor: Colors.gray[200],
+  },
+  optionText: {
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  activeText: {
+    color: Colors.primary[700],
+  },
+  inactiveText: {
+    color: Colors.gray[600],
+  },
+});

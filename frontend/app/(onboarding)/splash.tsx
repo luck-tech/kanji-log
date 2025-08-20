@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, {
@@ -8,6 +8,7 @@ import Animated, {
   withTiming,
   withSequence,
 } from 'react-native-reanimated';
+import { Colors } from '@/constants/Colors';
 
 export default function SplashScreen() {
   const scale = useSharedValue(0);
@@ -36,14 +37,54 @@ export default function SplashScreen() {
   }));
 
   return (
-    <View className="flex-1 bg-blue-600 justify-center items-center">
-      <Animated.View className="items-center" style={animatedLogoStyle}>
-        <View className="w-24 h-24 rounded-xl bg-blue-700 justify-center items-center mb-6 shadow-lg elevation-8">
+    <View style={styles.container}>
+      <Animated.View style={[styles.logoContainer, animatedLogoStyle]}>
+        <View style={styles.iconWrapper}>
           <Ionicons name="calendar" size={48} color="white" />
         </View>
-        <Text className="text-3xl font-bold text-white mb-2">幹事ナビ</Text>
-        <Text className="text-base text-blue-100 opacity-80">Event Organizer</Text>
+        <Text style={styles.appTitle}>幹事ナビ</Text>
+        <Text style={styles.appSubtitle}>Event Organizer</Text>
       </Animated.View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.primary[600],
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  logoContainer: {
+    alignItems: 'center',
+  },
+  iconWrapper: {
+    width: 96,
+    height: 96,
+    borderRadius: 12,
+    backgroundColor: Colors.primary[700],
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 24,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    elevation: 8,
+  },
+  appTitle: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: Colors.white,
+    marginBottom: 8,
+  },
+  appSubtitle: {
+    fontSize: 16,
+    color: Colors.primary[100],
+    opacity: 0.8,
+  },
+});

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ImageBackground } from 'react-native';
+import { View, Text, ImageBackground, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -11,35 +11,35 @@ export default function WelcomeScreen() {
   };
 
   return (
-    <View className="flex-1">
+    <View style={styles.container}>
       {/* Background Image with Overlay */}
       <ImageBackground
         source={{
           uri: 'https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
         }}
-        className="flex-1"
+        style={styles.backgroundImage}
         resizeMode="cover"
       >
         <LinearGradient
           colors={['rgba(79, 70, 229, 0.8)', 'rgba(99, 102, 241, 0.9)']}
-          className="flex-1"
+          style={styles.gradient}
         >
-          <View className="flex-1 px-6 pt-12 pb-6">
+          <View style={styles.content}>
             {/* Header */}
-            <View className="items-center mb-8">
-              <View className="w-16 h-16 rounded-xl bg-white bg-opacity-20 justify-center items-center mb-4">
+            <View style={styles.header}>
+              <View style={styles.iconContainer}>
                 <Ionicons name="people" size={32} color="white" />
               </View>
-              <Text className="text-xl font-semibold text-white">幹事ナビ</Text>
+              <Text style={styles.appName}>幹事ナビ</Text>
             </View>
 
             {/* Main Content */}
-            <View className="flex-1 justify-center items-center py-8">
-              <Text className="text-4xl font-bold text-white text-center mb-6 leading-11">
+            <View style={styles.mainContent}>
+              <Text style={styles.title}>
                 幹事の負担を
                 {'\n'}劇的に軽減
               </Text>
-              <Text className="text-base text-blue-100 text-center opacity-90 leading-6">
+              <Text style={styles.subtitle}>
                 イベントの企画から開催まで、
                 {'\n'}すべてをスマートに管理できる
                 {'\n'}幹事専用アプリです
@@ -47,18 +47,19 @@ export default function WelcomeScreen() {
             </View>
 
             {/* Call to Action */}
-            <View className="mt-auto">
+            <View style={styles.callToAction}>
               <Button
                 title="はじめる"
                 onPress={handleGetStarted}
                 variant="secondary"
                 size="lg"
                 fullWidth
-                icon={<Ionicons name="arrow-forward" size={20} color="#3b82f6" />}
-                className="bg-white border-white shadow-lg elevation-6"
+                icon={
+                  <Ionicons name="arrow-forward" size={20} color="#3b82f6" />
+                }
                 textStyle={{ color: '#3b82f6', fontWeight: '600' }}
               />
-              <Text className="text-xs text-blue-100 text-center mt-4 opacity-70 leading-4">
+              <Text style={styles.disclaimer}>
                 続行することで、利用規約とプライバシーポリシーに同意したものとみなされます
               </Text>
             </View>
@@ -68,3 +69,71 @@ export default function WelcomeScreen() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  backgroundImage: {
+    flex: 1,
+  },
+  gradient: {
+    flex: 1,
+  },
+  content: {
+    flex: 1,
+    paddingHorizontal: 24,
+    paddingTop: 48,
+    paddingBottom: 24,
+  },
+  header: {
+    alignItems: 'center',
+    marginBottom: 32,
+  },
+  iconContainer: {
+    width: 64,
+    height: 64,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  appName: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: 'white',
+  },
+  mainContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 32,
+  },
+  title: {
+    fontSize: 36,
+    fontWeight: 'bold',
+    color: 'white',
+    textAlign: 'center',
+    marginBottom: 24,
+    lineHeight: 44,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: 'rgba(219, 234, 254, 1)',
+    textAlign: 'center',
+    opacity: 0.9,
+    lineHeight: 24,
+  },
+  callToAction: {
+    marginTop: 'auto',
+  },
+  disclaimer: {
+    fontSize: 12,
+    color: 'rgba(219, 234, 254, 1)',
+    textAlign: 'center',
+    marginTop: 16,
+    opacity: 0.7,
+    lineHeight: 16,
+  },
+});

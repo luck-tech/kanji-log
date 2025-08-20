@@ -6,10 +6,12 @@ import {
   ScrollView,
   TouchableOpacity,
   SafeAreaView,
+  StyleSheet,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Card } from '@/components/common/Card';
 import { Input } from '@/components/common/Input';
+import { Colors } from '@/constants';
 
 export interface ProfileEditData {
   name: string;
@@ -179,34 +181,33 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
       presentationStyle="pageSheet"
       onRequestClose={handleClose}
     >
-      <SafeAreaView className="flex-1 bg-neutral-50">
+      <SafeAreaView style={styles.container}>
         {/* Header */}
-        <View className="px-6 py-4 bg-white border-b border-neutral-200">
-          <View className="flex-row justify-between items-center">
-            <TouchableOpacity onPress={handleClose} className="p-2 -ml-2">
+        <View style={styles.header}>
+          <View style={styles.headerContent}>
+            <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
               <Ionicons name="close" size={24} color="#64748b" />
             </TouchableOpacity>
-            <Text className="text-lg font-bold text-neutral-900">
-              プロフィール編集
-            </Text>
-            <TouchableOpacity onPress={handleSave} className="p-2 -mr-2">
-              <Text className="text-lg font-bold text-primary-600">保存</Text>
+            <Text style={styles.headerTitle}>プロフィール編集</Text>
+            <TouchableOpacity onPress={handleSave} style={styles.closeButton}>
+              <Text style={styles.saveButton}>保存</Text>
             </TouchableOpacity>
           </View>
         </View>
 
-        <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
-          <View className="p-6 gap-6">
+        <ScrollView
+          style={styles.scrollView}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.content}>
             {/* 基本情報 */}
-            <Card variant="elevated" shadow="none" animated={false}>
-              <View className="gap-4">
-                <View className="flex-row items-center gap-3 mb-2">
-                  <View className="w-10 h-10 rounded-2xl bg-blue-100 justify-center items-center">
+            <Card variant="elevated" shadow="none">
+              <View style={styles.cardContent}>
+                <View style={styles.sectionHeader}>
+                  <View style={[styles.iconContainer, styles.primaryIcon]}>
                     <Ionicons name="person" size={20} color="#0284c7" />
                   </View>
-                  <Text className="text-lg font-semibold text-neutral-900">
-                    基本情報
-                  </Text>
+                  <Text style={styles.sectionTitle}>基本情報</Text>
                 </View>
 
                 <Input
@@ -217,27 +218,26 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
                   error={errors.name}
                 />
 
-                <View className="gap-2">
-                  <Text className="text-base font-medium text-neutral-900 mb-2">
-                    性別
-                  </Text>
-                  <View className="flex-row flex-wrap gap-2">
+                <View style={styles.fieldContainer}>
+                  <Text style={styles.label}>性別</Text>
+                  <View style={styles.genreGrid}>
                     {genderOptions.map((option) => (
                       <TouchableOpacity
                         key={option}
                         onPress={() => updateFormData('gender', option)}
-                        className={`px-4 py-2 rounded-xl border ${
+                        style={[
+                          styles.genreChip,
                           formData.gender === option
-                            ? 'bg-primary-100 border-primary-300'
-                            : 'bg-white border-neutral-200'
-                        }`}
+                            ? styles.genreChipSelected
+                            : styles.genreChipUnselected,
+                        ]}
                       >
                         <Text
-                          className={`text-sm font-medium ${
+                          style={
                             formData.gender === option
-                              ? 'text-primary-700'
-                              : 'text-neutral-700'
-                          }`}
+                              ? styles.genreChipTextSelected
+                              : styles.genreChipTextUnselected
+                          }
                         >
                           {option}
                         </Text>
@@ -246,32 +246,31 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
                   </View>
                 </View>
 
-                <View className="gap-2">
-                  <Text className="text-base font-medium text-neutral-900 mb-2">
-                    都道府県
-                  </Text>
+                <View style={styles.fieldContainer}>
+                  <Text style={styles.label}>都道府県</Text>
                   <ScrollView
                     horizontal
                     showsHorizontalScrollIndicator={false}
-                    className="flex-row"
+                    style={styles.horizontalScroll}
                   >
-                    <View className="flex-row gap-2 pr-4">
+                    <View style={styles.horizontalContent}>
                       {prefectureOptions.map((option) => (
                         <TouchableOpacity
                           key={option}
                           onPress={() => updateFormData('prefecture', option)}
-                          className={`px-3 py-2 rounded-xl border ${
+                          style={[
+                            styles.prefectureChip,
                             formData.prefecture === option
-                              ? 'bg-primary-100 border-primary-300'
-                              : 'bg-white border-neutral-200'
-                          }`}
+                              ? styles.genreChipSelected
+                              : styles.genreChipUnselected,
+                          ]}
                         >
                           <Text
-                            className={`text-sm font-medium ${
+                            style={
                               formData.prefecture === option
-                                ? 'text-primary-700'
-                                : 'text-neutral-700'
-                            }`}
+                                ? styles.genreChipTextSelected
+                                : styles.genreChipTextUnselected
+                            }
                           >
                             {option}
                           </Text>
@@ -294,14 +293,12 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
 
             {/* 会社情報 */}
             <Card variant="elevated" shadow="none">
-              <View className="gap-4">
-                <View className="flex-row items-center gap-3 mb-2">
-                  <View className="w-10 h-10 rounded-2xl bg-purple-100 justify-center items-center">
+              <View style={styles.cardContent}>
+                <View style={styles.sectionHeader}>
+                  <View style={[styles.iconContainer, styles.purpleIcon]}>
                     <Ionicons name="business" size={20} color="#7c3aed" />
                   </View>
-                  <Text className="text-lg font-semibold text-neutral-900">
-                    会社情報
-                  </Text>
+                  <Text style={styles.sectionTitle}>会社情報</Text>
                 </View>
 
                 <Input
@@ -330,14 +327,12 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
 
             {/* 連絡先 */}
             <Card variant="elevated" shadow="none">
-              <View className="gap-4">
-                <View className="flex-row items-center gap-3 mb-2">
-                  <View className="w-10 h-10 rounded-2xl bg-green-100 justify-center items-center">
+              <View style={styles.cardContent}>
+                <View style={styles.sectionHeader}>
+                  <View style={[styles.iconContainer, styles.greenIcon]}>
                     <Ionicons name="call" size={20} color="#10b981" />
                   </View>
-                  <Text className="text-lg font-semibold text-neutral-900">
-                    連絡先
-                  </Text>
+                  <Text style={styles.sectionTitle}>連絡先</Text>
                 </View>
 
                 <Input
@@ -353,18 +348,16 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
 
             {/* 希望予算設定 */}
             <Card variant="elevated" shadow="none">
-              <View className="gap-4">
-                <View className="flex-row items-center gap-3 mb-2">
-                  <View className="w-10 h-10 rounded-2xl bg-orange-100 justify-center items-center">
+              <View style={styles.cardContent}>
+                <View style={styles.sectionHeader}>
+                  <View style={[styles.iconContainer, styles.orangeIcon]}>
                     <Ionicons name="wallet" size={20} color="#f59e0b" />
                   </View>
-                  <Text className="text-lg font-semibold text-neutral-900">
-                    希望予算設定
-                  </Text>
+                  <Text style={styles.sectionTitle}>希望予算設定</Text>
                 </View>
 
-                <View className="flex-row gap-3">
-                  <View className="flex-1">
+                <View style={styles.fieldRow}>
+                  <View style={styles.fieldContainer}>
                     <Input
                       label="最小予算 (円)"
                       placeholder="3000"
@@ -378,7 +371,7 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
                       keyboardType="numeric"
                     />
                   </View>
-                  <View className="flex-1">
+                  <View style={styles.fieldContainer}>
                     <Input
                       label="最大予算 (円)"
                       placeholder="5000"
@@ -394,26 +387,22 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
                   </View>
                 </View>
                 {errors.budget && (
-                  <Text className="text-sm text-error-600">
-                    {errors.budget}
-                  </Text>
+                  <Text style={styles.errorText}>{errors.budget}</Text>
                 )}
               </View>
             </Card>
 
             {/* 通知設定 */}
             <Card variant="elevated" shadow="none">
-              <View className="gap-4">
-                <View className="flex-row items-center gap-3 mb-2">
-                  <View className="w-10 h-10 rounded-2xl bg-yellow-100 justify-center items-center">
+              <View style={styles.cardContent}>
+                <View style={styles.sectionHeader}>
+                  <View style={[styles.iconContainer, styles.orangeIcon]}>
                     <Ionicons name="notifications" size={20} color="#f59e0b" />
                   </View>
-                  <Text className="text-lg font-semibold text-neutral-900">
-                    通知設定
-                  </Text>
+                  <Text style={styles.sectionTitle}>通知設定</Text>
                 </View>
 
-                <View className="gap-3">
+                <View style={styles.switchContainer}>
                   <TouchableOpacity
                     onPress={() =>
                       updateFormData(
@@ -421,29 +410,29 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
                         !formData.notifications.eventUpdates
                       )
                     }
-                    className="flex-row justify-between items-center p-3 bg-neutral-50 rounded-xl"
+                    style={styles.switchItem}
                   >
-                    <View className="flex-1">
-                      <Text className="text-base font-medium text-neutral-900">
-                        イベント更新通知
-                      </Text>
-                      <Text className="text-sm text-neutral-600">
+                    <View style={styles.switchContent}>
+                      <Text style={styles.switchTitle}>イベント更新通知</Text>
+                      <Text style={styles.switchDescription}>
                         参加中のイベントの変更をお知らせ
                       </Text>
                     </View>
                     <View
-                      className={`w-12 h-6 rounded-full ${
+                      style={[
+                        styles.switch,
                         formData.notifications.eventUpdates
-                          ? 'bg-primary-600'
-                          : 'bg-neutral-300'
-                      }`}
+                          ? styles.switchActive
+                          : styles.switchInactive,
+                      ]}
                     >
                       <View
-                        className={`w-5 h-5 rounded-full bg-white mt-0.5 ${
+                        style={[
+                          styles.switchThumb,
                           formData.notifications.eventUpdates
-                            ? 'ml-6'
-                            : 'ml-0.5'
-                        }`}
+                            ? styles.switchThumbActive
+                            : styles.switchThumbInactive,
+                        ]}
                       />
                     </View>
                   </TouchableOpacity>
@@ -455,27 +444,29 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
                         !formData.notifications.reminders
                       )
                     }
-                    className="flex-row justify-between items-center p-3 bg-neutral-50 rounded-xl"
+                    style={styles.switchItem}
                   >
-                    <View className="flex-1">
-                      <Text className="text-base font-medium text-neutral-900">
-                        リマインダー通知
-                      </Text>
-                      <Text className="text-sm text-neutral-600">
+                    <View style={styles.switchContent}>
+                      <Text style={styles.switchTitle}>リマインダー通知</Text>
+                      <Text style={styles.switchDescription}>
                         イベント開催前の通知
                       </Text>
                     </View>
                     <View
-                      className={`w-12 h-6 rounded-full ${
+                      style={[
+                        styles.switch,
                         formData.notifications.reminders
-                          ? 'bg-primary-600'
-                          : 'bg-neutral-300'
-                      }`}
+                          ? styles.switchActive
+                          : styles.switchInactive,
+                      ]}
                     >
                       <View
-                        className={`w-5 h-5 rounded-full bg-white mt-0.5 ${
-                          formData.notifications.reminders ? 'ml-6' : 'ml-0.5'
-                        }`}
+                        style={[
+                          styles.switchThumb,
+                          formData.notifications.reminders
+                            ? styles.switchThumbActive
+                            : styles.switchThumbInactive,
+                        ]}
                       />
                     </View>
                   </TouchableOpacity>
@@ -487,27 +478,29 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
                         !formData.notifications.suggestions
                       )
                     }
-                    className="flex-row justify-between items-center p-3 bg-neutral-50 rounded-xl"
+                    style={styles.switchItem}
                   >
-                    <View className="flex-1">
-                      <Text className="text-base font-medium text-neutral-900">
-                        レストラン提案通知
-                      </Text>
-                      <Text className="text-sm text-neutral-600">
+                    <View style={styles.switchContent}>
+                      <Text style={styles.switchTitle}>レストラン提案通知</Text>
+                      <Text style={styles.switchDescription}>
                         新しい店舗の提案をお知らせ
                       </Text>
                     </View>
                     <View
-                      className={`w-12 h-6 rounded-full ${
+                      style={[
+                        styles.switch,
                         formData.notifications.suggestions
-                          ? 'bg-primary-600'
-                          : 'bg-neutral-300'
-                      }`}
+                          ? styles.switchActive
+                          : styles.switchInactive,
+                      ]}
                     >
                       <View
-                        className={`w-5 h-5 rounded-full bg-white mt-0.5 ${
-                          formData.notifications.suggestions ? 'ml-6' : 'ml-0.5'
-                        }`}
+                        style={[
+                          styles.switchThumb,
+                          formData.notifications.suggestions
+                            ? styles.switchThumbActive
+                            : styles.switchThumbInactive,
+                        ]}
                       />
                     </View>
                   </TouchableOpacity>
@@ -519,27 +512,29 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
                         !formData.notifications.follows
                       )
                     }
-                    className="flex-row justify-between items-center p-3 bg-neutral-50 rounded-xl"
+                    style={styles.switchItem}
                   >
-                    <View className="flex-1">
-                      <Text className="text-base font-medium text-neutral-900">
-                        フォロー通知
-                      </Text>
-                      <Text className="text-sm text-neutral-600">
+                    <View style={styles.switchContent}>
+                      <Text style={styles.switchTitle}>フォロー通知</Text>
+                      <Text style={styles.switchDescription}>
                         新しいフォロワーの通知
                       </Text>
                     </View>
                     <View
-                      className={`w-12 h-6 rounded-full ${
+                      style={[
+                        styles.switch,
                         formData.notifications.follows
-                          ? 'bg-primary-600'
-                          : 'bg-neutral-300'
-                      }`}
+                          ? styles.switchActive
+                          : styles.switchInactive,
+                      ]}
                     >
                       <View
-                        className={`w-5 h-5 rounded-full bg-white mt-0.5 ${
-                          formData.notifications.follows ? 'ml-6' : 'ml-0.5'
-                        }`}
+                        style={[
+                          styles.switchThumb,
+                          formData.notifications.follows
+                            ? styles.switchThumbActive
+                            : styles.switchThumbInactive,
+                        ]}
                       />
                     </View>
                   </TouchableOpacity>
@@ -549,21 +544,19 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
 
             {/* プライバシー設定 */}
             <Card variant="elevated" shadow="none">
-              <View className="gap-4">
-                <View className="flex-row items-center gap-3 mb-2">
-                  <View className="w-10 h-10 rounded-2xl bg-purple-100 justify-center items-center">
+              <View style={styles.cardContent}>
+                <View style={styles.sectionHeader}>
+                  <View style={[styles.iconContainer, styles.purpleIcon]}>
                     <Ionicons
                       name="shield-checkmark"
                       size={20}
                       color="#7c3aed"
                     />
                   </View>
-                  <Text className="text-lg font-semibold text-neutral-900">
-                    プライバシー設定
-                  </Text>
+                  <Text style={styles.sectionTitle}>プライバシー設定</Text>
                 </View>
 
-                <View className="gap-3">
+                <View style={styles.switchContainer}>
                   <TouchableOpacity
                     onPress={() =>
                       updateFormData(
@@ -571,27 +564,29 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
                         !formData.privacy.shareRecords
                       )
                     }
-                    className="flex-row justify-between items-center p-3 bg-neutral-50 rounded-xl"
+                    style={styles.switchItem}
                   >
-                    <View className="flex-1">
-                      <Text className="text-base font-medium text-neutral-900">
-                        記録の共有
-                      </Text>
-                      <Text className="text-sm text-neutral-600">
+                    <View style={styles.switchContent}>
+                      <Text style={styles.switchTitle}>記録の共有</Text>
+                      <Text style={styles.switchDescription}>
                         開催記録を他の幹事と共有する
                       </Text>
                     </View>
                     <View
-                      className={`w-12 h-6 rounded-full ${
+                      style={[
+                        styles.switch,
                         formData.privacy.shareRecords
-                          ? 'bg-primary-600'
-                          : 'bg-neutral-300'
-                      }`}
+                          ? styles.switchActive
+                          : styles.switchInactive,
+                      ]}
                     >
                       <View
-                        className={`w-5 h-5 rounded-full bg-white mt-0.5 ${
-                          formData.privacy.shareRecords ? 'ml-6' : 'ml-0.5'
-                        }`}
+                        style={[
+                          styles.switchThumb,
+                          formData.privacy.shareRecords
+                            ? styles.switchThumbActive
+                            : styles.switchThumbInactive,
+                        ]}
                       />
                     </View>
                   </TouchableOpacity>
@@ -603,27 +598,29 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
                         !formData.privacy.useCompanyInfo
                       )
                     }
-                    className="flex-row justify-between items-center p-3 bg-neutral-50 rounded-xl"
+                    style={styles.switchItem}
                   >
-                    <View className="flex-1">
-                      <Text className="text-base font-medium text-neutral-900">
-                        会社情報を利用
-                      </Text>
-                      <Text className="text-sm text-neutral-600">
+                    <View style={styles.switchContent}>
+                      <Text style={styles.switchTitle}>会社情報を利用</Text>
+                      <Text style={styles.switchDescription}>
                         同じ会社の記録を優先表示する
                       </Text>
                     </View>
                     <View
-                      className={`w-12 h-6 rounded-full ${
+                      style={[
+                        styles.switch,
                         formData.privacy.useCompanyInfo
-                          ? 'bg-primary-600'
-                          : 'bg-neutral-300'
-                      }`}
+                          ? styles.switchActive
+                          : styles.switchInactive,
+                      ]}
                     >
                       <View
-                        className={`w-5 h-5 rounded-full bg-white mt-0.5 ${
-                          formData.privacy.useCompanyInfo ? 'ml-6' : 'ml-0.5'
-                        }`}
+                        style={[
+                          styles.switchThumb,
+                          formData.privacy.useCompanyInfo
+                            ? styles.switchThumbActive
+                            : styles.switchThumbInactive,
+                        ]}
                       />
                     </View>
                   </TouchableOpacity>
@@ -636,3 +633,222 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
     </Modal>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.neutral[50],
+  },
+  header: {
+    paddingHorizontal: 24,
+    paddingVertical: 16,
+    backgroundColor: 'white',
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.neutral[200],
+  },
+  headerContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  closeButton: {
+    padding: 8,
+    marginLeft: -8,
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: Colors.neutral[900],
+  },
+  saveButton: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: Colors.primary[600],
+  },
+  scrollView: {
+    flex: 1,
+  },
+  content: {
+    padding: 24,
+    gap: 24,
+  },
+  cardContent: {
+    gap: 16,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  iconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  primaryIcon: {
+    backgroundColor: Colors.primary[100],
+  },
+  orangeIcon: {
+    backgroundColor: Colors.warning[100],
+  },
+  purpleIcon: {
+    backgroundColor: Colors.secondary[100],
+  },
+  greenIcon: {
+    backgroundColor: Colors.success[100],
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: Colors.neutral[900],
+  },
+  fieldRow: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  fieldContainer: {
+    flex: 1,
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: Colors.neutral[700],
+    marginBottom: 8,
+  },
+  pickerContainer: {
+    borderWidth: 1,
+    borderColor: Colors.neutral[300],
+    borderRadius: 12,
+    backgroundColor: 'white',
+  },
+  picker: {
+    height: 48,
+  },
+  switchRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 8,
+  },
+  switchLabel: {
+    fontSize: 16,
+    color: Colors.neutral[900],
+  },
+  rangeContainer: {
+    paddingVertical: 8,
+  },
+  rangeHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  rangeTitle: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: Colors.neutral[900],
+  },
+  rangeValue: {
+    fontSize: 14,
+    color: Colors.primary[600],
+    fontWeight: '600',
+  },
+  genreContainer: {
+    gap: 12,
+  },
+  genreGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  genreChip: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 20,
+    borderWidth: 1,
+  },
+  genreChipSelected: {
+    backgroundColor: Colors.primary[100],
+    borderColor: Colors.primary[300],
+  },
+  genreChipUnselected: {
+    backgroundColor: 'white',
+    borderColor: Colors.neutral[300],
+  },
+  genreChipTextSelected: {
+    color: Colors.primary[700],
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  genreChipTextUnselected: {
+    color: Colors.neutral[600],
+    fontSize: 14,
+  },
+  horizontalScroll: {
+    flexDirection: 'row',
+  },
+  horizontalContent: {
+    flexDirection: 'row',
+    gap: 8,
+    paddingRight: 16,
+  },
+  prefectureChip: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 12,
+    borderWidth: 1,
+  },
+  errorText: {
+    fontSize: 14,
+    color: Colors.error[600],
+  },
+  switchContainer: {
+    gap: 12,
+  },
+  switchItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 12,
+    backgroundColor: Colors.neutral[50],
+    borderRadius: 12,
+  },
+  switchContent: {
+    flex: 1,
+  },
+  switchTitle: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: Colors.neutral[900],
+  },
+  switchDescription: {
+    fontSize: 14,
+    color: Colors.neutral[600],
+  },
+  switch: {
+    width: 48,
+    height: 24,
+    borderRadius: 12,
+  },
+  switchActive: {
+    backgroundColor: Colors.primary[600],
+  },
+  switchInactive: {
+    backgroundColor: Colors.neutral[300],
+  },
+  switchThumb: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: 'white',
+    marginTop: 2,
+  },
+  switchThumbActive: {
+    marginLeft: 24,
+  },
+  switchThumbInactive: {
+    marginLeft: 2,
+  },
+});

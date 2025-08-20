@@ -7,11 +7,14 @@ import {
   ScrollView,
   SafeAreaView,
   Switch,
+  StyleSheet,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Card } from '@/components/common/Card';
 import { Button } from '@/components/common/Button';
 import { Input } from '@/components/common/Input';
+import { Colors } from '@/constants/Colors';
+import { Layout } from '@/constants/Layout';
 
 interface EventLogModalProps {
   isVisible: boolean;
@@ -109,12 +112,12 @@ export const EventLogModal: React.FC<EventLogModalProps> = ({
 
   const renderStars = () => {
     return (
-      <View className="flex-row gap-2">
+      <View style={styles.starsContainer}>
         {[1, 2, 3, 4, 5].map((star) => (
           <TouchableOpacity
             key={star}
             onPress={() => handleRatingSelect(star)}
-            className="p-1"
+            style={styles.starButton}
             activeOpacity={0.7}
           >
             <Ionicons
@@ -147,32 +150,32 @@ export const EventLogModal: React.FC<EventLogModalProps> = ({
       presentationStyle="pageSheet"
       onRequestClose={handleClose}
     >
-      <SafeAreaView className="flex-1 bg-neutral-50">
+      <SafeAreaView style={styles.container}>
         {/* Header */}
-        <View className="px-6 py-4 bg-white border-b border-neutral-200">
-          <View className="flex-row justify-between items-center">
-            <TouchableOpacity onPress={handleClose} className="p-2 -ml-2">
+        <View style={styles.header}>
+          <View style={styles.headerContent}>
+            <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
               <Ionicons name="close" size={24} color="#64748b" />
             </TouchableOpacity>
-            <Text className="text-lg font-bold text-neutral-900">開催記録</Text>
-            <View className="w-10" />
+            <Text style={styles.headerTitle}>開催記録</Text>
+            <View style={styles.headerSpacer} />
           </View>
         </View>
 
-        <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
-          <View className="p-6 gap-6">
+        <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+          <View style={styles.content}>
             {/* イベント情報 */}
-            <Card variant="gradient" shadow="none" animated={false}>
-              <View className="gap-3">
-                <View className="flex-row items-center gap-3">
-                  <View className="w-10 h-10 rounded-2xl bg-white/20 justify-center items-center">
+            <Card variant="gradient" shadow="none">
+              <View style={styles.eventInfoSection}>
+                <View style={styles.eventInfoHeader}>
+                  <View style={styles.eventIcon}>
                     <Ionicons name="checkmark-circle" size={20} color="white" />
                   </View>
-                  <Text className="text-lg font-bold text-white">
+                  <Text style={styles.eventTitle}>
                     {eventTitle}
                   </Text>
                 </View>
-                <Text className="text-white/90">
+                <Text style={styles.eventDescription}>
                   お疲れさまでした！イベントの記録を残して、今後の幹事業務に活かしましょう。
                 </Text>
               </View>
@@ -180,12 +183,12 @@ export const EventLogModal: React.FC<EventLogModalProps> = ({
 
             {/* 店舗情報 */}
             <Card variant="elevated" shadow="none">
-              <View className="gap-4">
-                <View className="flex-row items-center gap-3">
-                  <View className="w-10 h-10 rounded-2xl bg-red-100 justify-center items-center">
+              <View style={styles.section}>
+                <View style={styles.sectionHeader}>
+                  <View style={[styles.sectionIcon, styles.venueIcon]}>
                     <Ionicons name="restaurant" size={20} color="#ef4444" />
                   </View>
-                  <Text className="text-lg font-semibold text-neutral-900">
+                  <Text style={styles.sectionTitle}>
                     店舗情報
                   </Text>
                 </View>
@@ -231,34 +234,33 @@ export const EventLogModal: React.FC<EventLogModalProps> = ({
 
             {/* 評価 */}
             <Card variant="elevated" shadow="none">
-              <View className="gap-4">
-                <View className="flex-row items-center gap-3">
-                  <View className="w-10 h-10 rounded-2xl bg-yellow-100 justify-center items-center">
+              <View style={styles.section}>
+                <View style={styles.sectionHeader}>
+                  <View style={[styles.sectionIcon, styles.ratingIcon]}>
                     <Ionicons name="star" size={20} color="#f59e0b" />
                   </View>
-                  <Text className="text-lg font-semibold text-neutral-900">
+                  <Text style={styles.sectionTitle}>
                     総合評価
                   </Text>
                   {errors.rating && (
-                    <Text className="text-sm text-error-600">*</Text>
+                    <Text style={styles.requiredIndicator}>*</Text>
                   )}
                 </View>
 
-                <View className="items-center gap-3">
+                <View style={styles.ratingSection}>
                   {renderStars()}
                   <Text
-                    className={`text-base font-medium ${
-                      formData.rating > 0
-                        ? 'text-neutral-900'
-                        : 'text-neutral-500'
-                    }`}
+                    style={[
+                      styles.ratingLabel,
+                      formData.rating > 0 ? styles.ratingLabelActive : styles.ratingLabelInactive
+                    ]}
                   >
                     {getRatingLabel(formData.rating)}
                   </Text>
                 </View>
 
                 {errors.rating && (
-                  <Text className="text-sm text-error-600">
+                  <Text style={styles.errorText}>
                     {errors.rating}
                   </Text>
                 )}
@@ -267,12 +269,12 @@ export const EventLogModal: React.FC<EventLogModalProps> = ({
 
             {/* 主観メモ */}
             <Card variant="elevated" shadow="none">
-              <View className="gap-4">
-                <View className="flex-row items-center gap-3">
-                  <View className="w-10 h-10 rounded-2xl bg-blue-100 justify-center items-center">
+              <View style={styles.section}>
+                <View style={styles.sectionHeader}>
+                  <View style={[styles.sectionIcon, styles.notesIcon]}>
                     <Ionicons name="document-text" size={20} color="#0284c7" />
                   </View>
-                  <Text className="text-lg font-semibold text-neutral-900">
+                  <Text style={styles.sectionTitle}>
                     主観メモ
                   </Text>
                 </View>
@@ -287,8 +289,8 @@ export const EventLogModal: React.FC<EventLogModalProps> = ({
                   numberOfLines={4}
                 />
 
-                <View className="p-3 bg-blue-50 rounded-xl">
-                  <Text className="text-sm text-blue-800 leading-5">
+                <View style={styles.memoTip}>
+                  <Text style={styles.memoTipText}>
                     💡 ここに書いたメモは、将来の幹事業務で大変役立ちます。
                     店の雰囲気、スタッフの対応、注意点など、思い出したことを自由に記録してください。
                   </Text>
@@ -298,43 +300,45 @@ export const EventLogModal: React.FC<EventLogModalProps> = ({
 
             {/* 会計情報 */}
             <Card variant="elevated" shadow="none">
-              <View className="gap-4">
-                <View className="flex-row items-center gap-3">
-                  <View className="w-10 h-10 rounded-2xl bg-green-100 justify-center items-center">
+              <View style={styles.section}>
+                <View style={styles.sectionHeader}>
+                  <View style={[styles.sectionIcon, styles.costIcon]}>
                     <Ionicons name="cash" size={20} color="#10b981" />
                   </View>
-                  <Text className="text-lg font-semibold text-neutral-900">
+                  <Text style={styles.sectionTitle}>
                     会計情報
                   </Text>
-                  <Text className="text-sm text-neutral-500">（任意）</Text>
+                  <Text style={styles.optionalLabel}>（任意）</Text>
                 </View>
 
-                <View className="flex-row gap-3">
-                  <Input
-                    label="合計金額"
-                    placeholder="25000"
-                    value={formData.totalCost}
-                    onChangeText={(text) =>
-                      setFormData((prev) => ({ ...prev, totalCost: text }))
-                    }
-                    keyboardType="numeric"
-                    className="flex-1"
-                    error={errors.totalCost}
-                  />
-                  <Input
-                    label="一人あたり"
-                    placeholder="5000"
-                    value={formData.costPerPerson}
-                    onChangeText={(text) =>
-                      setFormData((prev) => ({ ...prev, costPerPerson: text }))
-                    }
-                    keyboardType="numeric"
-                    className="flex-1"
-                    error={errors.costPerPerson}
-                  />
+                <View style={styles.costInputsRow}>
+                  <View style={styles.costInputContainer}>
+                    <Input
+                      label="合計金額"
+                      placeholder="25000"
+                      value={formData.totalCost}
+                      onChangeText={(text) =>
+                        setFormData((prev) => ({ ...prev, totalCost: text }))
+                      }
+                      keyboardType="numeric"
+                      error={errors.totalCost}
+                    />
+                  </View>
+                  <View style={styles.costInputContainer}>
+                    <Input
+                      label="一人あたり"
+                      placeholder="5000"
+                      value={formData.costPerPerson}
+                      onChangeText={(text) =>
+                        setFormData((prev) => ({ ...prev, costPerPerson: text }))
+                      }
+                      keyboardType="numeric"
+                      error={errors.costPerPerson}
+                    />
+                  </View>
                 </View>
 
-                <Text className="text-sm text-neutral-600 leading-5">
+                <Text style={styles.costDescription}>
                   会計情報を記録しておくと、今後の予算設定の参考になります
                 </Text>
               </View>
@@ -342,22 +346,22 @@ export const EventLogModal: React.FC<EventLogModalProps> = ({
 
             {/* 共有設定 */}
             <Card variant="elevated" shadow="none">
-              <View className="gap-4">
-                <View className="flex-row items-center gap-3">
-                  <View className="w-10 h-10 rounded-2xl bg-purple-100 justify-center items-center">
+              <View style={styles.section}>
+                <View style={styles.sectionHeader}>
+                  <View style={[styles.sectionIcon, styles.shareIcon]}>
                     <Ionicons name="share-social" size={20} color="#7c3aed" />
                   </View>
-                  <Text className="text-lg font-semibold text-neutral-900">
+                  <Text style={styles.sectionTitle}>
                     共有設定
                   </Text>
                 </View>
 
-                <View className="flex-row items-center justify-between p-4 bg-purple-50 rounded-xl">
-                  <View className="flex-1 mr-4">
-                    <Text className="text-base font-medium text-purple-900 mb-1">
+                <View style={styles.shareOption}>
+                  <View style={styles.shareOptionContent}>
+                    <Text style={styles.shareOptionTitle}>
                       他の幹事に記録を共有する
                     </Text>
-                    <Text className="text-sm text-purple-700 leading-5">
+                    <Text style={styles.shareOptionDescription}>
                       店舗情報と評価のみ共有されます。メンバー名や主観メモは非公開です。
                     </Text>
                   </View>
@@ -371,14 +375,14 @@ export const EventLogModal: React.FC<EventLogModalProps> = ({
                   />
                 </View>
 
-                <View className="p-3 bg-amber-50 rounded-xl">
-                  <View className="flex-row items-start gap-3">
+                <View style={styles.shareInfo}>
+                  <View style={styles.shareInfoContent}>
                     <Ionicons
                       name="information-circle"
                       size={20}
                       color="#f59e0b"
                     />
-                    <Text className="text-sm text-amber-800 leading-5 flex-1">
+                    <Text style={styles.shareInfoText}>
                       共有することで、他の幹事の記録も閲覧できるようになります。
                       みんなの知見を活用して、より良いお店選びができます。
                     </Text>
@@ -390,7 +394,7 @@ export const EventLogModal: React.FC<EventLogModalProps> = ({
         </ScrollView>
 
         {/* Footer */}
-        <View className="px-6 py-4 bg-white border-t border-neutral-200">
+        <View style={styles.footer}>
           <Button
             title="記録を保存"
             onPress={handleSave}
@@ -405,3 +409,201 @@ export const EventLogModal: React.FC<EventLogModalProps> = ({
     </Modal>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.neutral[50],
+  },
+  header: {
+    paddingHorizontal: Layout.padding.lg,
+    paddingVertical: Layout.padding.md,
+    backgroundColor: Colors.white,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.neutral[200],
+  },
+  headerContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  closeButton: {
+    padding: Layout.spacing.sm,
+    marginLeft: -Layout.spacing.sm,
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: Colors.neutral[900],
+  },
+  headerSpacer: {
+    width: 40,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  content: {
+    padding: Layout.padding.lg,
+    gap: Layout.spacing.lg,
+  },
+  eventInfoSection: {
+    gap: Layout.spacing.sm,
+  },
+  eventInfoHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Layout.spacing.sm,
+  },
+  eventIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: Layout.borderRadius.lg,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  eventTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: Colors.white,
+  },
+  eventDescription: {
+    color: 'rgba(255, 255, 255, 0.9)',
+  },
+  section: {
+    gap: Layout.spacing.md,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Layout.spacing.sm,
+  },
+  sectionIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: Layout.borderRadius.lg,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  venueIcon: {
+    backgroundColor: '#fee2e2',
+  },
+  ratingIcon: {
+    backgroundColor: '#fef3c7',
+  },
+  notesIcon: {
+    backgroundColor: Colors.primary[100],
+  },
+  costIcon: {
+    backgroundColor: Colors.success[100],
+  },
+  shareIcon: {
+    backgroundColor: '#f3e8ff',
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: Colors.neutral[900],
+  },
+  requiredIndicator: {
+    fontSize: 14,
+    color: Colors.error[600],
+  },
+  optionalLabel: {
+    fontSize: 14,
+    color: Colors.neutral[500],
+  },
+  starsContainer: {
+    flexDirection: 'row',
+    gap: Layout.spacing.sm,
+  },
+  starButton: {
+    padding: Layout.spacing.xs,
+  },
+  ratingSection: {
+    alignItems: 'center',
+    gap: Layout.spacing.sm,
+  },
+  ratingLabel: {
+    fontSize: 16,
+    fontWeight: '500',
+  },
+  ratingLabelActive: {
+    color: Colors.neutral[900],
+  },
+  ratingLabelInactive: {
+    color: Colors.neutral[500],
+  },
+  errorText: {
+    fontSize: 14,
+    color: Colors.error[600],
+  },
+  memoTip: {
+    padding: Layout.spacing.sm,
+    backgroundColor: Colors.primary[50],
+    borderRadius: Layout.borderRadius.md,
+  },
+  memoTipText: {
+    fontSize: 14,
+    color: Colors.primary[800],
+    lineHeight: 20,
+  },
+  costInputsRow: {
+    flexDirection: 'row',
+    gap: Layout.spacing.sm,
+  },
+  costInputContainer: {
+    flex: 1,
+  },
+  costDescription: {
+    fontSize: 14,
+    color: Colors.neutral[600],
+    lineHeight: 20,
+  },
+  shareOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: Layout.spacing.md,
+    backgroundColor: '#f9f5ff',
+    borderRadius: Layout.borderRadius.md,
+  },
+  shareOptionContent: {
+    flex: 1,
+    marginRight: Layout.spacing.md,
+  },
+  shareOptionTitle: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#581c87',
+    marginBottom: Layout.spacing.xs,
+  },
+  shareOptionDescription: {
+    fontSize: 14,
+    color: '#7c3aed',
+    lineHeight: 20,
+  },
+  shareInfo: {
+    padding: Layout.spacing.sm,
+    backgroundColor: '#fffbeb',
+    borderRadius: Layout.borderRadius.md,
+  },
+  shareInfoContent: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: Layout.spacing.sm,
+  },
+  shareInfoText: {
+    fontSize: 14,
+    color: '#92400e',
+    lineHeight: 20,
+    flex: 1,
+  },
+  footer: {
+    paddingHorizontal: Layout.padding.lg,
+    paddingVertical: Layout.padding.md,
+    backgroundColor: Colors.white,
+    borderTopWidth: 1,
+    borderTopColor: Colors.neutral[200],
+  },
+});

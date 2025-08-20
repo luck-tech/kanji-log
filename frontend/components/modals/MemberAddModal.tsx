@@ -7,11 +7,13 @@ import {
   ScrollView,
   SafeAreaView,
   Alert,
+  StyleSheet,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Card } from '@/components/common/Card';
 import { Button } from '@/components/common/Button';
 import { Input } from '@/components/common/Input';
+import { Colors } from '@/constants/Colors';
 
 interface MemberAddModalProps {
   isVisible: boolean;
@@ -82,34 +84,34 @@ export const MemberAddModal: React.FC<MemberAddModalProps> = ({
       presentationStyle="pageSheet"
       onRequestClose={handleClose}
     >
-      <SafeAreaView className="flex-1 bg-neutral-50">
+      <SafeAreaView style={styles.container}>
         {/* Header */}
-        <View className="px-6 py-4 bg-white border-b border-neutral-200">
-          <View className="flex-row justify-between items-center">
-            <TouchableOpacity onPress={handleClose} className="p-2 -ml-2">
-              <Ionicons name="close" size={24} color="#64748b" />
+        <View style={styles.header}>
+          <View style={styles.headerContent}>
+            <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
+              <Ionicons name="close" size={24} color={Colors.neutral[500]} />
             </TouchableOpacity>
-            <Text className="text-lg font-bold text-neutral-900">
+            <Text style={styles.headerTitle}>
               メンバー追加
             </Text>
-            <View className="w-10" />
+            <View style={styles.spacer} />
           </View>
         </View>
 
-        <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
-          <View className="p-6 gap-6">
+        <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+          <View style={styles.content}>
             {/* 説明 */}
             <Card variant="elevated" shadow="none">
-              <View className="gap-3">
-                <View className="flex-row items-center gap-3">
-                  <View className="w-10 h-10 rounded-2xl bg-blue-100 justify-center items-center">
-                    <Ionicons name="person-add" size={20} color="#0284c7" />
+              <View style={styles.cardContent}>
+                <View style={styles.sectionHeader}>
+                  <View style={[styles.sectionIcon, styles.primaryIcon]}>
+                    <Ionicons name="person-add" size={20} color={Colors.primary[600]} />
                   </View>
-                  <Text className="text-lg font-bold text-neutral-900">
+                  <Text style={styles.sectionTitle}>
                     新しいメンバー
                   </Text>
                 </View>
-                <Text className="text-neutral-700 leading-6">
+                <Text style={styles.description}>
                   飲み会に参加予定のメンバーの情報を入力してください。
                   今後のイベントでも簡単に招待できるようになります。
                 </Text>
@@ -118,12 +120,12 @@ export const MemberAddModal: React.FC<MemberAddModalProps> = ({
 
             {/* 基本情報 */}
             <Card variant="elevated" shadow="none">
-              <View className="gap-4">
-                <View className="flex-row items-center gap-3">
-                  <View className="w-10 h-10 rounded-2xl bg-blue-100 justify-center items-center">
-                    <Ionicons name="person" size={20} color="#0284c7" />
+              <View style={styles.cardContent}>
+                <View style={styles.sectionHeader}>
+                  <View style={[styles.sectionIcon, styles.primaryIcon]}>
+                    <Ionicons name="person" size={20} color={Colors.primary[600]} />
                   </View>
-                  <Text className="text-lg font-semibold text-neutral-900">
+                  <Text style={styles.sectionTitle}>
                     基本情報
                   </Text>
                 </View>
@@ -152,15 +154,15 @@ export const MemberAddModal: React.FC<MemberAddModalProps> = ({
 
             {/* 補足情報 */}
             <Card variant="elevated" shadow="none">
-              <View className="gap-4">
-                <View className="flex-row items-center gap-3">
-                  <View className="w-10 h-10 rounded-2xl bg-green-100 justify-center items-center">
-                    <Ionicons name="document-text" size={20} color="#10b981" />
+              <View style={styles.cardContent}>
+                <View style={styles.sectionHeader}>
+                  <View style={[styles.sectionIcon, styles.successIcon]}>
+                    <Ionicons name="document-text" size={20} color={Colors.success[600]} />
                   </View>
-                  <Text className="text-lg font-semibold text-neutral-900">
+                  <Text style={styles.sectionTitle}>
                     補足情報
                   </Text>
-                  <Text className="text-sm text-neutral-500">（任意）</Text>
+                  <Text style={styles.optionalLabel}>（任意）</Text>
                 </View>
 
                 <Input
@@ -174,14 +176,14 @@ export const MemberAddModal: React.FC<MemberAddModalProps> = ({
                   numberOfLines={3}
                 />
 
-                <View className="p-3 bg-amber-50 rounded-xl">
-                  <View className="flex-row items-start gap-3">
+                <View style={styles.infoAlert}>
+                  <View style={styles.infoContent}>
                     <Ionicons
                       name="information-circle"
                       size={20}
-                      color="#f59e0b"
+                      color={Colors.warning[500]}
                     />
-                    <Text className="text-sm text-amber-800 leading-5 flex-1">
+                    <Text style={styles.infoText}>
                       ここに入力した情報は、Webフォーム作成時の参考情報として活用されます。
                       詳細な好みやアレルギー情報は、実際のWebフォームで収集します。
                     </Text>
@@ -192,22 +194,22 @@ export const MemberAddModal: React.FC<MemberAddModalProps> = ({
 
             {/* プライバシー情報 */}
             <Card variant="elevated" shadow="none">
-              <View className="gap-3">
-                <View className="flex-row items-center gap-3">
-                  <View className="w-10 h-10 rounded-2xl bg-purple-100 justify-center items-center">
+              <View style={styles.cardContent}>
+                <View style={styles.sectionHeader}>
+                  <View style={[styles.sectionIcon, styles.accentIcon]}>
                     <Ionicons
                       name="shield-checkmark"
                       size={20}
-                      color="#7c3aed"
+                      color={Colors.accent[600]}
                     />
                   </View>
-                  <Text className="text-lg font-semibold text-neutral-900">
+                  <Text style={styles.sectionTitle}>
                     プライバシー
                   </Text>
                 </View>
 
-                <View className="p-3 bg-purple-50 rounded-xl">
-                  <Text className="text-sm text-purple-800 leading-5">
+                <View style={styles.privacyAlert}>
+                  <Text style={styles.privacyText}>
                     • メンバー情報は幹事のアプリ内でのみ管理されます{'\n'}•
                     他の幹事や第三者に共有されることはありません{'\n'}•
                     Webフォーム回答時も個人情報は適切に保護されます
@@ -219,7 +221,7 @@ export const MemberAddModal: React.FC<MemberAddModalProps> = ({
         </ScrollView>
 
         {/* Footer */}
-        <View className="px-6 py-4 bg-white border-t border-neutral-200">
+        <View style={styles.footer}>
           <Button
             title="メンバーを追加"
             onPress={handleAdd}
@@ -234,3 +236,111 @@ export const MemberAddModal: React.FC<MemberAddModalProps> = ({
     </Modal>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.neutral[50],
+  },
+  header: {
+    paddingHorizontal: 24,
+    paddingVertical: 16,
+    backgroundColor: Colors.white,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.neutral[200],
+  },
+  headerContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  closeButton: {
+    padding: 8,
+    marginLeft: -8,
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: Colors.neutral[900],
+  },
+  spacer: {
+    width: 40,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  content: {
+    padding: 24,
+    gap: 24,
+  },
+  cardContent: {
+    gap: 16,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  sectionIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  primaryIcon: {
+    backgroundColor: Colors.primary[100],
+  },
+  successIcon: {
+    backgroundColor: Colors.success[100],
+  },
+  accentIcon: {
+    backgroundColor: Colors.accent[100],
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: Colors.neutral[900],
+  },
+  optionalLabel: {
+    fontSize: 14,
+    color: Colors.neutral[500],
+  },
+  description: {
+    color: Colors.neutral[700],
+    lineHeight: 24,
+  },
+  infoAlert: {
+    padding: 12,
+    backgroundColor: Colors.warning[50],
+    borderRadius: 12,
+  },
+  infoContent: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 12,
+  },
+  infoText: {
+    fontSize: 14,
+    color: Colors.warning[800],
+    lineHeight: 20,
+    flex: 1,
+  },
+  privacyAlert: {
+    padding: 12,
+    backgroundColor: Colors.accent[50],
+    borderRadius: 12,
+  },
+  privacyText: {
+    fontSize: 14,
+    color: Colors.accent[800],
+    lineHeight: 20,
+  },
+  footer: {
+    paddingHorizontal: 24,
+    paddingVertical: 16,
+    backgroundColor: Colors.white,
+    borderTopWidth: 1,
+    borderTopColor: Colors.neutral[200],
+  },
+});

@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   Alert,
   Share,
+  StyleSheet,
 } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -14,6 +15,7 @@ import { Card } from '@/components/common/Card';
 import { Button } from '@/components/common/Button';
 import { Header } from '@/components/common/Header';
 import { Input } from '@/components/common/Input';
+import { Colors } from '@/constants';
 
 interface NewMember {
   id: string;
@@ -187,8 +189,8 @@ export default function FormSetupScreen() {
   const enabledQuestionCount = questions.filter((q) => q.enabled).length;
 
   return (
-    <View className="flex-1 bg-neutral-50">
-      <SafeAreaView className="flex-1">
+    <View style={styles.container}>
+      <SafeAreaView style={styles.safeArea}>
         <Header
           title="Webフォーム作成"
           subtitle="新規参加者向け情報収集フォーム"
@@ -197,40 +199,42 @@ export default function FormSetupScreen() {
           onLeftPress={handleBackPress}
         />
 
-        <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
-          <View className="p-6 gap-6">
+        <ScrollView
+          style={styles.scrollView}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.content}>
             {/* 新規参加者追加 */}
-            <Card variant="elevated" shadow="none" animated={false}>
-              <View className="gap-4">
-                <View className="flex-row items-center gap-3">
-                  <View className="w-10 h-10 rounded-2xl bg-blue-100 justify-center items-center">
-                    <Ionicons name="person-add" size={20} color="#0284c7" />
+            <Card variant="elevated" shadow="none">
+              <View style={styles.cardContent}>
+                <View style={styles.sectionHeader}>
+                  <View style={styles.iconContainer}>
+                    <Ionicons name="person-add" size={20} color={Colors.primary[600]} />
                   </View>
-                  <Text className="text-lg font-semibold text-neutral-900">
-                    新規参加者を追加
-                  </Text>
-                  <View className="bg-primary-100 rounded-full px-2 py-1">
-                    <Text className="text-xs font-bold text-primary-700">
-                      {newMembers.length}名追加済み
+                  <Text style={styles.sectionTitle}>新規参加者を追加</Text>
+                  <View style={styles.badge}>
+                    <Text style={styles.badgeText}>
+                      {newMembers.length}人
                     </Text>
                   </View>
                 </View>
 
-                <Text className="text-sm text-neutral-600 leading-5">
+                <Text style={styles.description}>
                   フォームで回答を収集する新規参加者の名前を事前に登録できます（任意）
                 </Text>
 
                 {/* 名前入力 */}
-                <View className="flex-row gap-3">
-                  <Input
-                    placeholder="新規参加者の名前"
-                    value={newMemberName}
-                    onChangeText={setNewMemberName}
-                    className="flex-1"
-                  />
+                <View style={styles.inputRow}>
+                  <View style={styles.inputContainer}>
+                    <Input
+                      placeholder="新規参加者の名前"
+                      value={newMemberName}
+                      onChangeText={setNewMemberName}
+                    />
+                  </View>
                   <TouchableOpacity
                     onPress={addNewMember}
-                    className="w-12 h-12 rounded-2xl bg-blue-600 justify-center items-center"
+                    style={styles.addButton}
                     activeOpacity={0.8}
                   >
                     <Ionicons name="add" size={20} color="white" />
@@ -239,31 +243,27 @@ export default function FormSetupScreen() {
 
                 {/* 追加済みメンバー一覧 */}
                 {newMembers.length > 0 && (
-                  <View className="gap-2">
-                    <Text className="text-sm font-medium text-neutral-700">
-                      追加済みメンバー:
+                  <View style={styles.memberList}>
+                    <Text style={styles.memberListTitle}>
+                      追加予定のメンバー ({newMembers.length}人)
                     </Text>
                     {newMembers.map((member) => (
-                      <View
-                        key={member.id}
-                        className="flex-row items-center gap-3 p-3 bg-blue-50 rounded-xl border border-blue-200"
-                      >
-                        <View className="w-8 h-8 rounded-xl bg-blue-100 justify-center items-center">
-                          <Text className="text-sm font-bold text-blue-700">
+                      <View key={member.id} style={styles.memberItem}>
+                        <View style={styles.memberAvatar}>
+                          <Text style={styles.memberAvatarText}>
                             {member.name.charAt(0)}
                           </Text>
                         </View>
-                        <Text className="flex-1 text-base font-medium text-blue-900">
-                          {member.name}
-                        </Text>
+                        <Text style={styles.memberName}>{member.name}</Text>
                         <TouchableOpacity
                           onPress={() => removeNewMember(member.id)}
-                          className="p-1"
+                          style={styles.deleteButton}
+                          activeOpacity={0.7}
                         >
                           <Ionicons
-                            name="trash-outline"
-                            size={16}
-                            color="#ef4444"
+                            name="close-circle"
+                            size={20}
+                            color={Colors.error[500]}
                           />
                         </TouchableOpacity>
                       </View>
@@ -274,46 +274,43 @@ export default function FormSetupScreen() {
             </Card>
 
             {/* 質問項目設定 */}
-            <Card variant="elevated" shadow="none" animated={false}>
-              <View className="gap-4">
-                <View className="flex-row items-center gap-3">
-                  <View className="w-10 h-10 rounded-2xl bg-orange-100 justify-center items-center">
-                    <Ionicons name="help-circle" size={20} color="#f59e0b" />
+            <Card variant="elevated" shadow="none">
+              <View style={styles.cardContent}>
+                <View style={styles.sectionHeader}>
+                  <View style={styles.questionIconContainer}>
+                    <Ionicons name="help-circle" size={20} color={Colors.warning[500]} />
                   </View>
-                  <Text className="text-lg font-semibold text-neutral-900">
+                  <Text style={styles.sectionTitle}>
                     質問項目設定
                   </Text>
-                  <View className="bg-orange-100 rounded-full px-2 py-1">
-                    <Text className="text-xs font-bold text-orange-700">
+                  <View style={styles.questionBadge}>
+                    <Text style={styles.questionBadgeText}>
                       {enabledQuestionCount}項目有効
                     </Text>
                   </View>
                 </View>
 
-                <Text className="text-sm text-neutral-600 leading-5">
+                <Text style={styles.description}>
                   新規参加者に聞きたい質問を選択してください
                 </Text>
 
-                <View className="gap-3">
+                <View style={styles.questionList}>
                   {questions.map((question) => (
                     <View
                       key={question.id}
-                      className={`p-4 rounded-xl border ${
-                        question.enabled
-                          ? 'border-orange-500 bg-orange-50'
-                          : 'border-neutral-200 bg-white'
-                      }`}
+                      style={[
+                        styles.questionItem,
+                        question.enabled ? styles.questionItemEnabled : styles.questionItemDisabled
+                      ]}
                     >
-                      <View className="flex-row items-center gap-3 mb-3">
+                      <View style={styles.questionHeader}>
                         <TouchableOpacity
                           onPress={() => toggleQuestionEnabled(question.id)}
-                          className={`w-6 h-6 rounded-full border-2 ${
-                            question.enabled
-                              ? 'border-orange-500 bg-orange-500'
-                              : 'border-neutral-300'
-                          } justify-center items-center ${
-                            !question.canDisable ? 'opacity-50' : ''
-                          }`}
+                          style={[
+                            styles.questionToggle,
+                            question.enabled ? styles.questionToggleEnabled : styles.questionToggleDisabled,
+                            !question.canDisable && styles.questionToggleFixed
+                          ]}
                           activeOpacity={question.canDisable ? 0.7 : 1}
                           disabled={!question.canDisable}
                         >
@@ -326,17 +323,16 @@ export default function FormSetupScreen() {
                           )}
                         </TouchableOpacity>
                         <Text
-                          className={`flex-1 text-base font-medium ${
-                            question.enabled
-                              ? 'text-orange-700'
-                              : 'text-neutral-700'
-                          }`}
+                          style={[
+                            styles.questionText,
+                            question.enabled ? styles.questionTextEnabled : styles.questionTextDisabled
+                          ]}
                         >
                           {question.question}
                         </Text>
                         {question.type === 'name' && (
-                          <View className="bg-red-100 rounded-full px-2 py-1">
-                            <Text className="text-xs font-bold text-red-700">
+                          <View style={styles.requiredBadge}>
+                            <Text style={styles.requiredBadgeText}>
                               必須
                             </Text>
                           </View>
@@ -344,12 +340,12 @@ export default function FormSetupScreen() {
                         {question.type === 'custom' && (
                           <TouchableOpacity
                             onPress={() => removeCustomQuestion(question.id)}
-                            className="p-1"
+                            style={styles.deleteIconButton}
                           >
                             <Ionicons
                               name="trash-outline"
                               size={16}
-                              color="#ef4444"
+                              color={Colors.error[500]}
                             />
                           </TouchableOpacity>
                         )}
@@ -357,18 +353,17 @@ export default function FormSetupScreen() {
 
                       {/* 必須・任意設定 */}
                       {question.enabled && question.type !== 'name' && (
-                        <View className="flex-row items-center gap-4 pl-9">
+                        <View style={styles.questionSettings}>
                           <TouchableOpacity
                             onPress={() => toggleQuestionRequired(question.id)}
-                            className="flex-row items-center gap-2"
+                            style={styles.requiredToggle}
                             activeOpacity={0.7}
                           >
                             <View
-                              className={`w-4 h-4 rounded border ${
-                                question.required
-                                  ? 'border-orange-500 bg-orange-500'
-                                  : 'border-neutral-400'
-                              } justify-center items-center`}
+                              style={[
+                                styles.requiredCheckbox,
+                                question.required ? styles.requiredCheckboxChecked : styles.requiredCheckboxUnchecked
+                              ]}
                             >
                               {question.required && (
                                 <Ionicons
@@ -379,11 +374,10 @@ export default function FormSetupScreen() {
                               )}
                             </View>
                             <Text
-                              className={`text-sm ${
-                                question.required
-                                  ? 'text-orange-700 font-medium'
-                                  : 'text-neutral-600'
-                              }`}
+                              style={[
+                                styles.requiredToggleText,
+                                question.required && styles.requiredToggleTextChecked
+                              ]}
                             >
                               必須回答
                             </Text>
@@ -395,20 +389,20 @@ export default function FormSetupScreen() {
                 </View>
 
                 {/* カスタム質問追加 */}
-                <View className="gap-3 pt-4 border-t border-neutral-200">
-                  <Text className="text-base font-semibold text-neutral-900">
+                <View style={styles.customQuestionSection}>
+                  <Text style={styles.customQuestionTitle}>
                     カスタム質問を追加
                   </Text>
-                  <View className="flex-row gap-3">
+                  <View style={styles.inputRow}>
                     <Input
                       placeholder="例：お箸とフォーク、どちらが良いですか？"
                       value={customQuestion}
                       onChangeText={setCustomQuestion}
-                      className="flex-1"
+                      style={styles.customQuestionInput}
                     />
                     <TouchableOpacity
                       onPress={addCustomQuestion}
-                      className="w-12 h-12 rounded-2xl bg-orange-600 justify-center items-center"
+                      style={styles.customQuestionAddButton}
                       activeOpacity={0.8}
                     >
                       <Ionicons name="add" size={20} color="white" />
@@ -432,42 +426,42 @@ export default function FormSetupScreen() {
                 disabled={enabledQuestionCount === 0}
               />
             ) : (
-              <Card variant="elevated" shadow="none" animated={false}>
-                <View className="gap-4">
-                  <View className="flex-row items-center gap-3">
-                    <View className="w-10 h-10 rounded-2xl bg-success-100 justify-center items-center">
+              <Card variant="elevated" shadow="none">
+                <View style={styles.cardContent}>
+                  <View style={styles.sectionHeader}>
+                    <View style={styles.successIconContainer}>
                       <Ionicons
                         name="checkmark-circle"
                         size={20}
-                        color="#10b981"
+                        color={Colors.success[500]}
                       />
                     </View>
-                    <Text className="text-lg font-semibold text-neutral-900">
+                    <Text style={styles.sectionTitle}>
                       フォーム生成完了！
                     </Text>
                   </View>
 
-                  <View className="p-4 bg-neutral-50 rounded-xl">
-                    <Text className="text-sm text-neutral-600 mb-2">
+                  <View style={styles.urlContainer}>
+                    <Text style={styles.urlLabel}>
                       生成されたURL:
                     </Text>
-                    <Text className="text-base font-mono text-neutral-900 leading-6">
+                    <Text style={styles.urlText}>
                       {formUrl}
                     </Text>
                   </View>
 
-                  <View className="flex-row gap-3">
+                  <View style={styles.buttonRow}>
                     <Button
                       title="URLをコピー"
                       onPress={copyToClipboard}
                       variant="outline"
                       size="md"
-                      style={{ flex: 1 }}
+                      style={styles.halfButton}
                       icon={
                         <Ionicons
                           name="copy-outline"
                           size={18}
-                          color="#0284c7"
+                          color={Colors.primary[600]}
                         />
                       }
                     />
@@ -476,7 +470,7 @@ export default function FormSetupScreen() {
                       onPress={shareForm}
                       variant="primary"
                       size="md"
-                      style={{ flex: 1 }}
+                      style={styles.halfButton}
                       icon={
                         <Ionicons
                           name="share-outline"
@@ -487,7 +481,7 @@ export default function FormSetupScreen() {
                     />
                   </View>
 
-                  <Text className="text-sm text-neutral-600 text-center leading-5">
+                  <Text style={styles.urlDescription}>
                     このURLをLINEやSlackで新規参加者に共有してください
                   </Text>
                 </View>
@@ -499,3 +493,291 @@ export default function FormSetupScreen() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.neutral[50],
+  },
+  safeArea: {
+    flex: 1,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  content: {
+    padding: 24,
+    gap: 24,
+  },
+  cardContent: {
+    gap: 16,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  iconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 16,
+    backgroundColor: Colors.primary[100],
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  questionIconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 16,
+    backgroundColor: Colors.warning[100],
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  successIconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 16,
+    backgroundColor: Colors.success[100],
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: Colors.neutral[900],
+  },
+  badge: {
+    backgroundColor: Colors.primary[100],
+    borderRadius: 12,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  badgeText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: Colors.primary[700],
+  },
+  questionBadge: {
+    backgroundColor: Colors.warning[100],
+    borderRadius: 12,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  questionBadgeText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: Colors.warning[700],
+  },
+  description: {
+    fontSize: 14,
+    color: Colors.neutral[600],
+    lineHeight: 20,
+  },
+  inputRow: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  inputContainer: {
+    flex: 1,
+  },
+  addButton: {
+    width: 48,
+    height: 48,
+    borderRadius: 16,
+    backgroundColor: Colors.primary[600],
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  memberList: {
+    gap: 8,
+  },
+  memberListTitle: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: Colors.neutral[700],
+  },
+  memberItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    padding: 12,
+    backgroundColor: Colors.primary[50],
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: Colors.primary[200],
+  },
+  memberAvatar: {
+    width: 32,
+    height: 32,
+    borderRadius: 12,
+    backgroundColor: Colors.primary[100],
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  memberAvatarText: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: Colors.primary[700],
+  },
+  memberName: {
+    flex: 1,
+    fontSize: 16,
+    fontWeight: '500',
+    color: Colors.primary[900],
+  },
+  deleteButton: {
+    padding: 4,
+  },
+  questionList: {
+    gap: 12,
+  },
+  questionItem: {
+    padding: 16,
+    borderRadius: 12,
+    borderWidth: 1,
+  },
+  questionItemEnabled: {
+    borderColor: Colors.warning[500],
+    backgroundColor: Colors.warning[50],
+  },
+  questionItemDisabled: {
+    borderColor: Colors.neutral[200],
+    backgroundColor: Colors.white,
+  },
+  questionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    marginBottom: 12,
+  },
+  questionToggle: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    borderWidth: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  questionToggleEnabled: {
+    borderColor: Colors.warning[500],
+    backgroundColor: Colors.warning[500],
+  },
+  questionToggleDisabled: {
+    borderColor: Colors.neutral[300],
+    backgroundColor: Colors.transparent,
+  },
+  questionToggleFixed: {
+    opacity: 0.5,
+  },
+  questionText: {
+    flex: 1,
+    fontSize: 16,
+    fontWeight: '500',
+  },
+  questionTextEnabled: {
+    color: Colors.warning[700],
+  },
+  questionTextDisabled: {
+    color: Colors.neutral[700],
+  },
+  requiredBadge: {
+    backgroundColor: Colors.error[100],
+    borderRadius: 12,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  requiredBadgeText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: Colors.error[700],
+  },
+  deleteIconButton: {
+    padding: 4,
+  },
+  questionSettings: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
+    paddingLeft: 36,
+  },
+  requiredToggle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  requiredCheckbox: {
+    width: 16,
+    height: 16,
+    borderRadius: 4,
+    borderWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  requiredCheckboxChecked: {
+    borderColor: Colors.warning[500],
+    backgroundColor: Colors.warning[500],
+  },
+  requiredCheckboxUnchecked: {
+    borderColor: Colors.neutral[400],
+    backgroundColor: Colors.transparent,
+  },
+  requiredToggleText: {
+    fontSize: 14,
+    color: Colors.neutral[600],
+  },
+  requiredToggleTextChecked: {
+    color: Colors.warning[700],
+    fontWeight: '500',
+  },
+  customQuestionSection: {
+    gap: 12,
+    paddingTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: Colors.neutral[200],
+  },
+  customQuestionTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: Colors.neutral[900],
+  },
+  customQuestionInput: {
+    flex: 1,
+  },
+  customQuestionAddButton: {
+    width: 48,
+    height: 48,
+    borderRadius: 16,
+    backgroundColor: Colors.warning[600],
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  urlContainer: {
+    padding: 16,
+    backgroundColor: Colors.neutral[50],
+    borderRadius: 12,
+  },
+  urlLabel: {
+    fontSize: 14,
+    color: Colors.neutral[600],
+    marginBottom: 8,
+  },
+  urlText: {
+    fontSize: 16,
+    fontFamily: 'monospace',
+    color: Colors.neutral[900],
+    lineHeight: 24,
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  halfButton: {
+    flex: 1,
+  },
+  urlDescription: {
+    fontSize: 14,
+    color: Colors.neutral[600],
+    textAlign: 'center',
+    lineHeight: 20,
+  },
+});

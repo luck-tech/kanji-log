@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, Dimensions } from 'react-native';
+import { View, Text, ScrollView, Dimensions, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Button } from '@/components/common/Button';
 import { Card } from '@/components/common/Card';
+import { Colors } from '@/constants/Colors';
 
 const { width } = Dimensions.get('window');
 
@@ -64,10 +65,10 @@ export default function FeaturesScreen() {
   };
 
   return (
-    <View className="flex-1 bg-white">
+    <View style={styles.container}>
       {/* Header */}
-      <View className="flex-row justify-between items-center px-6 pt-12 pb-6">
-        <Text className="text-2xl font-semibold text-gray-900">3つの価値</Text>
+      <View style={styles.header}>
+        <Text style={styles.title}>3つの価値</Text>
         <Button
           title="スキップ"
           onPress={handleSkip}
@@ -83,46 +84,45 @@ export default function FeaturesScreen() {
         showsHorizontalScrollIndicator={false}
         onScroll={handleScroll}
         scrollEventThrottle={16}
-        className="flex-row"
+        style={styles.scrollView}
       >
         {features.map((feature, index) => (
-          <View
-            key={feature.id}
-            className="px-6 items-center justify-center"
-            style={{ width }}
-          >
+          <View key={feature.id} style={[styles.featureContainer, { width }]}>
             <Card
-              className="w-40 h-40 justify-center items-center mb-8"
-              style={{ backgroundColor: feature.color }}
+              style={{
+                backgroundColor: feature.color,
+                width: 160,
+                height: 160,
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginBottom: 32,
+              }}
               shadow="none"
             >
-              <View className="p-6">{feature.icon}</View>
+              <View style={{ padding: 24 }}>{feature.icon}</View>
             </Card>
 
-            <Text className="text-2xl font-semibold text-gray-900 mb-4 text-center">
-              {feature.title}
-            </Text>
-            <Text className="text-base text-gray-600 text-center leading-6 px-4">
-              {feature.description}
-            </Text>
+            <Text style={styles.featureTitle}>{feature.title}</Text>
+            <Text style={styles.featureDescription}>{feature.description}</Text>
           </View>
         ))}
       </ScrollView>
 
       {/* Pagination Dots */}
-      <View className="flex-row justify-center items-center my-8">
+      <View style={styles.pagination}>
         {features.map((_, index) => (
           <View
             key={index}
-            className={`w-2 h-2 rounded-full mx-1 ${
-              index === currentIndex ? 'bg-blue-600' : 'bg-gray-300'
-            }`}
+            style={[
+              styles.dot,
+              index === currentIndex ? styles.activeDot : styles.inactiveDot,
+            ]}
           />
         ))}
       </View>
 
       {/* Navigation */}
-      <View className="px-6 pb-6 mt-auto">
+      <View style={styles.navigation}>
         <Button
           title={currentIndex === features.length - 1 ? 'はじめる' : '次へ'}
           onPress={handleNext}
@@ -134,3 +134,68 @@ export default function FeaturesScreen() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.white,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 24,
+    paddingTop: 48,
+    paddingBottom: 24,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: '600',
+    color: Colors.gray[900],
+  },
+  scrollView: {
+    flexDirection: 'row',
+  },
+  featureContainer: {
+    paddingHorizontal: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  featureTitle: {
+    fontSize: 24,
+    fontWeight: '600',
+    color: Colors.gray[900],
+    marginBottom: 16,
+    textAlign: 'center',
+  },
+  featureDescription: {
+    fontSize: 16,
+    color: Colors.gray[600],
+    textAlign: 'center',
+    lineHeight: 24,
+    paddingHorizontal: 16,
+  },
+  pagination: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 32,
+  },
+  dot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    marginHorizontal: 4,
+  },
+  activeDot: {
+    backgroundColor: Colors.primary[600],
+  },
+  inactiveDot: {
+    backgroundColor: Colors.gray[300],
+  },
+  navigation: {
+    paddingHorizontal: 24,
+    paddingBottom: 24,
+    marginTop: 'auto',
+  },
+});

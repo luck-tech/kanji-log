@@ -6,8 +6,10 @@ import {
   ViewStyle,
   TextStyle,
   View,
+  StyleSheet,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Colors } from '@/constants';
 
 interface ButtonProps {
   title?: string;
@@ -20,7 +22,6 @@ interface ButtonProps {
   textStyle?: TextStyle;
   icon?: React.ReactNode;
   fullWidth?: boolean;
-  className?: string;
   hapticFeedback?: boolean;
 }
 
@@ -35,97 +36,47 @@ export const Button: React.FC<ButtonProps> = ({
   textStyle,
   icon,
   fullWidth = false,
-  className,
   hapticFeedback = true,
 }) => {
-  // Base Tailwind classes with modern styling
-  const baseClasses = 'rounded-2xl flex-row items-center justify-center';
-
-  // Size classes with improved proportions
-  const sizeClasses = {
-    sm: 'px-4 py-2.5 min-h-10',
-    md: 'px-6 py-3.5 min-h-12',
-    lg: 'px-8 py-4 min-h-14',
-    xl: 'px-10 py-5 min-h-16',
-  };
-
-  // Enhanced variant classes
-  const variantClasses = {
-    primary: 'bg-primary-600 border-0',
-    secondary: 'bg-neutral-100 border-0',
-    outline: 'bg-transparent border-2 border-primary-600',
-    ghost: 'bg-transparent border-0',
-    gradient: 'border-0',
-  };
-
-  // Text color classes
-  const textColorClasses = {
-    primary: 'text-white',
-    secondary: 'text-neutral-700',
-    outline: 'text-primary-600',
-    ghost: 'text-primary-600',
-    gradient: 'text-white',
-  };
-
-  // Text size classes
-  const textSizeClasses = {
-    sm: 'text-sm',
-    md: 'text-base',
-    lg: 'text-lg',
-    xl: 'text-xl',
-  };
-
-  // Active state styles
-  const activeOpacity = disabled || loading ? 1 : 0.85;
-
-  // Combine classes
-  const buttonClasses = [
-    baseClasses,
-    sizeClasses[size],
-    variant !== 'gradient' && variantClasses[variant],
-    fullWidth && 'w-full',
-    (disabled || loading) && 'opacity-50',
-    className,
-  ]
-    .filter(Boolean)
-    .join(' ');
-
-  const textClasses = [
-    'font-semibold tracking-wide',
-    textSizeClasses[size],
-    textColorClasses[variant],
-    icon && title && 'ml-2',
-  ]
-    .filter(Boolean)
-    .join(' ');
-
   const handlePress = () => {
-    if (
-      hapticFeedback &&
-      typeof navigator !== 'undefined' &&
-      navigator.vibrate
-    ) {
-      navigator.vibrate(10); // Light haptic feedback
+    if (hapticFeedback && typeof navigator !== 'undefined' && navigator.vibrate) {
+      navigator.vibrate(10);
     }
     onPress();
   };
+
+  const buttonStyles = [
+    styles.base,
+    styles[variant],
+    styles[`size_${size}`],
+    fullWidth && styles.fullWidth,
+    (disabled || loading) && styles.disabled,
+    style,
+  ];
+
+  const textStyles = [
+    styles.text,
+    styles[`text_${variant}`],
+    styles[`textSize_${size}`],
+    textStyle,
+  ];
 
   const ButtonContent = () => (
     <>
       {loading && (
         <ActivityIndicator
           size="small"
-          color={
-            variant === 'primary' || variant === 'gradient'
-              ? '#ffffff'
-              : '#0284c7'
-          }
+          color={variant === 'primary' || variant === 'gradient' ? Colors.white : Colors.primary[600]}
           style={icon || title ? { marginRight: 8 } : {}}
         />
       )}
-      {icon && !loading && <View className={title ? 'mr-2' : ''}>{icon}</View>}
+      {icon && !loading && (
+        <View style={title ? { marginRight: 8 } : {}}>
+          {icon}
+        </View>
+      )}
       {title && (
-        <Text className={textClasses} style={textStyle}>
+        <Text style={textStyles}>
           {title}
         </Text>
       )}
@@ -135,16 +86,16 @@ export const Button: React.FC<ButtonProps> = ({
   if (variant === 'gradient') {
     return (
       <TouchableOpacity
+        style={[styles.base, fullWidth && styles.fullWidth, style]}
         onPress={handlePress}
         disabled={disabled || loading}
-        activeOpacity={activeOpacity}
-        style={style}
+        activeOpacity={disabled || loading ? 1 : 0.85}
       >
         <LinearGradient
-          colors={['#0ea5e9', '#0284c7']}
+          colors={[Colors.primary[500], Colors.primary[600]]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
-          className={buttonClasses}
+          style={[styles.gradient, styles[`size_${size}`]]}
         >
           <ButtonContent />
         </LinearGradient>
@@ -154,13 +105,109 @@ export const Button: React.FC<ButtonProps> = ({
 
   return (
     <TouchableOpacity
-      className={buttonClasses}
-      style={style}
+      style={buttonStyles}
       onPress={handlePress}
       disabled={disabled || loading}
-      activeOpacity={activeOpacity}
+      activeOpacity={disabled || loading ? 1 : 0.85}
     >
       <ButtonContent />
     </TouchableOpacity>
   );
 };
+
+const styles = StyleSheet.create({
+  base: {
+    borderRadius: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  
+  // Variants
+  primary: {
+    backgroundColor: Colors.primary[600],
+  },
+  secondary: {
+    backgroundColor: Colors.neutral[100],
+  },
+  outline: {
+    backgroundColor: Colors.transparent,
+    borderWidth: 2,
+    borderColor: Colors.primary[600],
+  },
+  ghost: {
+    backgroundColor: Colors.transparent,
+  },
+  gradient: {
+    backgroundColor: Colors.transparent,
+    borderRadius: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  
+  // Sizes
+  size_sm: {
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    minHeight: 40,
+  },
+  size_md: {
+    paddingHorizontal: 24,
+    paddingVertical: 14,
+    minHeight: 48,
+  },
+  size_lg: {
+    paddingHorizontal: 32,
+    paddingVertical: 16,
+    minHeight: 56,
+  },
+  size_xl: {
+    paddingHorizontal: 40,
+    paddingVertical: 20,
+    minHeight: 64,
+  },
+  
+  // States
+  fullWidth: {
+    width: '100%',
+  },
+  disabled: {
+    opacity: 0.5,
+  },
+  
+  // Text styles
+  text: {
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+  text_primary: {
+    color: Colors.white,
+  },
+  text_secondary: {
+    color: Colors.neutral[700],
+  },
+  text_outline: {
+    color: Colors.primary[600],
+  },
+  text_ghost: {
+    color: Colors.primary[600],
+  },
+  text_gradient: {
+    color: Colors.white,
+  },
+  
+  // Text sizes
+  textSize_sm: {
+    fontSize: 14,
+  },
+  textSize_md: {
+    fontSize: 16,
+  },
+  textSize_lg: {
+    fontSize: 18,
+  },
+  textSize_xl: {
+    fontSize: 20,
+  },
+});

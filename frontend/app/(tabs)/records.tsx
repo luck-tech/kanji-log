@@ -5,6 +5,7 @@ import {
   ScrollView,
   TouchableOpacity,
   SafeAreaView,
+  StyleSheet,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -15,6 +16,7 @@ import { FilterModal, FilterOptions } from '@/components/common/FilterModal';
 import { ActiveFilters } from '@/components/common/ActiveFilters';
 import { SharedRecord, EventPurpose } from '@/types';
 import { RecordDetailModal } from '@/components/modals';
+import { Colors } from '@/constants';
 
 // Extended SharedRecord type for additional features
 interface ExtendedSharedRecord extends SharedRecord {
@@ -359,20 +361,20 @@ export default function RecordsScreen() {
       );
     }
 
-    return <View className="flex-row gap-0.5">{stars}</View>;
+    return <View style={styles.starsContainer}>{stars}</View>;
   };
 
   return (
-    <View className="flex-1">
+    <View style={styles.container}>
       {/* Background */}
       <LinearGradient
         colors={['#f8fafc', '#f1f5f9']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
-        className="absolute inset-0"
+        style={styles.background}
       />
 
-      <SafeAreaView className="flex-1">
+      <SafeAreaView style={styles.safeArea}>
         <Header
           title="みんなの記録"
           subtitle="他の幹事が共有した貴重な経験とナレッジ"
@@ -382,78 +384,73 @@ export default function RecordsScreen() {
         {!hasSharedRecord ? (
           /* Unlock Screen */
           <ScrollView
-            className="flex-1 px-6"
-            contentContainerStyle={{ paddingTop: 40, paddingBottom: 120 }}
+            style={styles.unlockScrollView}
+            contentContainerStyle={styles.unlockContent}
             showsVerticalScrollIndicator={false}
           >
-            <View className="items-center">
+            <View style={styles.unlockCenter}>
               <LinearGradient
                 colors={['#f59e0b', '#d97706']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
-                className="w-24 h-24 rounded-3xl justify-center items-center mb-8"
+                style={styles.lockIcon}
               >
                 <Ionicons name="lock-closed" size={48} color="white" />
               </LinearGradient>
 
-              <Text className="text-2xl font-bold text-neutral-900 text-center mb-2">
+              <Text style={styles.unlockTitle}>
                 記録を共有して、
               </Text>
-              <Text className="text-2xl font-bold text-neutral-900 text-center mb-6">
+              <Text style={styles.unlockTitle}>
                 他の幹事のナレッジを閲覧しよう
               </Text>
 
-              <Text className="text-base text-neutral-600 text-center leading-6 mb-8 max-w-sm">
+              <Text style={styles.unlockDescription}>
                 あなたの終了済みイベントの記録を1つ以上共有すると、他の幹事が投稿した貴重な情報にアクセスできます。
               </Text>
 
-              <Card
-                variant="gradient"
-                shadow="none"
-                animated={false}
-                className="w-full mb-8"
-              >
-                <Text className="text-lg font-bold text-neutral-900 mb-4">
+              <Card variant="gradient" shadow="none">
+                <Text style={styles.benefitsTitle}>
                   アクセスできる情報
                 </Text>
-                <View className="gap-4">
-                  <View className="flex-row items-center gap-3">
-                    <View className="w-10 h-10 rounded-2xl bg-warning-100 justify-center items-center">
+                <View style={styles.benefitsList}>
+                  <View style={styles.benefitItem}>
+                    <View style={[styles.benefitIcon, styles.warningIcon]}>
                       <Ionicons name="star" size={20} color="#f59e0b" />
                     </View>
-                    <Text className="text-base text-neutral-700 flex-1">
+                    <Text style={styles.benefitText}>
                       お店の評価とレビュー
                     </Text>
                   </View>
-                  <View className="flex-row items-center gap-3">
-                    <View className="w-10 h-10 rounded-2xl bg-success-100 justify-center items-center">
+                  <View style={styles.benefitItem}>
+                    <View style={[styles.benefitIcon, styles.successIcon]}>
                       <Ionicons name="cash-outline" size={20} color="#10b981" />
                     </View>
-                    <Text className="text-base text-neutral-700 flex-1">
+                    <Text style={styles.benefitText}>
                       予算と費用の参考情報
                     </Text>
                   </View>
-                  <View className="flex-row items-center gap-3">
-                    <View className="w-10 h-10 rounded-2xl bg-primary-100 justify-center items-center">
+                  <View style={styles.benefitItem}>
+                    <View style={[styles.benefitIcon, styles.primaryIcon]}>
                       <Ionicons
                         name="location-outline"
                         size={20}
                         color="#0284c7"
                       />
                     </View>
-                    <Text className="text-base text-neutral-700 flex-1">
+                    <Text style={styles.benefitText}>
                       エリア別のおすすめ店舗
                     </Text>
                   </View>
-                  <View className="flex-row items-center gap-3">
-                    <View className="w-10 h-10 rounded-2xl bg-accent-100 justify-center items-center">
+                  <View style={styles.benefitItem}>
+                    <View style={[styles.benefitIcon, styles.accentIcon]}>
                       <Ionicons
                         name="share-social-outline"
                         size={20}
                         color="#ec7c30"
                       />
                     </View>
-                    <Text className="text-base text-neutral-700 flex-1">
+                    <Text style={styles.benefitText}>
                       イベント企画のコツ
                     </Text>
                   </View>
@@ -469,50 +466,53 @@ export default function RecordsScreen() {
                 icon={
                   <Ionicons name="lock-open-outline" size={20} color="white" />
                 }
-                className="mb-6"
               />
 
-              <Text className="text-sm text-neutral-500 text-center leading-5 max-w-xs">
+              <Text style={styles.privacyNote}>
                 共有する記録は、店舗情報と評価のみ表示され、個人情報は一切公開されません。
               </Text>
             </View>
           </ScrollView>
         ) : (
           /* Records List */
-          <View className="flex-1">
+          <View style={styles.recordsContainer}>
             {/* Tabs */}
-            <View className="px-6 pt-4 pb-2">
-              <View className="flex-row bg-neutral-100 rounded-2xl p-1">
+            <View style={styles.tabsContainer}>
+              <View style={styles.tabsBackground}>
                 <TouchableOpacity
                   onPress={() => handleTabChange('all')}
-                  className={`flex-1 py-2 px-4 rounded-xl ${
-                    activeTab === 'all' ? 'bg-white' : ''
-                  }`}
+                  style={[
+                    styles.tab,
+                    activeTab === 'all' ? styles.tabActive : styles.tabInactive,
+                  ]}
                   activeOpacity={0.8}
                 >
                   <Text
-                    className={`text-center font-semibold ${
+                    style={[
+                      styles.tabText,
                       activeTab === 'all'
-                        ? 'text-primary-600'
-                        : 'text-neutral-600'
-                    }`}
+                        ? styles.tabTextActive
+                        : styles.tabTextInactive,
+                    ]}
                   >
                     すべての記録
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => handleTabChange('liked')}
-                  className={`flex-1 py-2 px-4 rounded-xl ${
-                    activeTab === 'liked' ? 'bg-white' : ''
-                  }`}
+                  style={[
+                    styles.tab,
+                    activeTab === 'liked' ? styles.tabActive : styles.tabInactive,
+                  ]}
                   activeOpacity={0.8}
                 >
                   <Text
-                    className={`text-center font-semibold ${
+                    style={[
+                      styles.tabText,
                       activeTab === 'liked'
-                        ? 'text-primary-600'
-                        : 'text-neutral-600'
-                    }`}
+                        ? styles.tabTextActive
+                        : styles.tabTextInactive,
+                    ]}
                   >
                     いいねした記録
                   </Text>
@@ -521,19 +521,19 @@ export default function RecordsScreen() {
             </View>
 
             {/* Filter Button */}
-            <View className="px-6 py-2">
+            <View style={styles.filterContainer}>
               <TouchableOpacity
                 onPress={() => setIsFilterModalVisible(true)}
-                className="flex-row items-center justify-center py-3 px-4 bg-white rounded-2xl border border-neutral-200"
+                style={styles.filterButton}
                 activeOpacity={0.8}
               >
                 <Ionicons name="options-outline" size={20} color="#0284c7" />
-                <Text className="text-base font-semibold text-primary-600 ml-2">
+                <Text style={styles.filterButtonText}>
                   フィルター
                 </Text>
                 {getActiveFilterCount() > 0 && (
-                  <View className="bg-primary-600 rounded-full px-2 py-1 ml-2 min-w-6 justify-center items-center">
-                    <Text className="text-xs font-bold text-white">
+                  <View style={styles.filterBadge}>
+                    <Text style={styles.filterBadgeText}>
                       {getActiveFilterCount()}
                     </Text>
                   </View>
@@ -549,18 +549,18 @@ export default function RecordsScreen() {
             />
 
             {/* Results Count */}
-            <View className="px-6 py-2">
-              <Text className="text-sm text-neutral-500">
+            <View style={styles.resultsContainer}>
+              <Text style={styles.resultsText}>
                 {filteredRecords.length}件の記録が見つかりました
               </Text>
             </View>
 
             <ScrollView
-              className="flex-1 px-6"
-              contentContainerStyle={{ paddingTop: 8, paddingBottom: 120 }}
+              style={styles.recordsScrollView}
+              contentContainerStyle={styles.recordsContent}
               showsVerticalScrollIndicator={false}
             >
-              <View className="gap-4">
+              <View style={styles.recordsList}>
                 {filteredRecords.map((record, index) => (
                   <TouchableOpacity
                     key={record.id}
@@ -570,96 +570,95 @@ export default function RecordsScreen() {
                     <Card
                       variant="elevated"
                       shadow="none"
-                      animated={false}
-                      className={
+                      style={
                         record.organizer.isSameCompany
-                          ? 'border-2 border-blue-200'
-                          : ''
+                          ? styles.sameCompanyCard
+                          : undefined
                       }
                     >
                       {record.organizer.isSameCompany && (
-                        <View className="absolute -top-2 -right-2 bg-blue-500 rounded-full px-3 py-1 z-10">
-                          <Text className="text-xs font-bold text-white">
+                        <View style={styles.sameCompanyBadge}>
+                          <Text style={styles.sameCompanyBadgeText}>
                             同じ会社
                           </Text>
                         </View>
                       )}
 
-                      <View className="flex-row justify-between items-start mb-4">
-                        <View className="flex-1 mr-4">
-                          <Text className="text-xl font-bold text-neutral-900 mb-2">
+                      <View style={styles.recordHeader}>
+                        <View style={styles.recordInfo}>
+                          <Text style={styles.venueName}>
                             {record.eventLog.venue.name}
                           </Text>
-                          <View className="flex-row items-center gap-3 mb-1">
+                          <View style={styles.ratingRow}>
                             {renderStars(record.eventLog.rating)}
-                            <Text className="text-base text-neutral-600 font-semibold">
+                            <Text style={styles.ratingText}>
                               {record.eventLog.rating.toFixed(1)}
                             </Text>
                           </View>
                         </View>
 
-                        <View className="px-3 py-1.5 rounded-full bg-primary-100">
-                          <Text className="text-sm font-semibold text-primary-700">
+                        <View style={styles.purposeBadge}>
+                          <Text style={styles.purposeText}>
                             {getPurposeLabel(record.event.purpose)}
                           </Text>
                         </View>
                       </View>
 
                       <Text
-                        className="text-base text-neutral-700 leading-6 mb-4"
+                        style={styles.recordNotes}
                         numberOfLines={2}
                       >
                         {record.eventLog.notes}
                       </Text>
 
-                      <View className="flex-row gap-6 mb-4">
-                        <View className="flex-row items-center gap-2">
-                          <View className="p-2 rounded-xl bg-success-100">
+                      <View style={styles.recordDetails}>
+                        <View style={styles.detailItem}>
+                          <View style={[styles.detailIcon, styles.successIconBg]}>
                             <Ionicons
                               name="cash-outline"
                               size={16}
                               color="#10b981"
                             />
                           </View>
-                          <Text className="text-base text-neutral-700 font-medium">
+                          <Text style={styles.detailText}>
                             ¥{record.eventLog.costPerPerson.toLocaleString()}/人
                           </Text>
                         </View>
 
-                        <View className="flex-row items-center gap-2">
-                          <View className="p-2 rounded-xl bg-neutral-100">
+                        <View style={styles.detailItem}>
+                          <View style={[styles.detailIcon, styles.neutralIconBg]}>
                             <Ionicons
                               name="location-outline"
                               size={16}
                               color="#64748b"
                             />
                           </View>
-                          <Text className="text-base text-neutral-700">
+                          <Text style={styles.detailText}>
                             {record.eventLog.venue.address}
                           </Text>
                         </View>
                       </View>
 
                       {/* いいねボタンと情報 */}
-                      <View className="flex-row items-center justify-between pt-3 border-t border-neutral-200">
-                        <View className="flex-row items-center gap-4">
-                          <Text className="text-sm text-neutral-500">
+                      <View style={styles.recordFooter}>
+                        <View style={styles.organizerInfo}>
+                          <Text style={styles.organizerName}>
                             {record.organizer.name}さんの記録
                           </Text>
                           {record.organizer.company && (
-                            <Text className="text-xs text-neutral-400">
+                            <Text style={styles.organizerCompany}>
                               {record.organizer.company}
                             </Text>
                           )}
                         </View>
 
-                        <View className="flex-row items-center gap-3">
+                        <View style={styles.actionsRow}>
                           <TouchableOpacity
                             onPress={(e) => {
                               e.stopPropagation();
                               handleLike(record.id);
                             }}
-                            className="flex-row items-center gap-1"
+                            style={styles.likeButton}
                             activeOpacity={0.7}
                           >
                             <Ionicons
@@ -668,11 +667,12 @@ export default function RecordsScreen() {
                               color={record.isLiked ? '#ef4444' : '#94a3b8'}
                             />
                             <Text
-                              className={`text-sm font-medium ${
+                              style={[
+                                styles.likeCount,
                                 record.isLiked
-                                  ? 'text-red-500'
-                                  : 'text-neutral-500'
-                              }`}
+                                  ? styles.likeCountActive
+                                  : styles.likeCountInactive,
+                              ]}
                             >
                               {record.likeCount}
                             </Text>
@@ -718,3 +718,322 @@ export default function RecordsScreen() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  background: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+  },
+  safeArea: {
+    flex: 1,
+  },
+  unlockScrollView: {
+    flex: 1,
+    paddingHorizontal: 24,
+  },
+  unlockContent: {
+    paddingTop: 40,
+    paddingBottom: 120,
+  },
+  unlockCenter: {
+    alignItems: 'center',
+  },
+  lockIcon: {
+    width: 96,
+    height: 96,
+    borderRadius: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 32,
+  },
+  unlockTitle: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: Colors.neutral[900],
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+  unlockDescription: {
+    fontSize: 16,
+    color: Colors.neutral[600],
+    textAlign: 'center',
+    lineHeight: 24,
+    marginBottom: 32,
+    maxWidth: 320,
+  },
+  benefitsTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: Colors.neutral[900],
+    marginBottom: 16,
+  },
+  benefitsList: {
+    gap: 16,
+  },
+  benefitItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  benefitIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  warningIcon: {
+    backgroundColor: Colors.warning[100],
+  },
+  successIcon: {
+    backgroundColor: Colors.success[100],
+  },
+  primaryIcon: {
+    backgroundColor: Colors.primary[100],
+  },
+  accentIcon: {
+    backgroundColor: '#fef3e2',
+  },
+  benefitText: {
+    fontSize: 16,
+    color: Colors.neutral[700],
+    flex: 1,
+  },
+  privacyNote: {
+    fontSize: 14,
+    color: Colors.neutral[500],
+    textAlign: 'center',
+    lineHeight: 20,
+    maxWidth: 288,
+    marginTop: 16,
+  },
+  recordsContainer: {
+    flex: 1,
+  },
+  tabsContainer: {
+    paddingHorizontal: 24,
+    paddingTop: 16,
+    paddingBottom: 8,
+  },
+  tabsBackground: {
+    flexDirection: 'row',
+    backgroundColor: Colors.neutral[100],
+    borderRadius: 16,
+    padding: 4,
+  },
+  tab: {
+    flex: 1,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 12,
+  },
+  tabActive: {
+    backgroundColor: 'white',
+  },
+  tabInactive: {
+    backgroundColor: 'transparent',
+  },
+  tabText: {
+    textAlign: 'center',
+    fontWeight: '600',
+  },
+  tabTextActive: {
+    color: Colors.primary[600],
+  },
+  tabTextInactive: {
+    color: Colors.neutral[600],
+  },
+  filterContainer: {
+    paddingHorizontal: 24,
+    paddingVertical: 8,
+  },
+  filterButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    backgroundColor: 'white',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: Colors.neutral[200],
+  },
+  filterButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: Colors.primary[600],
+    marginLeft: 8,
+  },
+  filterBadge: {
+    backgroundColor: Colors.primary[600],
+    borderRadius: 20,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    marginLeft: 8,
+    minWidth: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  filterBadgeText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: 'white',
+  },
+  resultsContainer: {
+    paddingHorizontal: 24,
+    paddingVertical: 8,
+  },
+  resultsText: {
+    fontSize: 14,
+    color: Colors.neutral[500],
+  },
+  recordsScrollView: {
+    flex: 1,
+    paddingHorizontal: 24,
+  },
+  recordsContent: {
+    paddingTop: 8,
+    paddingBottom: 120,
+  },
+  recordsList: {
+    gap: 16,
+  },
+  sameCompanyCard: {
+    borderWidth: 2,
+    borderColor: '#bfdbfe',
+  },
+  sameCompanyBadge: {
+    position: 'absolute',
+    top: -8,
+    right: -8,
+    backgroundColor: '#3b82f6',
+    borderRadius: 20,
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    zIndex: 10,
+  },
+  sameCompanyBadgeText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: 'white',
+  },
+  recordHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 16,
+  },
+  recordInfo: {
+    flex: 1,
+    marginRight: 16,
+  },
+  venueName: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: Colors.neutral[900],
+    marginBottom: 8,
+  },
+  ratingRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  starsContainer: {
+    flexDirection: 'row',
+    gap: 2,
+  },
+  ratingText: {
+    fontSize: 16,
+    color: Colors.neutral[600],
+    fontWeight: '600',
+  },
+  purposeBadge: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
+    backgroundColor: Colors.primary[100],
+  },
+  purposeText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: Colors.primary[700],
+  },
+  recordNotes: {
+    fontSize: 16,
+    color: Colors.neutral[700],
+    lineHeight: 24,
+    marginBottom: 16,
+  },
+  recordDetails: {
+    flexDirection: 'row',
+    gap: 24,
+    marginBottom: 16,
+  },
+  detailItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  detailIcon: {
+    padding: 8,
+    borderRadius: 12,
+  },
+  successIconBg: {
+    backgroundColor: Colors.success[100],
+  },
+  neutralIconBg: {
+    backgroundColor: Colors.neutral[100],
+  },
+  detailText: {
+    fontSize: 16,
+    color: Colors.neutral[700],
+    fontWeight: '500',
+  },
+  recordFooter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: Colors.neutral[200],
+  },
+  organizerInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
+  },
+  organizerName: {
+    fontSize: 14,
+    color: Colors.neutral[500],
+  },
+  organizerCompany: {
+    fontSize: 12,
+    color: Colors.neutral[400],
+  },
+  actionsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  likeButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  likeCount: {
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  likeCountActive: {
+    color: Colors.error[500],
+  },
+  likeCountInactive: {
+    color: Colors.neutral[500],
+  },
+});

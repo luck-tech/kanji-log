@@ -1,76 +1,68 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Colors } from '@/constants';
 
 interface HeaderProps {
   title: string;
   subtitle?: string;
   style?: any;
-  className?: string;
   variant?: 'default' | 'gradient' | 'glass';
   leftIcon?: string;
   rightIcon?: string;
   onLeftPress?: () => void;
   onRightPress?: () => void;
-  animated?: boolean;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   title,
   subtitle,
   style,
-  className,
   variant = 'default',
   leftIcon,
   rightIcon,
   onLeftPress,
   onRightPress,
-  animated = true,
 }) => {
   const hasIcons = leftIcon || rightIcon;
-  const baseClasses = `py-6`;
-
-  const variantClasses = {
-    default: 'bg-white',
-    gradient: '',
-    glass: 'glass',
-  };
 
   const headerContent = (
-    <View
-      className={
-        hasIcons ? 'flex-row items-center justify-between' : 'items-center'
-      }
-    >
+    <View style={hasIcons ? styles.rowContainer : styles.centerContainer}>
       {leftIcon && (
         <TouchableOpacity
           onPress={onLeftPress}
-          className="p-2 rounded-xl bg-neutral-100 mr-4"
+          style={styles.iconButton}
           activeOpacity={0.7}
         >
-          <Ionicons name={leftIcon as any} size={24} color="#334155" />
+          <Ionicons
+            name={leftIcon as any}
+            size={24}
+            color={Colors.neutral[700]}
+          />
         </TouchableOpacity>
       )}
 
-      <View className={hasIcons ? 'flex-1 items-center' : 'items-center'}>
-        <Text className="text-3xl font-bold text-neutral-900 tracking-tight">
-          {title}
-        </Text>
-        {subtitle && (
-          <Text className="text-base text-neutral-600 mt-1 font-medium">
-            {subtitle}
-          </Text>
-        )}
+      <View
+        style={
+          hasIcons ? styles.titleContainerWithIcons : styles.titleContainer
+        }
+      >
+        <Text style={styles.title}>{title}</Text>
+        {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
       </View>
 
       {rightIcon && (
         <TouchableOpacity
           onPress={onRightPress}
-          className="p-2 rounded-xl bg-neutral-100 ml-4"
+          style={styles.iconButton}
           activeOpacity={0.7}
         >
-          <Ionicons name={rightIcon as any} size={24} color="#334155" />
+          <Ionicons
+            name={rightIcon as any}
+            size={24}
+            color={Colors.neutral[700]}
+          />
         </TouchableOpacity>
       )}
     </View>
@@ -79,45 +71,49 @@ export const Header: React.FC<HeaderProps> = ({
   if (variant === 'gradient') {
     return (
       <LinearGradient
-        colors={['#0ea5e9', '#0284c7']}
+        colors={[Colors.primary[500], Colors.primary[600]]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
-        className={`${baseClasses} ${className || ''}`}
-        style={style}
+        style={[styles.header, style]}
       >
         <View
-          className={`${
-            hasIcons ? 'flex-row items-center justify-between' : 'items-center'
-          } px-6`}
+          style={[
+            hasIcons ? styles.rowContainer : styles.centerContainer,
+            styles.padding,
+          ]}
         >
           {leftIcon && (
             <TouchableOpacity
               onPress={onLeftPress}
-              className="p-2 rounded-xl bg-white/20 mr-4"
+              style={styles.gradientIconButton}
               activeOpacity={0.7}
             >
-              <Ionicons name={leftIcon as any} size={24} color="#ffffff" />
+              <Ionicons name={leftIcon as any} size={24} color={Colors.white} />
             </TouchableOpacity>
           )}
 
-          <View className={hasIcons ? 'flex-1 items-center' : 'items-center'}>
-            <Text className="text-3xl font-bold text-white tracking-tight">
-              {title}
-            </Text>
+          <View
+            style={
+              hasIcons ? styles.titleContainerWithIcons : styles.titleContainer
+            }
+          >
+            <Text style={styles.gradientTitle}>{title}</Text>
             {subtitle && (
-              <Text className="text-base text-white/90 mt-1 font-medium">
-                {subtitle}
-              </Text>
+              <Text style={styles.gradientSubtitle}>{subtitle}</Text>
             )}
           </View>
 
           {rightIcon && (
             <TouchableOpacity
               onPress={onRightPress}
-              className="p-2 rounded-xl bg-white/20 ml-4"
+              style={styles.gradientIconButton}
               activeOpacity={0.7}
             >
-              <Ionicons name={rightIcon as any} size={24} color="#ffffff" />
+              <Ionicons
+                name={rightIcon as any}
+                size={24}
+                color={Colors.white}
+              />
             </TouchableOpacity>
           )}
         </View>
@@ -126,11 +122,74 @@ export const Header: React.FC<HeaderProps> = ({
   }
 
   return (
-    <View
-      className={`${baseClasses} ${variantClasses[variant]} ${className || ''}`}
-      style={style}
-    >
-      {headerContent}
-    </View>
+    <View style={[styles.header, styles[variant], style]}>{headerContent}</View>
   );
 };
+
+const styles = StyleSheet.create({
+  header: {
+    paddingVertical: 24,
+  },
+  rowContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  centerContainer: {
+    alignItems: 'center',
+  },
+  padding: {
+    paddingHorizontal: 24,
+  },
+  iconButton: {
+    padding: 8,
+    borderRadius: 12,
+    backgroundColor: Colors.neutral[100],
+    marginHorizontal: 16,
+  },
+  gradientIconButton: {
+    padding: 8,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    marginHorizontal: 16,
+  },
+  titleContainer: {
+    alignItems: 'center',
+  },
+  titleContainerWithIcons: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: Colors.neutral[900],
+    letterSpacing: -0.5,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: Colors.neutral[600],
+    marginTop: 4,
+    fontWeight: '500',
+  },
+  gradientTitle: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: Colors.white,
+    letterSpacing: -0.5,
+  },
+  gradientSubtitle: {
+    fontSize: 16,
+    color: 'rgba(255, 255, 255, 0.9)',
+    marginTop: 4,
+    fontWeight: '500',
+  },
+
+  // Variants
+  default: {
+    backgroundColor: Colors.white,
+  },
+  glass: {
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+  },
+});
