@@ -12,6 +12,7 @@ import { TabBar } from '@/components/common/TabBar';
 import { EventCard } from '@/components/common/EventCard';
 import { EmptyState } from '@/components/common/EmptyState';
 import { FloatingActionButton } from '@/components/common/FloatingActionButton';
+import { FadeInView, StaggeredList } from '@/components/common/Animations';
 import {
   EventCreateModal,
   EventCreateData,
@@ -227,26 +228,29 @@ export default function EventsScreen() {
       const messages = EMPTY_STATE_MESSAGES[activeTab];
       return (
         <View style={styles.emptyContainer}>
-          <EmptyState
-            icon="calendar-outline"
-            title={messages.title}
-            description={messages.description}
-          />
+          <FadeInView delay={300}>
+            <EmptyState
+              icon="calendar-outline"
+              title={messages.title}
+              description={messages.description}
+            />
+          </FadeInView>
         </View>
       );
     }
 
     return (
       <View style={styles.eventList}>
-        {filteredEvents.map((event, index) => (
-          <View key={event.id}>
+        <StaggeredList staggerDelay={100} initialDelay={0}>
+          {filteredEvents.map((event, index) => (
             <EventCard
+              key={event.id}
               event={event}
               onPress={handleEventPress}
               variant="elevated"
             />
-          </View>
-        ))}
+          ))}
+        </StaggeredList>
       </View>
     );
   };

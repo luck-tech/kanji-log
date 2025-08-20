@@ -9,10 +9,16 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import Animated from 'react-native-reanimated';
 import { Card } from '@/components/common/Card';
 import { Input } from '@/components/common/Input';
 import { Header } from '@/components/common/Header';
 import { EmptyState } from '@/components/common/EmptyState';
+import {
+  FadeInView,
+  StaggeredList,
+  usePressAnimation,
+} from '@/components/common/Animations';
 import { MemberAddModal, MemberData } from '@/components/modals/MemberAddModal';
 import { useRouter } from 'expo-router';
 import { Colors } from '@/constants/Colors';
@@ -136,22 +142,33 @@ export default function MembersScreen() {
 
       return (
         <View style={styles.emptyContainer}>
-          <EmptyState
-            icon="people-outline"
-            title={title}
-            description={description}
-          />
+          <FadeInView delay={300}>
+            <EmptyState
+              icon="people-outline"
+              title={title}
+              description={description}
+            />
+          </FadeInView>
         </View>
       );
     }
 
-    return (
-      <View style={styles.membersList}>
-        {filteredMembers.map((member, index) => (
+    const MemberCard = ({
+      member,
+      index,
+    }: {
+      member: Member;
+      index: number;
+    }) => {
+      const { animatedStyle, onPressIn, onPressOut } = usePressAnimation(0.98);
+
+      return (
+        <Animated.View style={[animatedStyle]}>
           <TouchableOpacity
-            key={member.id}
             onPress={() => handleMemberPress(member)}
-            activeOpacity={0.8}
+            onPressIn={onPressIn}
+            onPressOut={onPressOut}
+            activeOpacity={1}
           >
             <Card variant="elevated" shadow="none">
               <View style={styles.memberCard}>
@@ -164,9 +181,7 @@ export default function MembersScreen() {
 
                 {/* Member Info */}
                 <View style={styles.memberInfo}>
-                  <Text style={styles.memberName}>
-                    {member.name}
-                  </Text>
+                  <Text style={styles.memberName}>{member.name}</Text>
                   {member.department && (
                     <Text style={styles.memberDepartment}>
                       {member.department}
@@ -175,11 +190,25 @@ export default function MembersScreen() {
                 </View>
 
                 {/* Arrow */}
-                <Ionicons name="chevron-forward" size={20} color={Colors.neutral[400]} />
+                <Ionicons
+                  name="chevron-forward"
+                  size={20}
+                  color={Colors.neutral[400]}
+                />
               </View>
             </Card>
           </TouchableOpacity>
-        ))}
+        </Animated.View>
+      );
+    };
+
+    return (
+      <View style={styles.membersList}>
+        <StaggeredList staggerDelay={80} initialDelay={0}>
+          {filteredMembers.map((member, index) => (
+            <MemberCard key={member.id} member={member} index={index} />
+          ))}
+        </StaggeredList>
       </View>
     );
   };
@@ -208,7 +237,11 @@ export default function MembersScreen() {
             value={searchQuery}
             onChangeText={handleSearch}
             leftIcon={
-              <Ionicons name="search-outline" size={20} color={Colors.neutral[500]} />
+              <Ionicons
+                name="search-outline"
+                size={20}
+                color={Colors.neutral[500]}
+              />
             }
             style={styles.searchInput}
           />

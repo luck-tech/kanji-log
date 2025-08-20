@@ -10,7 +10,7 @@
 - **React**: 19
 - **React Native**: 0.79
 - **TypeScript**: 5.8（`strict: true`）
-- **NativeWind**: 4.1.23（TailwindCSS for React Native）
+- **React Native Reanimated**: ネイティブアニメーション
 
 ## 技術スタック（カテゴリ別）
 
@@ -27,16 +27,22 @@
 
 ### UI / スタイリング
 
+- **StyleSheet ベースのスタイリング**
+  - React Native の標準的な `StyleSheet.create()` を使用
+  - TypeScript 対応で型安全性を確保
+  - プラットフォーム固有のスタイル調整に対応
 - **React Native Reanimated** によるアニメーション実装
   - パフォーマンス重視のネイティブアニメーション
   - `useSharedValue`, `useAnimatedStyle`, `Animated.View` などを活用
   - コンポーネントレンダリング中の shared value アクセスを避ける
-- **デザイン定数**（一部コンポーネントで参照）
-  - `constants/Colors.ts`: カラーパレット（`primary`/`secondary`/`accent`/`gray` 等）
-  - `constants/Typography.ts`: 見出し/本文/ボタン/ラベルのタイポグラフィ定義
+- **デザイン定数**（全コンポーネントで統一使用）
+  - `constants/Colors.ts`: カラーパレット（`primary`/`secondary`/`accent`/`gray`/`blue`/`green`/`purple` 等）
+  - `constants/Styles.ts`: 共通スタイルパターン（ボタン、カード、入力フィールド等）
   - `constants/Layout.ts`: スペーシング・パディング・角丸・画面サイズ
-- 共通コンポーネント（`components/common`）
+- **共通コンポーネント**（`components/common`）
   - `Button`, `Card`, `Input`, `Header`, `TabBar`, `EmptyState`, `EventCard`, `FloatingActionButton`
+  - `Animations`: FadeIn, SlideIn, ScaleIn, Pulse, Shake, StaggeredList
+  - `SkeletonLoader`: スケルトンローディング状態
   - シンプルな props 設計（variant/size/state など）
 - **アイコン**
   - `@expo/vector-icons` をメインで使用
@@ -56,10 +62,6 @@
 - **TypeScript**: `strict: true`、パスエイリアス `@/*`（`tsconfig.json`）
 - **ESLint**: v9（Flat Config）+ `eslint-config-expo`
 - **パッケージマネージャ**: pnpm（`pnpm-lock.yaml` あり）
-- **NativeWind v4 設定**:
-  - `babel.config.js`: NativeWind babel preset 追加
-  - `metro.config.js`: NativeWind Metro 統合
-  - `tailwind.config.js`: コンテンツパス設定と NativeWind preset
 
 ### ディレクトリ構成
 
@@ -82,17 +84,13 @@ kanji-log/                    // プロジェクトルート
 │   │   │   └── settings.tsx
 │   │   └── +not-found.tsx
 │   ├── components/common/    // 再利用 UI コンポーネント
-│   ├── constants/            // Colors / Typography / Layout / EventConstants / StatusIcons
+│   ├── constants/            // Colors / Styles / Layout / EventConstants / StatusIcons
 │   ├── hooks/                // 共通フック（例: useFrameworkReady）
 │   ├── types/                // 型定義（イベント、ユーザー等のドメイン型）
 │   ├── assets/               // 画像やアイコンなどのアセット
 │   ├── app.json              // Expo設定
-│   ├── babel.config.js       // Babel設定
-│   ├── metro.config.js       // Metro設定
-│   ├── tailwind.config.js    // TailwindCSS設定
-│   ├── tsconfig.json         // TypeScript設定
 │   ├── eslint.config.js      // ESLint設定
-│   ├── global.css            // TailwindCSSスタイル
+│   ├── tsconfig.json         // TypeScript設定
 │   └── *.d.ts                // 型定義ファイル
 ├── package.json              // パッケージ管理（ルートプロジェクト）
 ├── pnpm-lock.yaml            // 依存関係ロック
@@ -139,12 +137,19 @@ pnpm lint
 
 ## コーディング規約のポイント
 
-- StyleSheet スタイリングを主軸とする
-- **アニメーション**: React Native Reanimated を直接使用し、Tailwind アニメーションクラスは使用禁止
-- デザイン定数（`frontend/constants/` の `Colors`/`Typography`/`Layout`）は必要に応じて参照
-- 共通 UI を `frontend/components/common` に集約し、画面側では組み合わせる方針
-- TypeScript の型（`frontend/types/index.ts`）でドメイン構造を明確化（`Event`/`User` 等）
-- ファイルベースルーティング（`frontend/app/` 直下）に従う
+- **StyleSheet スタイリング**を主軸とする
+  - React Native 標準の `StyleSheet.create()` を使用
+  - デザイン定数（`constants/Colors.ts`, `constants/Styles.ts`, `constants/Layout.ts`）を必須で参照
+  - プラットフォーム固有のスタイル調整には `Platform.select()` を使用
+- **アニメーション**: React Native Reanimated を直接使用
+  - `Animated.View` と `entering`/`exiting` プロパティでシンプルなアニメーション
+  - 複雑なアニメーションには `useSharedValue` と `useAnimatedStyle` を使用
+  - `components/common/Animations.tsx` の再利用可能なコンポーネントを活用
+- **共通 UI** を `frontend/components/common` に集約し、画面側では組み合わせる方針
+  - 各コンポーネントは適切な variant/size/state props を提供
+  - アニメーション機能は標準で組み込み済み
+- **TypeScript の型**（`frontend/types/index.ts`）でドメイン構造を明確化（`Event`/`User` 等）
+- **ファイルベースルーティング**（`frontend/app/` 直下）に従う
 - **フロントエンド**（モバイル画面）は `frontend/` 配下で管理
 - **バックエンド**（API、AWS 管理等）は将来的に別ディレクトリで分離予定
 
@@ -161,11 +166,36 @@ import Animated, {
   useSharedValue,
   useAnimatedStyle,
 } from 'react-native-reanimated';
+import { FadeInView, SlideInView, StaggeredList, usePressAnimation } from '@/components/common/Animations';
 
-// フェードインアニメーション
+// シンプルなフェードインアニメーション
 <Animated.View entering={FadeIn.delay(100)}>
   <Card>内容</Card>
-</Animated.View>;
+</Animated.View>
+
+// 再利用可能なアニメーションコンポーネント
+<FadeInView delay={200}>
+  <EventCard event={event} />
+</FadeInView>
+
+<SlideInView direction="up" delay={300}>
+  <Button title="詳細を見る" />
+</SlideInView>
+
+// リストアイテムのスタガーアニメーション
+<StaggeredList data={events} staggerDelay={100}>
+  {(event, index) => (
+    <EventCard key={event.id} event={event} />
+  )}
+</StaggeredList>
+
+// プレスアニメーション（カスタムフック）
+const pressStyle = usePressAnimation();
+<Animated.View style={[styles.button, pressStyle]}>
+  <Pressable onPressIn={pressStyle.onPressIn} onPressOut={pressStyle.onPressOut}>
+    <Text>押してください</Text>
+  </Pressable>
+</Animated.View>
 
 // カスタムアニメーション
 const opacity = useSharedValue(0);
@@ -175,5 +205,40 @@ const animatedStyle = useAnimatedStyle(() => ({
 
 <Animated.View style={animatedStyle}>
   <Content />
-</Animated.View>;
+</Animated.View>
+```
+
+### StyleSheet 実装例
+
+```tsx
+import { StyleSheet, Platform } from 'react-native';
+import { Colors, Layout, Styles } from '@/constants';
+
+const styles = StyleSheet.create({
+  container: {
+    ...Styles.container,
+    backgroundColor: Colors.background,
+    padding: Layout.spacing.md,
+  },
+  title: {
+    ...Styles.text.heading,
+    color: Colors.primary.main,
+    marginBottom: Layout.spacing.sm,
+  },
+  button: {
+    ...Styles.button.primary,
+    borderRadius: Layout.borderRadius.md,
+    ...Platform.select({
+      ios: {
+        shadowColor: Colors.shadow,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 3,
+      },
+    }),
+  },
+});
 ```

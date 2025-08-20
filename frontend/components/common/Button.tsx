@@ -8,8 +8,10 @@ import {
   View,
   StyleSheet,
 } from 'react-native';
+import Animated from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Colors } from '@/constants';
+import { usePressAnimation } from './Animations';
 
 interface ButtonProps {
   title?: string;
@@ -38,8 +40,14 @@ export const Button: React.FC<ButtonProps> = ({
   fullWidth = false,
   hapticFeedback = true,
 }) => {
+  const { animatedStyle, onPressIn, onPressOut } = usePressAnimation(0.95);
+
   const handlePress = () => {
-    if (hapticFeedback && typeof navigator !== 'undefined' && navigator.vibrate) {
+    if (
+      hapticFeedback &&
+      typeof navigator !== 'undefined' &&
+      navigator.vibrate
+    ) {
       navigator.vibrate(10);
     }
     onPress();
@@ -66,52 +74,58 @@ export const Button: React.FC<ButtonProps> = ({
       {loading && (
         <ActivityIndicator
           size="small"
-          color={variant === 'primary' || variant === 'gradient' ? Colors.white : Colors.primary[600]}
+          color={
+            variant === 'primary' || variant === 'gradient'
+              ? Colors.white
+              : Colors.primary[600]
+          }
           style={icon || title ? { marginRight: 8 } : {}}
         />
       )}
       {icon && !loading && (
-        <View style={title ? { marginRight: 8 } : {}}>
-          {icon}
-        </View>
+        <View style={title ? { marginRight: 8 } : {}}>{icon}</View>
       )}
-      {title && (
-        <Text style={textStyles}>
-          {title}
-        </Text>
-      )}
+      {title && <Text style={textStyles}>{title}</Text>}
     </>
   );
 
   if (variant === 'gradient') {
     return (
-      <TouchableOpacity
-        style={[styles.base, fullWidth && styles.fullWidth, style]}
-        onPress={handlePress}
-        disabled={disabled || loading}
-        activeOpacity={disabled || loading ? 1 : 0.85}
-      >
-        <LinearGradient
-          colors={[Colors.primary[500], Colors.primary[600]]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={[styles.gradient, styles[`size_${size}`]]}
+      <Animated.View style={[animatedStyle]}>
+        <TouchableOpacity
+          style={[styles.base, fullWidth && styles.fullWidth, style]}
+          onPress={handlePress}
+          onPressIn={disabled || loading ? undefined : onPressIn}
+          onPressOut={disabled || loading ? undefined : onPressOut}
+          disabled={disabled || loading}
+          activeOpacity={1}
         >
-          <ButtonContent />
-        </LinearGradient>
-      </TouchableOpacity>
+          <LinearGradient
+            colors={[Colors.primary[500], Colors.primary[600]]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={[styles.gradient, styles[`size_${size}`]]}
+          >
+            <ButtonContent />
+          </LinearGradient>
+        </TouchableOpacity>
+      </Animated.View>
     );
   }
 
   return (
-    <TouchableOpacity
-      style={buttonStyles}
-      onPress={handlePress}
-      disabled={disabled || loading}
-      activeOpacity={disabled || loading ? 1 : 0.85}
-    >
-      <ButtonContent />
-    </TouchableOpacity>
+    <Animated.View style={[animatedStyle]}>
+      <TouchableOpacity
+        style={buttonStyles}
+        onPress={handlePress}
+        onPressIn={disabled || loading ? undefined : onPressIn}
+        onPressOut={disabled || loading ? undefined : onPressOut}
+        disabled={disabled || loading}
+        activeOpacity={1}
+      >
+        <ButtonContent />
+      </TouchableOpacity>
+    </Animated.View>
   );
 };
 
@@ -122,7 +136,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  
+
   // Variants
   primary: {
     backgroundColor: Colors.primary[600],
@@ -145,7 +159,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  
+
   // Sizes
   size_sm: {
     paddingHorizontal: 16,
@@ -167,7 +181,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     minHeight: 64,
   },
-  
+
   // States
   fullWidth: {
     width: '100%',
@@ -175,7 +189,7 @@ const styles = StyleSheet.create({
   disabled: {
     opacity: 0.5,
   },
-  
+
   // Text styles
   text: {
     fontWeight: '600',
@@ -196,7 +210,7 @@ const styles = StyleSheet.create({
   text_gradient: {
     color: Colors.white,
   },
-  
+
   // Text sizes
   textSize_sm: {
     fontSize: 14,

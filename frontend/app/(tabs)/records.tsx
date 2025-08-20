@@ -398,9 +398,7 @@ export default function RecordsScreen() {
                 <Ionicons name="lock-closed" size={48} color="white" />
               </LinearGradient>
 
-              <Text style={styles.unlockTitle}>
-                記録を共有して、
-              </Text>
+              <Text style={styles.unlockTitle}>記録を共有して、</Text>
               <Text style={styles.unlockTitle}>
                 他の幹事のナレッジを閲覧しよう
               </Text>
@@ -410,25 +408,19 @@ export default function RecordsScreen() {
               </Text>
 
               <Card variant="gradient" shadow="none">
-                <Text style={styles.benefitsTitle}>
-                  アクセスできる情報
-                </Text>
+                <Text style={styles.benefitsTitle}>アクセスできる情報</Text>
                 <View style={styles.benefitsList}>
                   <View style={styles.benefitItem}>
                     <View style={[styles.benefitIcon, styles.warningIcon]}>
                       <Ionicons name="star" size={20} color="#f59e0b" />
                     </View>
-                    <Text style={styles.benefitText}>
-                      お店の評価とレビュー
-                    </Text>
+                    <Text style={styles.benefitText}>お店の評価とレビュー</Text>
                   </View>
                   <View style={styles.benefitItem}>
                     <View style={[styles.benefitIcon, styles.successIcon]}>
                       <Ionicons name="cash-outline" size={20} color="#10b981" />
                     </View>
-                    <Text style={styles.benefitText}>
-                      予算と費用の参考情報
-                    </Text>
+                    <Text style={styles.benefitText}>予算と費用の参考情報</Text>
                   </View>
                   <View style={styles.benefitItem}>
                     <View style={[styles.benefitIcon, styles.primaryIcon]}>
@@ -450,9 +442,7 @@ export default function RecordsScreen() {
                         color="#ec7c30"
                       />
                     </View>
-                    <Text style={styles.benefitText}>
-                      イベント企画のコツ
-                    </Text>
+                    <Text style={styles.benefitText}>イベント企画のコツ</Text>
                   </View>
                 </View>
               </Card>
@@ -502,7 +492,9 @@ export default function RecordsScreen() {
                   onPress={() => handleTabChange('liked')}
                   style={[
                     styles.tab,
-                    activeTab === 'liked' ? styles.tabActive : styles.tabInactive,
+                    activeTab === 'liked'
+                      ? styles.tabActive
+                      : styles.tabInactive,
                   ]}
                   activeOpacity={0.8}
                 >
@@ -528,9 +520,7 @@ export default function RecordsScreen() {
                 activeOpacity={0.8}
               >
                 <Ionicons name="options-outline" size={20} color="#0284c7" />
-                <Text style={styles.filterButtonText}>
-                  フィルター
-                </Text>
+                <Text style={styles.filterButtonText}>フィルター</Text>
                 {getActiveFilterCount() > 0 && (
                   <View style={styles.filterBadge}>
                     <Text style={styles.filterBadgeText}>
@@ -604,16 +594,15 @@ export default function RecordsScreen() {
                         </View>
                       </View>
 
-                      <Text
-                        style={styles.recordNotes}
-                        numberOfLines={2}
-                      >
+                      <Text style={styles.recordNotes} numberOfLines={2}>
                         {record.eventLog.notes}
                       </Text>
 
                       <View style={styles.recordDetails}>
                         <View style={styles.detailItem}>
-                          <View style={[styles.detailIcon, styles.successIconBg]}>
+                          <View
+                            style={[styles.detailIcon, styles.successIconBg]}
+                          >
                             <Ionicons
                               name="cash-outline"
                               size={16}
@@ -626,7 +615,9 @@ export default function RecordsScreen() {
                         </View>
 
                         <View style={styles.detailItem}>
-                          <View style={[styles.detailIcon, styles.neutralIconBg]}>
+                          <View
+                            style={[styles.detailIcon, styles.neutralIconBg]}
+                          >
                             <Ionicons
                               name="location-outline"
                               size={16}

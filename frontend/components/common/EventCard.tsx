@@ -2,9 +2,11 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import Animated from 'react-native-reanimated';
 import { Card } from './Card';
 import { Event } from '@/types';
 import { Colors } from '@/constants';
+import { usePressAnimation } from './Animations';
 
 interface EventCardProps {
   event: Event;
@@ -19,6 +21,8 @@ export const EventCard: React.FC<EventCardProps> = ({
   style,
   variant = 'elevated',
 }) => {
+  const { animatedStyle, onPressIn, onPressOut } = usePressAnimation(0.98);
+
   const formatDate = (event: Event) => {
     if (event.date && event.time) {
       const date = new Date(event.date);
@@ -90,26 +94,30 @@ export const EventCard: React.FC<EventCardProps> = ({
   );
 
   return (
-    <TouchableOpacity
-      onPress={() => onPress(event.id)}
-      activeOpacity={0.8}
-      style={[styles.container, style]}
-    >
-      {variant === 'gradient' ? (
-        <LinearGradient
-          colors={[Colors.white, Colors.neutral[50]]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.gradientCard}
-        >
-          <CardContent />
-        </LinearGradient>
-      ) : (
-        <Card variant={variant} shadow="none">
-          <CardContent />
-        </Card>
-      )}
-    </TouchableOpacity>
+    <Animated.View style={[animatedStyle]}>
+      <TouchableOpacity
+        onPress={() => onPress(event.id)}
+        onPressIn={onPressIn}
+        onPressOut={onPressOut}
+        activeOpacity={1}
+        style={[styles.container, style]}
+      >
+        {variant === 'gradient' ? (
+          <LinearGradient
+            colors={[Colors.white, Colors.neutral[50]]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.gradientCard}
+          >
+            <CardContent />
+          </LinearGradient>
+        ) : (
+          <Card variant={variant} shadow="none">
+            <CardContent />
+          </Card>
+        )}
+      </TouchableOpacity>
+    </Animated.View>
   );
 };
 
