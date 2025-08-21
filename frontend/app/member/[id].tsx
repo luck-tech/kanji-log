@@ -10,6 +10,7 @@ import {
   MemberEditData,
 } from '@/components/modals/MemberEditModal';
 import { Colors } from '@/constants/Colors';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface MemberDetail {
   id: string;
@@ -44,6 +45,7 @@ export default function MemberDetailScreen() {
   const router = useRouter();
   const [member] = useState<MemberDetail>(mockMemberDetail);
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+  const insets = useSafeAreaInsets();
 
   const handleBackPress = () => {
     router.back();
@@ -134,7 +136,7 @@ export default function MemberDetailScreen() {
           style={styles.scrollView}
           showsVerticalScrollIndicator={false}
         >
-          <View style={styles.content}>
+          <View style={[styles.content, { paddingBottom: insets.bottom }]}>
             {/* プロフィール概要 */}
             <Card variant="elevated" shadow="none">
               <View style={styles.cardContent}>
