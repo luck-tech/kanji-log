@@ -12,6 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Card } from '@/components/common/Card';
 import { SharedRecord } from '@/types';
 import { Colors } from '@/constants';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 // Extended SharedRecord type for the modal
 interface ExtendedSharedRecord extends SharedRecord {
@@ -43,6 +44,8 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({
   onLike,
   onUserPress,
 }) => {
+  const insets = useSafeAreaInsets();
+
   if (!record) return null;
 
   const handleShare = async () => {
@@ -148,7 +151,7 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({
           style={styles.scrollView}
           showsVerticalScrollIndicator={false}
         >
-          <View style={styles.content}>
+          <View style={[styles.content, { paddingBottom: insets.bottom }]}>
             {/* 店舗情報カード */}
             <Card variant="elevated" shadow="none">
               <View style={styles.cardContent}>

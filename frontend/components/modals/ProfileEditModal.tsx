@@ -11,6 +11,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Card } from '@/components/common/Card';
 import { Input } from '@/components/common/Input';
 import { Colors } from '@/constants';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export interface ProfileEditData {
   name: string;
@@ -52,6 +53,7 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
   onSave,
   initialData,
 }) => {
+  const insets = useSafeAreaInsets();
   const [formData, setFormData] = useState<ProfileEditData>(initialData);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -198,7 +200,7 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
           style={styles.scrollView}
           showsVerticalScrollIndicator={false}
         >
-          <View style={styles.content}>
+          <View style={[styles.content, { paddingBottom: insets.bottom }]}>
             {/* 基本情報 */}
             <Card variant="elevated" shadow="none">
               <View style={styles.cardContent}>
