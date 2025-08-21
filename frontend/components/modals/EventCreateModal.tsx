@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
-  Platform,
   StyleSheet,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -14,9 +13,9 @@ import { Card } from '@/components/common/Card';
 import { Button } from '@/components/common/Button';
 import { Input } from '@/components/common/Input';
 import { EventPurpose } from '@/types';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import { Colors } from '@/constants/Colors';
 import { Layout } from '@/constants/Layout';
+import { CustomDateTimePicker } from '../common/CustomDateTimePicker';
 
 interface EventCreateModalProps {
   isVisible: boolean;
@@ -148,30 +147,22 @@ export const EventCreateModal: React.FC<EventCreateModalProps> = ({
     }
   };
 
-  const handleDateChange = (event: any, date?: Date) => {
-    if (Platform.OS === 'android') {
-      setShowDatePicker(false);
-    }
-    if (date) {
-      setSelectedDate(date);
-      setFormData((prev) => ({
-        ...prev,
-        date: formatDate(date),
-      }));
-    }
+  const handleDateConfirm = (date: Date) => {
+    setSelectedDate(date);
+    setFormData((prev) => ({
+      ...prev,
+      date: formatDate(date),
+    }));
+    setShowDatePicker(false);
   };
 
-  const handleTimeChange = (event: any, time?: Date) => {
-    if (Platform.OS === 'android') {
-      setShowTimePicker(false);
-    }
-    if (time) {
-      setSelectedTime(time);
-      setFormData((prev) => ({
-        ...prev,
-        time: formatTime(time),
-      }));
-    }
+  const handleTimeConfirm = (time: Date) => {
+    setSelectedTime(time);
+    setFormData((prev) => ({
+      ...prev,
+      time: formatTime(time),
+    }));
+    setShowTimePicker(false);
   };
 
   return (
@@ -181,21 +172,22 @@ export const EventCreateModal: React.FC<EventCreateModalProps> = ({
       presentationStyle="pageSheet"
       onRequestClose={handleClose}
     >
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
           <View style={styles.headerContent}>
             <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
               <Ionicons name="close" size={24} color="#64748b" />
             </TouchableOpacity>
-            <Text style={styles.headerTitle}>
-              新しいイベント
-            </Text>
+            <Text style={styles.headerTitle}>新しいイベント</Text>
             <View style={styles.headerSpacer} />
           </View>
         </View>
 
-        <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+        <ScrollView
+          style={styles.scrollView}
+          showsVerticalScrollIndicator={false}
+        >
           <View style={styles.content}>
             {/* イベント名 */}
             <Card variant="elevated" shadow="none">
@@ -204,9 +196,7 @@ export const EventCreateModal: React.FC<EventCreateModalProps> = ({
                   <View style={[styles.sectionIcon, styles.eventIcon]}>
                     <Ionicons name="calendar" size={20} color="#0284c7" />
                   </View>
-                  <Text style={styles.sectionTitle}>
-                    イベント情報
-                  </Text>
+                  <Text style={styles.sectionTitle}>イベント情報</Text>
                 </View>
 
                 <Input
@@ -240,9 +230,7 @@ export const EventCreateModal: React.FC<EventCreateModalProps> = ({
                   <View style={[styles.sectionIcon, styles.purposeIcon]}>
                     <Text style={styles.emojiIcon}>🎯</Text>
                   </View>
-                  <Text style={styles.sectionTitle}>
-                    飲み会の目的
-                  </Text>
+                  <Text style={styles.sectionTitle}>飲み会の目的</Text>
                   <Text style={styles.optionalLabel}>（任意）</Text>
                 </View>
 
@@ -257,15 +245,21 @@ export const EventCreateModal: React.FC<EventCreateModalProps> = ({
                         }
                         style={[
                           styles.purposeOption,
-                          isSelected ? styles.purposeOptionSelected : styles.purposeOptionUnselected
+                          isSelected
+                            ? styles.purposeOptionSelected
+                            : styles.purposeOptionUnselected,
                         ]}
                         activeOpacity={0.7}
                       >
-                        <Text style={styles.purposeOptionIcon}>{option.icon}</Text>
+                        <Text style={styles.purposeOptionIcon}>
+                          {option.icon}
+                        </Text>
                         <Text
                           style={[
                             styles.purposeOptionText,
-                            isSelected ? styles.purposeOptionTextSelected : styles.purposeOptionTextUnselected
+                            isSelected
+                              ? styles.purposeOptionTextSelected
+                              : styles.purposeOptionTextUnselected,
                           ]}
                         >
                           {option.label}
@@ -284,9 +278,7 @@ export const EventCreateModal: React.FC<EventCreateModalProps> = ({
                   <View style={[styles.sectionIcon, styles.scheduleIcon]}>
                     <Ionicons name="time" size={20} color="#10b981" />
                   </View>
-                  <Text style={styles.sectionTitle}>
-                    開催日時
-                  </Text>
+                  <Text style={styles.sectionTitle}>開催日時</Text>
                 </View>
 
                 <Text style={styles.scheduleDescription}>
@@ -298,7 +290,9 @@ export const EventCreateModal: React.FC<EventCreateModalProps> = ({
                     onPress={() => handleDateTimeOption('now')}
                     style={[
                       styles.scheduleOption,
-                      !formData.hasScheduling ? styles.scheduleOptionSelected : styles.scheduleOptionUnselected
+                      !formData.hasScheduling
+                        ? styles.scheduleOptionSelected
+                        : styles.scheduleOptionUnselected,
                     ]}
                     activeOpacity={0.7}
                   >
@@ -306,7 +300,9 @@ export const EventCreateModal: React.FC<EventCreateModalProps> = ({
                       <View
                         style={[
                           styles.radioButton,
-                          !formData.hasScheduling ? styles.radioButtonSelected : styles.radioButtonUnselected
+                          !formData.hasScheduling
+                            ? styles.radioButtonSelected
+                            : styles.radioButtonUnselected,
                         ]}
                       >
                         {!formData.hasScheduling && (
@@ -316,7 +312,9 @@ export const EventCreateModal: React.FC<EventCreateModalProps> = ({
                       <Text
                         style={[
                           styles.scheduleOptionTitle,
-                          !formData.hasScheduling ? styles.scheduleOptionTitleSelected : styles.scheduleOptionTitleUnselected
+                          !formData.hasScheduling
+                            ? styles.scheduleOptionTitleSelected
+                            : styles.scheduleOptionTitleUnselected,
                         ]}
                       >
                         日時を設定して始める
@@ -331,7 +329,9 @@ export const EventCreateModal: React.FC<EventCreateModalProps> = ({
                     onPress={() => handleDateTimeOption('later')}
                     style={[
                       styles.scheduleOption,
-                      formData.hasScheduling ? styles.scheduleOptionSelected : styles.scheduleOptionUnselected
+                      formData.hasScheduling
+                        ? styles.scheduleOptionSelected
+                        : styles.scheduleOptionUnselected,
                     ]}
                     activeOpacity={0.7}
                   >
@@ -339,7 +339,9 @@ export const EventCreateModal: React.FC<EventCreateModalProps> = ({
                       <View
                         style={[
                           styles.radioButton,
-                          formData.hasScheduling ? styles.radioButtonSelected : styles.radioButtonUnselected
+                          formData.hasScheduling
+                            ? styles.radioButtonSelected
+                            : styles.radioButtonUnselected,
                         ]}
                       >
                         {formData.hasScheduling && (
@@ -349,7 +351,9 @@ export const EventCreateModal: React.FC<EventCreateModalProps> = ({
                       <Text
                         style={[
                           styles.scheduleOptionTitle,
-                          formData.hasScheduling ? styles.scheduleOptionTitleSelected : styles.scheduleOptionTitleUnselected
+                          formData.hasScheduling
+                            ? styles.scheduleOptionTitleSelected
+                            : styles.scheduleOptionTitleUnselected,
                         ]}
                       >
                         後で日程調整する
@@ -363,42 +367,40 @@ export const EventCreateModal: React.FC<EventCreateModalProps> = ({
 
                 {!formData.hasScheduling && (
                   <View style={styles.dateTimeContainer}>
-                    <View style={styles.dateTimeRow}>
+                    <View style={styles.dateTimeFields}>
                       <TouchableOpacity
                         onPress={() => setShowDatePicker(true)}
-                        style={styles.dateTimeInput}
+                        style={styles.dateTimeField}
                       >
-                        <View style={styles.dateTimeInputContainer}>
-                          <Text style={styles.dateTimeLabel}>
-                            開催日
+                        <Ionicons
+                          name="calendar-outline"
+                          size={20}
+                          color={Colors.primary[600]}
+                        />
+                        <View style={styles.dateTimeFieldContent}>
+                          <Text style={styles.dateTimeFieldLabel}>開催日</Text>
+                          <Text style={styles.dateTimeText}>
+                            {formatDate(selectedDate)}
                           </Text>
-                          <View style={styles.dateTimeField}>
-                            <Ionicons
-                              name="calendar"
-                              size={20}
-                              color="#64748b"
-                            />
-                            <Text style={styles.dateTimeText}>
-                              {formData.date || formatDate(selectedDate)}
-                            </Text>
-                          </View>
                         </View>
                       </TouchableOpacity>
 
                       <TouchableOpacity
                         onPress={() => setShowTimePicker(true)}
-                        style={styles.dateTimeInput}
+                        style={styles.dateTimeField}
                       >
-                        <View style={styles.dateTimeInputContainer}>
-                          <Text style={styles.dateTimeLabel}>
+                        <Ionicons
+                          name="time-outline"
+                          size={20}
+                          color={Colors.primary[600]}
+                        />
+                        <View style={styles.dateTimeFieldContent}>
+                          <Text style={styles.dateTimeFieldLabel}>
                             開始時間
                           </Text>
-                          <View style={styles.dateTimeField}>
-                            <Ionicons name="time" size={20} color="#64748b" />
-                            <Text style={styles.dateTimeText}>
-                              {formData.time || formatTime(selectedTime)}
-                            </Text>
-                          </View>
+                          <Text style={styles.dateTimeText}>
+                            {formatTime(selectedTime)}
+                          </Text>
                         </View>
                       </TouchableOpacity>
                     </View>
@@ -421,28 +423,29 @@ export const EventCreateModal: React.FC<EventCreateModalProps> = ({
             icon={<Ionicons name="add" size={20} color="white" />}
           />
         </View>
-      </SafeAreaView>
+      </View>
+      <SafeAreaView style={styles.safeAreaStyle} />
 
-      {/* Date Picker */}
-      {showDatePicker && (
-        <DateTimePicker
-          value={selectedDate}
-          mode="date"
-          display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-          onChange={handleDateChange}
-          minimumDate={new Date()}
-        />
-      )}
+      {/* モーダルの背景をタップで閉じる */}
 
-      {/* Time Picker */}
-      {showTimePicker && (
-        <DateTimePicker
-          value={selectedTime}
-          mode="time"
-          display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-          onChange={handleTimeChange}
-        />
-      )}
+      <CustomDateTimePicker
+        isVisible={showDatePicker}
+        mode="date"
+        value={selectedDate}
+        minimumDate={new Date()}
+        onConfirm={handleDateConfirm}
+        onCancel={() => setShowDatePicker(false)}
+        title="開催日を選択"
+      />
+
+      <CustomDateTimePicker
+        isVisible={showTimePicker}
+        mode="time"
+        value={selectedTime}
+        onConfirm={handleTimeConfirm}
+        onCancel={() => setShowTimePicker(false)}
+        title="開始時間を選択"
+      />
     </Modal>
   );
 };
@@ -618,42 +621,39 @@ const styles = StyleSheet.create({
     marginTop: Layout.spacing.xs,
   },
   dateTimeContainer: {
-    gap: Layout.spacing.sm,
     marginTop: Layout.spacing.md,
-    padding: Layout.spacing.md,
-    backgroundColor: Colors.primary[50],
-    borderRadius: Layout.borderRadius.lg,
+    padding: Layout.spacing.lg,
+    backgroundColor: Colors.white,
+    borderRadius: Layout.borderRadius.xl,
+    borderWidth: 1,
+    borderColor: Colors.primary[200],
   },
-  dateTimeRow: {
-    flexDirection: 'row',
-    gap: Layout.spacing.sm,
-  },
-  dateTimeInput: {
-    flex: 1,
-  },
-  dateTimeInputContainer: {
-    marginBottom: Layout.spacing.md,
-  },
-  dateTimeLabel: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: Colors.neutral[700],
-    marginBottom: Layout.spacing.sm,
+  dateTimeFields: {
+    gap: Layout.spacing.md,
   },
   dateTimeField: {
     flexDirection: 'row',
     alignItems: 'center',
-    minHeight: 48,
     paddingHorizontal: Layout.spacing.md,
-    paddingVertical: Layout.spacing.sm,
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    paddingVertical: Layout.spacing.lg,
+    backgroundColor: Colors.neutral[50],
     borderRadius: Layout.borderRadius.lg,
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: Colors.neutral[200],
+    gap: Layout.spacing.md,
+  },
+  dateTimeFieldContent: {
+    flex: 1,
+  },
+  dateTimeFieldLabel: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: Colors.neutral[600],
+    marginBottom: Layout.spacing.xs,
   },
   dateTimeText: {
-    marginLeft: Layout.spacing.sm,
     fontSize: 16,
+    fontWeight: '600',
     color: Colors.neutral[900],
   },
   footer: {
@@ -662,5 +662,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     borderTopWidth: 1,
     borderTopColor: Colors.neutral[200],
+  },
+  safeAreaStyle: {
+    height: 10,
   },
 });
