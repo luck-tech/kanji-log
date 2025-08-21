@@ -5,7 +5,7 @@ import { useWindowDimensions, Platform } from 'react-native';
 export default function TabLayout() {
   const { width } = useWindowDimensions();
   const isSmallScreen = width < 768;
-  
+
   return (
     <Tabs
       screenOptions={{
@@ -17,10 +17,10 @@ export default function TabLayout() {
           borderTopWidth: 0,
           borderTopLeftRadius: 24,
           borderTopRightRadius: 24,
-          paddingTop: 12,
-          paddingBottom: Platform.OS === 'ios' ? 28 : 12,
+          paddingTop: 10,
+          paddingBottom: Platform.OS === 'ios' ? 32 : 16,
           paddingHorizontal: 16,
-          height: isSmallScreen ? 72 : 84,
+          height: isSmallScreen ? 90 : 100,
           shadowColor: '#000',
           shadowOffset: {
             width: 0,
@@ -34,16 +34,12 @@ export default function TabLayout() {
         tabBarLabelStyle: {
           fontSize: 12,
           fontWeight: '600',
-          marginTop: 4,
-          display: isSmallScreen ? 'none' : 'flex'
+          display: isSmallScreen ? 'none' : 'flex',
         },
         tabBarItemStyle: {
           paddingHorizontal: 8,
           borderRadius: 16,
           marginHorizontal: 4,
-        },
-        tabBarIconStyle: {
-          marginTop: 4,
         },
       }}
     >
@@ -52,10 +48,10 @@ export default function TabLayout() {
         options={{
           title: 'イベント',
           tabBarIcon: ({ size, color, focused }) => (
-            <Ionicons 
-              name={focused ? "calendar" : "calendar-outline"} 
-              size={isSmallScreen ? 26 : size} 
-              color={color} 
+            <Ionicons
+              name={focused ? 'calendar' : 'calendar-outline'}
+              size={isSmallScreen ? 26 : size}
+              color={color}
             />
           ),
         }}
@@ -65,10 +61,10 @@ export default function TabLayout() {
         options={{
           title: 'メンバーリスト',
           tabBarIcon: ({ size, color, focused }) => (
-            <Ionicons 
-              name={focused ? "people" : "people-outline"} 
-              size={isSmallScreen ? 26 : size} 
-              color={color} 
+            <Ionicons
+              name={focused ? 'people' : 'people-outline'}
+              size={isSmallScreen ? 26 : size}
+              color={color}
             />
           ),
         }}
@@ -78,10 +74,10 @@ export default function TabLayout() {
         options={{
           title: 'みんなの記録',
           tabBarIcon: ({ size, color, focused }) => (
-            <Ionicons 
-              name={focused ? "book" : "book-outline"} 
-              size={isSmallScreen ? 26 : size} 
-              color={color} 
+            <Ionicons
+              name={focused ? 'book' : 'book-outline'}
+              size={isSmallScreen ? 26 : size}
+              color={color}
             />
           ),
         }}
@@ -91,10 +87,10 @@ export default function TabLayout() {
         options={{
           title: '設定',
           tabBarIcon: ({ size, color, focused }) => (
-            <Ionicons 
-              name={focused ? "settings" : "settings-outline"} 
-              size={isSmallScreen ? 26 : size} 
-              color={color} 
+            <Ionicons
+              name={focused ? 'settings' : 'settings-outline'}
+              size={isSmallScreen ? 26 : size}
+              color={color}
             />
           ),
         }}
