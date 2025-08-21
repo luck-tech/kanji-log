@@ -16,6 +16,7 @@ import {
   DateScheduleModal,
   ScheduleData,
 } from '@/components/modals/DateScheduleModal';
+import { EventLogModal, EventLogData } from '@/components/modals/EventLogModal';
 import { Event } from '@/types';
 import { Colors } from '@/constants';
 
@@ -200,6 +201,7 @@ export default function EventDetailScreen() {
   const [event] = useState<Event>(getMockEvent(id || '1'));
   const [isAreaModalVisible, setIsAreaModalVisible] = useState(false);
   const [isScheduleModalVisible, setIsScheduleModalVisible] = useState(false);
+  const [isEventLogModalVisible, setIsEventLogModalVisible] = useState(false);
 
   const handleBackPress = () => {
     router.back();
@@ -241,6 +243,16 @@ export default function EventDetailScreen() {
 
   const handleViewScheduleResults = () => {
     router.push(`/event/${id}/schedule-results`);
+  };
+
+  const handleCreateEventLog = () => {
+    setIsEventLogModalVisible(true);
+  };
+
+  const handleEventLogSave = (logData: EventLogData) => {
+    console.log('Event log saved:', logData);
+    // TODO: API call to save event log
+    setIsEventLogModalVisible(false);
   };
 
   const getPurposeLabel = (purpose: string): string => {
@@ -533,7 +545,7 @@ export default function EventDetailScreen() {
               {/* イベント記録 - 開催済みのみで表示 */}
               {event.status === 'completed' && (
                 <TouchableOpacity
-                  onPress={() => console.log('Open event log')}
+                  onPress={handleCreateEventLog}
                   activeOpacity={0.8}
                 >
                   <Card variant="elevated" shadow="none">
@@ -645,6 +657,14 @@ export default function EventDetailScreen() {
           isVisible={isScheduleModalVisible}
           onClose={() => setIsScheduleModalVisible(false)}
           onScheduleSetup={handleScheduleSetupComplete}
+        />
+
+        <EventLogModal
+          isVisible={isEventLogModalVisible}
+          onClose={() => setIsEventLogModalVisible(false)}
+          onSave={handleEventLogSave}
+          eventTitle={event.title}
+          venue={event.venue}
         />
       </View>
     </View>
