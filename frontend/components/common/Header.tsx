@@ -29,25 +29,20 @@ export const Header: React.FC<HeaderProps> = ({
   applySafeArea = true,
 }) => {
   const insets = useSafeAreaInsets();
-  const hasIcons = leftIcon || rightIcon;
 
   const safeAreaStyle = applySafeArea ? { paddingTop: insets.top } : {};
 
   const headerContent = (
-    <View
-      style={[
-        hasIcons ? styles.rowContainer : styles.centerContainer,
-        styles.padding,
-      ]}
-    >
+    <View style={styles.container}>
+      {/* 左アイコン */}
       {leftIcon && (
         <TouchableOpacity
           onPress={onLeftPress}
-          style={
-            variant === 'gradient'
-              ? styles.gradientIconButton
-              : styles.iconButton
-          }
+          style={[
+            styles.iconButton,
+            styles.leftIcon,
+            variant === 'gradient' && styles.gradientIconButton,
+          ]}
           activeOpacity={0.7}
         >
           <Ionicons
@@ -58,11 +53,8 @@ export const Header: React.FC<HeaderProps> = ({
         </TouchableOpacity>
       )}
 
-      <View
-        style={
-          hasIcons ? styles.titleContainerWithIcons : styles.titleContainer
-        }
-      >
+      {/* タイトルコンテナ（常に中央） */}
+      <View style={styles.titleContainer}>
         <Text
           style={variant === 'gradient' ? styles.gradientTitle : styles.title}
         >
@@ -79,14 +71,15 @@ export const Header: React.FC<HeaderProps> = ({
         )}
       </View>
 
+      {/* 右アイコン */}
       {rightIcon && (
         <TouchableOpacity
           onPress={onRightPress}
-          style={
-            variant === 'gradient'
-              ? styles.gradientIconButton
-              : styles.iconButton
-          }
+          style={[
+            styles.iconButton,
+            styles.rightIcon,
+            variant === 'gradient' && styles.gradientIconButton,
+          ]}
           activeOpacity={0.7}
         >
           <Ionicons
@@ -123,59 +116,66 @@ const styles = StyleSheet.create({
   header: {
     paddingVertical: 24,
   },
-  rowContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  centerContainer: {
-    alignItems: 'center',
-  },
-  padding: {
+  container: {
+    position: 'relative',
     paddingHorizontal: 24,
+    minHeight: 64,
+    justifyContent: 'center',
   },
   iconButton: {
+    position: 'absolute',
+    top: '50%',
+    transform: [{ translateY: -20 }],
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 8,
     borderRadius: 12,
     backgroundColor: Colors.neutral[100],
-    marginHorizontal: 16,
+    width: 40,
+    height: 40,
   },
   gradientIconButton: {
-    padding: 8,
-    borderRadius: 12,
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    marginHorizontal: 16,
+  },
+  leftIcon: {
+    left: 24,
+  },
+  rightIcon: {
+    right: 24,
   },
   titleContainer: {
     alignItems: 'center',
-  },
-  titleContainerWithIcons: {
+    justifyContent: 'center',
     flex: 1,
-    alignItems: 'center',
+    minHeight: 64,
   },
   title: {
     fontSize: 30,
     fontWeight: 'bold',
     color: Colors.neutral[900],
     letterSpacing: -0.5,
+    textAlign: 'center',
   },
   subtitle: {
     fontSize: 16,
     color: Colors.neutral[600],
     marginTop: 4,
     fontWeight: '500',
+    textAlign: 'center',
   },
   gradientTitle: {
     fontSize: 30,
     fontWeight: 'bold',
     color: Colors.white,
     letterSpacing: -0.5,
+    textAlign: 'center',
   },
   gradientSubtitle: {
     fontSize: 16,
     color: 'rgba(255, 255, 255, 0.9)',
     marginTop: 4,
     fontWeight: '500',
+    textAlign: 'center',
   },
 
   // Variants
