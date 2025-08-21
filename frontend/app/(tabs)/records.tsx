@@ -614,7 +614,11 @@ export default function RecordsScreen() {
                             color="#64748b"
                           />
                         </View>
-                        <Text style={styles.detailText}>
+                        <Text
+                          style={styles.detailText}
+                          numberOfLines={1}
+                          ellipsizeMode="tail"
+                        >
                           {record.eventLog.venue.address}
                         </Text>
                       </View>
@@ -948,8 +952,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   recordDetails: {
-    flexDirection: 'row',
-    gap: 24,
+    gap: 12,
     marginBottom: 16,
   },
   detailItem: {
@@ -971,6 +974,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: Colors.neutral[700],
     fontWeight: '500',
+    flex: 1,
   },
   recordFooter: {
     flexDirection: 'row',
