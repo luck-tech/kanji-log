@@ -158,6 +158,108 @@ pnpm lint
 - `react-native-reanimated` は Expo により自動設定されます（Expo SDK 53 以降）
 - ルーティングは `expo-router` を第一級で採用。必要に応じて React Navigation の API を併用可能です。
 
+### CustomDateTimePicker 使用方法
+
+`CustomDateTimePicker`は、iOS/Android/Web で統一された UI を提供するカスタム日付・時間選択コンポーネントです。ネイティブの DateTimePicker とは異なり、プラットフォーム間での実装の違いを意識する必要がありません。
+
+#### 基本的な使用方法
+
+```tsx
+import { CustomDateTimePicker } from '@/components/common/CustomDateTimePicker';
+
+const MyComponent = () => {
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showTimePicker, setShowTimePicker] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedTime, setSelectedTime] = useState(new Date());
+
+  const handleDateConfirm = (date: Date) => {
+    setSelectedDate(date);
+    setShowDatePicker(false);
+  };
+
+  const handleTimeConfirm = (time: Date) => {
+    setSelectedTime(time);
+    setShowTimePicker(false);
+  };
+
+  return (
+    <>
+      {/* 日付選択 */}
+      <TouchableOpacity onPress={() => setShowDatePicker(true)}>
+        <Text>日付: {selectedDate.toLocaleDateString('ja-JP')}</Text>
+      </TouchableOpacity>
+
+      {/* 時間選択 */}
+      <TouchableOpacity onPress={() => setShowTimePicker(true)}>
+        <Text>
+          時間:{' '}
+          {selectedTime.toLocaleTimeString('ja-JP', {
+            hour: '2-digit',
+            minute: '2-digit',
+          })}
+        </Text>
+      </TouchableOpacity>
+
+      {/* 日付ピッカー */}
+      <CustomDateTimePicker
+        isVisible={showDatePicker}
+        mode="date"
+        value={selectedDate}
+        minimumDate={new Date()}
+        onConfirm={handleDateConfirm}
+        onCancel={() => setShowDatePicker(false)}
+        title="開催日を選択"
+      />
+
+      {/* 時間ピッカー */}
+      <CustomDateTimePicker
+        isVisible={showTimePicker}
+        mode="time"
+        value={selectedTime}
+        onConfirm={handleTimeConfirm}
+        onCancel={() => setShowTimePicker(false)}
+        title="開始時間を選択"
+      />
+    </>
+  );
+};
+```
+
+#### プロパティ
+
+| プロパティ    | 型                     | 必須 | デフォルト値                    | 説明                                      |
+| ------------- | ---------------------- | ---- | ------------------------------- | ----------------------------------------- |
+| `isVisible`   | `boolean`              | ✅   | -                               | モーダルの表示/非表示                     |
+| `mode`        | `'date' \| 'time'`     | ✅   | -                               | 選択モード（日付または時間）              |
+| `value`       | `Date`                 | ✅   | -                               | 現在選択されている値                      |
+| `minimumDate` | `Date`                 | ❌   | `new Date(1900, 0, 1)`          | 選択可能な最小日付（`mode="date"`時のみ） |
+| `maximumDate` | `Date`                 | ❌   | `new Date(2100, 11, 31)`        | 選択可能な最大日付（`mode="date"`時のみ） |
+| `onConfirm`   | `(date: Date) => void` | ✅   | -                               | 決定ボタン押下時のコールバック            |
+| `onCancel`    | `() => void`           | ✅   | -                               | キャンセルボタン押下時のコールバック      |
+| `title`       | `string`               | ❌   | `'日付を選択'` / `'時間を選択'` | モーダルのタイトル                        |
+
+#### 特徴
+
+- **統一された UI**: iOS/Android/Web で同じデザインと UX
+- **滑らかなアニメーション**: React Native Reanimated によるネイティブアニメーション
+- **直感的な操作**: スクロールホイール形式で選択
+- **日本語対応**: 日本語のラベルとフォーマット
+- **アクセシビリティ**: タップによる直接選択も可能
+
+#### 時間選択の仕様
+
+- **時間**: 0-23 時（24 時間形式）
+- **分**: 5 分刻み（0, 5, 10, 15, ..., 55 分）
+- **表示形式**: `HH:MM`（例：`19:30`）
+
+#### 日付選択の仕様
+
+- **年**: `minimumDate` から `maximumDate` の範囲
+- **月**: 1-12 月
+- **日**: 各月の実際の日数に応じて動的に調整
+- **表示形式**: `YYYY年MM月DD日`（例：`2025年08月22日`）
+
 ### アニメーション実装例（React Native Reanimated）
 
 ```tsx
