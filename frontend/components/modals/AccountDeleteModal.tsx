@@ -290,26 +290,22 @@ export const AccountDeleteModal: React.FC<AccountDeleteModalProps> = ({
         {/* Footer */}
         <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
           <View style={styles.footerButtons}>
-            <View style={styles.buttonContainer}>
-              <Button
-                title="キャンセル"
-                onPress={handleClose}
-                variant="outline"
-                size="lg"
-                fullWidth
-              />
-            </View>
-            <View style={styles.buttonContainer}>
-              <Button
-                title="アカウントを削除"
-                onPress={handleDelete}
-                variant="primary"
-                size="lg"
-                fullWidth
-                disabled={!isConfirmed}
-                icon={<Ionicons name="trash" size={20} color="white" />}
-              />
-            </View>
+            <Button
+              title="アカウントを削除"
+              onPress={handleDelete}
+              variant="primary"
+              size="lg"
+              fullWidth
+              disabled={!isConfirmed}
+              icon={<Ionicons name="trash" size={20} color="white" />}
+            />
+            <Button
+              title="キャンセル"
+              onPress={handleClose}
+              variant="outline"
+              size="lg"
+              fullWidth
+            />
           </View>
         </View>
       </View>
@@ -536,10 +532,10 @@ const styles = StyleSheet.create({
     borderTopColor: Colors.neutral[200],
   },
   footerButtons: {
-    flexDirection: 'row',
     gap: 12,
+    // flexDirection: 'row' を削除して縦並びにする
   },
   buttonContainer: {
-    flex: 1,
+    // flex: 1 を削除（不要になったため）
   },
 });
