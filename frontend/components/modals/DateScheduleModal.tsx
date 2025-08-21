@@ -410,7 +410,7 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
         </ScrollView>
 
         {/* Footer */}
-        <View style={(styles.footer, { paddingBottom: insets.bottom })}>
+        <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
           <Button
             title="日程調整を開始"
             onPress={handleSetup}
