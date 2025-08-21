@@ -5,7 +5,6 @@ import {
   Modal,
   TouchableOpacity,
   ScrollView,
-  SafeAreaView,
   StyleSheet,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -13,6 +12,7 @@ import { Card } from './Card';
 import { Button } from './Button';
 import { PriceRangeSlider } from './PriceRangeSlider';
 import { Colors } from '@/constants/Colors';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export interface FilterOptions {
   areas: string[];
@@ -60,6 +60,7 @@ export const FilterModal: React.FC<FilterModalProps> = ({
   initialFilters,
 }) => {
   const [filters, setFilters] = useState<FilterOptions>(initialFilters);
+  const insets = useSafeAreaInsets();
   const [expandedSections, setExpandedSections] = useState({
     areas: false,
     purposes: false,
@@ -189,7 +190,7 @@ export const FilterModal: React.FC<FilterModalProps> = ({
       presentationStyle="pageSheet"
       onRequestClose={onClose}
     >
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
           <View style={styles.headerContent}>
@@ -347,7 +348,7 @@ export const FilterModal: React.FC<FilterModalProps> = ({
         </ScrollView>
 
         {/* Footer */}
-        <View style={styles.footer}>
+        <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
           <Button
             title={`フィルターを適用 (${getActiveFilterCount()})`}
             onPress={handleApply}
@@ -357,7 +358,7 @@ export const FilterModal: React.FC<FilterModalProps> = ({
             disabled={getActiveFilterCount() === 0}
           />
         </View>
-      </SafeAreaView>
+      </View>
     </Modal>
   );
 };

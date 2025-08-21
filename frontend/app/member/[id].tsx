@@ -1,12 +1,5 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  SafeAreaView,
-  Alert,
-  StyleSheet,
-} from 'react-native';
+import { View, Text, ScrollView, Alert, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Card } from '@/components/common/Card';
@@ -126,7 +119,7 @@ export default function MemberDetailScreen() {
 
   return (
     <View style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
+      <View style={styles.safeArea}>
         <Header
           title={member.name}
           subtitle={member.department || 'メンバー詳細'}
@@ -327,7 +320,7 @@ export default function MemberDetailScreen() {
           onSave={handleSaveMember}
           initialData={convertToEditData(member)}
         />
-      </SafeAreaView>
+      </View>
     </View>
   );
 }

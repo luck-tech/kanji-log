@@ -5,10 +5,10 @@ import {
   Modal,
   TouchableOpacity,
   ScrollView,
-  SafeAreaView,
   StyleSheet,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Card } from '@/components/common/Card';
 import { Button } from '@/components/common/Button';
@@ -44,6 +44,7 @@ export const AreaSelectionModal: React.FC<AreaSelectionModalProps> = ({
   onClose,
   onAreaSelect,
 }) => {
+  const insets = useSafeAreaInsets();
   const [selectionType, setSelectionType] = useState<
     'center' | 'specified' | null
   >(null);
@@ -78,21 +79,22 @@ export const AreaSelectionModal: React.FC<AreaSelectionModalProps> = ({
       presentationStyle="pageSheet"
       onRequestClose={handleClose}
     >
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
           <View style={styles.headerContent}>
             <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
               <Ionicons name="close" size={24} color="#64748b" />
             </TouchableOpacity>
-            <Text style={styles.headerTitle}>
-              エリア選択
-            </Text>
+            <Text style={styles.headerTitle}>エリア選択</Text>
             <View style={styles.headerSpacer} />
           </View>
         </View>
 
-        <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+        <ScrollView
+          style={styles.scrollView}
+          showsVerticalScrollIndicator={false}
+        >
           <View style={styles.content}>
             {/* 説明 */}
             <View style={styles.description}>
@@ -119,7 +121,9 @@ export const AreaSelectionModal: React.FC<AreaSelectionModalProps> = ({
                       end={{ x: 1, y: 1 }}
                       style={styles.centerIcon}
                     >
-                      <Text style={styles.centerIconText}>{RECOMMENDED_CENTER.icon}</Text>
+                      <Text style={styles.centerIconText}>
+                        {RECOMMENDED_CENTER.icon}
+                      </Text>
                     </LinearGradient>
                     <View style={styles.optionInfo}>
                       <View style={styles.optionTitleRow}>
@@ -127,9 +131,7 @@ export const AreaSelectionModal: React.FC<AreaSelectionModalProps> = ({
                           みんなの中心エリア
                         </Text>
                         <View style={styles.recommendedBadge}>
-                          <Text style={styles.recommendedBadgeText}>
-                            推奨
-                          </Text>
+                          <Text style={styles.recommendedBadgeText}>推奨</Text>
                         </View>
                       </View>
                       <Text style={styles.optionSubtitle}>
@@ -190,9 +192,7 @@ export const AreaSelectionModal: React.FC<AreaSelectionModalProps> = ({
                       <Ionicons name="map" size={24} color="#f59e0b" />
                     </View>
                     <View style={styles.optionInfo}>
-                      <Text style={styles.optionTitle}>
-                        指定エリアで探す
-                      </Text>
+                      <Text style={styles.optionTitle}>指定エリアで探す</Text>
                       <Text style={styles.optionSubtitle}>
                         特定のエリアや駅を指定
                       </Text>
@@ -208,9 +208,7 @@ export const AreaSelectionModal: React.FC<AreaSelectionModalProps> = ({
                     <View style={styles.specifiedOptions}>
                       {/* 人気エリア */}
                       <View style={styles.popularAreas}>
-                        <Text style={styles.sectionTitle}>
-                          人気エリア
-                        </Text>
+                        <Text style={styles.sectionTitle}>人気エリア</Text>
                         <View style={styles.areasList}>
                           {POPULAR_AREAS.map((area) => (
                             <TouchableOpacity
@@ -221,12 +219,8 @@ export const AreaSelectionModal: React.FC<AreaSelectionModalProps> = ({
                               style={styles.areaChip}
                               activeOpacity={0.7}
                             >
-                              <Text style={styles.areaIcon}>
-                                {area.icon}
-                              </Text>
-                              <Text style={styles.areaName}>
-                                {area.name}
-                              </Text>
+                              <Text style={styles.areaIcon}>{area.icon}</Text>
+                              <Text style={styles.areaName}>{area.name}</Text>
                             </TouchableOpacity>
                           ))}
                         </View>
@@ -268,7 +262,7 @@ export const AreaSelectionModal: React.FC<AreaSelectionModalProps> = ({
 
         {/* Footer */}
         {selectionType === 'center' && (
-          <View style={styles.footer}>
+          <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
             <Button
               title="中心エリアで探す"
               onPress={handleCenterAreaSelect}
@@ -279,7 +273,7 @@ export const AreaSelectionModal: React.FC<AreaSelectionModalProps> = ({
             />
           </View>
         )}
-      </SafeAreaView>
+      </View>
     </Modal>
   );
 };

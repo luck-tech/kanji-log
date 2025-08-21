@@ -4,7 +4,6 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
-  SafeAreaView,
   Alert,
   Share,
   StyleSheet,
@@ -190,7 +189,7 @@ export default function FormSetupScreen() {
 
   return (
     <View style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
+      <View style={styles.safeArea}>
         <Header
           title="Webフォーム作成"
           subtitle="新規参加者向け情報収集フォーム"
@@ -209,13 +208,15 @@ export default function FormSetupScreen() {
               <View style={styles.cardContent}>
                 <View style={styles.sectionHeader}>
                   <View style={styles.iconContainer}>
-                    <Ionicons name="person-add" size={20} color={Colors.primary[600]} />
+                    <Ionicons
+                      name="person-add"
+                      size={20}
+                      color={Colors.primary[600]}
+                    />
                   </View>
                   <Text style={styles.sectionTitle}>新規参加者を追加</Text>
                   <View style={styles.badge}>
-                    <Text style={styles.badgeText}>
-                      {newMembers.length}人
-                    </Text>
+                    <Text style={styles.badgeText}>{newMembers.length}人</Text>
                   </View>
                 </View>
 
@@ -278,11 +279,13 @@ export default function FormSetupScreen() {
               <View style={styles.cardContent}>
                 <View style={styles.sectionHeader}>
                   <View style={styles.questionIconContainer}>
-                    <Ionicons name="help-circle" size={20} color={Colors.warning[500]} />
+                    <Ionicons
+                      name="help-circle"
+                      size={20}
+                      color={Colors.warning[500]}
+                    />
                   </View>
-                  <Text style={styles.sectionTitle}>
-                    質問項目設定
-                  </Text>
+                  <Text style={styles.sectionTitle}>質問項目設定</Text>
                   <View style={styles.questionBadge}>
                     <Text style={styles.questionBadgeText}>
                       {enabledQuestionCount}項目有効
@@ -300,7 +303,9 @@ export default function FormSetupScreen() {
                       key={question.id}
                       style={[
                         styles.questionItem,
-                        question.enabled ? styles.questionItemEnabled : styles.questionItemDisabled
+                        question.enabled
+                          ? styles.questionItemEnabled
+                          : styles.questionItemDisabled,
                       ]}
                     >
                       <View style={styles.questionHeader}>
@@ -308,8 +313,10 @@ export default function FormSetupScreen() {
                           onPress={() => toggleQuestionEnabled(question.id)}
                           style={[
                             styles.questionToggle,
-                            question.enabled ? styles.questionToggleEnabled : styles.questionToggleDisabled,
-                            !question.canDisable && styles.questionToggleFixed
+                            question.enabled
+                              ? styles.questionToggleEnabled
+                              : styles.questionToggleDisabled,
+                            !question.canDisable && styles.questionToggleFixed,
                           ]}
                           activeOpacity={question.canDisable ? 0.7 : 1}
                           disabled={!question.canDisable}
@@ -325,16 +332,16 @@ export default function FormSetupScreen() {
                         <Text
                           style={[
                             styles.questionText,
-                            question.enabled ? styles.questionTextEnabled : styles.questionTextDisabled
+                            question.enabled
+                              ? styles.questionTextEnabled
+                              : styles.questionTextDisabled,
                           ]}
                         >
                           {question.question}
                         </Text>
                         {question.type === 'name' && (
                           <View style={styles.requiredBadge}>
-                            <Text style={styles.requiredBadgeText}>
-                              必須
-                            </Text>
+                            <Text style={styles.requiredBadgeText}>必須</Text>
                           </View>
                         )}
                         {question.type === 'custom' && (
@@ -362,7 +369,9 @@ export default function FormSetupScreen() {
                             <View
                               style={[
                                 styles.requiredCheckbox,
-                                question.required ? styles.requiredCheckboxChecked : styles.requiredCheckboxUnchecked
+                                question.required
+                                  ? styles.requiredCheckboxChecked
+                                  : styles.requiredCheckboxUnchecked,
                               ]}
                             >
                               {question.required && (
@@ -376,7 +385,8 @@ export default function FormSetupScreen() {
                             <Text
                               style={[
                                 styles.requiredToggleText,
-                                question.required && styles.requiredToggleTextChecked
+                                question.required &&
+                                  styles.requiredToggleTextChecked,
                               ]}
                             >
                               必須回答
@@ -436,18 +446,12 @@ export default function FormSetupScreen() {
                         color={Colors.success[500]}
                       />
                     </View>
-                    <Text style={styles.sectionTitle}>
-                      フォーム生成完了！
-                    </Text>
+                    <Text style={styles.sectionTitle}>フォーム生成完了！</Text>
                   </View>
 
                   <View style={styles.urlContainer}>
-                    <Text style={styles.urlLabel}>
-                      生成されたURL:
-                    </Text>
-                    <Text style={styles.urlText}>
-                      {formUrl}
-                    </Text>
+                    <Text style={styles.urlLabel}>生成されたURL:</Text>
+                    <Text style={styles.urlText}>{formUrl}</Text>
                   </View>
 
                   <View style={styles.buttonRow}>
@@ -489,7 +493,7 @@ export default function FormSetupScreen() {
             )}
           </View>
         </ScrollView>
-      </SafeAreaView>
+      </View>
     </View>
   );
 }

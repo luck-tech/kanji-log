@@ -5,11 +5,11 @@ import {
   Modal,
   TouchableOpacity,
   ScrollView,
-  SafeAreaView,
   Alert,
   StyleSheet,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Card } from '@/components/common/Card';
 import { Button } from '@/components/common/Button';
 import { Input } from '@/components/common/Input';
@@ -32,6 +32,7 @@ export const MemberAddModal: React.FC<MemberAddModalProps> = ({
   onClose,
   onAddMember,
 }) => {
+  const insets = useSafeAreaInsets();
   const [formData, setFormData] = useState<MemberData>({
     name: '',
     department: '',
@@ -84,32 +85,35 @@ export const MemberAddModal: React.FC<MemberAddModalProps> = ({
       presentationStyle="pageSheet"
       onRequestClose={handleClose}
     >
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
           <View style={styles.headerContent}>
             <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
               <Ionicons name="close" size={24} color={Colors.neutral[500]} />
             </TouchableOpacity>
-            <Text style={styles.headerTitle}>
-              メンバー追加
-            </Text>
+            <Text style={styles.headerTitle}>メンバー追加</Text>
             <View style={styles.spacer} />
           </View>
         </View>
 
-        <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+        <ScrollView
+          style={styles.scrollView}
+          showsVerticalScrollIndicator={false}
+        >
           <View style={styles.content}>
             {/* 説明 */}
             <Card variant="elevated" shadow="none">
               <View style={styles.cardContent}>
                 <View style={styles.sectionHeader}>
                   <View style={[styles.sectionIcon, styles.primaryIcon]}>
-                    <Ionicons name="person-add" size={20} color={Colors.primary[600]} />
+                    <Ionicons
+                      name="person-add"
+                      size={20}
+                      color={Colors.primary[600]}
+                    />
                   </View>
-                  <Text style={styles.sectionTitle}>
-                    新しいメンバー
-                  </Text>
+                  <Text style={styles.sectionTitle}>新しいメンバー</Text>
                 </View>
                 <Text style={styles.description}>
                   飲み会に参加予定のメンバーの情報を入力してください。
@@ -123,11 +127,13 @@ export const MemberAddModal: React.FC<MemberAddModalProps> = ({
               <View style={styles.cardContent}>
                 <View style={styles.sectionHeader}>
                   <View style={[styles.sectionIcon, styles.primaryIcon]}>
-                    <Ionicons name="person" size={20} color={Colors.primary[600]} />
+                    <Ionicons
+                      name="person"
+                      size={20}
+                      color={Colors.primary[600]}
+                    />
                   </View>
-                  <Text style={styles.sectionTitle}>
-                    基本情報
-                  </Text>
+                  <Text style={styles.sectionTitle}>基本情報</Text>
                 </View>
 
                 <Input
@@ -157,11 +163,13 @@ export const MemberAddModal: React.FC<MemberAddModalProps> = ({
               <View style={styles.cardContent}>
                 <View style={styles.sectionHeader}>
                   <View style={[styles.sectionIcon, styles.successIcon]}>
-                    <Ionicons name="document-text" size={20} color={Colors.success[600]} />
+                    <Ionicons
+                      name="document-text"
+                      size={20}
+                      color={Colors.success[600]}
+                    />
                   </View>
-                  <Text style={styles.sectionTitle}>
-                    補足情報
-                  </Text>
+                  <Text style={styles.sectionTitle}>補足情報</Text>
                   <Text style={styles.optionalLabel}>（任意）</Text>
                 </View>
 
@@ -203,9 +211,7 @@ export const MemberAddModal: React.FC<MemberAddModalProps> = ({
                       color={Colors.accent[600]}
                     />
                   </View>
-                  <Text style={styles.sectionTitle}>
-                    プライバシー
-                  </Text>
+                  <Text style={styles.sectionTitle}>プライバシー</Text>
                 </View>
 
                 <View style={styles.privacyAlert}>
@@ -221,7 +227,7 @@ export const MemberAddModal: React.FC<MemberAddModalProps> = ({
         </ScrollView>
 
         {/* Footer */}
-        <View style={styles.footer}>
+        <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
           <Button
             title="メンバーを追加"
             onPress={handleAdd}
@@ -232,7 +238,7 @@ export const MemberAddModal: React.FC<MemberAddModalProps> = ({
             icon={<Ionicons name="person-add" size={20} color="white" />}
           />
         </View>
-      </SafeAreaView>
+      </View>
     </Modal>
   );
 };

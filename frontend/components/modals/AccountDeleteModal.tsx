@@ -5,11 +5,11 @@ import {
   Modal,
   TouchableOpacity,
   ScrollView,
-  SafeAreaView,
   Alert,
   StyleSheet,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Card } from '@/components/common/Card';
 import { Button } from '@/components/common/Button';
 import { Input } from '@/components/common/Input';
@@ -26,6 +26,7 @@ export const AccountDeleteModal: React.FC<AccountDeleteModalProps> = ({
   onClose,
   onConfirmDelete,
 }) => {
+  const insets = useSafeAreaInsets();
   const [confirmationText, setConfirmationText] = useState('');
   const [isConfirmed, setIsConfirmed] = useState(false);
 
@@ -88,7 +89,7 @@ export const AccountDeleteModal: React.FC<AccountDeleteModalProps> = ({
       presentationStyle="pageSheet"
       onRequestClose={handleClose}
     >
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
           <View style={styles.headerContent}>
@@ -287,7 +288,7 @@ export const AccountDeleteModal: React.FC<AccountDeleteModalProps> = ({
         </ScrollView>
 
         {/* Footer */}
-        <View style={styles.footer}>
+        <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
           <View style={styles.footerButtons}>
             <View style={styles.buttonContainer}>
               <Button
@@ -311,7 +312,7 @@ export const AccountDeleteModal: React.FC<AccountDeleteModalProps> = ({
             </View>
           </View>
         </View>
-      </SafeAreaView>
+      </View>
     </Modal>
   );
 };

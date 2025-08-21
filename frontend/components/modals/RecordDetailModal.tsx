@@ -5,7 +5,6 @@ import {
   Modal,
   TouchableOpacity,
   ScrollView,
-  SafeAreaView,
   Share,
   StyleSheet,
 } from 'react-native';
@@ -131,7 +130,7 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({
       presentationStyle="pageSheet"
       onRequestClose={onClose}
     >
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
           <View style={styles.headerContent}>
@@ -145,7 +144,10 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({
           </View>
         </View>
 
-        <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+        <ScrollView
+          style={styles.scrollView}
+          showsVerticalScrollIndicator={false}
+        >
           <View style={styles.content}>
             {/* 店舗情報カード */}
             <Card variant="elevated" shadow="none">
@@ -189,9 +191,7 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({
 
                 {/* 予算 */}
                 <View style={styles.budgetCard}>
-                  <Text style={styles.budgetLabel}>
-                    予算（一人あたり）
-                  </Text>
+                  <Text style={styles.budgetLabel}>予算（一人あたり）</Text>
                   <Text style={styles.budgetValue}>
                     ¥{record.eventLog.costPerPerson?.toLocaleString() || '不明'}
                   </Text>
@@ -206,9 +206,7 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({
                   <View style={[styles.iconContainer, styles.blueIcon]}>
                     <Ionicons name="calendar" size={20} color="#0284c7" />
                   </View>
-                  <Text style={styles.sectionTitle}>
-                    イベント情報
-                  </Text>
+                  <Text style={styles.sectionTitle}>イベント情報</Text>
                 </View>
 
                 <View style={styles.eventInfo}>
@@ -238,9 +236,7 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({
                   </TouchableOpacity>
 
                   <View style={styles.eventInfoRowNeutral}>
-                    <Text style={styles.eventInfoLabel}>
-                      参加者数
-                    </Text>
+                    <Text style={styles.eventInfoLabel}>参加者数</Text>
                     <Text style={styles.eventInfoValueNeutral}>
                       {record.participantCount}名
                     </Text>
@@ -263,9 +259,7 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({
                   <View style={[styles.iconContainer, styles.amberIcon]}>
                     <Ionicons name="star" size={20} color="#f59e0b" />
                   </View>
-                  <Text style={styles.sectionTitle}>
-                    評価理由・記録メモ
-                  </Text>
+                  <Text style={styles.sectionTitle}>評価理由・記録メモ</Text>
                 </View>
 
                 <View style={styles.notesCard}>
@@ -284,18 +278,13 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({
                     <View style={[styles.iconContainer, styles.purpleIcon]}>
                       <Ionicons name="images" size={20} color="#8b5cf6" />
                     </View>
-                    <Text style={styles.sectionTitle}>
-                      お店の写真
-                    </Text>
+                    <Text style={styles.sectionTitle}>お店の写真</Text>
                   </View>
 
                   {/* 画像プレースホルダー（実際の画像表示機能は別途実装） */}
                   <View style={styles.imagesRow}>
                     {record.images.slice(0, 3).map((_, index) => (
-                      <View
-                        key={index}
-                        style={styles.imagePlaceholder}
-                      >
+                      <View key={index} style={styles.imagePlaceholder}>
                         <Ionicons
                           name="image-outline"
                           size={24}
@@ -305,9 +294,7 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({
                     ))}
                   </View>
 
-                  <Text style={styles.imageNote}>
-                    画像表示機能は開発中です
-                  </Text>
+                  <Text style={styles.imageNote}>画像表示機能は開発中です</Text>
                 </View>
               </Card>
             )}
@@ -319,9 +306,7 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({
                   <View style={[styles.iconContainer, styles.greenIcon]}>
                     <Ionicons name="heart" size={20} color="#10b981" />
                   </View>
-                  <Text style={styles.sectionTitle}>
-                    この記録を活用
-                  </Text>
+                  <Text style={styles.sectionTitle}>この記録を活用</Text>
                 </View>
 
                 <Text style={styles.actionDescription}>
@@ -334,7 +319,9 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({
                     onPress={onLike}
                     style={[
                       styles.likeButton,
-                      record.isLiked ? styles.likeButtonActive : styles.likeButtonInactive,
+                      record.isLiked
+                        ? styles.likeButtonActive
+                        : styles.likeButtonInactive,
                     ]}
                     activeOpacity={0.8}
                   >
@@ -344,7 +331,11 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({
                       color={record.isLiked ? '#ef4444' : '#94a3b8'}
                     />
                     <Text
-                      style={record.isLiked ? styles.likeTextActive : styles.likeTextInactive}
+                      style={
+                        record.isLiked
+                          ? styles.likeTextActive
+                          : styles.likeTextInactive
+                      }
                     >
                       {record.likeCount}
                     </Text>
@@ -363,7 +354,7 @@ export const RecordDetailModal: React.FC<RecordDetailModalProps> = ({
             </Card>
           </View>
         </ScrollView>
-      </SafeAreaView>
+      </View>
     </Modal>
   );
 };

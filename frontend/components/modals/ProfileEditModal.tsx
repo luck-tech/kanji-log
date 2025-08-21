@@ -5,7 +5,6 @@ import {
   Modal,
   ScrollView,
   TouchableOpacity,
-  SafeAreaView,
   StyleSheet,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -181,7 +180,7 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
       presentationStyle="pageSheet"
       onRequestClose={handleClose}
     >
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
           <View style={styles.headerContent}>
@@ -629,7 +628,7 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
             </Card>
           </View>
         </ScrollView>
-      </SafeAreaView>
+      </View>
     </Modal>
   );
 };

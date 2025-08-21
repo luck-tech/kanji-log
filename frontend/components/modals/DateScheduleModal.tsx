@@ -5,11 +5,11 @@ import {
   Modal,
   TouchableOpacity,
   ScrollView,
-  SafeAreaView,
   Alert,
   StyleSheet,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Card } from '@/components/common/Card';
 import { Button } from '@/components/common/Button';
 import { Input } from '@/components/common/Input';
@@ -42,6 +42,7 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
   onClose,
   onScheduleSetup,
 }) => {
+  const insets = useSafeAreaInsets();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [dateOptions, setDateOptions] = useState<DateOption[]>([
@@ -181,7 +182,7 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
       presentationStyle="pageSheet"
       onRequestClose={handleClose}
     >
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
           <View style={styles.headerContent}>
@@ -409,7 +410,7 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
         </ScrollView>
 
         {/* Footer */}
-        <View style={styles.footer}>
+        <View style={(styles.footer, { paddingBottom: insets.bottom })}>
           <Button
             title="日程調整を開始"
             onPress={handleSetup}
@@ -456,7 +457,7 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
             title="回答期限を選択"
           />
         )}
-      </SafeAreaView>
+      </View>
     </Modal>
   );
 };

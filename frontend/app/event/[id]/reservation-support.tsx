@@ -4,7 +4,6 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
-  SafeAreaView,
   Alert,
   Linking,
   Share,
@@ -190,7 +189,7 @@ ${reservationInfo.event.title}
 
   return (
     <View style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
+      <View style={styles.safeArea}>
         <Header
           title="予約サポート"
           subtitle="予約に必要な情報をまとめて表示"
@@ -206,11 +205,11 @@ ${reservationInfo.event.title}
         >
           <View style={styles.content}>
             {/* イベント概要 */}
-            <Card variant="gradient" shadow="none">
+            <Card variant="elevated" shadow="none">
               <View style={styles.eventCard}>
                 <View style={styles.eventHeader}>
                   <View style={styles.eventIcon}>
-                    <Ionicons name="calendar" size={20} color="white" />
+                    <Ionicons name="calendar" size={20} color="#4f46e5" />
                   </View>
                   <Text style={styles.eventTitle}>
                     {reservationInfo.event.title}
@@ -244,9 +243,7 @@ ${reservationInfo.event.title}
                   <View style={[styles.iconContainer, styles.redIcon]}>
                     <Ionicons name="restaurant" size={20} color="#ef4444" />
                   </View>
-                  <Text style={styles.sectionTitle}>
-                    選択されたお店
-                  </Text>
+                  <Text style={styles.sectionTitle}>選択されたお店</Text>
                 </View>
 
                 <View style={styles.restaurantInfo}>
@@ -277,13 +274,8 @@ ${reservationInfo.event.title}
                   <View style={styles.featuresContainer}>
                     {reservationInfo.restaurant.features.map(
                       (feature, index) => (
-                        <View
-                          key={index}
-                          style={styles.featureChip}
-                        >
-                          <Text style={styles.featureText}>
-                            {feature}
-                          </Text>
+                        <View key={index} style={styles.featureChip}>
+                          <Text style={styles.featureText}>{feature}</Text>
                         </View>
                       )
                     )}
@@ -299,9 +291,7 @@ ${reservationInfo.event.title}
                   <View style={[styles.iconContainer, styles.greenIcon]}>
                     <Ionicons name="call" size={20} color="#10b981" />
                   </View>
-                  <Text style={styles.sectionTitle}>
-                    予約手続き
-                  </Text>
+                  <Text style={styles.sectionTitle}>予約手続き</Text>
                 </View>
 
                 <View style={styles.actionButtons}>
@@ -311,9 +301,7 @@ ${reservationInfo.event.title}
                     activeOpacity={0.8}
                   >
                     <Ionicons name="call" size={20} color="white" />
-                    <Text style={styles.primaryButtonText}>
-                      電話で予約する
-                    </Text>
+                    <Text style={styles.primaryButtonText}>電話で予約する</Text>
                   </TouchableOpacity>
 
                   <View style={styles.secondaryButtonRow}>
@@ -323,9 +311,7 @@ ${reservationInfo.event.title}
                       activeOpacity={0.8}
                     >
                       <Ionicons name="map" size={18} color="#0284c7" />
-                      <Text style={styles.blueButtonText}>
-                        地図を開く
-                      </Text>
+                      <Text style={styles.blueButtonText}>地図を開く</Text>
                     </TouchableOpacity>
 
                     {reservationInfo.restaurant.reservationUrl && (
@@ -335,9 +321,7 @@ ${reservationInfo.event.title}
                         activeOpacity={0.8}
                       >
                         <Ionicons name="globe" size={18} color="#f59e0b" />
-                        <Text style={styles.orangeButtonText}>
-                          予約サイト
-                        </Text>
+                        <Text style={styles.orangeButtonText}>予約サイト</Text>
                       </TouchableOpacity>
                     )}
                   </View>
@@ -348,9 +332,7 @@ ${reservationInfo.event.title}
                     activeOpacity={0.8}
                   >
                     <Ionicons name="share" size={18} color="#7c3aed" />
-                    <Text style={styles.purpleButtonText}>
-                      予約情報を共有
-                    </Text>
+                    <Text style={styles.purpleButtonText}>予約情報を共有</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -367,9 +349,7 @@ ${reservationInfo.event.title}
                       color="#7c3aed"
                     />
                   </View>
-                  <Text style={styles.sectionTitle}>
-                    予約完了報告
-                  </Text>
+                  <Text style={styles.sectionTitle}>予約完了報告</Text>
                 </View>
 
                 <Text style={styles.reportDescription}>
@@ -451,9 +431,7 @@ ${reservationInfo.event.title}
                   <View style={[styles.iconContainer, styles.amberIcon]}>
                     <Ionicons name="bulb" size={20} color="#f59e0b" />
                   </View>
-                  <Text style={styles.sectionTitle}>
-                    予約のコツ
-                  </Text>
+                  <Text style={styles.sectionTitle}>予約のコツ</Text>
                 </View>
 
                 <View style={styles.tipsContent}>
@@ -474,16 +452,14 @@ ${reservationInfo.event.title}
                     <Text style={styles.tipItem}>
                       • 個室希望（可能であれば）
                     </Text>
-                    <Text style={styles.tipItem}>
-                      • アレルギー対応の確認
-                    </Text>
+                    <Text style={styles.tipItem}>• アレルギー対応の確認</Text>
                   </View>
                 </View>
               </View>
             </Card>
           </View>
         </ScrollView>
-      </SafeAreaView>
+      </View>
     </View>
   );
 }
@@ -518,14 +494,14 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 16,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    backgroundColor: Colors.primary[100],
     justifyContent: 'center',
     alignItems: 'center',
   },
   eventTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: 'white',
+    color: Colors.neutral[900],
   },
   eventDetails: {
     flexDirection: 'row',
@@ -534,19 +510,19 @@ const styles = StyleSheet.create({
   eventDetailItem: {
     flex: 1,
     padding: 12,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    backgroundColor: Colors.primary[50],
     borderRadius: 12,
   },
   eventDetailLabel: {
-    color: 'rgba(255, 255, 255, 0.9)',
+    color: Colors.neutral[600],
     fontSize: 14,
   },
   eventDetailValue: {
-    color: 'white',
+    color: Colors.neutral[900],
     fontWeight: '700',
   },
   eventMemberCount: {
-    color: 'white',
+    color: Colors.primary[700],
     fontWeight: '700',
     fontSize: 24,
     textAlign: 'center',

@@ -4,7 +4,6 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
-  SafeAreaView,
   StyleSheet,
 } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -13,6 +12,7 @@ import { Card } from '@/components/common/Card';
 import { Button } from '@/components/common/Button';
 import { Header } from '@/components/common/Header';
 import { Colors } from '@/constants/Colors';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface Restaurant {
   id: string;
@@ -77,6 +77,7 @@ export default function RestaurantSuggestionsScreen() {
   const [selectedRestaurant, setSelectedRestaurant] =
     useState<Restaurant | null>(null);
   const [restaurants] = useState<Restaurant[]>(mockRestaurants);
+  const insets = useSafeAreaInsets();
 
   const handleBackPress = () => {
     router.back();
@@ -149,7 +150,7 @@ export default function RestaurantSuggestionsScreen() {
 
   return (
     <View style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
+      <View style={styles.safeArea}>
         <Header
           title="レストラン提案"
           subtitle="AIが選んだおすすめのお店"
@@ -350,7 +351,7 @@ export default function RestaurantSuggestionsScreen() {
 
         {/* Footer - 選択したレストランで予約へ進む */}
         {selectedRestaurant && (
-          <View style={styles.footer}>
+          <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
             <Button
               title={`${selectedRestaurant.name}で予約する`}
               onPress={handleMakeReservation}
@@ -361,7 +362,7 @@ export default function RestaurantSuggestionsScreen() {
             />
           </View>
         )}
-      </SafeAreaView>
+      </View>
     </View>
   );
 }

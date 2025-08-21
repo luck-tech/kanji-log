@@ -5,10 +5,10 @@ import {
   Modal,
   TouchableOpacity,
   ScrollView,
-  SafeAreaView,
   StyleSheet,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Card } from '@/components/common/Card';
 import { Button } from '@/components/common/Button';
 import { Input } from '@/components/common/Input';
@@ -46,6 +46,7 @@ export const EventCreateModal: React.FC<EventCreateModalProps> = ({
   onClose,
   onCreate,
 }) => {
+  const insets = useSafeAreaInsets();
   const [formData, setFormData] = useState<EventCreateData>({
     title: '',
     purpose: '',
@@ -412,7 +413,7 @@ export const EventCreateModal: React.FC<EventCreateModalProps> = ({
         </ScrollView>
 
         {/* Footer */}
-        <View style={styles.footer}>
+        <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
           <Button
             title="イベントを作成"
             onPress={handleCreate}
@@ -424,10 +425,8 @@ export const EventCreateModal: React.FC<EventCreateModalProps> = ({
           />
         </View>
       </View>
-      <SafeAreaView style={styles.safeAreaStyle} />
 
-      {/* モーダルの背景をタップで閉じる */}
-
+      {/* CustomDateTimePickers */}
       <CustomDateTimePicker
         isVisible={showDatePicker}
         mode="date"
@@ -662,8 +661,5 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     borderTopWidth: 1,
     borderTopColor: Colors.neutral[200],
-  },
-  safeAreaStyle: {
-    height: 10,
   },
 });

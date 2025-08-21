@@ -5,11 +5,11 @@ import {
   Modal,
   TouchableOpacity,
   ScrollView,
-  SafeAreaView,
   Switch,
   StyleSheet,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Card } from '@/components/common/Card';
 import { Button } from '@/components/common/Button';
 import { Input } from '@/components/common/Input';
@@ -48,6 +48,7 @@ export const EventLogModal: React.FC<EventLogModalProps> = ({
   eventTitle,
   venue,
 }) => {
+  const insets = useSafeAreaInsets();
   const [formData, setFormData] = useState<EventLogData>({
     rating: 0,
     notes: '',
@@ -150,7 +151,7 @@ export const EventLogModal: React.FC<EventLogModalProps> = ({
       presentationStyle="pageSheet"
       onRequestClose={handleClose}
     >
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
           <View style={styles.headerContent}>
@@ -162,7 +163,10 @@ export const EventLogModal: React.FC<EventLogModalProps> = ({
           </View>
         </View>
 
-        <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+        <ScrollView
+          style={styles.scrollView}
+          showsVerticalScrollIndicator={false}
+        >
           <View style={styles.content}>
             {/* イベント情報 */}
             <Card variant="gradient" shadow="none">
@@ -171,9 +175,7 @@ export const EventLogModal: React.FC<EventLogModalProps> = ({
                   <View style={styles.eventIcon}>
                     <Ionicons name="checkmark-circle" size={20} color="white" />
                   </View>
-                  <Text style={styles.eventTitle}>
-                    {eventTitle}
-                  </Text>
+                  <Text style={styles.eventTitle}>{eventTitle}</Text>
                 </View>
                 <Text style={styles.eventDescription}>
                   お疲れさまでした！イベントの記録を残して、今後の幹事業務に活かしましょう。
@@ -188,9 +190,7 @@ export const EventLogModal: React.FC<EventLogModalProps> = ({
                   <View style={[styles.sectionIcon, styles.venueIcon]}>
                     <Ionicons name="restaurant" size={20} color="#ef4444" />
                   </View>
-                  <Text style={styles.sectionTitle}>
-                    店舗情報
-                  </Text>
+                  <Text style={styles.sectionTitle}>店舗情報</Text>
                 </View>
 
                 <Input
@@ -239,9 +239,7 @@ export const EventLogModal: React.FC<EventLogModalProps> = ({
                   <View style={[styles.sectionIcon, styles.ratingIcon]}>
                     <Ionicons name="star" size={20} color="#f59e0b" />
                   </View>
-                  <Text style={styles.sectionTitle}>
-                    総合評価
-                  </Text>
+                  <Text style={styles.sectionTitle}>総合評価</Text>
                   {errors.rating && (
                     <Text style={styles.requiredIndicator}>*</Text>
                   )}
@@ -252,7 +250,9 @@ export const EventLogModal: React.FC<EventLogModalProps> = ({
                   <Text
                     style={[
                       styles.ratingLabel,
-                      formData.rating > 0 ? styles.ratingLabelActive : styles.ratingLabelInactive
+                      formData.rating > 0
+                        ? styles.ratingLabelActive
+                        : styles.ratingLabelInactive,
                     ]}
                   >
                     {getRatingLabel(formData.rating)}
@@ -260,9 +260,7 @@ export const EventLogModal: React.FC<EventLogModalProps> = ({
                 </View>
 
                 {errors.rating && (
-                  <Text style={styles.errorText}>
-                    {errors.rating}
-                  </Text>
+                  <Text style={styles.errorText}>{errors.rating}</Text>
                 )}
               </View>
             </Card>
@@ -274,9 +272,7 @@ export const EventLogModal: React.FC<EventLogModalProps> = ({
                   <View style={[styles.sectionIcon, styles.notesIcon]}>
                     <Ionicons name="document-text" size={20} color="#0284c7" />
                   </View>
-                  <Text style={styles.sectionTitle}>
-                    主観メモ
-                  </Text>
+                  <Text style={styles.sectionTitle}>主観メモ</Text>
                 </View>
 
                 <Input
@@ -305,9 +301,7 @@ export const EventLogModal: React.FC<EventLogModalProps> = ({
                   <View style={[styles.sectionIcon, styles.costIcon]}>
                     <Ionicons name="cash" size={20} color="#10b981" />
                   </View>
-                  <Text style={styles.sectionTitle}>
-                    会計情報
-                  </Text>
+                  <Text style={styles.sectionTitle}>会計情報</Text>
                   <Text style={styles.optionalLabel}>（任意）</Text>
                 </View>
 
@@ -330,7 +324,10 @@ export const EventLogModal: React.FC<EventLogModalProps> = ({
                       placeholder="5000"
                       value={formData.costPerPerson}
                       onChangeText={(text) =>
-                        setFormData((prev) => ({ ...prev, costPerPerson: text }))
+                        setFormData((prev) => ({
+                          ...prev,
+                          costPerPerson: text,
+                        }))
                       }
                       keyboardType="numeric"
                       error={errors.costPerPerson}
@@ -351,9 +348,7 @@ export const EventLogModal: React.FC<EventLogModalProps> = ({
                   <View style={[styles.sectionIcon, styles.shareIcon]}>
                     <Ionicons name="share-social" size={20} color="#7c3aed" />
                   </View>
-                  <Text style={styles.sectionTitle}>
-                    共有設定
-                  </Text>
+                  <Text style={styles.sectionTitle}>共有設定</Text>
                 </View>
 
                 <View style={styles.shareOption}>
@@ -394,7 +389,7 @@ export const EventLogModal: React.FC<EventLogModalProps> = ({
         </ScrollView>
 
         {/* Footer */}
-        <View style={styles.footer}>
+        <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
           <Button
             title="記録を保存"
             onPress={handleSave}
@@ -405,7 +400,7 @@ export const EventLogModal: React.FC<EventLogModalProps> = ({
             icon={<Ionicons name="save" size={20} color="white" />}
           />
         </View>
-      </SafeAreaView>
+      </View>
     </Modal>
   );
 };

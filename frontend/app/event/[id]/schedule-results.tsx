@@ -4,7 +4,6 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
-  SafeAreaView,
   Alert,
   StyleSheet,
 } from 'react-native';
@@ -14,6 +13,7 @@ import { Card } from '@/components/common/Card';
 import { Button } from '@/components/common/Button';
 import { Header } from '@/components/common/Header';
 import { Colors } from '@/constants';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface ScheduleResponse {
   userId: string;
@@ -121,6 +121,7 @@ export default function ScheduleResultsScreen() {
   const [dateOptions] = useState<DateOptionWithStats[]>(mockDateOptions);
   const [responses] = useState<ScheduleResponse[]>(mockResponses);
   const [selectedDateId, setSelectedDateId] = useState<string | null>(null);
+  const insets = useSafeAreaInsets();
 
   const handleBackPress = () => {
     router.back();
@@ -209,7 +210,7 @@ export default function ScheduleResultsScreen() {
 
   return (
     <View style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
+      <View style={styles.safeArea}>
         <Header
           title="日程調整結果"
           subtitle="メンバーの回答状況と最適日程"
@@ -218,7 +219,10 @@ export default function ScheduleResultsScreen() {
           onLeftPress={handleBackPress}
         />
 
-        <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+        <ScrollView
+          style={styles.scrollView}
+          showsVerticalScrollIndicator={false}
+        >
           <View style={styles.content}>
             {/* 全体サマリー */}
             <Card variant="elevated" shadow="none">
@@ -227,9 +231,7 @@ export default function ScheduleResultsScreen() {
                   <View style={[styles.iconContainer, styles.blueIcon]}>
                     <Ionicons name="analytics" size={20} color="#3b82f6" />
                   </View>
-                  <Text style={styles.cardTitle}>
-                    調整結果サマリー
-                  </Text>
+                  <Text style={styles.cardTitle}>調整結果サマリー</Text>
                 </View>
 
                 <View style={styles.statsRow}>
@@ -260,9 +262,7 @@ export default function ScheduleResultsScreen() {
                 </View>
 
                 <View style={styles.bestOptionCard}>
-                  <Text style={styles.bestOptionTitle}>
-                    🏆 最適日程
-                  </Text>
+                  <Text style={styles.bestOptionTitle}>🏆 最適日程</Text>
                   <Text style={styles.bestOptionDate}>
                     {formatDate(bestOption.date)} {bestOption.time}
                   </Text>
@@ -276,9 +276,7 @@ export default function ScheduleResultsScreen() {
 
             {/* 候補日ごとの結果 */}
             <View style={styles.dateOptionsContainer}>
-              <Text style={styles.sectionTitle}>
-                候補日の詳細結果
-              </Text>
+              <Text style={styles.sectionTitle}>候補日の詳細結果</Text>
 
               {sortedDateOptions.map((option, index) => {
                 const isSelected = selectedDateId === option.id;
@@ -338,15 +336,29 @@ export default function ScheduleResultsScreen() {
                                   {formatDate(option.date)} {option.time}
                                 </Text>
                                 {isBest && !isSelected && (
-                                  <View style={[styles.badge, styles.bestBadge]}>
-                                    <Text style={[styles.badgeText, styles.bestBadgeText]}>
+                                  <View
+                                    style={[styles.badge, styles.bestBadge]}
+                                  >
+                                    <Text
+                                      style={[
+                                        styles.badgeText,
+                                        styles.bestBadgeText,
+                                      ]}
+                                    >
                                       最適
                                     </Text>
                                   </View>
                                 )}
                                 {isSelected && (
-                                  <View style={[styles.badge, styles.selectedBadge]}>
-                                    <Text style={[styles.badgeText, styles.selectedBadgeText]}>
+                                  <View
+                                    style={[styles.badge, styles.selectedBadge]}
+                                  >
+                                    <Text
+                                      style={[
+                                        styles.badgeText,
+                                        styles.selectedBadgeText,
+                                      ]}
+                                    >
                                       選択中
                                     </Text>
                                   </View>
@@ -403,7 +415,9 @@ export default function ScheduleResultsScreen() {
                           <View
                             style={[
                               styles.progressBar,
-                              isSelected ? styles.selectedProgressBar : styles.normalProgressBar,
+                              isSelected
+                                ? styles.selectedProgressBar
+                                : styles.normalProgressBar,
                             ]}
                           >
                             <View style={styles.progressBarContent}>
@@ -424,7 +438,8 @@ export default function ScheduleResultsScreen() {
                                   styles.maybeProgress,
                                   {
                                     width: `${
-                                      (option.stats.maybe / option.stats.total) *
+                                      (option.stats.maybe /
+                                        option.stats.total) *
                                       100
                                     }%`,
                                   },
@@ -447,7 +462,9 @@ export default function ScheduleResultsScreen() {
 
                           <View style={styles.legendRow}>
                             <View style={styles.legendItem}>
-                              <View style={[styles.legendDot, styles.availableDot]} />
+                              <View
+                                style={[styles.legendDot, styles.availableDot]}
+                              />
                               <Text
                                 style={[
                                   styles.legendText,
@@ -460,7 +477,9 @@ export default function ScheduleResultsScreen() {
                               </Text>
                             </View>
                             <View style={styles.legendItem}>
-                              <View style={[styles.legendDot, styles.maybeDot]} />
+                              <View
+                                style={[styles.legendDot, styles.maybeDot]}
+                              />
                               <Text
                                 style={[
                                   styles.legendText,
@@ -473,7 +492,12 @@ export default function ScheduleResultsScreen() {
                               </Text>
                             </View>
                             <View style={styles.legendItem}>
-                              <View style={[styles.legendDot, styles.unavailableDot]} />
+                              <View
+                                style={[
+                                  styles.legendDot,
+                                  styles.unavailableDot,
+                                ]}
+                              />
                               <Text
                                 style={[
                                   styles.legendText,
@@ -501,9 +525,7 @@ export default function ScheduleResultsScreen() {
                   <View style={[styles.iconContainer, styles.purpleIcon]}>
                     <Ionicons name="people" size={20} color="#7c3aed" />
                   </View>
-                  <Text style={styles.responseTitle}>
-                    個別回答状況
-                  </Text>
+                  <Text style={styles.responseTitle}>個別回答状況</Text>
                 </View>
 
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -511,18 +533,14 @@ export default function ScheduleResultsScreen() {
                     {/* ヘッダー */}
                     <View style={styles.tableHeader}>
                       <View style={styles.memberColumn}>
-                        <Text style={styles.memberHeaderText}>
-                          メンバー
-                        </Text>
+                        <Text style={styles.memberHeaderText}>メンバー</Text>
                       </View>
                       {sortedDateOptions.map((option) => (
                         <View key={option.id} style={styles.dateColumn}>
                           <Text style={styles.dateHeaderText}>
                             {formatDate(option.date)}
                           </Text>
-                          <Text style={styles.dateTimeText}>
-                            {option.time}
-                          </Text>
+                          <Text style={styles.dateTimeText}>{option.time}</Text>
                         </View>
                       ))}
                     </View>
@@ -568,20 +586,17 @@ export default function ScheduleResultsScreen() {
         </ScrollView>
 
         {/* Footer - 日程確定と操作ボタン */}
-        <View style={styles.footer}>
+        <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
           {selectedDateId ? (
             <View style={styles.footerContent}>
               {/* 選択された日程の情報 */}
               <View style={styles.selectedDateInfo}>
-                <Text style={styles.selectedDateLabel}>
-                  確定予定の日程
-                </Text>
+                <Text style={styles.selectedDateLabel}>確定予定の日程</Text>
                 <Text style={styles.selectedDateInfoTitle}>
                   {formatDate(
                     sortedDateOptions.find((o) => o.id === selectedDateId)
                       ?.date || ''
-                  )}
-                  {' '}
+                  )}{' '}
                   {sortedDateOptions.find((o) => o.id === selectedDateId)?.time}
                 </Text>
                 <Text style={styles.selectedDateStats}>
@@ -600,25 +615,22 @@ export default function ScheduleResultsScreen() {
               </View>
 
               {/* ボタン */}
-              <View style={styles.buttonRow}>
-                <Button
-                  title="選択を解除"
-                  onPress={() => setSelectedDateId(null)}
-                  variant="outline"
-                  size="lg"
-                  style={{ flex: 1 }}
-                />
-                <Button
-                  title="この日程で確定"
-                  onPress={handleDateConfirm}
-                  variant="gradient"
-                  size="lg"
-                  style={{ flex: 2 }}
-                  icon={
-                    <Ionicons name="checkmark-circle" size={20} color="white" />
-                  }
-                />
-              </View>
+              <Button
+                title="この日程で確定"
+                onPress={handleDateConfirm}
+                variant="gradient"
+                size="lg"
+                icon={
+                  <Ionicons name="checkmark-circle" size={20} color="white" />
+                }
+                fullWidth
+              />
+              <Button
+                title="選択を解除"
+                onPress={() => setSelectedDateId(null)}
+                variant="outline"
+                size="lg"
+              />
             </View>
           ) : (
             <View style={styles.footerButtons}>
@@ -644,7 +656,7 @@ export default function ScheduleResultsScreen() {
             </View>
           )}
         </View>
-      </SafeAreaView>
+      </View>
     </View>
   );
 }
@@ -1063,8 +1075,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     textAlign: 'center',
   },
-  buttonRow: {
-    flexDirection: 'row',
+  buttonColumn: {
     gap: 12,
   },
   footerButtons: {

@@ -4,7 +4,6 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
-  SafeAreaView,
   StyleSheet,
 } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -286,7 +285,7 @@ export default function EventDetailScreen() {
 
   return (
     <View style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
+      <View style={styles.safeArea}>
         <Header
           title={event.title}
           subtitle={getPurposeLabel(event.purpose)}
@@ -334,9 +333,7 @@ export default function EventDetailScreen() {
                         size={20}
                         color="#10b981"
                       />
-                      <Text style={styles.confirmedTitle}>
-                        確定日程
-                      </Text>
+                      <Text style={styles.confirmedTitle}>確定日程</Text>
                     </View>
                     <Text style={styles.confirmedDate}>
                       {new Date(event.confirmedDate.date).toLocaleDateString(
@@ -358,29 +355,21 @@ export default function EventDetailScreen() {
                   <View style={styles.venueCard}>
                     <View style={styles.venueHeader}>
                       <Ionicons name="location" size={20} color="#0284c7" />
-                      <Text style={styles.venueTitle}>
-                        開催会場
-                      </Text>
+                      <Text style={styles.venueTitle}>開催会場</Text>
                     </View>
-                    <Text style={styles.venueName}>
-                      {event.venue.name}
-                    </Text>
+                    <Text style={styles.venueName}>{event.venue.name}</Text>
                     <Text style={styles.venueAddress}>
                       {event.venue.address}
                     </Text>
                     {event.venue.phone && (
-                      <Text style={styles.venuePhone}>
-                        {event.venue.phone}
-                      </Text>
+                      <Text style={styles.venuePhone}>{event.venue.phone}</Text>
                     )}
                   </View>
                 )}
 
                 {event.notes && (
                   <View style={styles.notesCard}>
-                    <Text style={styles.notesText}>
-                      {event.notes}
-                    </Text>
+                    <Text style={styles.notesText}>{event.notes}</Text>
                   </View>
                 )}
 
@@ -461,9 +450,7 @@ export default function EventDetailScreen() {
                         <Ionicons name="calendar" size={24} color="#f59e0b" />
                       </View>
                       <View style={styles.actionContent}>
-                        <Text style={styles.actionTitle}>
-                          日程調整を設定
-                        </Text>
+                        <Text style={styles.actionTitle}>日程調整を設定</Text>
                         <Text style={styles.actionDescription}>
                           複数の候補日でメンバーの都合を確認
                         </Text>
@@ -496,9 +483,7 @@ export default function EventDetailScreen() {
                           />
                         </View>
                         <View style={styles.actionContent}>
-                          <Text style={styles.actionTitle}>
-                            日程調整の結果
-                          </Text>
+                          <Text style={styles.actionTitle}>日程調整の結果</Text>
                           <Text style={styles.actionDescription}>
                             メンバーの回答状況を確認して日程を確定
                           </Text>
@@ -530,9 +515,7 @@ export default function EventDetailScreen() {
                           />
                         </View>
                         <View style={styles.actionContent}>
-                          <Text style={styles.actionTitle}>
-                            お店を探す
-                          </Text>
+                          <Text style={styles.actionTitle}>お店を探す</Text>
                           <Text style={styles.actionDescription}>
                             AIがメンバー情報を元に最適なお店を提案
                           </Text>
@@ -606,12 +589,8 @@ export default function EventDetailScreen() {
                         </Text>
                       </View>
                       <View style={styles.memberInfo}>
-                        <Text style={styles.memberName}>
-                          {member.name}
-                        </Text>
-                        <Text style={styles.memberEmail}>
-                          {member.email}
-                        </Text>
+                        <Text style={styles.memberName}>{member.name}</Text>
+                        <Text style={styles.memberEmail}>{member.email}</Text>
                       </View>
                       <View
                         style={[
@@ -667,7 +646,7 @@ export default function EventDetailScreen() {
           onClose={() => setIsScheduleModalVisible(false)}
           onScheduleSetup={handleScheduleSetupComplete}
         />
-      </SafeAreaView>
+      </View>
     </View>
   );
 }

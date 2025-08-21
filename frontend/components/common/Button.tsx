@@ -91,20 +91,26 @@ export const Button: React.FC<ButtonProps> = ({
 
   if (variant === 'gradient') {
     return (
-      <Animated.View style={[animatedStyle]}>
+      <Animated.View style={[animatedStyle, fullWidth && styles.fullWidth]}>
         <TouchableOpacity
-          style={[styles.base, fullWidth && styles.fullWidth, style]}
           onPress={handlePress}
           onPressIn={disabled || loading ? undefined : onPressIn}
           onPressOut={disabled || loading ? undefined : onPressOut}
           disabled={disabled || loading}
           activeOpacity={1}
+          style={[styles.gradientTouchable, fullWidth && styles.fullWidth]}
         >
           <LinearGradient
             colors={[Colors.primary[500], Colors.primary[600]]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
-            style={[styles.gradient, styles[`size_${size}`]]}
+            style={[
+              styles.base,
+              styles[`size_${size}`],
+              styles.gradientContainer,
+              (disabled || loading) && styles.disabled,
+              style,
+            ]}
           >
             <ButtonContent />
           </LinearGradient>
@@ -154,10 +160,15 @@ const styles = StyleSheet.create({
   },
   gradient: {
     backgroundColor: Colors.transparent,
+  },
+
+  // Gradient specific styles
+  gradientTouchable: {
     borderRadius: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+  },
+  gradientContainer: {
+    backgroundColor: Colors.transparent,
+    width: '100%', // LinearGradient自体を100%にする
   },
 
   // Sizes

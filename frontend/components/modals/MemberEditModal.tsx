@@ -5,7 +5,6 @@ import {
   Modal,
   TouchableOpacity,
   ScrollView,
-  SafeAreaView,
   StyleSheet,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -13,6 +12,7 @@ import { Card } from '@/components/common/Card';
 import { Button } from '@/components/common/Button';
 import { Input } from '@/components/common/Input';
 import { Colors } from '@/constants';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface MemberEditModalProps {
   isVisible: boolean;
@@ -77,6 +77,7 @@ export const MemberEditModal: React.FC<MemberEditModalProps> = ({
   onSave,
   initialData,
 }) => {
+  const insets = useSafeAreaInsets();
   const [formData, setFormData] = useState<MemberEditData>(
     initialData || {
       name: '',
@@ -160,7 +161,10 @@ export const MemberEditModal: React.FC<MemberEditModalProps> = ({
   };
 
   const addCustomAllergy = () => {
-    if (newAllergy.trim() && !formData.preferences.allergies.includes(newAllergy.trim())) {
+    if (
+      newAllergy.trim() &&
+      !formData.preferences.allergies.includes(newAllergy.trim())
+    ) {
       setFormData((prev) => ({
         ...prev,
         preferences: {
@@ -183,12 +187,18 @@ export const MemberEditModal: React.FC<MemberEditModalProps> = ({
   };
 
   const addCustomDietary = () => {
-    if (newDietary.trim() && !formData.preferences.dietaryRestrictions.includes(newDietary.trim())) {
+    if (
+      newDietary.trim() &&
+      !formData.preferences.dietaryRestrictions.includes(newDietary.trim())
+    ) {
       setFormData((prev) => ({
         ...prev,
         preferences: {
           ...prev.preferences,
-          dietaryRestrictions: [...prev.preferences.dietaryRestrictions, newDietary.trim()],
+          dietaryRestrictions: [
+            ...prev.preferences.dietaryRestrictions,
+            newDietary.trim(),
+          ],
         },
       }));
       setNewDietary('');
@@ -212,7 +222,9 @@ export const MemberEditModal: React.FC<MemberEditModalProps> = ({
       ...prev,
       preferences: {
         ...prev.preferences,
-        dietaryRestrictions: prev.preferences.dietaryRestrictions.includes(dietary)
+        dietaryRestrictions: prev.preferences.dietaryRestrictions.includes(
+          dietary
+        )
           ? prev.preferences.dietaryRestrictions.filter((d) => d !== dietary)
           : [...prev.preferences.dietaryRestrictions, dietary],
       },
@@ -220,8 +232,12 @@ export const MemberEditModal: React.FC<MemberEditModalProps> = ({
   };
 
   return (
-    <Modal visible={isVisible} animationType="slide" presentationStyle="pageSheet">
-      <SafeAreaView style={styles.container}>
+    <Modal
+      visible={isVisible}
+      animationType="slide"
+      presentationStyle="pageSheet"
+    >
+      <View style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
           <View style={styles.headerContent}>
@@ -235,7 +251,10 @@ export const MemberEditModal: React.FC<MemberEditModalProps> = ({
           </View>
         </View>
 
-        <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+        <ScrollView
+          style={styles.scrollView}
+          showsVerticalScrollIndicator={false}
+        >
           <View style={styles.content}>
             {/* 基本情報 */}
             <Card variant="elevated" shadow="none">
@@ -257,7 +276,11 @@ export const MemberEditModal: React.FC<MemberEditModalProps> = ({
                     placeholder="田中太郎"
                     error={errors.name}
                     leftIcon={
-                      <Ionicons name="person-outline" size={20} color="#9ca3af" />
+                      <Ionicons
+                        name="person-outline"
+                        size={20}
+                        color="#9ca3af"
+                      />
                     }
                   />
 
@@ -269,7 +292,11 @@ export const MemberEditModal: React.FC<MemberEditModalProps> = ({
                     }
                     placeholder="営業部"
                     leftIcon={
-                      <Ionicons name="business-outline" size={20} color="#9ca3af" />
+                      <Ionicons
+                        name="business-outline"
+                        size={20}
+                        color="#9ca3af"
+                      />
                     }
                   />
                 </View>
@@ -288,21 +315,26 @@ export const MemberEditModal: React.FC<MemberEditModalProps> = ({
 
                 <View style={styles.chipsContainer}>
                   {GENRE_OPTIONS.map((genre) => {
-                    const isSelected = formData.preferences.favoriteGenres.includes(genre);
+                    const isSelected =
+                      formData.preferences.favoriteGenres.includes(genre);
                     return (
                       <TouchableOpacity
                         key={genre}
                         onPress={() => toggleGenre(genre)}
                         style={[
                           styles.chip,
-                          isSelected ? styles.chipSelected : styles.chipUnselected,
+                          isSelected
+                            ? styles.chipSelected
+                            : styles.chipUnselected,
                         ]}
                         activeOpacity={0.7}
                       >
                         <Text
                           style={[
                             styles.chipText,
-                            isSelected ? styles.chipTextSelected : styles.chipTextUnselected,
+                            isSelected
+                              ? styles.chipTextSelected
+                              : styles.chipTextUnselected,
                           ]}
                         >
                           {genre}
@@ -392,7 +424,8 @@ export const MemberEditModal: React.FC<MemberEditModalProps> = ({
                     { value: 'sometimes', label: 'たまに飲む', icon: '🍷' },
                     { value: 'no', label: '飲まない', icon: '🚫' },
                   ].map((option) => {
-                    const isSelected = formData.preferences.alcoholPreference === option.value;
+                    const isSelected =
+                      formData.preferences.alcoholPreference === option.value;
                     return (
                       <TouchableOpacity
                         key={option.value}
@@ -401,13 +434,18 @@ export const MemberEditModal: React.FC<MemberEditModalProps> = ({
                             ...prev,
                             preferences: {
                               ...prev.preferences,
-                              alcoholPreference: option.value as 'yes' | 'no' | 'sometimes',
+                              alcoholPreference: option.value as
+                                | 'yes'
+                                | 'no'
+                                | 'sometimes',
                             },
                           }))
                         }
                         style={[
                           styles.alcoholOption,
-                          isSelected ? styles.alcoholOptionSelected : styles.alcoholOptionUnselected,
+                          isSelected
+                            ? styles.alcoholOptionSelected
+                            : styles.alcoholOptionUnselected,
                         ]}
                         activeOpacity={0.7}
                       >
@@ -415,7 +453,9 @@ export const MemberEditModal: React.FC<MemberEditModalProps> = ({
                         <Text
                           style={[
                             styles.alcoholText,
-                            isSelected ? styles.alcoholTextSelected : styles.alcoholTextUnselected,
+                            isSelected
+                              ? styles.alcoholTextSelected
+                              : styles.alcoholTextUnselected,
                           ]}
                         >
                           {option.label}
@@ -450,7 +490,11 @@ export const MemberEditModal: React.FC<MemberEditModalProps> = ({
                               onPress={() => removeAllergy(allergy)}
                               style={styles.removeButton}
                             >
-                              <Ionicons name="close" size={16} color={Colors.error[600]} />
+                              <Ionicons
+                                name="close"
+                                size={16}
+                                color={Colors.error[600]}
+                              />
                             </TouchableOpacity>
                           </View>
                         ))}
@@ -460,10 +504,13 @@ export const MemberEditModal: React.FC<MemberEditModalProps> = ({
 
                   {/* よくあるアレルギー */}
                   <View style={styles.commonAllergies}>
-                    <Text style={styles.subsectionTitle}>よくあるアレルギー</Text>
+                    <Text style={styles.subsectionTitle}>
+                      よくあるアレルギー
+                    </Text>
                     <View style={styles.chipsContainer}>
                       {ALLERGY_OPTIONS.map((allergy) => {
-                        const isSelected = formData.preferences.allergies.includes(allergy);
+                        const isSelected =
+                          formData.preferences.allergies.includes(allergy);
                         return (
                           <TouchableOpacity
                             key={allergy}
@@ -475,21 +522,28 @@ export const MemberEditModal: React.FC<MemberEditModalProps> = ({
                                   ...prev,
                                   preferences: {
                                     ...prev.preferences,
-                                    allergies: [...prev.preferences.allergies, allergy],
+                                    allergies: [
+                                      ...prev.preferences.allergies,
+                                      allergy,
+                                    ],
                                   },
                                 }));
                               }
                             }}
                             style={[
                               styles.chip,
-                              isSelected ? styles.chipDangerSelected : styles.chipUnselected,
+                              isSelected
+                                ? styles.chipDangerSelected
+                                : styles.chipUnselected,
                             ]}
                             activeOpacity={0.7}
                           >
                             <Text
                               style={[
                                 styles.chipText,
-                                isSelected ? styles.chipTextDangerSelected : styles.chipTextUnselected,
+                                isSelected
+                                  ? styles.chipTextDangerSelected
+                                  : styles.chipTextUnselected,
                               ]}
                             >
                               {allergy}
@@ -502,7 +556,9 @@ export const MemberEditModal: React.FC<MemberEditModalProps> = ({
 
                   {/* カスタムアレルギー追加 */}
                   <View style={styles.customAllergy}>
-                    <Text style={styles.subsectionTitle}>その他のアレルギー</Text>
+                    <Text style={styles.subsectionTitle}>
+                      その他のアレルギー
+                    </Text>
                     <View style={styles.inputWithButton}>
                       <Input
                         value={newAllergy}
@@ -539,17 +595,25 @@ export const MemberEditModal: React.FC<MemberEditModalProps> = ({
                     <View style={styles.currentDietary}>
                       <Text style={styles.subsectionTitle}>現在の設定</Text>
                       <View style={styles.dietaryList}>
-                        {formData.preferences.dietaryRestrictions.map((dietary) => (
-                          <View key={dietary} style={styles.dietaryTag}>
-                            <Text style={styles.dietaryTagText}>{dietary}</Text>
-                            <TouchableOpacity
-                              onPress={() => removeDietary(dietary)}
-                              style={styles.removeButton}
-                            >
-                              <Ionicons name="close" size={16} color={Colors.secondary[600]} />
-                            </TouchableOpacity>
-                          </View>
-                        ))}
+                        {formData.preferences.dietaryRestrictions.map(
+                          (dietary) => (
+                            <View key={dietary} style={styles.dietaryTag}>
+                              <Text style={styles.dietaryTagText}>
+                                {dietary}
+                              </Text>
+                              <TouchableOpacity
+                                onPress={() => removeDietary(dietary)}
+                                style={styles.removeButton}
+                              >
+                                <Ionicons
+                                  name="close"
+                                  size={16}
+                                  color={Colors.secondary[600]}
+                                />
+                              </TouchableOpacity>
+                            </View>
+                          )
+                        )}
                       </View>
                     </View>
                   )}
@@ -559,21 +623,28 @@ export const MemberEditModal: React.FC<MemberEditModalProps> = ({
                     <Text style={styles.subsectionTitle}>よくある配慮事項</Text>
                     <View style={styles.chipsContainer}>
                       {DIETARY_OPTIONS.map((dietary) => {
-                        const isSelected = formData.preferences.dietaryRestrictions.includes(dietary);
+                        const isSelected =
+                          formData.preferences.dietaryRestrictions.includes(
+                            dietary
+                          );
                         return (
                           <TouchableOpacity
                             key={dietary}
                             onPress={() => toggleDietary(dietary)}
                             style={[
                               styles.chip,
-                              isSelected ? styles.chipInfoSelected : styles.chipUnselected,
+                              isSelected
+                                ? styles.chipInfoSelected
+                                : styles.chipUnselected,
                             ]}
                             activeOpacity={0.7}
                           >
                             <Text
                               style={[
                                 styles.chipText,
-                                isSelected ? styles.chipTextInfoSelected : styles.chipTextUnselected,
+                                isSelected
+                                  ? styles.chipTextInfoSelected
+                                  : styles.chipTextUnselected,
                               ]}
                             >
                               {dietary}
@@ -634,25 +705,25 @@ export const MemberEditModal: React.FC<MemberEditModalProps> = ({
         </ScrollView>
 
         {/* Footer */}
-        <View style={styles.footer}>
+        <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
           <View style={styles.buttonContainer}>
-            <Button
-              title="キャンセル"
-              onPress={handleClose}
-              variant="outline"
-              size="lg"
-              style={styles.cancelButton}
-            />
             <Button
               title={initialData ? '更新' : '追加'}
               onPress={handleSave}
               variant="gradient"
               size="lg"
-              style={styles.saveButton}
+              fullWidth
+            />
+            <Button
+              title="キャンセル"
+              onPress={handleClose}
+              variant="outline"
+              size="lg"
+              fullWidth
             />
           </View>
         </View>
-      </SafeAreaView>
+      </View>
     </Modal>
   );
 };
@@ -920,13 +991,6 @@ const styles = StyleSheet.create({
     borderTopColor: Colors.neutral[200],
   },
   buttonContainer: {
-    flexDirection: 'row',
     gap: 12,
-  },
-  cancelButton: {
-    flex: 1,
-  },
-  saveButton: {
-    flex: 2,
   },
 });
