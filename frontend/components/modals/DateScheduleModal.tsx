@@ -10,10 +10,10 @@ import {
   StyleSheet,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import { Card } from '@/components/common/Card';
 import { Button } from '@/components/common/Button';
 import { Input } from '@/components/common/Input';
+import { CustomDateTimePicker } from '@/components/common/CustomDateTimePicker';
 import { Colors } from '@/constants/Colors';
 import { Layout } from '@/constants/Layout';
 
@@ -53,6 +53,9 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
   const [showDatePicker, setShowDatePicker] = useState<string | null>(null);
   const [showTimePicker, setShowTimePicker] = useState<string | null>(null);
   const [showDeadlinePicker, setShowDeadlinePicker] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedTime, setSelectedTime] = useState(new Date());
+  const [deadlineDate, setDeadlineDate] = useState(new Date());
 
   const resetForm = () => {
     setTitle('');
@@ -138,20 +141,16 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
     );
   };
 
-  const handleDateChange = (id: string, event: any, selectedDate?: Date) => {
+  const handleDateChange = (id: string, selectedDate: Date) => {
     setShowDatePicker(null);
-    if (selectedDate) {
-      const dateString = selectedDate.toISOString().split('T')[0];
-      updateDateOption(id, 'date', dateString);
-    }
+    const dateString = selectedDate.toISOString().split('T')[0];
+    updateDateOption(id, 'date', dateString);
   };
 
-  const handleTimeChange = (id: string, event: any, selectedTime?: Date) => {
+  const handleTimeChange = (id: string, selectedTime: Date) => {
     setShowTimePicker(null);
-    if (selectedTime) {
-      const timeString = selectedTime.toTimeString().slice(0, 5);
-      updateDateOption(id, 'time', timeString);
-    }
+    const timeString = selectedTime.toTimeString().slice(0, 5);
+    updateDateOption(id, 'time', timeString);
   };
 
   const formatDate = (dateString: string) => {
@@ -164,12 +163,11 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
     });
   };
 
-  const handleDeadlineChange = (event: any, selectedDate?: Date) => {
+  const handleDeadlineChange = (selectedDate: Date) => {
     setShowDeadlinePicker(false);
-    if (selectedDate) {
-      const dateString = selectedDate.toISOString().split('T')[0];
-      setDeadline(dateString);
-    }
+    const dateString = selectedDate.toISOString().split('T')[0];
+    setDeadline(dateString);
+    setDeadlineDate(selectedDate);
   };
 
   const validOptionsCount = dateOptions.filter((option) =>
@@ -190,14 +188,15 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
             <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
               <Ionicons name="close" size={24} color="#64748b" />
             </TouchableOpacity>
-            <Text style={styles.headerTitle}>
-              日程調整設定
-            </Text>
+            <Text style={styles.headerTitle}>日程調整設定</Text>
             <View style={styles.headerSpacer} />
           </View>
         </View>
 
-        <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+        <ScrollView
+          style={styles.scrollView}
+          showsVerticalScrollIndicator={false}
+        >
           <View style={styles.content}>
             {/* 説明 */}
             <Card variant="elevated" shadow="none">
@@ -206,9 +205,7 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
                   <View style={[styles.sectionIcon, styles.calendarIcon]}>
                     <Ionicons name="calendar" size={20} color="#f59e0b" />
                   </View>
-                  <Text style={styles.sectionTitle}>
-                    日程調整の設定
-                  </Text>
+                  <Text style={styles.sectionTitle}>日程調整の設定</Text>
                 </View>
                 <Text style={styles.sectionDescription}>
                   メンバーに都合を聞くための候補日を設定します。
@@ -228,9 +225,7 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
                       color="#0284c7"
                     />
                   </View>
-                  <Text style={styles.sectionTitle}>
-                    基本情報
-                  </Text>
+                  <Text style={styles.sectionTitle}>基本情報</Text>
                 </View>
 
                 <Input
@@ -260,9 +255,7 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
                     <View style={[styles.sectionIcon, styles.timeIcon]}>
                       <Ionicons name="time" size={20} color="#f59e0b" />
                     </View>
-                    <Text style={styles.sectionTitle}>
-                      候補日設定
-                    </Text>
+                    <Text style={styles.sectionTitle}>候補日設定</Text>
                   </View>
                   <View style={styles.candidatesCounter}>
                     <Text style={styles.candidatesCounterText}>
@@ -272,18 +265,13 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
                 </View>
 
                 {errors.dateOptions && (
-                  <Text style={styles.errorText}>
-                    {errors.dateOptions}
-                  </Text>
+                  <Text style={styles.errorText}>{errors.dateOptions}</Text>
                 )}
 
                 {/* 候補日リスト */}
                 <View style={styles.candidatesList}>
                   {dateOptions.map((option, index) => (
-                    <View
-                      key={option.id}
-                      style={styles.candidateItem}
-                    >
+                    <View key={option.id} style={styles.candidateItem}>
                       <View style={styles.candidateHeader}>
                         <Text style={styles.candidateLabel}>
                           候補 {index + 1}
@@ -304,17 +292,25 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
 
                       <View style={styles.candidateFields}>
                         <TouchableOpacity
-                          onPress={() => setShowDatePicker(option.id)}
+                          onPress={() => {
+                            setShowDatePicker(option.id);
+                            // 既存の日付がある場合はそれを使用、なければ今日
+                            if (option.date) {
+                              setSelectedDate(new Date(option.date));
+                            } else {
+                              setSelectedDate(new Date());
+                            }
+                          }}
                           style={styles.candidateField}
                           activeOpacity={0.7}
                         >
-                          <Text style={styles.fieldLabel}>
-                            日付
-                          </Text>
+                          <Text style={styles.fieldLabel}>日付</Text>
                           <Text
                             style={[
                               styles.fieldValue,
-                              option.date ? styles.fieldValueSet : styles.fieldValuePlaceholder
+                              option.date
+                                ? styles.fieldValueSet
+                                : styles.fieldValuePlaceholder,
                             ]}
                           >
                             {option.date
@@ -324,14 +320,26 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
                         </TouchableOpacity>
 
                         <TouchableOpacity
-                          onPress={() => setShowTimePicker(option.id)}
+                          onPress={() => {
+                            setShowTimePicker(option.id);
+                            // 既存の時間がある場合はそれを使用、なければ現在時刻
+                            const [hours, minutes] = option.time.split(':');
+                            const timeDate = new Date();
+                            timeDate.setHours(
+                              parseInt(hours),
+                              parseInt(minutes),
+                              0,
+                              0
+                            );
+                            setSelectedTime(timeDate);
+                          }}
                           style={styles.candidateField}
                           activeOpacity={0.7}
                         >
-                          <Text style={styles.fieldLabel}>
-                            時間
-                          </Text>
-                          <Text style={[styles.fieldValue, styles.fieldValueSet]}>
+                          <Text style={styles.fieldLabel}>時間</Text>
+                          <Text
+                            style={[styles.fieldValue, styles.fieldValueSet]}
+                          >
                             {option.time}
                           </Text>
                         </TouchableOpacity>
@@ -347,9 +355,7 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
                   activeOpacity={0.7}
                 >
                   <Ionicons name="add" size={20} color="#f59e0b" />
-                  <Text style={styles.addButtonText}>
-                    候補日を追加
-                  </Text>
+                  <Text style={styles.addButtonText}>候補日を追加</Text>
                 </TouchableOpacity>
               </View>
             </Card>
@@ -361,24 +367,30 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
                   <View style={[styles.sectionIcon, styles.deadlineIcon]}>
                     <Ionicons name="alarm" size={20} color="#ef4444" />
                   </View>
-                  <Text style={styles.sectionTitle}>
-                    回答期限
-                  </Text>
+                  <Text style={styles.sectionTitle}>回答期限</Text>
                   <Text style={styles.optionalLabel}>（任意）</Text>
                 </View>
 
                 <TouchableOpacity
-                  onPress={() => setShowDeadlinePicker(true)}
+                  onPress={() => {
+                    setShowDeadlinePicker(true);
+                    // 既存の期限がある場合はそれを使用、なければ今日
+                    if (deadline) {
+                      setDeadlineDate(new Date(deadline));
+                    } else {
+                      setDeadlineDate(new Date());
+                    }
+                  }}
                   style={styles.deadlineField}
                   activeOpacity={0.7}
                 >
-                  <Text style={styles.fieldLabel}>
-                    期限日
-                  </Text>
+                  <Text style={styles.fieldLabel}>期限日</Text>
                   <Text
                     style={[
                       styles.fieldValue,
-                      deadline ? styles.fieldValueSet : styles.fieldValuePlaceholder
+                      deadline
+                        ? styles.fieldValueSet
+                        : styles.fieldValuePlaceholder,
                     ]}
                   >
                     {deadline ? formatDate(deadline) : '期限を選択'}
@@ -411,33 +423,37 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
 
         {/* Date/Time Pickers */}
         {showDatePicker && (
-          <DateTimePicker
-            value={new Date()}
+          <CustomDateTimePicker
+            isVisible={true}
             mode="date"
-            display="default"
-            onChange={(event, date) =>
-              handleDateChange(showDatePicker, event, date)
-            }
+            value={selectedDate}
+            minimumDate={new Date()}
+            onConfirm={(date) => handleDateChange(showDatePicker, date)}
+            onCancel={() => setShowDatePicker(null)}
+            title="候補日を選択"
           />
         )}
 
         {showTimePicker && (
-          <DateTimePicker
-            value={new Date()}
+          <CustomDateTimePicker
+            isVisible={true}
             mode="time"
-            display="default"
-            onChange={(event, time) =>
-              handleTimeChange(showTimePicker, event, time)
-            }
+            value={selectedTime}
+            onConfirm={(time) => handleTimeChange(showTimePicker, time)}
+            onCancel={() => setShowTimePicker(null)}
+            title="開始時間を選択"
           />
         )}
 
         {showDeadlinePicker && (
-          <DateTimePicker
-            value={new Date()}
+          <CustomDateTimePicker
+            isVisible={true}
             mode="date"
-            display="default"
-            onChange={handleDeadlineChange}
+            value={deadlineDate}
+            minimumDate={new Date()}
+            onConfirm={handleDeadlineChange}
+            onCancel={() => setShowDeadlinePicker(false)}
+            title="回答期限を選択"
           />
         )}
       </SafeAreaView>
