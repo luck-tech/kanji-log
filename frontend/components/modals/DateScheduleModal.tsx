@@ -423,40 +423,34 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
         </View>
 
         {/* Date/Time Pickers */}
-        {showDatePicker && (
-          <CustomDateTimePicker
-            isVisible={true}
-            mode="date"
-            value={selectedDate}
-            minimumDate={new Date()}
-            onConfirm={(date) => handleDateChange(showDatePicker, date)}
-            onCancel={() => setShowDatePicker(null)}
-            title="候補日を選択"
-          />
-        )}
+        <CustomDateTimePicker
+          isVisible={!!showDatePicker}
+          mode="date"
+          value={selectedDate}
+          minimumDate={new Date()}
+          onConfirm={(date) => handleDateChange(showDatePicker!, date)}
+          onCancel={() => setShowDatePicker(null)}
+          title="候補日を選択"
+        />
 
-        {showTimePicker && (
-          <CustomDateTimePicker
-            isVisible={true}
-            mode="time"
-            value={selectedTime}
-            onConfirm={(time) => handleTimeChange(showTimePicker, time)}
-            onCancel={() => setShowTimePicker(null)}
-            title="開始時間を選択"
-          />
-        )}
+        <CustomDateTimePicker
+          isVisible={!!showTimePicker}
+          mode="time"
+          value={selectedTime}
+          onConfirm={(time) => handleTimeChange(showTimePicker!, time)}
+          onCancel={() => setShowTimePicker(null)}
+          title="開始時間を選択"
+        />
 
-        {showDeadlinePicker && (
-          <CustomDateTimePicker
-            isVisible={true}
-            mode="date"
-            value={deadlineDate}
-            minimumDate={new Date()}
-            onConfirm={handleDeadlineChange}
-            onCancel={() => setShowDeadlinePicker(false)}
-            title="回答期限を選択"
-          />
-        )}
+        <CustomDateTimePicker
+          isVisible={showDeadlinePicker}
+          mode="date"
+          value={deadlineDate}
+          minimumDate={new Date()}
+          onConfirm={handleDeadlineChange}
+          onCancel={() => setShowDeadlinePicker(false)}
+          title="回答期限を選択"
+        />
       </View>
     </Modal>
   );
