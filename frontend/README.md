@@ -35,6 +35,12 @@
   - パフォーマンス重視のネイティブアニメーション
   - `useSharedValue`, `useAnimatedStyle`, `Animated.View` などを活用
   - コンポーネントレンダリング中の shared value アクセスを避ける
+- **SafeArea 設定**
+  - **react-native-safe-area-context** を統一使用（React Native 標準の SafeAreaView は使用禁止）
+  - `SafeAreaProvider` を `app/_layout.tsx` でルートレベルに設定
+  - 各コンポーネントで `useSafeAreaInsets()` を使用して柔軟に SafeArea を制御
+  - 上部・下部・左右を個別に適用可能（例：`{ paddingTop: insets.top, paddingBottom: insets.bottom }`）
+  - iOS/Android/Web でクロスプラットフォーム対応
 - **デザイン定数**（全コンポーネントで統一使用）
   - `constants/Colors.ts`: カラーパレット（`primary`/`secondary`/`accent`/`gray`/`blue`/`green`/`purple` 等）
   - `constants/Styles.ts`: 共通スタイルパターン（ボタン、カード、入力フィールド等）
@@ -69,7 +75,7 @@
 kanji-log/                    // プロジェクトルート
 ├── frontend/                 // モバイルアプリ（フロントエンド）部分
 │   ├── app/                  // expo-router画面定義
-│   │   ├── _layout.tsx       // ルート Stack
+│   │   ├── _layout.tsx       // ルート Stack + SafeAreaProvider設定
 │   │   ├── (onboarding)/     // Onboarding フロー用の Stack グループ
 │   │   │   ├── _layout.tsx
 │   │   │   ├── splash.tsx
@@ -141,6 +147,12 @@ pnpm lint
   - React Native 標準の `StyleSheet.create()` を使用
   - デザイン定数（`constants/Colors.ts`, `constants/Styles.ts`, `constants/Layout.ts`）を必須で参照
   - プラットフォーム固有のスタイル調整には `Platform.select()` を使用
+- **SafeArea 実装規約**
+  - **react-native-safe-area-context** を必須使用（React Native 標準の `SafeAreaView` は使用禁止）
+  - ルートレベル（`app/_layout.tsx`）で `SafeAreaProvider` を設定
+  - 各画面・コンポーネントで `useSafeAreaInsets()` を使用
+  - 上部・下部を個別制御：`{ paddingTop: insets.top }`, `{ paddingBottom: insets.bottom }`
+  - Header コンポーネントでの標準的な使用例を参考にする
 - **アニメーション**: React Native Reanimated を直接使用
   - `Animated.View` と `entering`/`exiting` プロパティでシンプルなアニメーション
   - 複雑なアニメーションには `useSharedValue` と `useAnimatedStyle` を使用
@@ -259,6 +271,69 @@ const MyComponent = () => {
 - **月**: 1-12 月
 - **日**: 各月の実際の日数に応じて動的に調整
 - **表示形式**: `YYYY年MM月DD日`（例：`2025年08月22日`）
+
+### SafeArea 実装例（react-native-safe-area-context）
+
+```tsx
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+// 基本的な使用方法
+const MyScreen = () => {
+  const insets = useSafeAreaInsets();
+
+  return (
+    <View style={[styles.container, { paddingTop: insets.top }]}>
+      {/* Header部分 - 上部SafeAreaを適用 */}
+      <View style={styles.header}>
+        <Text>ヘッダー</Text>
+      </View>
+
+      {/* Content部分 */}
+      <ScrollView style={styles.content}>
+        <Text>コンテンツ</Text>
+      </ScrollView>
+
+      {/* Footer部分 - 下部SafeAreaを適用 */}
+      <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
+        <Button title="決定" />
+      </View>
+    </View>
+  );
+};
+
+// モーダルでの使用例
+const MyModal = () => {
+  const insets = useSafeAreaInsets();
+
+  return (
+    <Modal>
+      <View
+        style={[
+          styles.modalContainer,
+          {
+            paddingTop: insets.top,
+            paddingBottom: insets.bottom,
+          },
+        ]}
+      >
+        {/* モーダルコンテンツ */}
+      </View>
+    </Modal>
+  );
+};
+
+// Header コンポーネントでの標準的な実装
+const Header = ({ applySafeArea = true }) => {
+  const insets = useSafeAreaInsets();
+  const safeAreaStyle = applySafeArea ? { paddingTop: insets.top } : {};
+
+  return (
+    <View style={[styles.header, safeAreaStyle]}>
+      {/* ヘッダーコンテンツ */}
+    </View>
+  );
+};
+```
 
 ### アニメーション実装例（React Native Reanimated）
 

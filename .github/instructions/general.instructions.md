@@ -40,7 +40,18 @@ applyTo: "**"
 - `StyleSheet`による統一されたスタイリング
 - デザイン定数（`constants/Colors.ts`等）は必要に応じて参照
 
-### 3. アニメーション規約
+### 3. SafeArea 実装規約
+
+- **react-native-safe-area-context を必須使用**（React Native 標準の `SafeAreaView` は使用禁止）
+- **ルートレベル設定**: `app/_layout.tsx` で `SafeAreaProvider` を設定
+- **コンポーネントレベル**: 各画面・コンポーネントで `useSafeAreaInsets()` を使用
+- **柔軟な制御**: 上部・下部・左右を個別に適用可能
+  - `{ paddingTop: insets.top }`: 上部のSafeArea適用
+  - `{ paddingBottom: insets.bottom }`: 下部のSafeArea適用
+  - `{ paddingHorizontal: Math.max(insets.left, insets.right) }`: 横方向のSafeArea適用
+- **クロスプラットフォーム**: iOS/Android/Web で統一された動作
+
+### 4. アニメーション規約
 
 - **Tailwind のアニメーションクラスは React Native Reanimated と競合するため使用禁止**
   - `animate-*`クラス（`animate-fade-in`, `animate-scale-in`, `animate-spin`等）は使用しない
@@ -50,14 +61,14 @@ applyTo: "**"
   - コンポーネントレンダリング中の shared value アクセスを避ける
 - パフォーマンスを重視したネイティブアニメーションの実装を心がける
 
-### 4. ファイル命名・構造規約
+### 5. ファイル命名・構造規約
 
 - **PascalCase**: コンポーネントファイル（例：`EventCard.tsx`）
 - **camelCase**: フック、ユーティリティ関数（例：`useFrameworkReady.ts`）
 - **kebab-case**: 画面ファイル（expo-router 規約に従う）
 - **snake_case**: 定数ファイル（例：`EVENT_STATUS_TABS`）
 
-### 5. テスト戦略
+### 6. テスト戦略
 
 - 都度 lint を実行し、通ることを確認する
 - 新しいカスタムフックや関数を追加した場合は、jest でテストを作成し、実行して通ることを確認する
@@ -104,3 +115,48 @@ applyTo: "**"
 - スマートフォン優先設計（Mobile First）
 - タブレット・Web 表示への段階的対応
 - 横画面・縦画面の適切な対応
+
+## SafeArea 実装例
+
+```tsx
+// ルートレベル設定（app/_layout.tsx）
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+
+export default function RootLayout() {
+  return (
+    <SafeAreaProvider>
+      <Stack screenOptions={{ headerShown: false }}>
+        {/* 画面定義 */}
+      </Stack>
+    </SafeAreaProvider>
+  );
+}
+
+// 各画面・コンポーネントでの使用
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+const MyScreen = () => {
+  const insets = useSafeAreaInsets();
+
+  return (
+    <View style={[styles.container, { paddingTop: insets.top }]}>
+      {/* コンテンツ */}
+      <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
+        {/* フッター */}
+      </View>
+    </View>
+  );
+};
+
+// Header コンポーネントでの標準実装
+const Header = ({ applySafeArea = true }) => {
+  const insets = useSafeAreaInsets();
+  const safeAreaStyle = applySafeArea ? { paddingTop: insets.top } : {};
+
+  return (
+    <View style={[styles.header, safeAreaStyle]}>
+      {/* ヘッダーコンテンツ */}
+    </View>
+  );
+};
+```
