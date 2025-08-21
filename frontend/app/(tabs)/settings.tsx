@@ -166,7 +166,6 @@ export default function SettingsScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Background */}
       <LinearGradient
         colors={['#f8fafc', '#f1f5f9']}
         start={{ x: 0, y: 0 }}
@@ -179,6 +178,8 @@ export default function SettingsScreen() {
         subtitle="アカウントとアプリ設定の管理"
         variant="gradient"
       />
+
+      <View style={styles.spacing} />
 
       <ScrollView
         style={styles.scrollView}
@@ -393,6 +394,9 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
+  },
+  spacing: {
+    height: 16,
   },
   scrollView: {
     flex: 1,
