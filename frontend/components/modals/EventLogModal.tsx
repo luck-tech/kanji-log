@@ -9,6 +9,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Card } from '@/components/common/Card';
 import { Button } from '@/components/common/Button';
@@ -169,19 +170,30 @@ export const EventLogModal: React.FC<EventLogModalProps> = ({
         >
           <View style={styles.content}>
             {/* イベント情報 */}
-            <Card variant="gradient" shadow="none">
-              <View style={styles.eventInfoSection}>
-                <View style={styles.eventInfoHeader}>
-                  <View style={styles.eventIcon}>
-                    <Ionicons name="checkmark-circle" size={20} color="white" />
+            <View style={styles.eventInfoCard}>
+              <LinearGradient
+                colors={[Colors.primary[500], Colors.primary[600]]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.eventInfoGradient}
+              >
+                <View style={styles.eventInfoSection}>
+                  <View style={styles.eventInfoHeader}>
+                    <View style={styles.eventIcon}>
+                      <Ionicons
+                        name="checkmark-circle"
+                        size={20}
+                        color="white"
+                      />
+                    </View>
+                    <Text style={styles.eventTitle}>{eventTitle}</Text>
                   </View>
-                  <Text style={styles.eventTitle}>{eventTitle}</Text>
+                  <Text style={styles.eventDescription}>
+                    お疲れさまでした！イベントの記録を残して、今後の幹事業務に活かしましょう。
+                  </Text>
                 </View>
-                <Text style={styles.eventDescription}>
-                  お疲れさまでした！イベントの記録を残して、今後の幹事業務に活かしましょう。
-                </Text>
-              </View>
-            </Card>
+              </LinearGradient>
+            </View>
 
             {/* 店舗情報 */}
             <Card variant="elevated" shadow="none">
@@ -440,6 +452,14 @@ const styles = StyleSheet.create({
   content: {
     padding: Layout.padding.lg,
     gap: Layout.spacing.lg,
+  },
+  eventInfoCard: {
+    borderRadius: 16,
+    overflow: 'hidden',
+  },
+  eventInfoGradient: {
+    padding: Layout.padding.lg,
+    borderRadius: 16,
   },
   eventInfoSection: {
     gap: Layout.spacing.sm,
