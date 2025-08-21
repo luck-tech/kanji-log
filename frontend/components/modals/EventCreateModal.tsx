@@ -15,7 +15,7 @@ import { Input } from '@/components/common/Input';
 import { EventPurpose } from '@/types';
 import { Colors } from '@/constants/Colors';
 import { Layout } from '@/constants/Layout';
-import { CustomDateTimePicker } from '../common/CustomDateTimePicker';
+import { CustomDateTimePicker } from '@/components/common/CustomDateTimePicker';
 
 interface EventCreateModalProps {
   isVisible: boolean;
