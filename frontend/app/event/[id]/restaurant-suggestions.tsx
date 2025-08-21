@@ -208,25 +208,14 @@ export default function RestaurantSuggestionsScreen() {
                         {/* レストラン基本情報 */}
                         <View style={styles.restaurantHeader}>
                           <View style={styles.restaurantInfo}>
-                            <View style={styles.nameRow}>
-                              <Text
-                                style={[
-                                  styles.restaurantName,
-                                  isSelected && styles.selectedRestaurantName,
-                                ]}
-                              >
-                                {restaurant.name}
-                              </Text>
-                              {isSelected && (
-                                <View style={styles.checkmarkContainer}>
-                                  <Ionicons
-                                    name="checkmark"
-                                    size={14}
-                                    color="white"
-                                  />
-                                </View>
-                              )}
-                            </View>
+                            <Text
+                              style={[
+                                styles.restaurantName,
+                                isSelected && styles.selectedRestaurantName,
+                              ]}
+                            >
+                              {restaurant.name}
+                            </Text>
                             <View style={styles.ratingRow}>
                               {renderStars(restaurant.rating)}
                               <Text
@@ -267,26 +256,37 @@ export default function RestaurantSuggestionsScreen() {
                               </Text>
                             </View>
                           </View>
-                          <View
-                            style={[
-                              styles.typeTag,
-                              isSelected
-                                ? styles.selectedTypeTag
-                                : { backgroundColor: typeColors.bg },
-                            ]}
-                          >
-                            <Text
+                          <View style={styles.rightColumn}>
+                            <View
                               style={[
-                                styles.typeTagText,
+                                styles.typeTag,
                                 isSelected
-                                  ? styles.selectedTypeTagText
-                                  : { color: typeColors.text },
+                                  ? styles.selectedTypeTag
+                                  : { backgroundColor: typeColors.bg },
                               ]}
                             >
-                              {getRecommendationTypeLabel(
-                                restaurant.recommendationType
-                              )}
-                            </Text>
+                              <Text
+                                style={[
+                                  styles.typeTagText,
+                                  isSelected
+                                    ? styles.selectedTypeTagText
+                                    : { color: typeColors.text },
+                                ]}
+                              >
+                                {getRecommendationTypeLabel(
+                                  restaurant.recommendationType
+                                )}
+                              </Text>
+                            </View>
+                            {isSelected && (
+                              <View style={styles.selectedIndicator}>
+                                <Ionicons
+                                  name="checkmark-circle"
+                                  size={24}
+                                  color={Colors.blue['500']}
+                                />
+                              </View>
+                            )}
                           </View>
                         </View>
 
@@ -427,6 +427,10 @@ const styles = StyleSheet.create({
     flex: 1,
     marginRight: 16,
   },
+  rightColumn: {
+    alignItems: 'flex-end',
+    gap: 8,
+  },
   nameRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -448,6 +452,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.blue['500'],
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  selectedIndicator: {
+    marginTop: 4,
   },
   ratingRow: {
     flexDirection: 'row',
