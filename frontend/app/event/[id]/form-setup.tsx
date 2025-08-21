@@ -9,6 +9,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Card } from '@/components/common/Card';
 import { Button } from '@/components/common/Button';
@@ -84,6 +85,7 @@ const defaultQuestions = [
 
 export default function FormSetupScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
+  const insets = useSafeAreaInsets();
   const router = useRouter();
   const [newMembers, setNewMembers] = useState<NewMember[]>([]);
   const [newMemberName, setNewMemberName] = useState('');
@@ -202,7 +204,7 @@ export default function FormSetupScreen() {
           style={styles.scrollView}
           showsVerticalScrollIndicator={false}
         >
-          <View style={styles.content}>
+          <View style={[styles.content, { paddingBottom: insets.bottom }]}>
             {/* 新規参加者追加 */}
             <Card variant="elevated" shadow="none">
               <View style={styles.cardContent}>
@@ -404,12 +406,13 @@ export default function FormSetupScreen() {
                     カスタム質問を追加
                   </Text>
                   <View style={styles.inputRow}>
-                    <Input
-                      placeholder="例：お箸とフォーク、どちらが良いですか？"
-                      value={customQuestion}
-                      onChangeText={setCustomQuestion}
-                      style={styles.customQuestionInput}
-                    />
+                    <View style={styles.inputContainer}>
+                      <Input
+                        placeholder="例：お箸とフォーク、どちらが良いですか？"
+                        value={customQuestion}
+                        onChangeText={setCustomQuestion}
+                      />
+                    </View>
                     <TouchableOpacity
                       onPress={addCustomQuestion}
                       style={styles.customQuestionAddButton}
