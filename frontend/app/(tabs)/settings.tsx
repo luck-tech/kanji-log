@@ -4,7 +4,6 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
-  SafeAreaView,
   Alert,
   StyleSheet,
 } from 'react-native';
@@ -175,229 +174,211 @@ export default function SettingsScreen() {
         style={styles.background}
       />
 
-      <SafeAreaView style={styles.safeArea}>
-        <Header
-          title="設定"
-          subtitle="アカウントとアプリ設定の管理"
-          variant="gradient"
-        />
+      <Header
+        title="設定"
+        subtitle="アカウントとアプリ設定の管理"
+        variant="gradient"
+      />
 
-        <ScrollView
-          style={styles.scrollView}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.scrollViewContent}
-        >
-          {/* Profile Section */}
-          <Card variant="elevated" shadow="none">
-            <View style={styles.profileHeader}>
-              <LinearGradient
-                colors={['#0ea5e9', '#0284c7']}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={styles.avatarGradient}
-              >
-                <Ionicons name="person" size={36} color="white" />
-              </LinearGradient>
-              <View style={styles.profileInfo}>
-                <Text style={styles.profileName}>
-                  {userData.name}
-                </Text>
-              </View>
-              {isOwnProfile ? (
-                <TouchableOpacity
-                  style={styles.editButton}
-                  onPress={handleEditProfile}
-                  activeOpacity={0.7}
-                >
-                  <Ionicons name="pencil" size={20} color="#0284c7" />
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity
-                  style={[
-                    styles.followButton,
-                    isFollowing ? styles.followingButton : styles.notFollowingButton
-                  ]}
-                  onPress={handleFollowToggle}
-                  activeOpacity={0.7}
-                >
-                  <Text
-                    style={[
-                      styles.followButtonText,
-                      isFollowing ? styles.followingText : styles.notFollowingText
-                    ]}
-                  >
-                    {isFollowing ? 'フォロー中' : 'フォロー'}
-                  </Text>
-                </TouchableOpacity>
-              )}
-            </View>
-
-            <View style={styles.profileDetails}>
-              <View style={styles.profileDetailItem}>
-                <View style={styles.profileDetailIcon}>
-                  <Ionicons name="person-outline" size={16} color="#64748b" />
-                </View>
-                <Text style={styles.profileDetailText}>
-                  {userData.gender}
-                </Text>
-              </View>
-              <View style={styles.profileDetailItem}>
-                <View style={styles.profileDetailIcon}>
-                  <Ionicons name="location-outline" size={16} color="#64748b" />
-                </View>
-                <Text style={styles.profileDetailText}>
-                  {userData.prefecture}
-                </Text>
-              </View>
-              <View style={styles.profileDetailItem}>
-                <View style={styles.profileDetailIcon}>
-                  <Ionicons name="calendar-outline" size={16} color="#64748b" />
-                </View>
-                <Text style={styles.profileDetailText}>
-                  {userData.joinDate}から利用開始
-                </Text>
-              </View>
-            </View>
-
-            {/* フォロー/フォロワー情報 */}
-            <View style={styles.followStats}>
-              <View style={styles.followStatItem}>
-                <Text style={styles.followStatNumber}>
-                  {userData.followCount}
-                </Text>
-                <Text style={styles.followStatLabel}>フォロー</Text>
-              </View>
-              <View style={styles.followStatSeparator} />
-              <View style={styles.followStatItem}>
-                <Text style={styles.followStatNumber}>
-                  {userData.followerCount}
-                </Text>
-                <Text style={styles.followStatLabel}>フォロワー</Text>
-              </View>
-            </View>
-          </Card>
-
-          {/* Stats Section */}
-          <Card variant="gradient" shadow="none">
-            <Text style={styles.sectionTitle}>
-              幹事統計
-            </Text>
-            <View style={styles.statsContainer}>
-              <View style={styles.statItem}>
-                <View style={[styles.statIcon, styles.primaryStat]}>
-                  <Text style={styles.statNumber}>
-                    12
-                  </Text>
-                </View>
-                <Text style={styles.statLabel}>
-                  主催イベント
-                </Text>
-              </View>
-              <View style={styles.statSeparator} />
-              <View style={styles.statItem}>
-                <View style={[styles.statIcon, styles.successStat]}>
-                  <Text style={styles.statNumberSuccess}>8</Text>
-                </View>
-                <Text style={styles.statLabel}>
-                  共有記録
-                </Text>
-              </View>
-              <View style={styles.statSeparator} />
-              <View style={styles.statItem}>
-                <View style={[styles.statIcon, styles.accentStat]}>
-                  <Text style={styles.statNumberAccent}>45</Text>
-                </View>
-                <Text style={styles.statLabel}>
-                  メンバー記録数
-                </Text>
-              </View>
-            </View>
-          </Card>
-
-          {/* Settings List */}
-          <View style={styles.settingsList}>
-            {settingsItems.map((item, index) => (
-              <TouchableOpacity
-                key={item.id}
-                onPress={item.onPress}
-                activeOpacity={0.8}
-              >
-                <Card variant="elevated" shadow="none">
-                  <View style={styles.settingsItem}>
-                    <View style={styles.settingsItemContent}>
-                      <View style={styles.settingsItemIcon}>
-                        {item.icon}
-                      </View>
-                      <View style={styles.settingsItemText}>
-                        <Text
-                          style={[
-                            styles.settingsItemTitle,
-                            item.textColor && { color: item.textColor }
-                          ]}
-                        >
-                          {item.title}
-                        </Text>
-                        {item.description && (
-                          <Text style={styles.settingsItemDescription}>
-                            {item.description}
-                          </Text>
-                        )}
-                      </View>
-                    </View>
-                    {item.showArrow && (
-                      <Ionicons
-                        name="chevron-forward"
-                        size={20}
-                        color="#94a3b8"
-                      />
-                    )}
-                  </View>
-                </Card>
-              </TouchableOpacity>
-            ))}
-          </View>
-
-          {/* App Info */}
-          <View style={styles.appInfo}>
+      <ScrollView
+        style={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollViewContent}
+      >
+        {/* Profile Section */}
+        <Card variant="elevated" shadow="medium">
+          <View style={styles.profileHeader}>
             <LinearGradient
               colors={['#0ea5e9', '#0284c7']}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
-              style={styles.appIcon}
+              style={styles.avatarGradient}
             >
-              <Ionicons name="wine" size={28} color="white" />
+              <Ionicons name="person" size={36} color="white" />
             </LinearGradient>
-            <Text style={styles.appTitle}>
-              幹事ログ
-            </Text>
-            <Text style={styles.appVersion}>
-              バージョン 1.0.0
-            </Text>
-            <Text style={styles.appDescription}>
-              飲み会の企画・管理をスマートにサポートするアプリ
-            </Text>
-            <Text style={styles.copyright}>
-              © 2025 幹事ログ. All rights reserved.
-            </Text>
+            <View style={styles.profileInfo}>
+              <Text style={styles.profileName}>{userData.name}</Text>
+            </View>
+            {isOwnProfile ? (
+              <TouchableOpacity
+                style={styles.editButton}
+                onPress={handleEditProfile}
+                activeOpacity={0.7}
+              >
+                <Ionicons name="pencil" size={20} color="#0284c7" />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                style={[
+                  styles.followButton,
+                  isFollowing
+                    ? styles.followingButton
+                    : styles.notFollowingButton,
+                ]}
+                onPress={handleFollowToggle}
+                activeOpacity={0.7}
+              >
+                <Text
+                  style={[
+                    styles.followButtonText,
+                    isFollowing
+                      ? styles.followingText
+                      : styles.notFollowingText,
+                  ]}
+                >
+                  {isFollowing ? 'フォロー中' : 'フォロー'}
+                </Text>
+              </TouchableOpacity>
+            )}
           </View>
-        </ScrollView>
 
-        <ProfileEditModal
-          isVisible={isProfileEditVisible}
-          onClose={() => setIsProfileEditVisible(false)}
-          onSave={handleSaveProfile}
-          initialData={getCurrentProfileData()}
-        />
+          <View style={styles.profileDetails}>
+            <View style={styles.profileDetailItem}>
+              <View style={styles.profileDetailIcon}>
+                <Ionicons name="person-outline" size={16} color="#64748b" />
+              </View>
+              <Text style={styles.profileDetailText}>{userData.gender}</Text>
+            </View>
+            <View style={styles.profileDetailItem}>
+              <View style={styles.profileDetailIcon}>
+                <Ionicons name="location-outline" size={16} color="#64748b" />
+              </View>
+              <Text style={styles.profileDetailText}>
+                {userData.prefecture}
+              </Text>
+            </View>
+            <View style={styles.profileDetailItem}>
+              <View style={styles.profileDetailIcon}>
+                <Ionicons name="calendar-outline" size={16} color="#64748b" />
+              </View>
+              <Text style={styles.profileDetailText}>
+                {userData.joinDate}から利用開始
+              </Text>
+            </View>
+          </View>
 
-        <AccountDeleteModal
-          isVisible={isDeleteModalVisible}
-          onClose={() => setIsDeleteModalVisible(false)}
-          onConfirmDelete={() => {
-            console.log('アカウントを削除しました');
-            Alert.alert('完了', 'アカウントが削除されました');
-          }}
-        />
-      </SafeAreaView>
+          {/* フォロー/フォロワー情報 */}
+          <View style={styles.followStats}>
+            <View style={styles.followStatItem}>
+              <Text style={styles.followStatNumber}>
+                {userData.followCount}
+              </Text>
+              <Text style={styles.followStatLabel}>フォロー</Text>
+            </View>
+            <View style={styles.followStatSeparator} />
+            <View style={styles.followStatItem}>
+              <Text style={styles.followStatNumber}>
+                {userData.followerCount}
+              </Text>
+              <Text style={styles.followStatLabel}>フォロワー</Text>
+            </View>
+          </View>
+        </Card>
+
+        {/* Stats Section */}
+        <Card variant="gradient" shadow="medium">
+          <Text style={styles.sectionTitle}>幹事統計</Text>
+          <View style={styles.statsContainer}>
+            <View style={styles.statItem}>
+              <View style={[styles.statIcon, styles.primaryStat]}>
+                <Text style={styles.statNumber}>12</Text>
+              </View>
+              <Text style={styles.statLabel}>主催イベント</Text>
+            </View>
+            <View style={styles.statSeparator} />
+            <View style={styles.statItem}>
+              <View style={[styles.statIcon, styles.successStat]}>
+                <Text style={styles.statNumberSuccess}>8</Text>
+              </View>
+              <Text style={styles.statLabel}>共有記録</Text>
+            </View>
+            <View style={styles.statSeparator} />
+            <View style={styles.statItem}>
+              <View style={[styles.statIcon, styles.accentStat]}>
+                <Text style={styles.statNumberAccent}>45</Text>
+              </View>
+              <Text style={styles.statLabel}>メンバー記録数</Text>
+            </View>
+          </View>
+        </Card>
+
+        {/* Settings List */}
+        <View style={styles.settingsList}>
+          {settingsItems.map((item, index) => (
+            <TouchableOpacity
+              key={item.id}
+              onPress={item.onPress}
+              activeOpacity={0.8}
+            >
+              <Card variant="elevated" shadow="soft">
+                <View style={styles.settingsItem}>
+                  <View style={styles.settingsItemContent}>
+                    <View style={styles.settingsItemIcon}>{item.icon}</View>
+                    <View style={styles.settingsItemText}>
+                      <Text
+                        style={[
+                          styles.settingsItemTitle,
+                          item.textColor && { color: item.textColor },
+                        ]}
+                      >
+                        {item.title}
+                      </Text>
+                      {item.description && (
+                        <Text style={styles.settingsItemDescription}>
+                          {item.description}
+                        </Text>
+                      )}
+                    </View>
+                  </View>
+                  {item.showArrow && (
+                    <Ionicons
+                      name="chevron-forward"
+                      size={20}
+                      color="#94a3b8"
+                    />
+                  )}
+                </View>
+              </Card>
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        {/* App Info */}
+        <View style={styles.appInfo}>
+          <LinearGradient
+            colors={['#0ea5e9', '#0284c7']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.appIcon}
+          >
+            <Ionicons name="wine" size={28} color="white" />
+          </LinearGradient>
+          <Text style={styles.appTitle}>幹事ログ</Text>
+          <Text style={styles.appVersion}>バージョン 1.0.0</Text>
+          <Text style={styles.appDescription}>
+            飲み会の企画・管理をスマートにサポートするアプリ
+          </Text>
+          <Text style={styles.copyright}>
+            © 2025 幹事ログ. All rights reserved.
+          </Text>
+        </View>
+      </ScrollView>
+
+      <ProfileEditModal
+        isVisible={isProfileEditVisible}
+        onClose={() => setIsProfileEditVisible(false)}
+        onSave={handleSaveProfile}
+        initialData={getCurrentProfileData()}
+      />
+
+      <AccountDeleteModal
+        isVisible={isDeleteModalVisible}
+        onClose={() => setIsDeleteModalVisible(false)}
+        onConfirmDelete={() => {
+          console.log('アカウントを削除しました');
+          Alert.alert('完了', 'アカウントが削除されました');
+        }}
+      />
     </View>
   );
 }
@@ -413,20 +394,18 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
   },
-  safeArea: {
-    flex: 1,
-  },
   scrollView: {
     flex: 1,
     paddingHorizontal: Layout.padding.lg,
   },
   scrollViewContent: {
     paddingBottom: 120,
+    gap: Layout.spacing.md,
   },
   profileHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: Layout.spacing.md,
+    marginBottom: Layout.spacing.lg,
   },
   avatarGradient: {
     width: 80,

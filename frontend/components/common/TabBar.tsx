@@ -238,15 +238,17 @@ const styles = StyleSheet.create({
   },
   segmentedTab: {
     flex: 1,
+    minWidth: 0,
   },
   activeSegment: {
     paddingVertical: 12,
-    paddingHorizontal: 16,
+    paddingHorizontal: 18,
     borderRadius: 12,
+    minWidth: 80,
   },
   inactiveSegment: {
     paddingVertical: 12,
-    paddingHorizontal: 24,
+    paddingHorizontal: 22,
   },
   segmentContent: {
     alignItems: 'center',

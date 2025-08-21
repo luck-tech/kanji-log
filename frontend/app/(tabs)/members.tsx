@@ -3,7 +3,6 @@ import {
   View,
   Text,
   ScrollView,
-  SafeAreaView,
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
@@ -20,7 +19,7 @@ import {
   usePressAnimation,
 } from '@/components/common/Animations';
 import { MemberAddModal, MemberData } from '@/components/modals/MemberAddModal';
-import { useRouter } from 'expo-router';
+import { useRouter, useFocusEffect } from 'expo-router';
 import { Colors } from '@/constants/Colors';
 
 interface Member {
@@ -93,6 +92,14 @@ export default function MembersScreen() {
   const [members, setMembers] = useState(mockMembers);
   const [filteredMembers, setFilteredMembers] = useState(mockMembers);
   const [isAddModalVisible, setIsAddModalVisible] = useState(false);
+  const [animationKey, setAnimationKey] = useState(0);
+
+  // タブ切り替え時にアニメーションをリセット
+  useFocusEffect(
+    React.useCallback(() => {
+      setAnimationKey((prev) => prev + 1);
+    }, [])
+  );
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -204,7 +211,7 @@ export default function MembersScreen() {
 
     return (
       <View style={styles.membersList}>
-        <StaggeredList staggerDelay={80} initialDelay={0}>
+        <StaggeredList key={animationKey} staggerDelay={80} initialDelay={0}>
           {filteredMembers.map((member, index) => (
             <MemberCard key={member.id} member={member} index={index} />
           ))}
@@ -223,52 +230,51 @@ export default function MembersScreen() {
         style={styles.background}
       />
 
-      <SafeAreaView style={styles.safeArea}>
-        <Header
-          title="メンバー"
-          subtitle="飲み会に参加可能なメンバー一覧"
-          variant="gradient"
+      <Header
+        title="メンバー"
+        subtitle="飲み会に参加可能なメンバー一覧"
+        variant="gradient"
+      />
+
+      {/* Search Bar with Add Button */}
+      <View style={styles.searchContainer}>
+        <Input
+          placeholder="名前、部署で検索"
+          value={searchQuery}
+          onChangeText={handleSearch}
+          leftIcon={
+            <Ionicons
+              name="search-outline"
+              size={20}
+              color={Colors.neutral[500]}
+            />
+          }
+          containerStyle={styles.searchInputContainer}
+          inputStyle={styles.searchInputText}
         />
-
-        {/* Search Bar with Add Button */}
-        <View style={styles.searchContainer}>
-          <Input
-            placeholder="名前、部署で検索"
-            value={searchQuery}
-            onChangeText={handleSearch}
-            leftIcon={
-              <Ionicons
-                name="search-outline"
-                size={20}
-                color={Colors.neutral[500]}
-              />
-            }
-            style={styles.searchInput}
-          />
-          <TouchableOpacity
-            onPress={handleAddMember}
-            style={styles.addButton}
-            activeOpacity={0.8}
-          >
-            <Ionicons name="person-add-outline" size={20} color="white" />
-          </TouchableOpacity>
-        </View>
-
-        {/* Members List */}
-        <ScrollView
-          style={styles.scrollView}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.scrollContent}
+        <TouchableOpacity
+          onPress={handleAddMember}
+          style={styles.addButton}
+          activeOpacity={0.8}
         >
-          {renderMembers()}
-        </ScrollView>
+          <Ionicons name="person-add-outline" size={20} color="white" />
+        </TouchableOpacity>
+      </View>
 
-        <MemberAddModal
-          isVisible={isAddModalVisible}
-          onClose={() => setIsAddModalVisible(false)}
-          onAddMember={handleMemberAdd}
-        />
-      </SafeAreaView>
+      {/* Members List */}
+      <ScrollView
+        style={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContent}
+      >
+        {renderMembers()}
+      </ScrollView>
+
+      <MemberAddModal
+        isVisible={isAddModalVisible}
+        onClose={() => setIsAddModalVisible(false)}
+        onAddMember={handleMemberAdd}
+      />
     </View>
   );
 }
@@ -284,9 +290,6 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
   },
-  safeArea: {
-    flex: 1,
-  },
   searchContainer: {
     flexDirection: 'row',
     paddingHorizontal: 24,
@@ -294,9 +297,13 @@ const styles = StyleSheet.create({
     gap: 12,
     backgroundColor: 'transparent',
   },
-  searchInput: {
+  searchInputContainer: {
     flex: 1,
-    borderWidth: 0,
+    marginBottom: 0,
+    width: '100%',
+  },
+  searchInputText: {
+    width: '100%',
   },
   addButton: {
     width: 48,
@@ -305,6 +312,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary[600],
     justifyContent: 'center',
     alignItems: 'center',
+    flexShrink: 0,
   },
   scrollView: {
     flex: 1,

@@ -2,9 +2,7 @@ import React from 'react';
 import { TouchableOpacity, View, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import Animated from 'react-native-reanimated';
 import { Colors } from '@/constants';
-import { usePressAnimation } from './Animations';
 
 interface FloatingActionButtonProps {
   icon: keyof typeof Ionicons.glyphMap;
@@ -23,8 +21,6 @@ export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
   color,
   variant = 'gradient',
 }) => {
-  const { animatedStyle, onPressIn, onPressOut } = usePressAnimation(0.9);
-
   // Size configurations
   const iconSizes = {
     sm: 20,
@@ -48,43 +44,35 @@ export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
 
   if (variant === 'gradient') {
     return (
-      <Animated.View style={[animatedStyle]}>
-        <TouchableOpacity
-          onPress={handlePress}
-          onPressIn={onPressIn}
-          onPressOut={onPressOut}
-          activeOpacity={1}
-          style={[styles.container, styles[size], style]}
+      <TouchableOpacity
+        onPress={handlePress}
+        activeOpacity={0.8}
+        style={[styles.container, styles[size], style]}
+      >
+        <LinearGradient
+          colors={[Colors.primary[500], Colors.primary[600]]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={[styles.button, styles[size]]}
         >
-          <LinearGradient
-            colors={[Colors.primary[500], Colors.primary[600]]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={[styles.button, styles[size]]}
-          >
-            <View style={styles.iconContainer}>
-              <Ionicons name={icon} size={iconSize} color={defaultColor} />
-            </View>
-          </LinearGradient>
-        </TouchableOpacity>
-      </Animated.View>
+          <View style={styles.iconContainer}>
+            <Ionicons name={icon} size={iconSize} color={defaultColor} />
+          </View>
+        </LinearGradient>
+      </TouchableOpacity>
     );
   }
 
   return (
-    <Animated.View style={[animatedStyle]}>
-      <TouchableOpacity
-        style={[styles.container, styles[size], styles[variant], style]}
-        onPress={handlePress}
-        onPressIn={onPressIn}
-        onPressOut={onPressOut}
-        activeOpacity={1}
-      >
-        <View style={styles.iconContainer}>
-          <Ionicons name={icon} size={iconSize} color={defaultColor} />
-        </View>
-      </TouchableOpacity>
-    </Animated.View>
+    <TouchableOpacity
+      style={[styles.container, styles[size], styles[variant], style]}
+      onPress={handlePress}
+      activeOpacity={0.8}
+    >
+      <View style={styles.iconContainer}>
+        <Ionicons name={icon} size={iconSize} color={defaultColor} />
+      </View>
+    </TouchableOpacity>
   );
 };
 

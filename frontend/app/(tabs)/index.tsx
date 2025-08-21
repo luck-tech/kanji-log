@@ -1,11 +1,5 @@
 import React, { useState } from 'react';
-import {
-  View,
-  ScrollView,
-  SafeAreaView,
-  RefreshControl,
-  StyleSheet,
-} from 'react-native';
+import { View, ScrollView, RefreshControl, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Header } from '@/components/common/Header';
 import { TabBar } from '@/components/common/TabBar';
@@ -265,48 +259,46 @@ export default function EventsScreen() {
         style={styles.gradient}
       />
 
-      <SafeAreaView style={styles.safeArea}>
-        <Header
-          title="イベント"
-          subtitle="飲み会の企画・管理"
-          variant="gradient"
-        />
+      <Header
+        title="イベント"
+        subtitle="飲み会の企画・管理"
+        variant="gradient"
+      />
 
-        <TabBar
-          tabs={EVENT_STATUS_TABS}
-          activeTab={activeTab}
-          onTabPress={setActiveTab}
-          variant="segmented"
-        />
+      <TabBar
+        tabs={EVENT_STATUS_TABS}
+        activeTab={activeTab}
+        onTabPress={setActiveTab}
+        variant="segmented"
+      />
 
-        <ScrollView
-          style={styles.scrollView}
-          showsVerticalScrollIndicator={false}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={handleRefresh}
-              tintColor="#0284c7"
-              colors={['#0284c7']}
-            />
-          }
-        >
-          <View style={styles.content}>{renderEvents()}</View>
-        </ScrollView>
+      <ScrollView
+        style={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+            tintColor="#0284c7"
+            colors={['#0284c7']}
+          />
+        }
+      >
+        <View style={styles.content}>{renderEvents()}</View>
+      </ScrollView>
 
-        <FloatingActionButton
-          icon="add"
-          onPress={handleCreateEvent}
-          variant="gradient"
-          size="md"
-        />
+      <FloatingActionButton
+        icon="add"
+        onPress={handleCreateEvent}
+        variant="gradient"
+        size="md"
+      />
 
-        <EventCreateModal
-          isVisible={isCreateModalVisible}
-          onClose={() => setIsCreateModalVisible(false)}
-          onCreate={handleEventCreate}
-        />
-      </SafeAreaView>
+      <EventCreateModal
+        isVisible={isCreateModalVisible}
+        onClose={() => setIsCreateModalVisible(false)}
+        onCreate={handleEventCreate}
+      />
     </View>
   );
 }
@@ -321,9 +313,6 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-  },
-  safeArea: {
-    flex: 1,
   },
   scrollView: {
     flex: 1,

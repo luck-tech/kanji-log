@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Colors } from '@/constants';
 
 interface HeaderProps {
@@ -13,6 +14,7 @@ interface HeaderProps {
   rightIcon?: string;
   onLeftPress?: () => void;
   onRightPress?: () => void;
+  applySafeArea?: boolean;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -24,21 +26,34 @@ export const Header: React.FC<HeaderProps> = ({
   rightIcon,
   onLeftPress,
   onRightPress,
+  applySafeArea = true,
 }) => {
+  const insets = useSafeAreaInsets();
   const hasIcons = leftIcon || rightIcon;
 
+  const safeAreaStyle = applySafeArea ? { paddingTop: insets.top } : {};
+
   const headerContent = (
-    <View style={hasIcons ? styles.rowContainer : styles.centerContainer}>
+    <View
+      style={[
+        hasIcons ? styles.rowContainer : styles.centerContainer,
+        styles.padding,
+      ]}
+    >
       {leftIcon && (
         <TouchableOpacity
           onPress={onLeftPress}
-          style={styles.iconButton}
+          style={
+            variant === 'gradient'
+              ? styles.gradientIconButton
+              : styles.iconButton
+          }
           activeOpacity={0.7}
         >
           <Ionicons
             name={leftIcon as any}
             size={24}
-            color={Colors.neutral[700]}
+            color={variant === 'gradient' ? Colors.white : Colors.neutral[700]}
           />
         </TouchableOpacity>
       )}
@@ -48,20 +63,36 @@ export const Header: React.FC<HeaderProps> = ({
           hasIcons ? styles.titleContainerWithIcons : styles.titleContainer
         }
       >
-        <Text style={styles.title}>{title}</Text>
-        {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
+        <Text
+          style={variant === 'gradient' ? styles.gradientTitle : styles.title}
+        >
+          {title}
+        </Text>
+        {subtitle && (
+          <Text
+            style={
+              variant === 'gradient' ? styles.gradientSubtitle : styles.subtitle
+            }
+          >
+            {subtitle}
+          </Text>
+        )}
       </View>
 
       {rightIcon && (
         <TouchableOpacity
           onPress={onRightPress}
-          style={styles.iconButton}
+          style={
+            variant === 'gradient'
+              ? styles.gradientIconButton
+              : styles.iconButton
+          }
           activeOpacity={0.7}
         >
           <Ionicons
             name={rightIcon as any}
             size={24}
-            color={Colors.neutral[700]}
+            color={variant === 'gradient' ? Colors.white : Colors.neutral[700]}
           />
         </TouchableOpacity>
       )}
@@ -74,55 +105,17 @@ export const Header: React.FC<HeaderProps> = ({
         colors={[Colors.primary[500], Colors.primary[600]]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
-        style={[styles.header, style]}
+        style={[styles.header, safeAreaStyle, style]}
       >
-        <View
-          style={[
-            hasIcons ? styles.rowContainer : styles.centerContainer,
-            styles.padding,
-          ]}
-        >
-          {leftIcon && (
-            <TouchableOpacity
-              onPress={onLeftPress}
-              style={styles.gradientIconButton}
-              activeOpacity={0.7}
-            >
-              <Ionicons name={leftIcon as any} size={24} color={Colors.white} />
-            </TouchableOpacity>
-          )}
-
-          <View
-            style={
-              hasIcons ? styles.titleContainerWithIcons : styles.titleContainer
-            }
-          >
-            <Text style={styles.gradientTitle}>{title}</Text>
-            {subtitle && (
-              <Text style={styles.gradientSubtitle}>{subtitle}</Text>
-            )}
-          </View>
-
-          {rightIcon && (
-            <TouchableOpacity
-              onPress={onRightPress}
-              style={styles.gradientIconButton}
-              activeOpacity={0.7}
-            >
-              <Ionicons
-                name={rightIcon as any}
-                size={24}
-                color={Colors.white}
-              />
-            </TouchableOpacity>
-          )}
-        </View>
+        {headerContent}
       </LinearGradient>
     );
   }
 
   return (
-    <View style={[styles.header, styles[variant], style]}>{headerContent}</View>
+    <View style={[styles.header, styles[variant], safeAreaStyle, style]}>
+      {headerContent}
+    </View>
   );
 };
 

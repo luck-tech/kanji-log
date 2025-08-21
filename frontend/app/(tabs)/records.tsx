@@ -4,7 +4,6 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
-  SafeAreaView,
   StyleSheet,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -374,338 +373,328 @@ export default function RecordsScreen() {
         style={styles.background}
       />
 
-      <SafeAreaView style={styles.safeArea}>
-        <Header
-          title="みんなの記録"
-          subtitle="他の幹事が共有した貴重な経験とナレッジ"
-          variant="gradient"
-        />
+      <Header
+        title="みんなの記録"
+        subtitle="他の幹事が共有した貴重な経験とナレッジ"
+        variant="gradient"
+      />
 
-        {!hasSharedRecord ? (
-          /* Unlock Screen */
-          <ScrollView
-            style={styles.unlockScrollView}
-            contentContainerStyle={styles.unlockContent}
-            showsVerticalScrollIndicator={false}
-          >
-            <View style={styles.unlockCenter}>
-              <LinearGradient
-                colors={['#f59e0b', '#d97706']}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={styles.lockIcon}
-              >
-                <Ionicons name="lock-closed" size={48} color="white" />
-              </LinearGradient>
+      {!hasSharedRecord ? (
+        /* Unlock Screen */
+        <ScrollView
+          style={styles.unlockScrollView}
+          contentContainerStyle={styles.unlockContent}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.unlockCenter}>
+            <LinearGradient
+              colors={['#f59e0b', '#d97706']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.lockIcon}
+            >
+              <Ionicons name="lock-closed" size={48} color="white" />
+            </LinearGradient>
 
-              <Text style={styles.unlockTitle}>記録を共有して、</Text>
-              <Text style={styles.unlockTitle}>
-                他の幹事のナレッジを閲覧しよう
-              </Text>
+            <Text style={styles.unlockTitle}>記録を共有して、</Text>
+            <Text style={styles.unlockTitle}>
+              他の幹事のナレッジを閲覧しよう
+            </Text>
 
-              <Text style={styles.unlockDescription}>
-                あなたの終了済みイベントの記録を1つ以上共有すると、他の幹事が投稿した貴重な情報にアクセスできます。
-              </Text>
+            <Text style={styles.unlockDescription}>
+              あなたの終了済みイベントの記録を1つ以上共有すると、他の幹事が投稿した貴重な情報にアクセスできます。
+            </Text>
 
-              <Card variant="gradient" shadow="none">
-                <Text style={styles.benefitsTitle}>アクセスできる情報</Text>
-                <View style={styles.benefitsList}>
-                  <View style={styles.benefitItem}>
-                    <View style={[styles.benefitIcon, styles.warningIcon]}>
-                      <Ionicons name="star" size={20} color="#f59e0b" />
-                    </View>
-                    <Text style={styles.benefitText}>お店の評価とレビュー</Text>
+            <Card variant="gradient" shadow="none">
+              <Text style={styles.benefitsTitle}>アクセスできる情報</Text>
+              <View style={styles.benefitsList}>
+                <View style={styles.benefitItem}>
+                  <View style={[styles.benefitIcon, styles.warningIcon]}>
+                    <Ionicons name="star" size={20} color="#f59e0b" />
                   </View>
-                  <View style={styles.benefitItem}>
-                    <View style={[styles.benefitIcon, styles.successIcon]}>
-                      <Ionicons name="cash-outline" size={20} color="#10b981" />
-                    </View>
-                    <Text style={styles.benefitText}>予算と費用の参考情報</Text>
-                  </View>
-                  <View style={styles.benefitItem}>
-                    <View style={[styles.benefitIcon, styles.primaryIcon]}>
-                      <Ionicons
-                        name="location-outline"
-                        size={20}
-                        color="#0284c7"
-                      />
-                    </View>
-                    <Text style={styles.benefitText}>
-                      エリア別のおすすめ店舗
-                    </Text>
-                  </View>
-                  <View style={styles.benefitItem}>
-                    <View style={[styles.benefitIcon, styles.accentIcon]}>
-                      <Ionicons
-                        name="share-social-outline"
-                        size={20}
-                        color="#ec7c30"
-                      />
-                    </View>
-                    <Text style={styles.benefitText}>イベント企画のコツ</Text>
-                  </View>
+                  <Text style={styles.benefitText}>お店の評価とレビュー</Text>
                 </View>
-              </Card>
-
-              <Button
-                title="記録を共有する"
-                onPress={handleUnlock}
-                size="lg"
-                variant="gradient"
-                fullWidth
-                icon={
-                  <Ionicons name="lock-open-outline" size={20} color="white" />
-                }
-              />
-
-              <Text style={styles.privacyNote}>
-                共有する記録は、店舗情報と評価のみ表示され、個人情報は一切公開されません。
-              </Text>
-            </View>
-          </ScrollView>
-        ) : (
-          /* Records List */
-          <View style={styles.recordsContainer}>
-            {/* Tabs */}
-            <View style={styles.tabsContainer}>
-              <View style={styles.tabsBackground}>
-                <TouchableOpacity
-                  onPress={() => handleTabChange('all')}
-                  style={[
-                    styles.tab,
-                    activeTab === 'all' ? styles.tabActive : styles.tabInactive,
-                  ]}
-                  activeOpacity={0.8}
-                >
-                  <Text
-                    style={[
-                      styles.tabText,
-                      activeTab === 'all'
-                        ? styles.tabTextActive
-                        : styles.tabTextInactive,
-                    ]}
-                  >
-                    すべての記録
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => handleTabChange('liked')}
-                  style={[
-                    styles.tab,
-                    activeTab === 'liked'
-                      ? styles.tabActive
-                      : styles.tabInactive,
-                  ]}
-                  activeOpacity={0.8}
-                >
-                  <Text
-                    style={[
-                      styles.tabText,
-                      activeTab === 'liked'
-                        ? styles.tabTextActive
-                        : styles.tabTextInactive,
-                    ]}
-                  >
-                    いいねした記録
-                  </Text>
-                </TouchableOpacity>
+                <View style={styles.benefitItem}>
+                  <View style={[styles.benefitIcon, styles.successIcon]}>
+                    <Ionicons name="cash-outline" size={20} color="#10b981" />
+                  </View>
+                  <Text style={styles.benefitText}>予算と費用の参考情報</Text>
+                </View>
+                <View style={styles.benefitItem}>
+                  <View style={[styles.benefitIcon, styles.primaryIcon]}>
+                    <Ionicons
+                      name="location-outline"
+                      size={20}
+                      color="#0284c7"
+                    />
+                  </View>
+                  <Text style={styles.benefitText}>エリア別のおすすめ店舗</Text>
+                </View>
+                <View style={styles.benefitItem}>
+                  <View style={[styles.benefitIcon, styles.accentIcon]}>
+                    <Ionicons
+                      name="share-social-outline"
+                      size={20}
+                      color="#ec7c30"
+                    />
+                  </View>
+                  <Text style={styles.benefitText}>イベント企画のコツ</Text>
+                </View>
               </View>
-            </View>
+            </Card>
 
-            {/* Filter Button */}
-            <View style={styles.filterContainer}>
+            <Button
+              title="記録を共有する"
+              onPress={handleUnlock}
+              size="lg"
+              variant="gradient"
+              fullWidth
+              icon={
+                <Ionicons name="lock-open-outline" size={20} color="white" />
+              }
+            />
+
+            <Text style={styles.privacyNote}>
+              共有する記録は、店舗情報と評価のみ表示され、個人情報は一切公開されません。
+            </Text>
+          </View>
+        </ScrollView>
+      ) : (
+        /* Records List */
+        <View style={styles.recordsContainer}>
+          {/* Tabs */}
+          <View style={styles.tabsContainer}>
+            <View style={styles.tabsBackground}>
               <TouchableOpacity
-                onPress={() => setIsFilterModalVisible(true)}
-                style={styles.filterButton}
+                onPress={() => handleTabChange('all')}
+                style={[
+                  styles.tab,
+                  activeTab === 'all' ? styles.tabActive : styles.tabInactive,
+                ]}
                 activeOpacity={0.8}
               >
-                <Ionicons name="options-outline" size={20} color="#0284c7" />
-                <Text style={styles.filterButtonText}>フィルター</Text>
-                {getActiveFilterCount() > 0 && (
-                  <View style={styles.filterBadge}>
-                    <Text style={styles.filterBadgeText}>
-                      {getActiveFilterCount()}
-                    </Text>
-                  </View>
-                )}
+                <Text
+                  style={[
+                    styles.tabText,
+                    activeTab === 'all'
+                      ? styles.tabTextActive
+                      : styles.tabTextInactive,
+                  ]}
+                >
+                  すべての記録
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => handleTabChange('liked')}
+                style={[
+                  styles.tab,
+                  activeTab === 'liked' ? styles.tabActive : styles.tabInactive,
+                ]}
+                activeOpacity={0.8}
+              >
+                <Text
+                  style={[
+                    styles.tabText,
+                    activeTab === 'liked'
+                      ? styles.tabTextActive
+                      : styles.tabTextInactive,
+                  ]}
+                >
+                  いいねした記録
+                </Text>
               </TouchableOpacity>
             </View>
+          </View>
 
-            {/* Active Filters */}
-            <ActiveFilters
-              filters={filters}
-              onRemoveFilter={removeFilter}
-              onClearAll={clearAllFilters}
-            />
-
-            {/* Results Count */}
-            <View style={styles.resultsContainer}>
-              <Text style={styles.resultsText}>
-                {filteredRecords.length}件の記録が見つかりました
-              </Text>
-            </View>
-
-            <ScrollView
-              style={styles.recordsScrollView}
-              contentContainerStyle={styles.recordsContent}
-              showsVerticalScrollIndicator={false}
+          {/* Filter Button */}
+          <View style={styles.filterContainer}>
+            <TouchableOpacity
+              onPress={() => setIsFilterModalVisible(true)}
+              style={styles.filterButton}
+              activeOpacity={0.8}
             >
-              <View style={styles.recordsList}>
-                {filteredRecords.map((record, index) => (
-                  <TouchableOpacity
-                    key={record.id}
-                    onPress={() => handleRecordPress(record)}
-                    activeOpacity={0.8}
+              <Ionicons name="options-outline" size={20} color="#0284c7" />
+              <Text style={styles.filterButtonText}>フィルター</Text>
+              {getActiveFilterCount() > 0 && (
+                <View style={styles.filterBadge}>
+                  <Text style={styles.filterBadgeText}>
+                    {getActiveFilterCount()}
+                  </Text>
+                </View>
+              )}
+            </TouchableOpacity>
+          </View>
+
+          {/* Active Filters */}
+          <ActiveFilters
+            filters={filters}
+            onRemoveFilter={removeFilter}
+            onClearAll={clearAllFilters}
+          />
+
+          {/* Results Count */}
+          <View style={styles.resultsContainer}>
+            <Text style={styles.resultsText}>
+              {filteredRecords.length}件の記録が見つかりました
+            </Text>
+          </View>
+
+          <ScrollView
+            style={styles.recordsScrollView}
+            contentContainerStyle={styles.recordsContent}
+            showsVerticalScrollIndicator={false}
+          >
+            <View style={styles.recordsList}>
+              {filteredRecords.map((record, index) => (
+                <TouchableOpacity
+                  key={record.id}
+                  onPress={() => handleRecordPress(record)}
+                  activeOpacity={0.8}
+                >
+                  <Card
+                    variant="elevated"
+                    shadow="none"
+                    style={
+                      record.organizer.isSameCompany
+                        ? styles.sameCompanyCard
+                        : undefined
+                    }
                   >
-                    <Card
-                      variant="elevated"
-                      shadow="none"
-                      style={
-                        record.organizer.isSameCompany
-                          ? styles.sameCompanyCard
-                          : undefined
-                      }
-                    >
-                      {record.organizer.isSameCompany && (
-                        <View style={styles.sameCompanyBadge}>
-                          <Text style={styles.sameCompanyBadgeText}>
-                            同じ会社
-                          </Text>
-                        </View>
-                      )}
+                    {record.organizer.isSameCompany && (
+                      <View style={styles.sameCompanyBadge}>
+                        <Text style={styles.sameCompanyBadgeText}>
+                          同じ会社
+                        </Text>
+                      </View>
+                    )}
 
-                      <View style={styles.recordHeader}>
-                        <View style={styles.recordInfo}>
-                          <Text style={styles.venueName}>
-                            {record.eventLog.venue.name}
-                          </Text>
-                          <View style={styles.ratingRow}>
-                            {renderStars(record.eventLog.rating)}
-                            <Text style={styles.ratingText}>
-                              {record.eventLog.rating.toFixed(1)}
-                            </Text>
-                          </View>
-                        </View>
-
-                        <View style={styles.purposeBadge}>
-                          <Text style={styles.purposeText}>
-                            {getPurposeLabel(record.event.purpose)}
+                    <View style={styles.recordHeader}>
+                      <View style={styles.recordInfo}>
+                        <Text style={styles.venueName}>
+                          {record.eventLog.venue.name}
+                        </Text>
+                        <View style={styles.ratingRow}>
+                          {renderStars(record.eventLog.rating)}
+                          <Text style={styles.ratingText}>
+                            {record.eventLog.rating.toFixed(1)}
                           </Text>
                         </View>
                       </View>
 
-                      <Text style={styles.recordNotes} numberOfLines={2}>
-                        {record.eventLog.notes}
-                      </Text>
-
-                      <View style={styles.recordDetails}>
-                        <View style={styles.detailItem}>
-                          <View
-                            style={[styles.detailIcon, styles.successIconBg]}
-                          >
-                            <Ionicons
-                              name="cash-outline"
-                              size={16}
-                              color="#10b981"
-                            />
-                          </View>
-                          <Text style={styles.detailText}>
-                            ¥{record.eventLog.costPerPerson.toLocaleString()}/人
-                          </Text>
-                        </View>
-
-                        <View style={styles.detailItem}>
-                          <View
-                            style={[styles.detailIcon, styles.neutralIconBg]}
-                          >
-                            <Ionicons
-                              name="location-outline"
-                              size={16}
-                              color="#64748b"
-                            />
-                          </View>
-                          <Text style={styles.detailText}>
-                            {record.eventLog.venue.address}
-                          </Text>
-                        </View>
+                      <View style={styles.purposeBadge}>
+                        <Text style={styles.purposeText}>
+                          {getPurposeLabel(record.event.purpose)}
+                        </Text>
                       </View>
+                    </View>
 
-                      {/* いいねボタンと情報 */}
-                      <View style={styles.recordFooter}>
-                        <View style={styles.organizerInfo}>
-                          <Text style={styles.organizerName}>
-                            {record.organizer.name}さんの記録
-                          </Text>
-                          {record.organizer.company && (
-                            <Text style={styles.organizerCompany}>
-                              {record.organizer.company}
-                            </Text>
-                          )}
-                        </View>
+                    <Text style={styles.recordNotes} numberOfLines={2}>
+                      {record.eventLog.notes}
+                    </Text>
 
-                        <View style={styles.actionsRow}>
-                          <TouchableOpacity
-                            onPress={(e) => {
-                              e.stopPropagation();
-                              handleLike(record.id);
-                            }}
-                            style={styles.likeButton}
-                            activeOpacity={0.7}
-                          >
-                            <Ionicons
-                              name={record.isLiked ? 'heart' : 'heart-outline'}
-                              size={20}
-                              color={record.isLiked ? '#ef4444' : '#94a3b8'}
-                            />
-                            <Text
-                              style={[
-                                styles.likeCount,
-                                record.isLiked
-                                  ? styles.likeCountActive
-                                  : styles.likeCountInactive,
-                              ]}
-                            >
-                              {record.likeCount}
-                            </Text>
-                          </TouchableOpacity>
+                    <View style={styles.recordDetails}>
+                      <View style={styles.detailItem}>
+                        <View style={[styles.detailIcon, styles.successIconBg]}>
                           <Ionicons
-                            name="chevron-forward"
-                            size={20}
-                            color="#94a3b8"
+                            name="cash-outline"
+                            size={16}
+                            color="#10b981"
                           />
                         </View>
+                        <Text style={styles.detailText}>
+                          ¥{record.eventLog.costPerPerson.toLocaleString()}/人
+                        </Text>
                       </View>
-                    </Card>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </ScrollView>
 
-            {/* Filter Modal */}
-            <FilterModal
-              isVisible={isFilterModalVisible}
-              onClose={() => setIsFilterModalVisible(false)}
-              onApply={applyFilters}
-              initialFilters={filters}
-            />
+                      <View style={styles.detailItem}>
+                        <View style={[styles.detailIcon, styles.neutralIconBg]}>
+                          <Ionicons
+                            name="location-outline"
+                            size={16}
+                            color="#64748b"
+                          />
+                        </View>
+                        <Text style={styles.detailText}>
+                          {record.eventLog.venue.address}
+                        </Text>
+                      </View>
+                    </View>
 
-            {/* Record Detail Modal */}
-            <RecordDetailModal
-              isVisible={selectedRecord !== null}
-              onClose={() => setSelectedRecord(null)}
-              record={selectedRecord}
-              onLike={
-                selectedRecord ? () => handleLike(selectedRecord.id) : undefined
-              }
-              onUserPress={
-                selectedRecord
-                  ? () => handleUserPress(selectedRecord.organizer.id)
-                  : undefined
-              }
-            />
-          </View>
-        )}
-      </SafeAreaView>
+                    {/* いいねボタンと情報 */}
+                    <View style={styles.recordFooter}>
+                      <View style={styles.organizerInfo}>
+                        <Text style={styles.organizerName}>
+                          {record.organizer.name}さんの記録
+                        </Text>
+                        {record.organizer.company && (
+                          <Text style={styles.organizerCompany}>
+                            {record.organizer.company}
+                          </Text>
+                        )}
+                      </View>
+
+                      <View style={styles.actionsRow}>
+                        <TouchableOpacity
+                          onPress={(e) => {
+                            e.stopPropagation();
+                            handleLike(record.id);
+                          }}
+                          style={styles.likeButton}
+                          activeOpacity={0.7}
+                        >
+                          <Ionicons
+                            name={record.isLiked ? 'heart' : 'heart-outline'}
+                            size={20}
+                            color={record.isLiked ? '#ef4444' : '#94a3b8'}
+                          />
+                          <Text
+                            style={[
+                              styles.likeCount,
+                              record.isLiked
+                                ? styles.likeCountActive
+                                : styles.likeCountInactive,
+                            ]}
+                          >
+                            {record.likeCount}
+                          </Text>
+                        </TouchableOpacity>
+                        <Ionicons
+                          name="chevron-forward"
+                          size={20}
+                          color="#94a3b8"
+                        />
+                      </View>
+                    </View>
+                  </Card>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </ScrollView>
+
+          {/* Filter Modal */}
+          <FilterModal
+            isVisible={isFilterModalVisible}
+            onClose={() => setIsFilterModalVisible(false)}
+            onApply={applyFilters}
+            initialFilters={filters}
+          />
+
+          {/* Record Detail Modal */}
+          <RecordDetailModal
+            isVisible={selectedRecord !== null}
+            onClose={() => setSelectedRecord(null)}
+            record={selectedRecord}
+            onLike={
+              selectedRecord ? () => handleLike(selectedRecord.id) : undefined
+            }
+            onUserPress={
+              selectedRecord
+                ? () => handleUserPress(selectedRecord.organizer.id)
+                : undefined
+            }
+          />
+        </View>
+      )}
     </View>
   );
 }
@@ -720,9 +709,6 @@ const styles = StyleSheet.create({
     right: 0,
     top: 0,
     bottom: 0,
-  },
-  safeArea: {
-    flex: 1,
   },
   unlockScrollView: {
     flex: 1,

@@ -86,7 +86,7 @@ export const Input: React.FC<InputProps> = ({
 
   // スタイル計算
   const getContainerStyle = () => {
-    let borderColor: string = Colors.neutral[200]; // default
+    let borderColor: string = Colors.neutral[200];
 
     if (error) {
       borderColor = Colors.error[500];
