@@ -9,13 +9,10 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Card } from '@/components/common/Card';
-import { Button } from '@/components/common/Button';
-import { Input } from '@/components/common/Input';
+import { Card, Button, Input, DateTimePicker } from '@/components/common';
 import { EventPurpose } from '@/types';
 import { Colors } from '@/constants/Colors';
 import { Layout } from '@/constants/Layout';
-import { CustomDateTimePicker } from '@/components/common/CustomDateTimePicker';
 
 interface EventCreateModalProps {
   isVisible: boolean;
@@ -426,8 +423,8 @@ export const EventCreateModal: React.FC<EventCreateModalProps> = ({
         </View>
       </View>
 
-      {/* CustomDateTimePickers */}
-      <CustomDateTimePicker
+      {/* DateTimePickers */}
+      <DateTimePicker
         isVisible={showDatePicker}
         mode="date"
         value={selectedDate}
@@ -437,7 +434,7 @@ export const EventCreateModal: React.FC<EventCreateModalProps> = ({
         title="開催日を選択"
       />
 
-      <CustomDateTimePicker
+      <DateTimePicker
         isVisible={showTimePicker}
         mode="time"
         value={selectedTime}

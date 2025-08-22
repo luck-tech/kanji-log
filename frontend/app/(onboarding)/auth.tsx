@@ -9,8 +9,7 @@ import {
 } from 'react-native';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { Button } from '@/components/common/Button';
-import { Input } from '@/components/common/Input';
+import { Button, Input } from '@/components/common';
 import { Colors } from '@/constants/Colors';
 
 export default function AuthScreen() {
@@ -67,10 +66,14 @@ export default function AuthScreen() {
             <Input
               label="お名前"
               value={form.name}
-              onChangeText={(text) => setForm({ ...form, name: text })}
+              onChangeText={(text: string) => setForm({ ...form, name: text })}
               placeholder="山田太郎"
               leftIcon={
-                <Ionicons name="person-outline" size={20} color={Colors.neutral[400]} />
+                <Ionicons
+                  name="person-outline"
+                  size={20}
+                  color={Colors.neutral[400]}
+                />
               }
             />
           )}
@@ -78,23 +81,33 @@ export default function AuthScreen() {
           <Input
             label="メールアドレス"
             value={form.email}
-            onChangeText={(text) => setForm({ ...form, email: text })}
+            onChangeText={(text: string) => setForm({ ...form, email: text })}
             placeholder="example@email.com"
             keyboardType="email-address"
             autoCapitalize="none"
             leftIcon={
-              <Ionicons name="mail-outline" size={20} color={Colors.neutral[400]} />
+              <Ionicons
+                name="mail-outline"
+                size={20}
+                color={Colors.neutral[400]}
+              />
             }
           />
 
           <Input
             label="パスワード"
             value={form.password}
-            onChangeText={(text) => setForm({ ...form, password: text })}
+            onChangeText={(text: string) =>
+              setForm({ ...form, password: text })
+            }
             placeholder="8文字以上"
             secureTextEntry={!showPassword}
             leftIcon={
-              <Ionicons name="lock-closed-outline" size={20} color={Colors.neutral[400]} />
+              <Ionicons
+                name="lock-closed-outline"
+                size={20}
+                color={Colors.neutral[400]}
+              />
             }
             rightIcon={
               <Button
@@ -108,7 +121,11 @@ export default function AuthScreen() {
                       color={Colors.neutral[400]}
                     />
                   ) : (
-                    <Ionicons name="eye-outline" size={20} color={Colors.neutral[400]} />
+                    <Ionicons
+                      name="eye-outline"
+                      size={20}
+                      color={Colors.neutral[400]}
+                    />
                   )
                 }
               />

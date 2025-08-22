@@ -10,10 +10,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Card } from '@/components/common/Card';
-import { Button } from '@/components/common/Button';
-import { Input } from '@/components/common/Input';
-import { CustomDateTimePicker } from '@/components/common/CustomDateTimePicker';
+import { Card, Button, Input, DateTimePicker } from '@/components/common';
 import { Colors } from '@/constants/Colors';
 import { Layout } from '@/constants/Layout';
 
@@ -423,26 +420,26 @@ export const DateScheduleModal: React.FC<DateScheduleModalProps> = ({
         </View>
 
         {/* Date/Time Pickers */}
-        <CustomDateTimePicker
+        <DateTimePicker
           isVisible={!!showDatePicker}
           mode="date"
           value={selectedDate}
           minimumDate={new Date()}
-          onConfirm={(date) => handleDateChange(showDatePicker!, date)}
+          onConfirm={(date: Date) => handleDateChange(showDatePicker!, date)}
           onCancel={() => setShowDatePicker(null)}
           title="候補日を選択"
         />
 
-        <CustomDateTimePicker
+        <DateTimePicker
           isVisible={!!showTimePicker}
           mode="time"
           value={selectedTime}
-          onConfirm={(time) => handleTimeChange(showTimePicker!, time)}
+          onConfirm={(time: Date) => handleTimeChange(showTimePicker!, time)}
           onCancel={() => setShowTimePicker(null)}
           title="開始時間を選択"
         />
 
-        <CustomDateTimePicker
+        <DateTimePicker
           isVisible={showDeadlinePicker}
           mode="date"
           value={deadlineDate}

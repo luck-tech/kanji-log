@@ -1,5 +1,4 @@
 import { ViewStyle, TextStyle } from 'react-native';
-import { BudgetRange } from './base';
 
 /**
  * UI共通Props型定義
@@ -129,14 +128,6 @@ export interface ShakeViewProps extends BaseAnimationProps {
 export interface StaggeredListProps extends BaseAnimationProps {
   itemDelay?: number;
   direction?: 'up' | 'down';
-}
-
-// フィルターオプション
-export interface FilterOptions {
-  areas: string[];
-  purposes: string[];
-  genres: string[];
-  price: BudgetRange;
 }
 
 // エラー情報

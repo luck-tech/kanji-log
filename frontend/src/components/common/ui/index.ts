@@ -9,6 +9,7 @@ export { SkeletonLoader, SkeletonCard, SkeletonList } from './SkeletonLoader';
 export { ActiveFilters } from './ActiveFilters';
 export { PriceRangeSlider } from './PriceRangeSlider';
 export { DateTimePicker } from './DateTimePicker';
+export { FilterModal } from './FilterModal';
 
 // Animation Components and Hooks
 export {
@@ -23,3 +24,6 @@ export {
   useModalAnimation,
   usePickerScrollAnimation,
 } from './Animations';
+
+// Re-export FilterOptions type
+export type { FilterOptions } from './FilterModal';

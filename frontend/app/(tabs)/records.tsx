@@ -8,13 +8,15 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Card } from '@/components/common/Card';
-import { Button } from '@/components/common/Button';
-import { Header } from '@/components/common/Header';
-import { FilterModal, FilterOptions } from '@/components/common/FilterModal';
-import { ActiveFilters } from '@/components/common/ActiveFilters';
+import {
+  Card,
+  Button,
+  Header,
+  FilterModal,
+  ActiveFilters,
+  FilterOptions,
+} from '@/components/common';
 import { SharedRecord, EventPurpose } from '@/types';
-import { RecordDetailModal } from '@/components/modals';
 import { Colors } from '@/constants';
 
 // Extended SharedRecord type for additional features
@@ -194,7 +196,7 @@ export default function RecordsScreen() {
     areas: [],
     purposes: [],
     genres: [],
-    priceRange: { min: 0, max: 10000 },
+    price: { min: 0, max: 10000 },
   });
 
   const handleUnlock = () => {
@@ -219,11 +221,6 @@ export default function RecordsScreen() {
           : record
       )
     );
-  };
-
-  const handleUserPress = (userId: string) => {
-    console.log('Navigate to user profile:', userId);
-    // TODO: Navigate to user profile page
   };
 
   const applyFilters = useCallback(
@@ -257,11 +254,11 @@ export default function RecordsScreen() {
       }
 
       // Price range filter
-      if (newFilters.priceRange.min > 0 || newFilters.priceRange.max < 10000) {
+      if (newFilters.price.min > 0 || newFilters.price.max < 10000) {
         filtered = filtered.filter(
           (record) =>
-            record.eventLog.costPerPerson >= newFilters.priceRange.min &&
-            record.eventLog.costPerPerson <= newFilters.priceRange.max
+            record.eventLog.costPerPerson >= newFilters.price.min &&
+            record.eventLog.costPerPerson <= newFilters.price.max
         );
       }
 
@@ -292,9 +289,11 @@ export default function RecordsScreen() {
       const newFilters = { ...filters };
 
       if (type === 'price') {
-        newFilters.priceRange = { min: 0, max: 10000 };
+        newFilters.price = { min: 0, max: 10000 };
       } else if (value) {
-        newFilters[type] = newFilters[type].filter((item) => item !== value);
+        newFilters[type] = newFilters[type].filter(
+          (item: string) => item !== value
+        );
       }
 
       applyFilters(newFilters);
@@ -307,7 +306,7 @@ export default function RecordsScreen() {
       areas: [],
       purposes: [],
       genres: [],
-      priceRange: { min: 0, max: 10000 },
+      price: { min: 0, max: 10000 },
     };
     applyFilters(emptyFilters);
   }, [applyFilters]);
@@ -317,7 +316,7 @@ export default function RecordsScreen() {
       filters.areas.length +
       filters.purposes.length +
       filters.genres.length +
-      (filters.priceRange.min > 0 || filters.priceRange.max < 10000 ? 1 : 0)
+      (filters.price.min > 0 || filters.price.max < 10000 ? 1 : 0)
     );
   };
 
@@ -684,7 +683,7 @@ export default function RecordsScreen() {
           />
 
           {/* Record Detail Modal */}
-          <RecordDetailModal
+          {/* <RecordDetailModal
             isVisible={selectedRecord !== null}
             onClose={() => setSelectedRecord(null)}
             record={selectedRecord}
@@ -696,7 +695,7 @@ export default function RecordsScreen() {
                 ? () => handleUserPress(selectedRecord.organizer.id)
                 : undefined
             }
-          />
+          /> */}
         </View>
       )}
     </View>

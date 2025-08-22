@@ -13,7 +13,8 @@ import {
   PURPOSE_LABELS,
   GENRE_LABELS,
 } from '../../../utils/constants/business/labels';
-import { BaseComponentProps, FilterOptions } from '../../../types/common/ui';
+import { BaseComponentProps } from '../../../types/common/ui';
+import type { FilterOptions } from './FilterModal';
 
 interface ActiveFiltersProps extends BaseComponentProps {
   filters: FilterOptions;

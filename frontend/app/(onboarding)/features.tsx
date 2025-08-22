@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, ScrollView, Dimensions, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { Button } from '@/components/common/Button';
-import { Card } from '@/components/common/Card';
+import { Button, Card } from '@/components/common';
 import { Colors } from '@/constants/Colors';
 
 const { width } = Dimensions.get('window');

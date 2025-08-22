@@ -8,8 +8,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Card } from '@/components/common/Card';
-import { Input } from '@/components/common/Input';
+import { Card, Input } from '@/components/common';
 import { Colors } from '@/constants';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 

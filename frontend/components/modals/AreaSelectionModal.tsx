@@ -10,9 +10,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Card } from '@/components/common/Card';
-import { Button } from '@/components/common/Button';
-import { Input } from '@/components/common/Input';
+import { Card, Button, Input } from '@/components/common';
 import { Colors } from '@/constants/Colors';
 import { Layout } from '@/constants/Layout';
 

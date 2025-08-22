@@ -1,5 +1,6 @@
-import { EventPurpose, BaseModalProps, FilterOptions } from '../common';
+import { EventPurpose, BaseModalProps } from '../common';
 import { EventLog, Venue, SharedRecord } from './event';
+import type { FilterOptions } from '../../components/common/ui/FilterModal';
 
 /**
  * Record機能関連の型定義

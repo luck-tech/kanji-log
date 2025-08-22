@@ -3,7 +3,7 @@ import { View, Text, ImageBackground, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Button } from '@/components/common/Button';
+import { Button } from '@/components/common';
 
 export default function WelcomeScreen() {
   const handleGetStarted = () => {
