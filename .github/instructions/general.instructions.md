@@ -158,6 +158,74 @@ applyTo: "**"
   - 各機能ドメインに特化した型定義
   - 共通型を import して拡張
 
+#### 型定義の配置判断基準
+
+新しい interface や型を定義する際は、以下の基準で配置を決定する：
+
+- **✅ `src/types/features/`に配置すべき型**:
+
+  - **複数コンポーネントで使用される**: 同一機能内の 2 つ以上のコンポーネントで使用
+  - **ドメインオブジェクト**: ビジネスロジックの核となる概念（User, Event, Question 等）
+  - **データ構造**: API レスポンス、状態管理で使用されるデータ構造
+  - **将来の拡張性**: 他のコンポーネントでも使用される可能性が高い
+
+- **✅ コンポーネント内で定義してよい型**:
+  - **Props インターフェース**: そのコンポーネント専用の Props 型
+  - **ローカル状態**: そのコンポーネントでのみ使用される内部状態の型
+  - **一時的な型**: 一時的な計算やマッピングでのみ使用される型
+
+#### 型定義作成時のチェックリスト
+
+新しい型を定義する前に以下を確認：
+
+- [ ] この型は他のコンポーネントでも使用される可能性があるか？
+- [ ] この型はビジネスドメインの概念を表しているか？
+- [ ] 同じような型が既に`src/types/`に存在していないか？
+- [ ] Props 型以外で、コンポーネント固有でない型か？
+
+#### 型定義の実装例
+
+```typescript
+// ✅ 良い例：共通型定義（src/types/features/event.ts）
+export interface Question {
+  id: string;
+  question: string;
+  type:
+    | "name"
+    | "email"
+    | "phone"
+    | "allergy"
+    | "alcohol"
+    | "budget"
+    | "genre"
+    | "station"
+    | "custom";
+  required: boolean;
+  enabled: boolean;
+  canDisable: boolean;
+}
+
+export interface NewMember {
+  id: string;
+  name: string;
+}
+
+// ✅ 良い例：コンポーネント専用Props型
+interface QuestionItemProps extends BaseComponentProps {
+  question: Question; // 共通型を使用
+  onToggleEnabled: (questionId: string) => void;
+  onToggleRequired: (questionId: string) => void;
+}
+
+// ❌ 悪い例：コンポーネント内での重複定義
+interface Question {
+  // これは共通型として定義すべき
+  id: string;
+  question: string;
+  // ...
+}
+```
+
 #### 型安全性の確保
 
 - **型アサーション（as）の使用禁止**: 型安全性を損なうため原則使用しない

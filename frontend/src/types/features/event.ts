@@ -175,3 +175,36 @@ export interface ScheduleData {
   dateOptions: DateOption[];
   deadline?: string;
 }
+
+/**
+ * フォーム設定関連の型定義
+ */
+export interface Question {
+  id: string;
+  question: string;
+  type:
+    | 'name'
+    | 'email'
+    | 'phone'
+    | 'allergy'
+    | 'alcohol'
+    | 'budget'
+    | 'genre'
+    | 'station'
+    | 'custom';
+  required: boolean;
+  enabled: boolean;
+  canDisable: boolean;
+}
+
+export interface NewMember {
+  id: string;
+  name: string;
+}
+
+export interface FormSetupState {
+  questions: Question[];
+  newMembers: NewMember[];
+  customQuestion: string;
+  formUrl?: string;
+}
