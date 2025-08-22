@@ -35,13 +35,14 @@ export interface Restaurant {
   name: string;
   genre: string;
   area: string;
-  phone: string;
+  phone?: string;
   address: string;
   rating?: number;
   priceRange: string;
   imageUrl?: string;
   recommendationReason?: string;
   mapUrl?: string;
+  reservationUrl?: string;
 }
 
 // 日程オプション
@@ -244,4 +245,19 @@ export interface ScheduleResultsSummary {
   totalResponses: number;
   totalMembers: number;
   bestOption: DateOptionWithStats;
+}
+
+/**
+ * レストラン提案関連の型定義
+ */
+export interface RestaurantSuggestion extends Restaurant {
+  recommendationType: 'majority' | 'inclusive' | 'challenge';
+  features: string[];
+  budget: string; // priceRangeの代わりに使用
+}
+
+export interface RestaurantRecommendationSummary {
+  totalRestaurants: number;
+  analysisBase: string;
+  memberCount: number;
 }

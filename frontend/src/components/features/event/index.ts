@@ -11,3 +11,6 @@ export * from './form-setup';
 
 // Schedule Results関連
 export * from './schedule-results';
+
+// Restaurant Suggestions関連
+export * from './restaurant-suggestions';
