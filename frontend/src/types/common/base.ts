@@ -3,12 +3,6 @@
  * 全プロジェクトで共通利用される基本的な型定義
  */
 
-// 基本ID型
-export type ID = string;
-
-// タイムスタンプ型
-export type Timestamp = string;
-
 // 応答状態
 export type ResponseStatus = 'pending' | 'accepted' | 'declined' | 'maybe';
 
@@ -46,6 +40,3 @@ export interface BudgetRange {
   min: number;
   max: number;
 }
-
-// 基本的なレーティング（1-5、小数点可）
-export type Rating = number;

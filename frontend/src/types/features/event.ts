@@ -1,11 +1,8 @@
 import {
-  ID,
-  Timestamp,
   EventStatus,
   EventPurpose,
   ResponseStatus,
   DateResponseType,
-  Rating,
   BaseModalProps,
 } from '../common';
 
@@ -15,11 +12,11 @@ import {
 
 // ユーザー基本情報
 export interface User {
-  id: ID;
+  id: string;
   email: string;
   name: string;
   avatar?: string;
-  createdAt: Timestamp;
+  createdAt: string;
 }
 
 // 会場情報
@@ -34,7 +31,7 @@ export interface Venue {
 
 // レストラン情報
 export interface Restaurant {
-  id: ID;
+  id: string;
   name: string;
   genre: string;
   area: string;
@@ -49,7 +46,7 @@ export interface Restaurant {
 
 // 日程オプション
 export interface DateOption {
-  id: ID;
+  id: string;
   date: string;
   time?: string;
   responses: DateResponse[];
@@ -58,40 +55,40 @@ export interface DateOption {
 
 // 日程回答
 export interface DateResponse {
-  userId: ID;
+  userId: string;
   response: DateResponseType;
 }
 
 // イベントメンバー
 export interface EventMember {
-  id: ID;
-  userId: ID;
+  id: string;
+  userId: string;
   name: string;
   email: string;
   avatar?: string;
   responseStatus: ResponseStatus;
   dateResponses: DateResponse[];
-  joinedAt: Timestamp;
+  joinedAt: string;
 }
 
 // イベントログ
 export interface EventLog {
-  id: ID;
-  eventId: ID;
-  organizerId: ID;
-  rating: Rating;
+  id: string;
+  eventId: string;
+  organizerId: string;
+  rating: number;
   notes: string;
   totalCost: number;
   costPerPerson: number;
   attendees?: number;
   venue: Venue;
   isShared: boolean;
-  createdAt: Timestamp;
+  createdAt: string;
 }
 
 // イベント本体
 export interface Event {
-  id: ID;
+  id: string;
   title: string;
   purpose: EventPurpose;
   description?: string;
@@ -99,7 +96,7 @@ export interface Event {
   date?: string;
   time?: string;
   venue?: Venue;
-  organizerId: ID;
+  organizerId: string;
   members: EventMember[];
   dateOptions?: DateOption[];
   confirmedDate?: {
@@ -109,13 +106,13 @@ export interface Event {
   restaurantSuggestions?: Restaurant[];
   eventLog?: EventLog;
   notes?: string;
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
+  createdAt: string;
+  updatedAt: string;
 }
 
 // 共有記録
 export interface SharedRecord {
-  id: ID;
+  id: string;
   eventLog: EventLog;
   event: {
     title: string;
@@ -155,7 +152,7 @@ export interface EventLogModalProps extends BaseModalProps {
 }
 
 export interface EventLogData {
-  rating: Rating;
+  rating: number;
   notes: string;
   totalCost: string;
   costPerPerson: string;

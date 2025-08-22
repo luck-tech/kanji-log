@@ -1,4 +1,4 @@
-import { ID, BudgetRange, AlcoholPreference, BaseModalProps } from '../common';
+import { BudgetRange, AlcoholPreference, BaseModalProps } from '../common';
 
 /**
  * Member機能関連の型定義
@@ -6,7 +6,7 @@ import { ID, BudgetRange, AlcoholPreference, BaseModalProps } from '../common';
 
 // メンバー基本情報
 export interface Member {
-  id: ID;
+  id: string;
   name: string;
   email?: string;
   avatar?: string;

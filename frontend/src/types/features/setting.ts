@@ -1,4 +1,4 @@
-import { ID, Gender, NotificationSettings, BaseModalProps } from '../common';
+import { Gender, NotificationSettings, BaseModalProps } from '../common';
 
 /**
  * Setting機能関連の型定義
@@ -6,7 +6,7 @@ import { ID, Gender, NotificationSettings, BaseModalProps } from '../common';
 
 // ユーザープロフィール
 export interface UserProfile {
-  id: ID;
+  id: string;
   name: string;
   email: string;
   avatar?: string;

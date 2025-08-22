@@ -1,11 +1,4 @@
-import {
-  ID,
-  Timestamp,
-  EventPurpose,
-  Rating,
-  BaseModalProps,
-  FilterOptions,
-} from '../common';
+import { EventPurpose, BaseModalProps, FilterOptions } from '../common';
 import { EventLog, Venue } from './event';
 
 /**
@@ -18,8 +11,8 @@ export interface RecordFilter extends FilterOptions {
     start: string;
     end: string;
   };
-  rating?: Rating[];
-  organizers?: ID[];
+  rating?: number[];
+  organizers?: string[];
 }
 
 // 記録統計
@@ -40,14 +33,14 @@ export interface RecordStats {
 
 // 記録詳細表示用
 export interface RecordDetail {
-  id: ID;
+  id: string;
   event: {
     title: string;
     purpose: EventPurpose;
     date: string;
   };
   venue: Venue;
-  rating: Rating;
+  rating: number;
   notes: string;
   totalCost: number;
   costPerPerson: number;
@@ -57,7 +50,7 @@ export interface RecordDetail {
     avatar?: string;
   };
   isShared: boolean;
-  createdAt: Timestamp;
+  createdAt: string;
 }
 
 // === Modal関連の型定義 ===
