@@ -29,7 +29,7 @@ applyTo: "**"
 ### 2. スタイリング規約
 
 - `StyleSheet`による統一されたスタイリング（React Native 標準）
-- デザイン定数（`constants/Colors.ts`等、将来的に`src/utils/constants/`へ移行）は必要に応じて参照
+- デザイン定数は必要に応じて参照
 - React Native Reanimated によるネイティブアニメーション実装
 - プラットフォーム固有の調整は`Platform.select()`を使用
 
@@ -50,7 +50,7 @@ applyTo: "**"
   - `Animated.View`や`useSharedValue`、`useAnimatedStyle`等を活用
   - コンポーネントレンダリング中の shared value アクセスを避ける
 - パフォーマンスを重視したネイティブアニメーションの実装を心がける
-- 再利用可能なアニメーションコンポーネント（`components/common/Animations.tsx`、将来的に`src/components/common/ui/Animations.tsx`）を活用
+- 再利用可能なアニメーションコンポーネント
 
 ### 5. ファイル命名・構造規約
 
@@ -73,18 +73,20 @@ applyTo: "**"
 #### モジュール境界の明確化
 
 - **機能間の依存関係ルール**:
+
   - `features/` 内の機能は相互に直接依存しない
   - 共通機能は `common/` または `utils/` 経由で提供
   - 上位層（`hooks/`, `services/`）から下位層（`components/`）への一方向依存
 
 - **依存関係の例**:
+
   ```typescript
   // ✅ 良い例
-  import { Button } from '@/components/common/ui';
-  import { useEventData } from '@/hooks/features/event';
-  
+  import { Button } from "@/components/common/ui";
+  import { useEventData } from "@/hooks/features/event";
+
   // ❌ 悪い例（機能間の直接依存）
-  import { MemberCard } from '@/components/features/member';
+  import { MemberCard } from "@/components/features/member";
   ```
 
 #### バレルエクスポート戦略
@@ -94,19 +96,20 @@ applyTo: "**"
 - **tree shaking** に配慮した named export
 
 - **実装例**:
+
   ```typescript
   // src/components/common/ui/index.ts
-  export { Button } from './Button';
-  export { Input } from './Input';
-  export { Card } from './Card';
-  
+  export { Button } from "./Button";
+  export { Input } from "./Input";
+  export { Card } from "./Card";
+
   // src/components/features/event/index.ts
-  export { EventCard } from './EventCard';
-  export { EventForm } from './EventForm';
-  
+  export { EventCard } from "./EventCard";
+  export { EventForm } from "./EventForm";
+
   // 使用側
-  import { Button, Input } from '@/components/common/ui';
-  import { EventCard } from '@/components/features/event';
+  import { Button, Input } from "@/components/common/ui";
+  import { EventCard } from "@/components/features/event";
   ```
 
 ### 8. 型定義戦略
@@ -114,36 +117,39 @@ applyTo: "**"
 #### 共通型と機能別型の分離
 
 - **共通型定義**: `src/types/common/` に配置
+
   - `base.ts`: ID、Date、基本的なプリミティブ型
   - `api.ts`: API レスポンス・リクエストの共通型
   - `ui.ts`: UI コンポーネントの共通 Props 型
 
 - **機能別型定義**: `src/types/features/` に配置
+
   - 各機能ドメインに特化した型定義
   - 共通型を import して拡張
 
 - **型定義例**:
+
   ```typescript
   // src/types/common/base.ts
   export type ID = string;
   export type Timestamp = Date;
-  
+
   // src/types/common/ui.ts
   export interface BaseComponentProps {
     testID?: string;
     style?: ViewStyle;
   }
-  
+
   // src/types/features/event.ts
-  import { ID, Timestamp } from '../common/base';
-  import { BaseComponentProps } from '../common/ui';
-  
+  import { ID, Timestamp } from "../common/base";
+  import { BaseComponentProps } from "../common/ui";
+
   export interface Event {
     id: ID;
     name: string;
     createdAt: Timestamp;
   }
-  
+
   export interface EventCardProps extends BaseComponentProps {
     event: Event;
     onPress: (event: Event) => void;
@@ -240,56 +246,56 @@ const Header = ({ applySafeArea = true }) => {
 
 ```typescript
 // components/common/ui/index.ts
-export { Button } from './Button';
-export { Input } from './Input';
-export { Card } from './Card';
-export { Animations } from './Animations';
+export { Button } from "./Button";
+export { Input } from "./Input";
+export { Card } from "./Card";
+export { Animations } from "./Animations";
 
 // components/features/event/index.ts
-export { EventCard } from './EventCard';
-export { EventForm } from './EventForm';
-export { EventsList } from './EventsList';
+export { EventCard } from "./EventCard";
+export { EventForm } from "./EventForm";
+export { EventsList } from "./EventsList";
 
 // types/index.ts
-export * from './common';
-export * from './features';
+export * from "./common";
+export * from "./features";
 
 // 使用例
-import { Button, Input, Card } from '@/components/common/ui';
-import { EventCard, EventForm } from '@/components/features/event';
-import { Event, EventCardProps } from '@/types';
+import { Button, Input, Card } from "@/components/common/ui";
+import { EventCard, EventForm } from "@/components/features/event";
+import { Event, EventCardProps } from "@/types";
 ```
 
 ## テスト実装例
 
 ```typescript
 // components/features/event/__tests__/EventCard.test.tsx
-import { render, fireEvent } from '@testing-library/react-native';
-import { EventCard } from '../EventCard';
-import { Event } from '@/types';
+import { render, fireEvent } from "@testing-library/react-native";
+import { EventCard } from "../EventCard";
+import { Event } from "@/types";
 
 const mockEvent: Event = {
-  id: '1',
-  name: 'テストイベント',
+  id: "1",
+  name: "テストイベント",
   createdAt: new Date(),
 };
 
-describe('EventCard', () => {
-  it('イベント名が正しく表示される', () => {
+describe("EventCard", () => {
+  it("イベント名が正しく表示される", () => {
     const { getByText } = render(
       <EventCard event={mockEvent} onPress={jest.fn()} />
     );
-    
-    expect(getByText('テストイベント')).toBeTruthy();
+
+    expect(getByText("テストイベント")).toBeTruthy();
   });
 
-  it('タップ時にonPressが呼ばれる', () => {
+  it("タップ時にonPressが呼ばれる", () => {
     const mockOnPress = jest.fn();
     const { getByTestId } = render(
       <EventCard event={mockEvent} onPress={mockOnPress} />
     );
-    
-    fireEvent.press(getByTestId('event-card'));
+
+    fireEvent.press(getByTestId("event-card"));
     expect(mockOnPress).toHaveBeenCalledWith(mockEvent);
   });
 });
