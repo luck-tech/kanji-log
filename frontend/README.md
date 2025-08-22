@@ -71,43 +71,177 @@
 
 ### ディレクトリ構成
 
-```
-kanji-log/                    // プロジェクトルート
-├── frontend/                 // モバイルアプリ（フロントエンド）部分
-│   ├── app/                  // expo-router画面定義
-│   │   ├── _layout.tsx       // ルート Stack + SafeAreaProvider設定
-│   │   ├── (onboarding)/     // Onboarding フロー用の Stack グループ
-│   │   │   ├── _layout.tsx
-│   │   │   ├── splash.tsx
-│   │   │   ├── welcome.tsx
-│   │   │   ├── features.tsx
-│   │   │   └── auth.tsx
-│   │   ├── (tabs)/           // メインアプリのタブグループ
-│   │   │   ├── _layout.tsx   // Tabs（index/members/records/settings）
-│   │   │   ├── index.tsx     // イベント一覧タブ
-│   │   │   ├── members.tsx
-│   │   │   ├── records.tsx
-│   │   │   └── settings.tsx
-│   │   └── +not-found.tsx
-│   ├── components/common/    // 再利用 UI コンポーネント
-│   ├── constants/            // Colors / Styles / Layout / EventConstants / StatusIcons
-│   ├── hooks/                // 共通フック（例: useFrameworkReady）
-│   ├── types/                // 型定義（イベント、ユーザー等のドメイン型）
-│   ├── assets/               // 画像やアイコンなどのアセット
-│   ├── app.json              // Expo設定
-│   ├── eslint.config.js      // ESLint設定
-│   ├── tsconfig.json         // TypeScript設定
-│   └── *.d.ts                // 型定義ファイル
-├── package.json              // パッケージ管理（ルートプロジェクト）
-├── pnpm-lock.yaml            // 依存関係ロック
-└── README.md                 // プロジェクト概要
+#### 現在の構造（小規模対応）
 
-// 将来予定のディレクトリ:
-// ├── api/                   // API実装
-// ├── aws/                   // AWS管理コード
-// ├── backend/               // バックエンドロジック
-// └── infrastructure/        // インフラ設定
 ```
+frontend/                     // フロントエンド（モバイルアプリ）
+├── app/                      // expo-router画面定義
+│   ├── _layout.tsx           // ルート Stack + SafeAreaProvider設定
+│   ├── (onboarding)/         // Onboarding フロー用の Stack グループ
+│   │   ├── _layout.tsx
+│   │   ├── splash.tsx
+│   │   ├── welcome.tsx
+│   │   ├── features.tsx
+│   │   └── auth.tsx
+│   ├── (tabs)/               // メインアプリのタブグループ
+│   │   ├── _layout.tsx       // Tabs（index/members/records/settings）
+│   │   ├── index.tsx         // イベント一覧タブ
+│   │   ├── members.tsx
+│   │   ├── records.tsx
+│   │   └── settings.tsx
+│   ├── event/[id]/           // イベント詳細・関連画面
+│   │   ├── [id].tsx          // イベント詳細
+│   │   ├── form-setup.tsx    // フォーム設定
+│   │   ├── reservation-support.tsx
+│   │   ├── restaurant-suggestions.tsx
+│   │   └── schedule-results.tsx
+│   └── +not-found.tsx
+├── components/               // UIコンポーネント
+│   ├── common/               // 再利用可能UIコンポーネント
+│   │   ├── Button.tsx
+│   │   ├── Card.tsx
+│   │   ├── Header.tsx
+│   │   ├── Input.tsx
+│   │   ├── Animations.tsx
+│   │   └── index.ts
+│   └── modals/               // モーダルコンポーネント
+│       ├── EventCreateModal.tsx
+│       ├── MemberEditModal.tsx
+│       ├── EventLogModal.tsx
+│       └── index.ts
+├── constants/                // デザイン定数・設定
+│   ├── Colors.ts             // カラーパレット
+│   ├── Layout.ts             // スペーシング・レイアウト
+│   ├── EventConstants.ts     // イベント関連定数
+│   ├── StatusIcons.tsx       // ステータスアイコン
+│   └── index.ts
+├── hooks/                    // カスタムフック
+│   └── useFrameworkReady.ts
+├── types/                    // 型定義
+│   └── index.ts              // ドメイン型（Event, User等）
+├── assets/                   // 画像・アイコン
+├── app.json                  // Expo設定
+├── eslint.config.js          // ESLint設定
+├── tsconfig.json             // TypeScript設定
+└── package.json              // 依存関係管理
+```
+
+#### 大規模対応構造（将来の移行先）
+
+```
+frontend/
+├── app/                      # expo-router（ルーティング専用）
+│   ├── (onboarding)/        # オンボーディングルート
+│   ├── (tabs)/              # メインタブルート
+│   └── event/[id]/          # イベント詳細ルート
+│
+├── src/                      # メインソースコード
+│   ├── components/          # 機能別コンポーネント管理
+│   │   ├── common/          # 汎用UIコンポーネント
+│   │   │   ├── ui/          # プリミティブUI
+│   │   │   │   ├── Button.tsx
+│   │   │   │   ├── Input.tsx
+│   │   │   │   ├── Animations.tsx
+│   │   │   │   └── index.ts
+│   │   │   ├── layout/      # レイアウト系
+│   │   │   │   ├── Header.tsx
+│   │   │   │   ├── Card.tsx
+│   │   │   │   └── index.ts
+│   │   │   └── feedback/    # フィードバック系
+│   │   │       ├── Modal.tsx
+│   │   │       ├── Toast.tsx
+│   │   │       └── index.ts
+│   │   ├── features/        # 機能別コンポーネント
+│   │   │   ├── event/       # イベント関連
+│   │   │   │   ├── components/
+│   │   │   │   │   ├── EventCard.tsx
+│   │   │   │   │   ├── EventForm.tsx
+│   │   │   │   │   └── EventsList.tsx
+│   │   │   │   ├── hooks/
+│   │   │   │   │   ├── useEvent.ts
+│   │   │   │   │   └── useEventForm.ts
+│   │   │   │   ├── services/
+│   │   │   │   │   └── eventService.ts
+│   │   │   │   ├── modals/
+│   │   │   │   │   ├── EventCreateModal.tsx
+│   │   │   │   │   └── EventLogModal.tsx
+│   │   │   │   └── types.ts
+│   │   │   ├── member/      # メンバー管理関連
+│   │   │   ├── restaurant/  # レストラン関連
+│   │   │   └── record/      # 記録関連
+│   │   └── pages/           # ページ特化コンポーネント
+│   │       ├── EventsPage/  # イベント一覧ページ
+│   │       │   ├── EventsPage.tsx    # ページコンテナ
+│   │       │   ├── EventsView.tsx    # ビューコンポーネント
+│   │       │   └── index.ts
+│   │       └── EventDetailPage/
+│   │
+│   ├── hooks/               # グローバルカスタムフック
+│   │   ├── api/             # API関連フック
+│   │   │   ├── useEvents.ts
+│   │   │   └── useMembers.ts
+│   │   ├── auth/            # 認証関連
+│   │   └── common/          # 汎用フック
+│   │       └── useFrameworkReady.ts
+│   │
+│   ├── services/            # 外部サービス・API管理
+│   │   ├── api/             # API層
+│   │   │   ├── client.ts    # APIクライアント設定
+│   │   │   ├── event.ts     # イベントAPI
+│   │   │   ├── member.ts    # メンバーAPI
+│   │   │   └── restaurant.ts # レストランAPI
+│   │   ├── storage/         # ローカルストレージ
+│   │   └── external/        # 外部API（ホットペッパー等）
+│   │
+│   ├── store/               # 状態管理（将来的にZustand等）
+│   │   ├── slices/          # 機能別ストア
+│   │   │   ├── eventSlice.ts
+│   │   │   └── userSlice.ts
+│   │   └── index.ts
+│   │
+│   ├── utils/               # ユーティリティ関数
+│   │   ├── validation/      # バリデーション
+│   │   │   ├── eventValidation.ts
+│   │   │   └── formValidation.ts
+│   │   ├── formatting/      # フォーマット処理
+│   │   │   ├── dateFormat.ts
+│   │   │   └── numberFormat.ts
+│   │   ├── calculation/     # 計算ロジック
+│   │   │   └── budgetCalculation.ts
+│   │   └── constants/       # 定数（現在のconstants移行）
+│   │       ├── colors.ts
+│   │       ├── layout.ts
+│   │       └── eventConstants.ts
+│   │
+│   └── types/               # 型定義の統合管理
+│       ├── api.ts           # API関連型
+│       ├── domain.ts        # ドメイン型（Event, User等）
+│       └── common.ts        # 共通型
+│
+├── assets/                  # 静的リソース（現状維持）
+├── app.json                 # Expo設定
+├── eslint.config.js         # ESLint設定
+├── tsconfig.json            # TypeScript設定
+└── package.json             # 依存関係管理
+```
+
+#### 段階的移行戦略
+
+1. **Phase 1: 基盤整備** - 新しいディレクトリ構造を作成
+2. **Phase 2: 型定義の統合** - `src/types/`に型定義を統合
+3. **Phase 3: 機能別コンポーネントの移行** - `src/components/features/`に機能別で移行
+4. **Phase 4: API サービス層の構築** - `src/services/api/`で API 層を統一
+5. **Phase 5: ページコンポーネントの分離** - `src/components/pages/`でページロジックを分離
+6. **Phase 6: ルーティング層の純化** - `app/`をルーティング専用にリファクタリング
+
+#### 移行のメリット
+
+- **単一責任**: 各ファイルが明確な役割を持つ
+- **テスタビリティ**: ビジネスロジック（hooks/services）と UI（components）が分離
+- **再利用性**: 機能別コンポーネントを他の場所でも使用可能
+- **保守性**: 変更時の影響範囲が限定される
+- **チーム開発**: 機能別で作業分担しやすい
+- **スケーラビリティ**: 大規模アプリケーションへの成長に対応
 
 ## ルーティング設計の要点
 

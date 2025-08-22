@@ -22,23 +22,145 @@ applyTo: "**"
 
 - **ベースフレームワーク**: Expo + React Native（SDK 53）
 - **ルーティング**: expo-router v5（ファイルベースルーティング）
-- **スタイリング**: NativeWind v4（TailwindCSS for React Native）
+- **スタイリング**: StyleSheet（React Native 標準）
 - **状態管理**: React Hooks（必要に応じて Zustand 等を検討）
 - **型安全性**: TypeScript（strict: true）
+
+### ディレクトリ構造設計
+
+現在の小規模構造から大規模対応への段階的移行を想定した設計方針：
+
+#### 現在の構造
+
+```
+frontend/
+├── app/                      # expo-router（ルーティング専用）
+├── components/               # 現在の構造
+│   ├── common/              # 汎用UIコンポーネント
+│   └── modals/              # モーダルコンポーネント
+├── constants/               # デザイン定数
+├── hooks/                   # グローバルフック
+└── types/                   # 型定義
+```
+
+#### 大規模対応構造（将来の移行先）
+
+```
+frontend/
+├── app/                      # expo-router（ルーティング専用）
+│   ├── (onboarding)/        # オンボーディングルート
+│   ├── (tabs)/              # メインタブルート
+│   └── event/[id]/          # イベント詳細ルート
+│
+├── src/                      # メインソースコード
+│   ├── components/          # 機能別コンポーネント管理
+│   │   ├── common/          # 汎用UIコンポーネント
+│   │   │   ├── ui/          # プリミティブUI（Button, Input等）
+│   │   │   ├── layout/      # レイアウト系（Header, Card等）
+│   │   │   └── feedback/    # フィードバック系（Modal, Toast等）
+│   │   ├── features/        # 機能別コンポーネント
+│   │   │   ├── event/       # イベント関連
+│   │   │   │   ├── components/  # EventCard, EventForm等
+│   │   │   │   ├── hooks/       # useEvent, useEventForm等
+│   │   │   │   ├── services/    # eventService.ts
+│   │   │   │   └── types.ts     # 機能固有型
+│   │   │   ├── member/      # メンバー管理関連
+│   │   │   ├── restaurant/  # レストラン関連
+│   │   │   └── record/      # 記録関連
+│   │   └── pages/           # ページ特化コンポーネント
+│   │       └── EventsPage/  # ページコンテナ + ビュー
+│   │
+│   ├── hooks/               # グローバルカスタムフック
+│   │   ├── api/             # API関連フック
+│   │   ├── auth/            # 認証関連
+│   │   └── common/          # 汎用フック
+│   │
+│   ├── services/            # 外部サービス・API管理
+│   │   ├── api/             # API層
+│   │   │   ├── client.ts    # APIクライアント設定
+│   │   │   ├── event.ts     # イベントAPI
+│   │   │   └── restaurant.ts # レストランAPI
+│   │   ├── storage/         # ローカルストレージ
+│   │   └── external/        # 外部API（ホットペッパー等）
+│   │
+│   ├── store/               # 状態管理（将来的にZustand等）
+│   │   ├── slices/          # 機能別ストア
+│   │   └── index.ts
+│   │
+│   ├── utils/               # ユーティリティ関数
+│   │   ├── validation/      # バリデーション
+│   │   ├── formatting/      # フォーマット処理
+│   │   ├── calculation/     # 計算ロジック
+│   │   └── constants/       # 定数（現在のconstants移行）
+│   │
+│   └── types/               # 型定義の統合管理
+│       ├── api.ts           # API関連型
+│       ├── domain.ts        # ドメイン型
+│       └── common.ts        # 共通型
+│
+├── assets/                  # 静的リソース
+└── package.json
+```
+
+#### 段階的移行戦略
+
+1. **Phase 1**: 型定義の統合（`src/types/`）
+2. **Phase 2**: 機能別コンポーネントの移行（`src/components/features/`）
+3. **Phase 3**: API サービス層の構築（`src/services/api/`）
+4. **Phase 4**: ページコンポーネントの分離（`src/components/pages/`）
+5. **Phase 5**: ルーティング層の純化（`app/`をルーティング専用に）
 
 ## 開発原則・コーディング規約
 
 ### 1. コンポーネント設計原則
 
+#### 現在の構造
+
 - `components/common/`: 汎用 UI コンポーネント
-- `components/(ページ名)/`: ページ特化型コンポーネント
+- `components/modals/`: モーダルコンポーネント
 - 各コンポーネントは単一責任の原則に従う
 - Props 設計は`variant`、`size`、`state`による統一された API
 
+#### 将来の大規模対応構造
+
+- `src/components/common/ui/`: プリミティブ UI コンポーネント（Button, Input 等）
+- `src/components/common/layout/`: レイアウト系コンポーネント（Header, Card 等）
+- `src/components/common/feedback/`: フィードバック系（Modal, Toast 等）
+- `src/components/features/{機能名}/`: 機能別コンポーネント群
+  - `components/`: その機能専用の UI コンポーネント
+  - `hooks/`: その機能専用のカスタムフック
+  - `services/`: その機能のビジネスロジック・API
+  - `types.ts`: その機能固有の型定義
+- `src/components/pages/`: ページコンテナコンポーネント
+- `app/`: ルーティング専用（expo-router）
+
+#### ルーティング層とページ層の分離例
+
+```typescript
+// app/(tabs)/index.tsx - ルーティング専用
+import { EventsPage } from '@/src/components/pages/EventsPage';
+export default function EventsRoute() {
+  return <EventsPage />;
+}
+
+// src/components/pages/EventsPage/EventsPage.tsx - ページコンテナ
+export const EventsPage: React.FC = () => {
+  const eventLogic = useEvents(); // ビジネスロジック
+  return <EventsView {...eventLogic} />; // プレゼンテーション
+};
+
+// src/components/pages/EventsPage/EventsView.tsx - ビューコンポーネント
+export const EventsView: React.FC<EventsViewProps> = (props) => {
+  return (/* UIのみに専念 */);
+};
+```
+
 ### 2. スタイリング規約
 
-- `StyleSheet`による統一されたスタイリング
-- デザイン定数（`constants/Colors.ts`等）は必要に応じて参照
+- `StyleSheet`による統一されたスタイリング（React Native 標準）
+- デザイン定数（`constants/Colors.ts`等、将来的に`src/utils/constants/`へ移行）は必要に応じて参照
+- React Native Reanimated によるネイティブアニメーション実装
+- プラットフォーム固有の調整は`Platform.select()`を使用
 
 ### 3. SafeArea 実装規約
 
@@ -46,20 +168,18 @@ applyTo: "**"
 - **ルートレベル設定**: `app/_layout.tsx` で `SafeAreaProvider` を設定
 - **コンポーネントレベル**: 各画面・コンポーネントで `useSafeAreaInsets()` を使用
 - **柔軟な制御**: 上部・下部・左右を個別に適用可能
-  - `{ paddingTop: insets.top }`: 上部のSafeArea適用
-  - `{ paddingBottom: insets.bottom }`: 下部のSafeArea適用
-  - `{ paddingHorizontal: Math.max(insets.left, insets.right) }`: 横方向のSafeArea適用
+  - `{ paddingTop: insets.top }`: 上部の SafeArea 適用
+  - `{ paddingBottom: insets.bottom }`: 下部の SafeArea 適用
+  - `{ paddingHorizontal: Math.max(insets.left, insets.right) }`: 横方向の SafeArea 適用
 - **クロスプラットフォーム**: iOS/Android/Web で統一された動作
 
 ### 4. アニメーション規約
 
-- **Tailwind のアニメーションクラスは React Native Reanimated と競合するため使用禁止**
-  - `animate-*`クラス（`animate-fade-in`, `animate-scale-in`, `animate-spin`等）は使用しない
-  - `shadow-*`クラスも同様の理由で慎重に使用する
 - **React Native Reanimated**を直接使用してアニメーションを実装
   - `Animated.View`や`useSharedValue`、`useAnimatedStyle`等を活用
   - コンポーネントレンダリング中の shared value アクセスを避ける
 - パフォーマンスを重視したネイティブアニメーションの実装を心がける
+- 再利用可能なアニメーションコンポーネント（`components/common/Animations.tsx`、将来的に`src/components/common/ui/Animations.tsx`）を活用
 
 ### 5. ファイル命名・構造規約
 
@@ -120,20 +240,18 @@ applyTo: "**"
 
 ```tsx
 // ルートレベル設定（app/_layout.tsx）
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function RootLayout() {
   return (
     <SafeAreaProvider>
-      <Stack screenOptions={{ headerShown: false }}>
-        {/* 画面定義 */}
-      </Stack>
+      <Stack screenOptions={{ headerShown: false }}>{/* 画面定義 */}</Stack>
     </SafeAreaProvider>
   );
 }
 
 // 各画面・コンポーネントでの使用
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const MyScreen = () => {
   const insets = useSafeAreaInsets();
