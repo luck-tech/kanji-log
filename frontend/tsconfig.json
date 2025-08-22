@@ -3,7 +3,9 @@
   "compilerOptions": {
     "strict": true,
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@/types": ["./src/types"],
+      "@/types/*": ["./src/types/*"]
     }
   },
   "include": [
