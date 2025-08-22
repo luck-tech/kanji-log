@@ -20,3 +20,4 @@ export { RecordActions } from './RecordActions';
 // List container components
 export { RecordsList } from './RecordsList';
 export { RecordsEmptyState } from './RecordsEmptyState';
+export { RecordDetailModal } from './RecordDetailModal';

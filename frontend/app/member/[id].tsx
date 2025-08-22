@@ -3,19 +3,17 @@ import { View, ScrollView, Alert, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Header } from '../../components/common/Header';
+import { Header } from '@/components/common';
 import {
   MemberProfileHeader,
   MemberPreferencesCard,
   MemberNotesCard,
   MemberActionsCard,
-} from '../../src/components/features/member';
-import {
   MemberEditModal,
-  MemberEditData,
-} from '../../components/modals/MemberEditModal';
-import { Colors } from '../../constants/Colors';
-import { Member } from '../../src/types/features/member';
+  type MemberEditData,
+} from '@/components/features/member';
+import { Colors } from '@/constants/Colors';
+import { Member } from '@/types/features/member';
 
 // Mock data
 const mockMemberDetail: Member = {

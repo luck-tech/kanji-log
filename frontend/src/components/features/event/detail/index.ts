@@ -3,3 +3,6 @@
 export { EventOverviewCard } from './EventOverviewCard';
 export { EventActionsList } from './EventActionsList';
 export { EventMembersList } from './EventMembersList';
+export { EventLogModal } from './EventLogModal';
+export { DateScheduleModal } from './DateScheduleModal';
+export { AreaSelectionModal } from './AreaSelectionModal';

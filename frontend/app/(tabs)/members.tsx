@@ -2,18 +2,16 @@ import React, { useState, useCallback } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useRouter, useFocusEffect } from 'expo-router';
 
-import { Header } from '../../components/common/Header';
+import { Header } from '@/components/common';
 import {
   MemberSearchBar,
   MembersList,
   MembersEmptyState,
-} from '../../src/components/features/member';
-import {
   MemberAddModal,
-  MemberData,
-} from '../../components/modals/MemberAddModal';
-import { Colors } from '../../constants/Colors';
-import { Member } from '../../src/types/features/member';
+  type MemberData,
+} from '@/components/features/member';
+import { Colors } from '@/constants/Colors';
+import { Member } from '@/types/features/member';
 
 // Mock data - Member型に合わせて修正
 const mockMembers: Member[] = [

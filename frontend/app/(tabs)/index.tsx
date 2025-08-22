@@ -1,21 +1,19 @@
 import React, { useState } from 'react';
 import { View, ScrollView, RefreshControl, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Header } from '../../src/components/common/layout';
-import { EventListFilter } from '../../src/components/features/event/list';
 import {
+  Header,
   EmptyState,
   FloatingActionButton,
   EventCard,
-} from '../../src/components/common/ui';
-import {
   FadeInView,
   StaggeredList,
-} from '../../src/components/common/ui/Animations';
+} from '@/components/common';
+import { EventListFilter } from '@/components/features/event';
 import {
   EventCreateModal,
-  EventCreateData,
-} from '../../components/modals/EventCreateModal';
+  type EventCreateData,
+} from '@/components/features/event';
 import { Event, EventStatus } from '@/types';
 import { EMPTY_STATE_MESSAGES } from '@/constants/EventConstants';
 import { useRouter } from 'expo-router';

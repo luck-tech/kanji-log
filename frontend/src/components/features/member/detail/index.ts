@@ -6,3 +6,4 @@ export { AlcoholPreferenceBadge } from './AlcoholPreferenceBadge';
 export { AllergiesTagsList } from './AllergiesTagsList';
 export { FavoriteGenresTagsList } from './FavoriteGenresTagsList';
 export { BudgetRangeDisplay } from './BudgetRangeDisplay';
+export { MemberEditModal, type MemberEditData } from './MemberEditModal';

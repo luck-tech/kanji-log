@@ -2,24 +2,22 @@ import React, { useState } from 'react';
 import { View, ScrollView, Alert, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Header } from '../../components/common/Header';
-import { AccountDeleteModal } from '../../components/modals/AccountDeleteModal';
-import {
-  ProfileEditModal,
-  ProfileEditData,
-} from '../../components/modals/ProfileEditModal';
+import { Header } from '@/components/common';
 import {
   ProfileCard,
   StatsCard,
   SettingsGroup,
   AppInfoCard,
-} from '../../src/components/features/settings';
+  AccountDeleteModal,
+  ProfileEditModal,
+  type ProfileEditData,
+} from '@/components/features/settings';
 import {
   UserData,
   SettingsItem,
   StatData,
   AppInfo,
-} from '../../src/types/features/setting';
+} from '@/types/features/setting';
 import { Layout } from '../../constants/Layout';
 
 export default function SettingsScreen() {
