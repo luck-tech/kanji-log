@@ -26,135 +26,6 @@ applyTo: "**"
 - **状態管理**: React Hooks（必要に応じて Zustand 等を検討）
 - **型安全性**: TypeScript（strict: true）
 
-### ディレクトリ構造設計
-
-現在の小規模構造から大規模対応への段階的移行を想定した設計方針：
-
-#### 現在の構造
-
-```
-frontend/
-├── app/                      # expo-router（ルーティング専用）
-├── components/               # 現在の構造
-│   ├── common/              # 汎用UIコンポーネント
-│   └── modals/              # モーダルコンポーネント
-├── constants/               # デザイン定数
-├── hooks/                   # グローバルフック
-└── types/                   # 型定義
-```
-
-#### 大規模対応構造（将来の移行先）
-
-```
-frontend/
-├── app/                      # expo-router（ルーティング専用）
-│   ├── (onboarding)/        # オンボーディングルート
-│   ├── (tabs)/              # メインタブルート
-│   └── event/[id]/          # イベント詳細ルート
-│
-├── src/                      # メインソースコード
-│   ├── components/          # 機能別コンポーネント管理
-│   │   ├── common/          # 汎用UIコンポーネント
-│   │   │   ├── ui/          # プリミティブUI（Button, Input等）
-│   │   │   ├── layout/      # レイアウト系（Header, Card等）
-│   │   │   └── feedback/    # フィードバック系（Modal, Toast等）
-│   │   ├── features/        # 機能別コンポーネント
-│   │   │   ├── event/       # イベント関連
-│   │   │   │   ├── components/  # EventCard, EventForm等
-│   │   │   │   ├── hooks/       # useEvent, useEventForm等
-│   │   │   │   ├── services/    # eventService.ts
-│   │   │   │   └── types.ts     # 機能固有型
-│   │   │   ├── member/      # メンバー管理関連
-│   │   │   ├── restaurant/  # レストラン関連
-│   │   │   └── record/      # 記録関連
-│   │   └── pages/           # ページ特化コンポーネント
-│   │       └── EventsPage/  # ページコンテナ + ビュー
-│   │
-│   ├── hooks/               # グローバルカスタムフック
-│   │   ├── api/             # API関連フック
-│   │   ├── auth/            # 認証関連
-│   │   └── common/          # 汎用フック
-│   │
-│   ├── services/            # 外部サービス・API管理
-│   │   ├── api/             # API層
-│   │   │   ├── client.ts    # APIクライアント設定
-│   │   │   ├── event.ts     # イベントAPI
-│   │   │   └── restaurant.ts # レストランAPI
-│   │   ├── storage/         # ローカルストレージ
-│   │   └── external/        # 外部API（ホットペッパー等）
-│   │
-│   ├── store/               # 状態管理（将来的にZustand等）
-│   │   ├── slices/          # 機能別ストア
-│   │   └── index.ts
-│   │
-│   ├── utils/               # ユーティリティ関数
-│   │   ├── validation/      # バリデーション
-│   │   ├── formatting/      # フォーマット処理
-│   │   ├── calculation/     # 計算ロジック
-│   │   └── constants/       # 定数（現在のconstants移行）
-│   │
-│   └── types/               # 型定義の統合管理
-│       ├── api.ts           # API関連型
-│       ├── domain.ts        # ドメイン型
-│       └── common.ts        # 共通型
-│
-├── assets/                  # 静的リソース
-└── package.json
-```
-
-#### 段階的移行戦略
-
-1. **Phase 1**: 型定義の統合（`src/types/`）
-2. **Phase 2**: 機能別コンポーネントの移行（`src/components/features/`）
-3. **Phase 3**: API サービス層の構築（`src/services/api/`）
-4. **Phase 4**: ページコンポーネントの分離（`src/components/pages/`）
-5. **Phase 5**: ルーティング層の純化（`app/`をルーティング専用に）
-
-## 開発原則・コーディング規約
-
-### 1. コンポーネント設計原則
-
-#### 現在の構造
-
-- `components/common/`: 汎用 UI コンポーネント
-- `components/modals/`: モーダルコンポーネント
-- 各コンポーネントは単一責任の原則に従う
-- Props 設計は`variant`、`size`、`state`による統一された API
-
-#### 将来の大規模対応構造
-
-- `src/components/common/ui/`: プリミティブ UI コンポーネント（Button, Input 等）
-- `src/components/common/layout/`: レイアウト系コンポーネント（Header, Card 等）
-- `src/components/common/feedback/`: フィードバック系（Modal, Toast 等）
-- `src/components/features/{機能名}/`: 機能別コンポーネント群
-  - `components/`: その機能専用の UI コンポーネント
-  - `hooks/`: その機能専用のカスタムフック
-  - `services/`: その機能のビジネスロジック・API
-  - `types.ts`: その機能固有の型定義
-- `src/components/pages/`: ページコンテナコンポーネント
-- `app/`: ルーティング専用（expo-router）
-
-#### ルーティング層とページ層の分離例
-
-```typescript
-// app/(tabs)/index.tsx - ルーティング専用
-import { EventsPage } from '@/src/components/pages/EventsPage';
-export default function EventsRoute() {
-  return <EventsPage />;
-}
-
-// src/components/pages/EventsPage/EventsPage.tsx - ページコンテナ
-export const EventsPage: React.FC = () => {
-  const eventLogic = useEvents(); // ビジネスロジック
-  return <EventsView {...eventLogic} />; // プレゼンテーション
-};
-
-// src/components/pages/EventsPage/EventsView.tsx - ビューコンポーネント
-export const EventsView: React.FC<EventsViewProps> = (props) => {
-  return (/* UIのみに専念 */);
-};
-```
-
 ### 2. スタイリング規約
 
 - `StyleSheet`による統一されたスタイリング（React Native 標準）
@@ -192,6 +63,92 @@ export const EventsView: React.FC<EventsViewProps> = (props) => {
 
 - 都度 lint を実行し、通ることを確認する
 - 新しいカスタムフックや関数を追加した場合は、jest でテストを作成し、実行して通ることを確認する
+- **テスト配置規約**:
+  - コンポーネント・フック・ユーティリティ関数のテストは各ディレクトリ内の `__tests__/` に配置
+  - テストファイル名は `{対象ファイル名}.test.tsx` または `{対象ファイル名}.test.ts`
+  - グローバルテストは `frontend/__tests__/` に配置
+
+### 7. アーキテクチャ原則
+
+#### モジュール境界の明確化
+
+- **機能間の依存関係ルール**:
+  - `features/` 内の機能は相互に直接依存しない
+  - 共通機能は `common/` または `utils/` 経由で提供
+  - 上位層（`hooks/`, `services/`）から下位層（`components/`）への一方向依存
+
+- **依存関係の例**:
+  ```typescript
+  // ✅ 良い例
+  import { Button } from '@/components/common/ui';
+  import { useEventData } from '@/hooks/features/event';
+  
+  // ❌ 悪い例（機能間の直接依存）
+  import { MemberCard } from '@/components/features/member';
+  ```
+
+#### バレルエクスポート戦略
+
+- **各ディレクトリの `index.ts`** でエクスポートを統一
+- **インポート文の簡潔性**を保つ
+- **tree shaking** に配慮した named export
+
+- **実装例**:
+  ```typescript
+  // src/components/common/ui/index.ts
+  export { Button } from './Button';
+  export { Input } from './Input';
+  export { Card } from './Card';
+  
+  // src/components/features/event/index.ts
+  export { EventCard } from './EventCard';
+  export { EventForm } from './EventForm';
+  
+  // 使用側
+  import { Button, Input } from '@/components/common/ui';
+  import { EventCard } from '@/components/features/event';
+  ```
+
+### 8. 型定義戦略
+
+#### 共通型と機能別型の分離
+
+- **共通型定義**: `src/types/common/` に配置
+  - `base.ts`: ID、Date、基本的なプリミティブ型
+  - `api.ts`: API レスポンス・リクエストの共通型
+  - `ui.ts`: UI コンポーネントの共通 Props 型
+
+- **機能別型定義**: `src/types/features/` に配置
+  - 各機能ドメインに特化した型定義
+  - 共通型を import して拡張
+
+- **型定義例**:
+  ```typescript
+  // src/types/common/base.ts
+  export type ID = string;
+  export type Timestamp = Date;
+  
+  // src/types/common/ui.ts
+  export interface BaseComponentProps {
+    testID?: string;
+    style?: ViewStyle;
+  }
+  
+  // src/types/features/event.ts
+  import { ID, Timestamp } from '../common/base';
+  import { BaseComponentProps } from '../common/ui';
+  
+  export interface Event {
+    id: ID;
+    name: string;
+    createdAt: Timestamp;
+  }
+  
+  export interface EventCardProps extends BaseComponentProps {
+    event: Event;
+    onPress: (event: Event) => void;
+  }
+  ```
 
 ## 機能実装ガイドライン
 
@@ -277,4 +234,63 @@ const Header = ({ applySafeArea = true }) => {
     </View>
   );
 };
+```
+
+## バレルエクスポート実装例
+
+```typescript
+// components/common/ui/index.ts
+export { Button } from './Button';
+export { Input } from './Input';
+export { Card } from './Card';
+export { Animations } from './Animations';
+
+// components/features/event/index.ts
+export { EventCard } from './EventCard';
+export { EventForm } from './EventForm';
+export { EventsList } from './EventsList';
+
+// types/index.ts
+export * from './common';
+export * from './features';
+
+// 使用例
+import { Button, Input, Card } from '@/components/common/ui';
+import { EventCard, EventForm } from '@/components/features/event';
+import { Event, EventCardProps } from '@/types';
+```
+
+## テスト実装例
+
+```typescript
+// components/features/event/__tests__/EventCard.test.tsx
+import { render, fireEvent } from '@testing-library/react-native';
+import { EventCard } from '../EventCard';
+import { Event } from '@/types';
+
+const mockEvent: Event = {
+  id: '1',
+  name: 'テストイベント',
+  createdAt: new Date(),
+};
+
+describe('EventCard', () => {
+  it('イベント名が正しく表示される', () => {
+    const { getByText } = render(
+      <EventCard event={mockEvent} onPress={jest.fn()} />
+    );
+    
+    expect(getByText('テストイベント')).toBeTruthy();
+  });
+
+  it('タップ時にonPressが呼ばれる', () => {
+    const mockOnPress = jest.fn();
+    const { getByTestId } = render(
+      <EventCard event={mockEvent} onPress={mockOnPress} />
+    );
+    
+    fireEvent.press(getByTestId('event-card'));
+    expect(mockOnPress).toHaveBeenCalledWith(mockEvent);
+  });
+});
 ```

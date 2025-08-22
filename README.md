@@ -4,8 +4,6 @@
 
 ## プロジェクト構造
 
-### 現在の構造
-
 ```
 kanji-log/                    // プロジェクトルート
 ├── frontend/                 // モバイルアプリ（フロントエンド）
@@ -29,40 +27,6 @@ kanji-log/                    // プロジェクトルート
 // ├── backend/               // バックエンドロジック
 // └── infrastructure/        // インフラ設定
 ```
-
-### 大規模対応構造（将来の移行計画）
-
-フロントエンドの成長に合わせて、以下の構造への段階的移行を計画：
-
-```
-kanji-log/
-├── frontend/
-│   ├── app/                  # expo-router（ルーティング専用）
-│   ├── src/                  # メインソースコード
-│   │   ├── components/       # 機能別コンポーネント管理
-│   │   │   ├── common/       # 汎用UI（ui/layout/feedback）
-│   │   │   ├── features/     # 機能別（event/member/restaurant/record）
-│   │   │   └── pages/        # ページコンテナ
-│   │   ├── hooks/            # グローバルフック（api/auth/common）
-│   │   ├── services/         # API・外部サービス管理
-│   │   ├── store/            # 状態管理（Zustand等）
-│   │   ├── utils/            # ユーティリティ（validation/formatting/calculation）
-│   │   └── types/            # 型定義統合（api/domain/common）
-│   ├── assets/               # 静的リソース
-│   └── package.json
-├── api/                      # バックエンドAPI
-├── aws/                      # AWS管理コード
-├── backend/                  # ビジネスロジック
-└── infrastructure/           # インフラ構成
-```
-
-#### 移行の利点
-
-- **責任分離**: ルーティング（app/）とロジック（src/）の明確な分離
-- **機能別組織化**: イベント、メンバー、レストラン等の機能別管理
-- **スケーラビリティ**: 大規模チーム開発に対応
-- **保守性**: 変更影響範囲の限定化
-- **テスタビリティ**: ビジネスロジックと UI の分離
 
 ## 各ディレクトリの説明
 

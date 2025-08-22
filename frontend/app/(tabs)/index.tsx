@@ -175,7 +175,7 @@ export default function EventsScreen() {
     const newEvent: Event = {
       id: Date.now().toString(),
       title: eventData.title,
-      purpose: (eventData.purpose as any) || 'other',
+      purpose: eventData.purpose || 'other',
       status: eventData.hasScheduling ? 'planning' : 'confirmed',
       date: eventData.date,
       time: eventData.time,
