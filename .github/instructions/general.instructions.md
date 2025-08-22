@@ -89,6 +89,38 @@ applyTo: "**"
   import { MemberCard } from "@/components/features/member";
   ```
 
+#### コンポーネント設計原則
+
+- **YAGNI（You Aren't Gonna Need It）の徹底**: 実際に必要になるまで抽象化しない
+
+  ```typescript
+  // ❌ 悪い例（不要なラッパーコンポーネント）
+  const EventListCard = ({ event, onPress }) => (
+    <EventCard event={event} onPress={onPress} />
+  );
+
+  // ✅ 良い例（直接既存コンポーネントを使用）
+  <EventCard event={event} onPress={onPress} />;
+  ```
+
+- **機能別コンポーネント作成の判断基準**:
+
+  - **独自の状態管理**が必要か？
+  - **機能固有のロジック**があるか？
+  - **既存の共通コンポーネントでは表現できない UI**があるか？
+  - **将来的な拡張**が明確に見込まれるか？
+
+- **作成すべきでない機能別コンポーネント**:
+
+  - 既存コンポーネントの単純なラッパー
+  - props をそのまま渡すだけのコンポーネント
+  - 機能固有の価値を提供しないコンポーネント
+
+- **作成すべき機能別コンポーネント**:
+  - 複数の共通コンポーネントを組み合わせる複合コンポーネント
+  - 機能固有の状態やロジックを持つコンポーネント
+  - 機能固有の UI パターンを実現するコンポーネント
+
 #### バレルエクスポート戦略
 
 - **各ディレクトリの `index.ts`** でエクスポートを統一
@@ -259,6 +291,119 @@ import { Button, Input, Card } from "@/components/common/ui";
 import { EventCard, EventForm } from "@/components/features/event";
 import { Event, EventCardProps } from "@/types";
 ```
+
+## コンポーネント設計実装例
+
+### ❌ 悪い例（不要なラッパーコンポーネント）
+
+```typescript
+// 避けるべき：単純なラッパーコンポーネント
+const EventListCard: React.FC<EventListCardProps> = ({
+  event,
+  onPress,
+  variant,
+  style,
+  testID,
+}) => {
+  return (
+    <EventCard
+      event={event}
+      onPress={onPress}
+      variant={variant}
+      style={style}
+      testID={testID}
+    />
+  );
+};
+
+// 使用時も余分なインポートが必要
+import { EventListCard } from "@/components/features/event/list";
+```
+
+### ✅ 良い例（既存コンポーネントの直接使用）
+
+```typescript
+// 推奨：既存の汎用コンポーネントを直接使用
+import { EventCard } from "@/components/common/ui";
+
+// 直接使用
+<EventCard event={event} onPress={onPress} variant="elevated" />;
+```
+
+### ✅ 良い例（価値のある機能別コンポーネント）
+
+```typescript
+// 価値のある機能別コンポーネント：複数コンポーネントの組み合わせ + 機能固有ロジック
+const EventScheduleSelector: React.FC<EventScheduleSelectorProps> = ({
+  event,
+  onScheduleUpdate,
+}) => {
+  const [selectedDates, setSelectedDates] = useState<string[]>([]);
+  const [conflicts, setConflicts] = useState<ConflictInfo[]>([]);
+
+  // 機能固有のロジック
+  const handleDateSelection = useCallback(
+    (date: string) => {
+      const newSelection = selectedDates.includes(date)
+        ? selectedDates.filter((d) => d !== date)
+        : [...selectedDates, date];
+
+      setSelectedDates(newSelection);
+      validateScheduleConflicts(newSelection);
+    },
+    [selectedDates]
+  );
+
+  return (
+    <Card variant="elevated">
+      <Header title="日程調整" />
+      <DatePicker
+        selectedDates={selectedDates}
+        onDateSelect={handleDateSelection}
+      />
+      {conflicts.length > 0 && <ConflictWarning conflicts={conflicts} />}
+      <Button
+        title="スケジュール更新"
+        onPress={() => onScheduleUpdate(selectedDates)}
+      />
+    </Card>
+  );
+};
+```
+
+## 機能別コンポーネント作成チェックリスト
+
+新しい機能別コンポーネントを作成する前に、以下の質問に答えてください：
+
+### 🔍 作成前チェック
+
+- [ ] **既存の共通コンポーネントで実現できないか？**
+
+  - 既存のコンポーネントの組み合わせで十分でないか確認
+
+- [ ] **機能固有の価値があるか？**
+
+  - 単純な props の転送以上の価値を提供するか
+  - 機能固有の状態管理やロジックがあるか
+  - 複数の共通コンポーネントを意味のある形で組み合わせるか
+
+- [ ] **将来的な拡張性があるか？**
+  - 明確な拡張予定があるか（YAGNI に注意）
+  - 他の機能でも再利用される可能性があるか
+
+### ✅ 作成してもよい場合
+
+- 複数の共通コンポーネントを組み合わせて新しい意味を持つ UI
+- 機能固有の複雑な状態管理が必要
+- 機能固有のバリデーションやビジネスロジックを含む
+- 既存コンポーネントでは表現できない独自の UI パターン
+
+### ❌ 作成すべきでない場合
+
+- 既存コンポーネントをそのまま呼び出すだけ
+- props をそのまま渡すだけの薄いラッパー
+- 「将来的に機能が追加されるかも」という推測ベース
+- 単にファイル分割したいだけの理由
 
 ## テスト実装例
 

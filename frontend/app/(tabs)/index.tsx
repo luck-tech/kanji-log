@@ -1,21 +1,23 @@
 import React, { useState } from 'react';
 import { View, ScrollView, RefreshControl, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Header } from '@/components/common/Header';
-import { TabBar } from '@/components/common/TabBar';
-import { EventCard } from '@/components/common/EventCard';
-import { EmptyState } from '@/components/common/EmptyState';
-import { FloatingActionButton } from '@/components/common/FloatingActionButton';
-import { FadeInView, StaggeredList } from '@/components/common/Animations';
+import { Header } from '../../src/components/common/layout';
+import { EventListFilter } from '../../src/components/features/event/list';
+import {
+  EmptyState,
+  FloatingActionButton,
+  EventCard,
+} from '../../src/components/common/ui';
+import {
+  FadeInView,
+  StaggeredList,
+} from '../../src/components/common/ui/Animations';
 import {
   EventCreateModal,
   EventCreateData,
-} from '@/components/modals/EventCreateModal';
+} from '../../components/modals/EventCreateModal';
 import { Event, EventStatus } from '@/types';
-import {
-  EVENT_STATUS_TABS,
-  EMPTY_STATE_MESSAGES,
-} from '@/constants/EventConstants';
+import { EMPTY_STATE_MESSAGES } from '@/constants/EventConstants';
 import { useRouter } from 'expo-router';
 
 // Mock data for events
@@ -235,7 +237,7 @@ export default function EventsScreen() {
 
     return (
       <View style={styles.eventList}>
-        <StaggeredList staggerDelay={100} initialDelay={0}>
+        <StaggeredList itemDelay={100}>
           {filteredEvents.map((event, index) => (
             <EventCard
               key={event.id}
@@ -265,10 +267,9 @@ export default function EventsScreen() {
         variant="gradient"
       />
 
-      <TabBar
-        tabs={EVENT_STATUS_TABS}
-        activeTab={activeTab}
-        onTabPress={setActiveTab}
+      <EventListFilter
+        activeStatus={activeTab}
+        onStatusChange={setActiveTab}
         variant="segmented"
       />
 
