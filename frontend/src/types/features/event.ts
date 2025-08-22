@@ -208,3 +208,40 @@ export interface FormSetupState {
   customQuestion: string;
   formUrl?: string;
 }
+
+/**
+ * 日程調整結果関連の型定義
+ */
+export interface ScheduleResponse {
+  userId: string;
+  userName: string;
+  responses: {
+    dateOptionId: string;
+    response: 'available' | 'maybe' | 'unavailable';
+  }[];
+  respondedAt: string;
+}
+
+export interface DateOptionStats {
+  available: number;
+  maybe: number;
+  unavailable: number;
+  total: number;
+  percentage: number;
+}
+
+export interface DateOptionWithStats {
+  id: string;
+  date: string;
+  time: string;
+  label?: string;
+  stats: DateOptionStats;
+  responses: ScheduleResponse[];
+}
+
+export interface ScheduleResultsSummary {
+  responseRate: number;
+  totalResponses: number;
+  totalMembers: number;
+  bestOption: DateOptionWithStats;
+}
