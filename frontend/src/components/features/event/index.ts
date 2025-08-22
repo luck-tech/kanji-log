@@ -2,3 +2,6 @@
 
 // List関連
 export * from './list';
+
+// Detail関連
+export * from './detail';
