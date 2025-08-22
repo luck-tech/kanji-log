@@ -40,3 +40,14 @@ export interface BudgetRange {
   min: number;
   max: number;
 }
+
+// フィルターオプション（共通）
+export interface FilterOptions {
+  areas: string[];
+  purposes: string[];
+  genres: string[];
+  price: {
+    min: number;
+    max: number;
+  };
+}

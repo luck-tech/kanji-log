@@ -123,38 +123,32 @@ applyTo: "**"
   - `ui.ts`: UI コンポーネントの共通 Props 型
 
 - **機能別型定義**: `src/types/features/` に配置
-
   - 各機能ドメインに特化した型定義
   - 共通型を import して拡張
 
-- **型定義例**:
+#### 型安全性の確保
+
+- **型アサーション（as）の使用禁止**: 型安全性を損なうため原則使用しない
 
   ```typescript
-  // src/types/common/base.ts
-  export type ID = string;
-  export type Timestamp = Date;
+  // ❌ 悪い例（型アサーションの使用）
+  const data = response as UserData;
+  const element = document.getElementById("button") as HTMLButtonElement;
 
-  // src/types/common/ui.ts
-  export interface BaseComponentProps {
-    testID?: string;
-    style?: ViewStyle;
-  }
+  // ✅ 良い例（型ガードや適切な型定義の使用）
+  const isUserData = (data: unknown): data is UserData => {
+    return typeof data === "object" && data !== null && "id" in data;
+  };
 
-  // src/types/features/event.ts
-  import { ID, Timestamp } from "../common/base";
-  import { BaseComponentProps } from "../common/ui";
-
-  export interface Event {
-    id: ID;
-    name: string;
-    createdAt: Timestamp;
-  }
-
-  export interface EventCardProps extends BaseComponentProps {
-    event: Event;
-    onPress: (event: Event) => void;
+  if (isUserData(response)) {
+    // responseはUserData型として安全に使用可能
   }
   ```
+
+- **例外的な使用許可**: 以下の場合のみ使用を許可
+  - React Native のプラットフォーム固有 API 利用時
+  - 外部ライブラリの型定義が不完全な場合
+  - 使用時は必ずコメントで理由を記載
 
 ## 機能実装ガイドライン
 

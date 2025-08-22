@@ -227,3 +227,34 @@ export const StyleCombinations = {
     maxWidth: '90%',
   },
 };
+
+// DateTimePicker用の定数
+export const DateTimePickerConstants = {
+  // アニメーション設定
+  animation: {
+    fadeInDuration: 250,
+    slideUpDuration: 300,
+    fadeOutDuration: 200,
+    slideDownDuration: 250,
+    initialTranslateY: 300,
+    finalTranslateY: 400,
+  },
+
+  // ピッカーホイール設定
+  wheel: {
+    itemHeight: 50,
+    containerHeight: 250,
+    minHeight: 300,
+    padding: {
+      top: 100, // itemHeight * 2
+      bottom: 100, // itemHeight * 2
+    },
+  },
+
+  // モーダル設定
+  modal: {
+    maxHeight: '75%',
+    minHeight: 400,
+    minButtonWidth: 80,
+  },
+} as const;
