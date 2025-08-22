@@ -14,24 +14,26 @@
 ### 1. ディレクトリ作成
 
 ```
-src/components/features/settings/list/
-├── ProfileCard.tsx
-├── ProfileHeader.tsx
-├── ProfileDetails.tsx
-├── ProfileDetailItem.tsx
-├── FollowStats.tsx
-├── FollowStatItem.tsx
-├── EditProfileButton.tsx
-├── FollowButton.tsx
-├── StatsCard.tsx
-├── StatItem.tsx
-├── SettingsGroup.tsx
-├── SettingItem.tsx
-├── SettingItemIcon.tsx
-├── SettingItemContent.tsx
-├── AppInfoCard.tsx
-├── AppIcon.tsx
-├── AppDetails.tsx
+src/components/features/settings/
+├── list/
+│   ├── ProfileCard.tsx
+│   ├── ProfileHeader.tsx
+│   ├── ProfileDetails.tsx
+│   ├── ProfileDetailItem.tsx
+│   ├── FollowStats.tsx
+│   ├── FollowStatItem.tsx
+│   ├── EditProfileButton.tsx
+│   ├── FollowButton.tsx
+│   ├── StatsCard.tsx
+│   ├── StatItem.tsx
+│   ├── SettingsGroup.tsx
+│   ├── SettingItem.tsx
+│   ├── SettingItemIcon.tsx
+│   ├── SettingItemContent.tsx
+│   ├── AppInfoCard.tsx
+│   ├── AppIcon.tsx
+│   ├── AppDetails.tsx
+│   └── index.ts
 └── index.ts
 ```
 
