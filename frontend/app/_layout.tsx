@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { useFrameworkReady } from '@/hooks/useFrameworkReady';
+import { useFrameworkReady } from '../src/hooks/common';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function RootLayout() {

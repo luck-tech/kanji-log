@@ -136,7 +136,7 @@ export interface FilterOptions {
   areas: string[];
   purposes: string[];
   genres: string[];
-  priceRange: BudgetRange;
+  price: BudgetRange;
 }
 
 // エラー情報
