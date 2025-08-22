@@ -261,3 +261,38 @@ export interface RestaurantRecommendationSummary {
   analysisBase: string;
   memberCount: number;
 }
+
+/**
+ * 予約サポート関連の型定義
+ */
+export interface ReservationInfo {
+  restaurant: {
+    id: string;
+    name: string;
+    genre: string;
+    address: string;
+    phone: string;
+    mapUrl?: string;
+    reservationUrl?: string;
+    features: string[];
+  };
+  event: {
+    title: string;
+    date: string;
+    time: string;
+    memberCount: number;
+  };
+  reservationDetails?: {
+    reservationId?: string;
+    contactPerson?: string;
+    specialRequests?: string;
+    isConfirmed: boolean;
+    confirmedAt?: string;
+  };
+}
+
+export interface ReservationForm {
+  contactPerson: string;
+  specialRequests: string;
+  reservationId: string;
+}
