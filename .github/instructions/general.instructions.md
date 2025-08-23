@@ -299,6 +299,51 @@ utils/constants/business/
   - 型: `PascalCase` (例: `Event`, `EventCardProps`)
   - 定数: `PascalCase` または `SCREAMING_SNAKE_CASE`
 
+### パスエイリアス規約
+
+- **必須使用**: すべてのインポート文で `@/` パスエイリアスを使用する
+- **相対パス禁止**: `../../../` のような長い相対パスは使用禁止
+- **利点**:
+
+  - ファイル移動時にインポートパスの修正が不要
+  - 可読性の向上
+  - IDE での自動補完とリファクタリング支援
+  - プロジェクト構造の把握が容易
+
+- **パスエイリアス設定**:
+
+  - `@/*`: プロジェクトルート（`./*`）
+  - `@/constants`: `./utils/constants`
+  - `@/constants/*`: `./utils/constants/*`
+  - `@/constants/Colors`: `./utils/constants/design/colors`
+  - `@/constants/Layout`: `./utils/constants/design/layout`
+  - `@/constants/EventConstants`: `./utils/constants/business/event`
+
+- **推奨インポート例**:
+
+  ```typescript
+  // ✅ 良い例（パスエイリアス使用）
+  import { Button, Input } from "@/components/common/ui";
+  import { EventCard } from "@/components/features/event";
+  import { Event } from "@/types/features/event";
+  import { Colors } from "@/utils/constants/design/colors";
+
+  // ❌ 悪い例（長い相対パス）
+  import { Button } from "../../../common/ui";
+  import { Event } from "../../../../types/features/event";
+  ```
+
+- **例外規則**:
+
+  - 同一ディレクトリ内の相対インポートは `./` を使用可能
+  - 一つ上の階層のみの場合は `../` を使用可能
+  - 2 階層以上（`../../`）の相対パスは禁止
+
+- **強制ルール**:
+  - 新規ファイル作成時は必ずパスエイリアスを使用
+  - コードレビューでは相対パスの使用をチェック
+  - リファクタリング時は既存の相対パスもパスエイリアスに変更
+
 ## 技術スタック・アーキテクチャルール
 
 ### フロントエンド技術
