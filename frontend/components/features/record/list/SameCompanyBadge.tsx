@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-import { BaseComponentProps } from '../../../../types/common/ui';
+import { BaseComponentProps } from '@/types/common/ui';
 import { Colors } from '@/constants';
 
 /**

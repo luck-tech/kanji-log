@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Card } from '../../../common/ui';
-import { Event } from '../../../../types/features/event';
-import { BaseComponentProps } from '../../../../types/common/ui';
-import { Colors } from '../../../../utils/constants/design/colors';
+import { Card } from '@/components/common/ui';
+import { Event } from '@/types/features/event';
+import { BaseComponentProps } from '@/types/common/ui';
+import { Colors } from '@/utils/constants/design/colors';
 
 interface EventOverviewCardProps extends BaseComponentProps {
   event: Event;

@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { BaseComponentProps } from '../../../../types/common/ui';
-import { Question } from '../../../../types/features/event';
-import { Colors } from '../../../../utils/constants/design/colors';
+import { BaseComponentProps } from '@/types/common/ui';
+import { Question } from '@/types/features/event';
+import { Colors } from '@/utils/constants/design/colors';
 
 interface QuestionItemProps extends BaseComponentProps {
   question: Question;

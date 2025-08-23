@@ -3,9 +3,9 @@ import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import { Button } from '../../../common/ui';
+import { Button } from '@/components/common/ui';
 import { BenefitsCard } from './BenefitsCard';
-import { BaseComponentProps } from '../../../../types/common/ui';
+import { BaseComponentProps } from '@/types/common/ui';
 import { Colors } from '@/constants';
 
 interface UnlockPromptProps extends BaseComponentProps {

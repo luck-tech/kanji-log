@@ -1,13 +1,13 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Card } from '../../../common/ui';
+import { Card } from '@/components/common/ui';
 import { AlcoholPreferenceBadge } from './AlcoholPreferenceBadge';
 import { AllergiesTagsList } from './AllergiesTagsList';
 import { FavoriteGenresTagsList } from './FavoriteGenresTagsList';
 import { BudgetRangeDisplay } from './BudgetRangeDisplay';
-import { BaseComponentProps } from '../../../../types/common/ui';
-import { MemberPreferences } from '../../../../types/features/member';
+import { BaseComponentProps } from '@/types/common/ui';
+import { MemberPreferences } from '@/types/features/member';
 import { Colors } from '@/constants';
 interface MemberPreferencesCardProps extends BaseComponentProps {
   preferences: MemberPreferences;

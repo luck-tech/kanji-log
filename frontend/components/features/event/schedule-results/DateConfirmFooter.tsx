@@ -2,10 +2,10 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Button } from '../../../common/ui';
-import { BaseComponentProps } from '../../../../types/common/ui';
-import { DateOptionWithStats } from '../../../../types/features/event';
-import { Colors } from '../../../../utils/constants/design/colors';
+import { Button } from '@/components/common/ui';
+import { BaseComponentProps } from '@/types/common/ui';
+import { DateOptionWithStats } from '@/types/features/event';
+import { Colors } from '@/utils/constants/design/colors';
 
 interface DateConfirmFooterProps extends BaseComponentProps {
   selectedDateId: string | null;

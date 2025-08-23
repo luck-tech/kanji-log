@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { BaseComponentProps } from '../../../../types/common/ui';
-import { BudgetRange } from '../../../../types/common/base';
+import { BaseComponentProps } from '@/types/common/ui';
+import { BudgetRange } from '@/types/common/base';
 import { Colors } from '@/constants';
 
 interface BudgetRangeDisplayProps extends BaseComponentProps {

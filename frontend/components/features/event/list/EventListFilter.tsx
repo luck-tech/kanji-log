@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { TabBar } from '../../../common/layout';
-import { EventStatus } from '../../../../types/common/base';
-import { BaseComponentProps } from '../../../../types/common/ui';
-import { EVENT_STATUS_TABS } from '../../../../utils/constants/business/event';
+import { TabBar } from '@/components/common/layout';
+import { EventStatus } from '@/types/common/base';
+import { BaseComponentProps } from '@/types/common/ui';
+import { EVENT_STATUS_TABS } from '@/utils/constants/business/event';
 
 interface EventListFilterProps extends BaseComponentProps {
   activeStatus: EventStatus;

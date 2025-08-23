@@ -1,12 +1,9 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { Colors } from '../../../utils/constants/design/colors';
-import { Layout } from '../../../utils/constants/design/layout';
-import {
-  PRICE_PRESETS,
-  formatPrice,
-} from '../../../utils/constants/business/pricing';
-import { BaseComponentProps } from '../../../types/common/ui';
+import { Colors } from '@/utils/constants/design/colors';
+import { Layout } from '@/utils/constants/design/layout';
+import { PRICE_PRESETS, formatPrice } from '@/utils/constants/business/pricing';
+import { BaseComponentProps } from '@/types/common/ui';
 
 interface PriceRangeSliderProps extends BaseComponentProps {
   min: number;

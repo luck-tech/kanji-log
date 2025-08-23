@@ -1,11 +1,11 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Card, Input } from '../../../common/ui';
+import { Card, Input } from '@/components/common/ui';
 import { QuestionItem } from './QuestionItem';
-import { BaseComponentProps } from '../../../../types/common/ui';
-import { Question } from '../../../../types/features/event';
-import { Colors } from '../../../../utils/constants/design/colors';
+import { BaseComponentProps } from '@/types/common/ui';
+import { Question } from '@/types/features/event';
+import { Colors } from '@/utils/constants/design/colors';
 
 interface QuestionsListProps extends BaseComponentProps {
   questions: Question[];

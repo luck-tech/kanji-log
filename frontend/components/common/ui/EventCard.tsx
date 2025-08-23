@@ -4,11 +4,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated from 'react-native-reanimated';
 import { Card } from './Card';
-import { Event } from '../../../types/features/event';
-import { EventStatus } from '../../../types/common/base';
-import { Colors } from '../../../utils/constants/design/colors';
-import { Layout } from '../../../utils/constants/design/layout';
-import { BaseComponentProps } from '../../../types/common/ui';
+import { Event } from '@/types/features/event';
+import { EventStatus } from '@/types/common/base';
+import { Colors } from '@/utils/constants/design/colors';
+import { Layout } from '@/utils/constants/design/layout';
+import { BaseComponentProps } from '@/types/common/ui';
 import { usePressAnimation } from './Animations';
 
 interface EventCardProps extends BaseComponentProps {

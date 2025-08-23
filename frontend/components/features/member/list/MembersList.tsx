@@ -1,9 +1,9 @@
 import React from 'react';
 import { ScrollView, View, StyleSheet } from 'react-native';
-import { StaggeredList } from '../../../common/ui/Animations';
+import { StaggeredList } from '@/components/common/ui/Animations';
 import { MemberCard } from './MemberCard';
-import { BaseComponentProps } from '../../../../types/common/ui';
-import { Member } from '../../../../types/features/member';
+import { BaseComponentProps } from '@/types/common/ui';
+import { Member } from '@/types/features/member';
 
 interface MembersListProps extends BaseComponentProps {
   members: Member[];

@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { RestaurantCard } from './RestaurantCard';
-import { BaseComponentProps } from '../../../../types/common/ui';
-import { RestaurantSuggestion } from '../../../../types/features/event';
+import { BaseComponentProps } from '@/types/common/ui';
+import { RestaurantSuggestion } from '@/types/features/event';
 
 interface RestaurantSelectionProps extends BaseComponentProps {
   restaurants: RestaurantSuggestion[];

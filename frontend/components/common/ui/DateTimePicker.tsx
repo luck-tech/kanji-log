@@ -8,9 +8,9 @@ import {
   StyleSheet,
 } from 'react-native';
 import Animated from 'react-native-reanimated';
-import { Colors } from '../../../utils/constants/design/colors';
-import { Layout } from '../../../utils/constants/design/layout';
-import { DateTimePickerConstants } from '../../../utils/constants/design/styles';
+import { Colors } from '@/utils/constants/design/colors';
+import { Layout } from '@/utils/constants/design/layout';
+import { DateTimePickerConstants } from '@/utils/constants/design/styles';
 import {
   DATE_TIME_DEFAULTS,
   generateYears,
@@ -18,9 +18,9 @@ import {
   generateHours,
   generateMinutes,
   getDaysInMonth,
-} from '../../../utils/constants/business/datetime';
+} from '@/utils/constants/business/datetime';
 import { useModalAnimation, usePickerScrollAnimation } from './Animations';
-import { BaseComponentProps } from '../../../types/common/ui';
+import { BaseComponentProps } from '@/types/common/ui';
 
 interface DateTimePickerProps extends BaseComponentProps {
   isVisible: boolean;

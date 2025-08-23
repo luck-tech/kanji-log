@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-import { Card } from '../../../common/ui';
+import { Card } from '@/components/common/ui';
 import { BenefitItem } from './BenefitItem';
-import { BaseComponentProps } from '../../../../types/common/ui';
-import { BenefitItem as BenefitItemType } from '../../../../types/features/record';
+import { BaseComponentProps } from '@/types/common/ui';
+import { BenefitItem as BenefitItemType } from '@/types/features/record';
 import { Colors } from '@/constants';
 
 const benefitItems: BenefitItemType[] = [

@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Card } from '../../../common/ui';
-import { BaseComponentProps } from '../../../../types/common/ui';
-import { DateOptionWithStats } from '../../../../types/features/event';
-import { Colors } from '../../../../utils/constants/design/colors';
+import { Card } from '@/components/common/ui';
+import { BaseComponentProps } from '@/types/common/ui';
+import { DateOptionWithStats } from '@/types/features/event';
+import { Colors } from '@/utils/constants/design/colors';
 
 interface DateOptionCardProps extends BaseComponentProps {
   option: DateOptionWithStats;

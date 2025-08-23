@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Card } from '../../../common/ui';
-import { BaseComponentProps } from '../../../../types/common/ui';
-import { Member } from '../../../../types/features/member';
+import { Card } from '@/components/common/ui';
+import { BaseComponentProps } from '@/types/common/ui';
+import { Member } from '@/types/features/member';
 import { Colors } from '@/constants';
 
 interface MemberProfileHeaderProps extends BaseComponentProps {

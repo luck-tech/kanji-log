@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
-import { BaseComponentProps } from '../../../../types/common/ui';
-import { RecordTabType } from '../../../../types/features/record';
+import { BaseComponentProps } from '@/types/common/ui';
+import { RecordTabType } from '@/types/features/record';
 import { Colors } from '@/constants';
 
 interface RecordTabsProps extends BaseComponentProps {

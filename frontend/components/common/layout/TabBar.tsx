@@ -7,9 +7,9 @@ import {
   StyleSheet,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Colors } from '../../../utils/constants/design/colors';
-import { Layout } from '../../../utils/constants/design/layout';
-import { TabItem, TabBarProps } from '../../../types/common/ui';
+import { Colors } from '@/utils/constants/design/colors';
+import { Layout } from '@/utils/constants/design/layout';
+import { TabItem, TabBarProps } from '@/types/common/ui';
 
 export function TabBar<T>({
   tabs,

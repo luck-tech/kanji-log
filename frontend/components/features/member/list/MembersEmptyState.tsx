@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { EmptyState } from '../../../common/ui';
-import { FadeInView } from '../../../common/ui/Animations';
-import { BaseComponentProps } from '../../../../types/common/ui';
+import { EmptyState } from '@/components/common/ui';
+import { FadeInView } from '@/components/common/ui/Animations';
+import { BaseComponentProps } from '@/types/common/ui';
 
 interface MembersEmptyStateProps extends BaseComponentProps {
   searchQuery: string;

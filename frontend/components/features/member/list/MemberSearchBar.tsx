@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Input } from '../../../common/ui';
-import { BaseComponentProps } from '../../../../types/common/ui';
+import { Input } from '@/components/common/ui';
+import { BaseComponentProps } from '@/types/common/ui';
 import { Colors } from '@/constants';
 
 interface MemberSearchBarProps extends BaseComponentProps {

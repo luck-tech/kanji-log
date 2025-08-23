@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Card, Button } from '../../../common/ui';
-import { BaseComponentProps } from '../../../../types/common/ui';
-import { Colors } from '../../../../utils/constants/design/colors';
+import { Card, Button } from '@/components/common/ui';
+import { BaseComponentProps } from '@/types/common/ui';
+import { Colors } from '@/utils/constants/design/colors';
 
 interface FormUrlShareProps extends BaseComponentProps {
   formUrl: string;

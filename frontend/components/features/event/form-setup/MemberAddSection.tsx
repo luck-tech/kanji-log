@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Alert, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Card, Input } from '../../../common/ui';
-import { BaseComponentProps } from '../../../../types/common/ui';
-import { NewMember } from '../../../../types/features/event';
-import { Colors } from '../../../../utils/constants/design/colors';
+import { Card, Input } from '@/components/common/ui';
+import { BaseComponentProps } from '@/types/common/ui';
+import { NewMember } from '@/types/features/event';
+import { Colors } from '@/utils/constants/design/colors';
 
 interface MemberAddSectionProps extends BaseComponentProps {
   newMembers: NewMember[];

@@ -2,10 +2,10 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Animated from 'react-native-reanimated';
-import { Card } from '../../../common/ui';
-import { usePressAnimation } from '../../../common/ui/Animations';
-import { BaseComponentProps } from '../../../../types/common/ui';
-import { Member } from '../../../../types/features/member';
+import { Card } from '@/components/common/ui';
+import { usePressAnimation } from '@/components/common/ui/Animations';
+import { BaseComponentProps } from '@/types/common/ui';
+import { Member } from '@/types/features/member';
 import { Colors } from '@/constants';
 
 interface MemberCardProps extends BaseComponentProps {

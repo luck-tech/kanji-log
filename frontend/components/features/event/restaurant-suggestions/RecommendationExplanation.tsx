@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Card } from '../../../common/ui';
-import { BaseComponentProps } from '../../../../types/common/ui';
-import { RestaurantRecommendationSummary } from '../../../../types/features/event';
-import { Colors } from '../../../../utils/constants/design/colors';
+import { Card } from '@/components/common/ui';
+import { BaseComponentProps } from '@/types/common/ui';
+import { RestaurantRecommendationSummary } from '@/types/features/event';
+import { Colors } from '@/utils/constants/design/colors';
 
 interface RecommendationExplanationProps extends BaseComponentProps {
   summary: RestaurantRecommendationSummary;

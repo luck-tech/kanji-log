@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-import { BaseComponentProps } from '../../../../types/common/ui';
+import { BaseComponentProps } from '@/types/common/ui';
 import { Colors } from '@/constants';
 
 interface RecordRatingProps extends BaseComponentProps {

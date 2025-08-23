@@ -7,13 +7,13 @@ import {
   StyleSheet,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Colors } from '../../../utils/constants/design/colors';
-import { Layout } from '../../../utils/constants/design/layout';
+import { Colors } from '@/utils/constants/design/colors';
+import { Layout } from '@/utils/constants/design/layout';
 import {
   PURPOSE_LABELS,
   GENRE_LABELS,
-} from '../../../utils/constants/business/labels';
-import { BaseComponentProps } from '../../../types/common/ui';
+} from '@/utils/constants/business/labels';
+import { BaseComponentProps } from '@/types/common/ui';
 import type { FilterOptions } from './FilterModal';
 
 interface ActiveFiltersProps extends BaseComponentProps {

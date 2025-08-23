@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Card, Input, Button } from '../../../common/ui';
-import { BaseComponentProps } from '../../../../types/common/ui';
-import { ReservationForm } from '../../../../types/features/event';
-import { Colors } from '../../../../utils/constants/design/colors';
+import { Card, Input, Button } from '@/components/common/ui';
+import { BaseComponentProps } from '@/types/common/ui';
+import { ReservationForm } from '@/types/features/event';
+import { Colors } from '@/utils/constants/design/colors';
 
 interface ReservationReportFormProps extends BaseComponentProps {
   form: ReservationForm;

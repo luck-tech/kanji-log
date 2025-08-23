@@ -8,9 +8,9 @@ import Animated, {
   withSequence,
 } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Colors } from '../../../utils/constants/design/colors';
-import { Layout } from '../../../utils/constants/design/layout';
-import { BaseComponentProps } from '../../../types/common/ui';
+import { Colors } from '@/utils/constants/design/colors';
+import { Layout } from '@/utils/constants/design/layout';
+import { BaseComponentProps } from '@/types/common/ui';
 
 interface SkeletonLoaderProps extends BaseComponentProps {
   width?: DimensionValue;
