@@ -563,6 +563,7 @@ export const MemberEditModal: React.FC<MemberEditModalProps> = ({
                         onChangeText={setNewAllergy}
                         placeholder="カスタムアレルギーを入力"
                         style={styles.customInput}
+                        containerStyle={styles.customInput}
                       />
                       <Button
                         title="追加"
@@ -662,6 +663,7 @@ export const MemberEditModal: React.FC<MemberEditModalProps> = ({
                         onChangeText={setNewDietary}
                         placeholder="カスタム配慮事項を入力"
                         style={styles.customInput}
+                        containerStyle={styles.customInput}
                       />
                       <Button
                         title="追加"
@@ -942,7 +944,7 @@ const styles = StyleSheet.create({
   inputWithButton: {
     flexDirection: 'row',
     gap: 12,
-    alignItems: 'flex-end',
+    alignItems: 'center',
   },
   customInput: {
     flex: 1,
