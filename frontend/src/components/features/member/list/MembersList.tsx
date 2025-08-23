@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { ScrollView, View, StyleSheet } from 'react-native';
 import { StaggeredList } from '../../../common/ui/Animations';
 import { MemberCard } from './MemberCard';
 import { BaseComponentProps } from '../../../../types/common/ui';
@@ -22,18 +22,32 @@ export const MembersList: React.FC<MembersListProps> = ({
   testID,
 }) => {
   return (
-    <View style={[styles.membersList, style]} testID={testID}>
+    <ScrollView
+      style={[styles.membersList, style]}
+      contentContainerStyle={styles.membersListContent}
+      testID={testID}
+      showsVerticalScrollIndicator={false}
+    >
       <StaggeredList key={animationKey} itemDelay={80}>
         {members.map((member, index) => (
-          <MemberCard key={member.id} member={member} onPress={onMemberPress} />
+          <View key={member.id} style={styles.memberCardContainer}>
+            <MemberCard member={member} onPress={onMemberPress} />
+          </View>
         ))}
       </StaggeredList>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   membersList: {
-    gap: 12,
+    flex: 1,
+  },
+  membersListContent: {
+    paddingHorizontal: 24,
+    paddingBottom: 100, // FABとの重複回避
+  },
+  memberCardContainer: {
+    marginBottom: 12,
   },
 });

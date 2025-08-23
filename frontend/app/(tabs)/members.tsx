@@ -64,6 +64,7 @@ export default function MembersScreen() {
   const [members, setMembers] = useState<Member[]>(mockMembers);
   const [searchQuery, setSearchQuery] = useState('');
   const [isAddModalVisible, setIsAddModalVisible] = useState(false);
+  const [animationKey, setAnimationKey] = useState(0);
 
   // フィルタリング
   const filteredMembers = members.filter(
@@ -94,6 +95,8 @@ export default function MembersScreen() {
   useFocusEffect(
     useCallback(() => {
       // TODO: API call to refresh members
+      // アニメーションキーを更新してタブ切り替え毎にアニメーションを発生させる
+      setAnimationKey((prev) => prev + 1);
     }, [])
   );
 
@@ -116,6 +119,7 @@ export default function MembersScreen() {
           <MembersList
             members={filteredMembers}
             onMemberPress={handleMemberPress}
+            animationKey={animationKey}
           />
         ) : (
           <MembersEmptyState searchQuery={searchQuery} />
@@ -138,7 +142,5 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    padding: 24,
-    gap: 20,
   },
 });

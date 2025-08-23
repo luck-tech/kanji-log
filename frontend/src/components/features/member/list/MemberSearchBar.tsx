@@ -34,7 +34,7 @@ export const MemberSearchBar: React.FC<MemberSearchBarProps> = ({
             color={Colors.neutral[500]}
           />
         }
-        style={styles.searchInputContainer}
+        containerStyle={styles.searchInputContainer}
         inputStyle={styles.searchInputText}
       />
       <TouchableOpacity
@@ -59,10 +59,10 @@ const styles = StyleSheet.create({
   searchInputContainer: {
     flex: 1,
     marginBottom: 0,
-    width: '100%',
+    minWidth: 0,
   },
   searchInputText: {
-    width: '100%',
+    fontSize: 16,
   },
   addButton: {
     width: 48,
