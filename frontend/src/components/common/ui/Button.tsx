@@ -145,7 +145,8 @@ export const Button: React.FC<ButtonProps> = ({
     if (disabled) {
       return {
         ...baseSizeStyles[size],
-        color: Colors.neutral[400],
+        color:
+          variant === 'gradient' ? Colors.neutral[500] : Colors.neutral[400],
       };
     }
 
@@ -170,7 +171,11 @@ export const Button: React.FC<ButtonProps> = ({
           activeOpacity={0.8}
         >
           <LinearGradient
-            colors={[Colors.primary[400], Colors.primary[600]]}
+            colors={
+              disabled || loading
+                ? [Colors.neutral[300], Colors.neutral[400]]
+                : [Colors.primary[400], Colors.primary[600]]
+            }
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={buttonStyle}

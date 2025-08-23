@@ -2,8 +2,8 @@ import React from 'react';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Colors } from '../../../utils/constants/design/colors';
-import { FloatingActionButtonProps } from '../../../types/common/ui';
+import { Colors } from '@/constants';
+import { FloatingActionButtonProps } from '@/types/common/ui';
 
 export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
   icon,
@@ -30,13 +30,21 @@ export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
 
   const buttonSizes = {
     sm: 48,
-    md: 56,
-    lg: 64,
+    md: 64,
+    lg: 80,
   };
 
   const iconColor = color || Colors.white;
   const buttonSize = buttonSizes[size];
   const iconSize = iconSizes[size];
+
+  const handlePress = () => {
+    // Add haptic feedback for mobile
+    if (typeof navigator !== 'undefined' && navigator.vibrate) {
+      navigator.vibrate(15);
+    }
+    onPress();
+  };
 
   // 無効なアイコン名の場合は何も表示しない
   if (!isValidIconName(icon)) {
@@ -46,7 +54,7 @@ export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
   if (variant === 'gradient') {
     return (
       <TouchableOpacity
-        onPress={onPress}
+        onPress={handlePress}
         style={[
           styles.button,
           { width: buttonSize, height: buttonSize },
@@ -77,7 +85,7 @@ export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
   if (variant === 'secondary') {
     return (
       <TouchableOpacity
-        onPress={onPress}
+        onPress={handlePress}
         style={[
           styles.button,
           styles.secondaryButton,
@@ -99,7 +107,7 @@ export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
   // Primary variant
   return (
     <TouchableOpacity
-      onPress={onPress}
+      onPress={handlePress}
       style={[
         styles.button,
         styles.primaryButton,
@@ -116,6 +124,9 @@ export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
 
 const styles = StyleSheet.create({
   button: {
+    position: 'absolute',
+    bottom: 96,
+    right: 24,
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: Colors.neutral[900],
@@ -133,10 +144,16 @@ const styles = StyleSheet.create({
   },
   primaryButton: {
     backgroundColor: Colors.primary[500],
+    position: 'absolute',
+    bottom: 96,
+    right: 24,
   },
   secondaryButton: {
     backgroundColor: Colors.white,
     borderWidth: 1,
     borderColor: Colors.neutral[200],
+    position: 'absolute',
+    bottom: 96,
+    right: 24,
   },
 });
