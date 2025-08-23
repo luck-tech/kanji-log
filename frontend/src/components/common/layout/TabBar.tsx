@@ -174,7 +174,14 @@ export function TabBar<T>({
 
   return (
     <View style={[styles.container, style]} testID={testID}>
-      <View style={styles.content}>{tabs.map(renderTab)}</View>
+      <View
+        style={[
+          styles.content,
+          variant === 'segmented' && styles.segmentedContainer,
+        ]}
+      >
+        {tabs.map(renderTab)}
+      </View>
     </View>
   );
 }
@@ -187,6 +194,12 @@ const styles = StyleSheet.create({
   },
   content: {
     flexDirection: 'row',
+  },
+  segmentedContainer: {
+    marginHorizontal: 24,
+    marginVertical: 16,
+    borderRadius: 4,
+    overflow: 'hidden',
   },
   scrollContent: {
     paddingHorizontal: Layout.padding.sm,
@@ -252,16 +265,16 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.neutral[50],
     borderWidth: 1,
     borderColor: Colors.neutral[200],
-    borderLeftWidth: 0,
+    marginLeft: -1, // 隣接するボーダーの重複を防ぐ
   },
   segmentedTabFirst: {
-    borderLeftWidth: 1,
-    borderTopLeftRadius: Layout.borderRadius.md,
-    borderBottomLeftRadius: Layout.borderRadius.md,
+    marginLeft: 0, // 最初のタブはマージンなし
+    borderTopLeftRadius: 4,
+    borderBottomLeftRadius: 4,
   },
   segmentedTabLast: {
-    borderTopRightRadius: Layout.borderRadius.md,
-    borderBottomRightRadius: Layout.borderRadius.md,
+    borderTopRightRadius: 4,
+    borderBottomRightRadius: 4,
   },
   segmentedTabActive: {
     backgroundColor: Colors.white,

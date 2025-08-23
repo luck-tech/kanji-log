@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, ScrollView, RefreshControl, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
@@ -16,7 +16,7 @@ import {
 } from '@/components/features/event';
 import { Event, EventStatus } from '@/types';
 import { EMPTY_STATE_MESSAGES } from '@/constants/EventConstants';
-import { useRouter } from 'expo-router';
+import { useRouter, useFocusEffect } from 'expo-router';
 
 // Mock data for events
 const mockEvents: Event[] = [
@@ -160,8 +160,18 @@ export default function EventsScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
   const [events, setEvents] = useState<Event[]>(mockEvents);
+  const [animationKey, setAnimationKey] = useState(0);
 
   const filteredEvents = events.filter((event) => event.status === activeTab);
+
+  // フォーカス時の処理
+  useFocusEffect(
+    useCallback(() => {
+      // TODO: API call to refresh events
+      // アニメーションキーを更新してタブ切り替え毎にアニメーションを発生させる
+      setAnimationKey((prev) => prev + 1);
+    }, [])
+  );
 
   const handleCreateEvent = () => {
     setIsCreateModalVisible(true);
@@ -235,7 +245,7 @@ export default function EventsScreen() {
 
     return (
       <View style={styles.eventList}>
-        <StaggeredList itemDelay={100}>
+        <StaggeredList key={animationKey} itemDelay={100}>
           {filteredEvents.map((event, index) => (
             <EventCard
               key={event.id}
