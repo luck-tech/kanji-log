@@ -72,12 +72,30 @@ const mockRestaurants: RestaurantSuggestion[] = [
 ];
 
 export default function RestaurantSuggestionsScreen() {
-  const params = useLocalSearchParams();
+  const params = useLocalSearchParams<{
+    id: string;
+    areaType?: string;
+    area?: string;
+  }>();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const [selectedRestaurant, setSelectedRestaurant] =
     useState<RestaurantSuggestion | null>(null);
   const [restaurants] = useState<RestaurantSuggestion[]>(mockRestaurants);
+
+  // 選択されたエリア情報を取得
+  const selectedAreaType = params.areaType;
+  const selectedArea = params.area;
+
+  // ヘッダーのサブタイトルを動的に生成
+  const getSubtitle = () => {
+    if (selectedAreaType === 'center') {
+      return 'AIが選んだ最適エリアのお店';
+    } else if (selectedAreaType === 'specified' && selectedArea) {
+      return `${selectedArea}エリアのおすすめのお店`;
+    }
+    return 'AIが選んだおすすめのお店';
+  };
 
   const handleBackPress = () => {
     router.back();
@@ -109,7 +127,7 @@ export default function RestaurantSuggestionsScreen() {
       <View style={styles.safeArea}>
         <Header
           title="レストラン提案"
-          subtitle="AIが選んだおすすめのお店"
+          subtitle={getSubtitle()}
           variant="gradient"
           leftIcon="arrow-back"
           onLeftPress={handleBackPress}

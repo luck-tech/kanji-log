@@ -197,7 +197,6 @@ ${
       <ScrollView
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContent}
       >
         <View style={styles.content}>
           {/* イベント概要 */}
@@ -251,9 +250,6 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
-  },
-  scrollContent: {
-    paddingBottom: 100,
   },
   content: {
     padding: 24,

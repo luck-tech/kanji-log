@@ -402,7 +402,7 @@ const styles = StyleSheet.create({
   },
   wheelSelection: {
     position: 'absolute',
-    top: '50%',
+    top: '40%',
     left: 0,
     right: 0,
     height: DateTimePickerConstants.wheel.itemHeight,

@@ -7,6 +7,13 @@ import {
   EventActionsList,
   EventMembersList,
 } from '../../src/components/features/event/detail';
+import {
+  DateScheduleModal,
+  AreaSelectionModal,
+  EventLogModal,
+  type ScheduleData,
+  type EventLogData,
+} from '../../components/modals';
 import { Event } from '@/types';
 import { Colors } from '@/constants';
 
@@ -189,6 +196,9 @@ export default function EventDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const [event] = useState<Event>(getMockEvent(id || '1'));
+  const [isScheduleModalVisible, setIsScheduleModalVisible] = useState(false);
+  const [isAreaModalVisible, setIsAreaModalVisible] = useState(false);
+  const [isEventLogModalVisible, setIsEventLogModalVisible] = useState(false);
 
   const handleBackPress = () => {
     router.back();
@@ -208,11 +218,11 @@ export default function EventDetailScreen() {
   };
 
   const handleScheduleSetup = () => {
-    console.log('日程調整設定を開く');
+    setIsScheduleModalVisible(true);
   };
 
   const handleAreaSelection = () => {
-    console.log('エリア選択を開く');
+    setIsAreaModalVisible(true);
   };
 
   const handleViewScheduleResults = () => {
@@ -220,7 +230,7 @@ export default function EventDetailScreen() {
   };
 
   const handleCreateEventLog = () => {
-    console.log('イベント記録作成を開く');
+    setIsEventLogModalVisible(true);
   };
 
   const getPurposeLabel = (purpose: string): string => {
@@ -277,6 +287,44 @@ export default function EventDetailScreen() {
             <EventMembersList event={event} onMemberPress={handleMemberPress} />
           </View>
         </ScrollView>
+
+        {/* モーダル */}
+        <DateScheduleModal
+          isVisible={isScheduleModalVisible}
+          onClose={() => setIsScheduleModalVisible(false)}
+          onScheduleSetup={(scheduleData: ScheduleData) => {
+            console.log('Schedule setup:', scheduleData);
+            setIsScheduleModalVisible(false);
+          }}
+        />
+
+        <AreaSelectionModal
+          isVisible={isAreaModalVisible}
+          onClose={() => setIsAreaModalVisible(false)}
+          onAreaSelect={(areaType, area) => {
+            console.log('Area selected:', areaType, area);
+            setIsAreaModalVisible(false);
+            // レストランサジェスト画面に遷移（選択されたエリア情報をクエリパラメータで渡す）
+            const queryParams = new URLSearchParams({
+              areaType,
+              ...(area && { area }),
+            });
+            router.push(
+              `/event/${id}/restaurant-suggestions?${queryParams.toString()}`
+            );
+          }}
+        />
+
+        <EventLogModal
+          isVisible={isEventLogModalVisible}
+          onClose={() => setIsEventLogModalVisible(false)}
+          onSave={(eventLogData: EventLogData) => {
+            console.log('Event log saved:', eventLogData);
+            setIsEventLogModalVisible(false);
+          }}
+          eventTitle={event.title}
+          venue={event.venue}
+        />
       </View>
     </View>
   );

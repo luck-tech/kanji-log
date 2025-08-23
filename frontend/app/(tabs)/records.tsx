@@ -16,6 +16,7 @@ import {
   ActiveFilters,
   FilterOptions,
 } from '@/components/common';
+import { RecordDetailModal } from '../../components/modals';
 import { SharedRecord, EventPurpose } from '@/types';
 import { Colors } from '@/constants';
 
@@ -205,6 +206,11 @@ export default function RecordsScreen() {
 
   const handleRecordPress = (record: ExtendedSharedRecord) => {
     setSelectedRecord(record);
+  };
+
+  const handleUserPress = (userId: string) => {
+    console.log('Navigate to user profile:', userId);
+    // TODO: ユーザープロフィール画面へのナビゲーション
   };
 
   const handleLike = (recordId: string) => {
@@ -683,7 +689,7 @@ export default function RecordsScreen() {
           />
 
           {/* Record Detail Modal */}
-          {/* <RecordDetailModal
+          <RecordDetailModal
             isVisible={selectedRecord !== null}
             onClose={() => setSelectedRecord(null)}
             record={selectedRecord}
@@ -695,7 +701,7 @@ export default function RecordsScreen() {
                 ? () => handleUserPress(selectedRecord.organizer.id)
                 : undefined
             }
-          /> */}
+          />
         </View>
       )}
     </View>
