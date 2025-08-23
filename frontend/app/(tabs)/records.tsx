@@ -16,7 +16,7 @@ import {
   ActiveFilters,
   FilterOptions,
 } from '@/components/common';
-import { RecordDetailModal } from '../../components/modals';
+import { RecordDetailModal } from '@/components/features/record';
 import { SharedRecord, EventPurpose } from '@/types';
 import { Colors } from '@/constants';
 

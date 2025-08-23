@@ -18,7 +18,7 @@ import {
   StatData,
   AppInfo,
 } from '@/types/features/setting';
-import { Layout } from '../../constants/Layout';
+import { Layout } from '@/constants';
 
 export default function SettingsScreen() {
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);

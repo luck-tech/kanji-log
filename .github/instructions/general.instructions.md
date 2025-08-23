@@ -16,6 +16,270 @@ applyTo: "**"
 2. **ナレッジ蓄積**: 過去のイベント記録を資産として活用
 3. **集合知**: 他の幹事の経験を共有・参照可能
 
+## ディレクトリ構造とファイル配置基準
+
+### 現在のディレクトリ構造
+
+```
+frontend/
+├── app/                     # expo-router画面定義
+│   ├── _layout.tsx         # ルートレイアウト
+│   ├── (onboarding)/       # オンボーディング画面群
+│   ├── (tabs)/             # タブナビゲーション画面群
+│   ├── event/              # イベント関連画面
+│   └── member/             # メンバー関連画面
+├── src/                    # アプリケーションコード
+│   ├── components/         # UIコンポーネント
+│   │   ├── common/         # 汎用コンポーネント
+│   │   │   ├── ui/         # 基本UIコンポーネント
+│   │   │   └── layout/     # レイアウトコンポーネント
+│   │   └── features/       # 機能別コンポーネント
+│   │       ├── event/      # イベント機能
+│   │       ├── member/     # メンバー機能
+│   │       ├── record/     # 記録機能
+│   │       └── settings/   # 設定機能
+│   ├── hooks/              # カスタムフック
+│   │   ├── common/         # 汎用フック
+│   │   └── features/       # 機能別フック（将来拡張）
+│   ├── types/              # 型定義
+│   │   ├── common/         # 共通型定義
+│   │   └── features/       # 機能別型定義
+│   └── utils/              # ユーティリティ・定数
+│       └── constants/      # 定数定義
+│           ├── design/     # デザイン定数
+│           └── business/   # ビジネス定数
+├── assets/                 # 静的アセット
+└── docs/                   # ドキュメント
+```
+
+### ファイル追加時の配置基準
+
+#### 🎯 画面ファイル（app/）
+
+- **新しい画面**: `app/` 配下に追加
+- **画面のグループ化**: 括弧 `()` でルートグループを作成
+- **パラメータ付き画面**: `[param].tsx` 形式
+- **ネストした画面**: フォルダ内に配置
+
+```typescript
+// 例：新しい設定画面
+app/settings/
+├── index.tsx          # /settings
+├── profile.tsx        # /settings/profile
+└── [id]/
+    └── edit.tsx       # /settings/[id]/edit
+```
+
+#### 🧩 コンポーネントファイル（src/components/）
+
+新しいコンポーネントを追加する際の判断基準：
+
+##### ✅ src/components/common/ui/ に追加すべきもの
+
+- **再利用性**: 3 つ以上の異なる機能で使用される
+- **汎用性**: 特定の機能に依存しない
+- **基本性**: Button、Input、Card 等の基本 UI 要素
+
+```typescript
+// 例：汎用的なコンポーネント
+src/components/common/ui/
+├── Button.tsx         # 汎用ボタン
+├── Modal.tsx          # 汎用モーダル
+├── DatePicker.tsx     # 汎用日付選択
+└── LoadingSpinner.tsx # 汎用ローディング
+```
+
+##### ✅ src/components/common/layout/ に追加すべきもの
+
+- **レイアウト関連**: ヘッダー、フッター、ナビゲーション
+- **画面構造**: SafeArea、Container 等
+
+```typescript
+// 例：レイアウトコンポーネント
+src/components/common/layout/
+├── Header.tsx         # 汎用ヘッダー
+├── TabBar.tsx         # タブバー
+├── Container.tsx      # 画面コンテナ
+└── SafeAreaContainer.tsx # SafeAreaラッパー
+```
+
+##### ✅ src/components/features/[domain]/ に追加すべきもの
+
+- **機能固有性**: 特定の機能ドメインでのみ使用
+- **複合性**: 複数の common コンポーネントを組み合わせ
+- **ビジネスロジック**: 機能固有の状態管理・ロジック
+
+```typescript
+// 例：イベント機能コンポーネント
+src/components/features/event/
+├── list/
+│   ├── EventCard.tsx           # イベントカード
+│   ├── EventFilter.tsx         # イベントフィルター
+│   └── index.ts               # バレルエクスポート
+├── detail/
+│   ├── EventOverview.tsx       # イベント概要
+│   ├── EventActions.tsx        # イベントアクション
+│   └── index.ts               # バレルエクスポート
+└── index.ts                   # ドメイン全体エクスポート
+```
+
+#### 🎣 カスタムフック（src/hooks/）
+
+新しいフックを追加する際の判断基準：
+
+##### ✅ src/hooks/common/ に追加すべきもの
+
+- **汎用性**: 複数の機能で再利用される
+- **基本性**: API 通信、ストレージ、デバイス機能等
+
+```typescript
+// 例：汎用フック
+src/hooks/common/
+├── useFrameworkReady.ts    # フレームワーク初期化
+├── useAsyncStorage.ts      # ローカルストレージ
+├── useDeviceInfo.ts        # デバイス情報
+└── index.ts               # バレルエクスポート
+```
+
+##### ✅ src/hooks/features/ に追加すべきもの（将来拡張）
+
+- **機能固有性**: 特定の機能ドメインでのみ使用
+- **複雑性**: 複雑な状態管理やビジネスロジック
+
+```typescript
+// 例：機能別フック（将来拡張時）
+src/hooks/features/
+├── event/
+│   ├── useEventData.ts     # イベントデータ管理
+│   ├── useEventForm.ts     # イベントフォーム
+│   └── index.ts           # バレルエクスポート
+└── index.ts               # 全体エクスポート
+```
+
+#### 📝 型定義（src/types/）
+
+新しい型を定義する際の判断基準：
+
+##### ✅ src/types/common/ に追加すべき型
+
+- **基本型**: ID、Date、基本プリミティブ型
+- **API 型**: レスポンス・リクエストの共通型
+- **UI 型**: コンポーネントの共通 Props 型
+
+```typescript
+// 例：共通型定義
+src/types/common/
+├── base.ts            # 基本型定義
+├── ui.ts              # UI関連型
+├── api.ts             # API関連型（将来拡張）
+└── index.ts           # バレルエクスポート
+```
+
+##### ✅ src/types/features/ に追加すべき型
+
+- **ドメインオブジェクト**: Event、Member、Record 等
+- **機能固有型**: 特定機能でのみ使用される型
+- **複数コンポーネント使用**: 同一機能内の複数コンポーネントで使用
+
+```typescript
+// 例：機能別型定義
+src/types/features/
+├── event.ts           # イベント関連型
+├── member.ts          # メンバー関連型
+├── record.ts          # 記録関連型
+├── setting.ts         # 設定関連型
+└── index.ts           # バレルエクスポート
+```
+
+#### 🔧 ユーティリティ・定数（src/utils/）
+
+新しいユーティリティや定数を追加する際の判断基準：
+
+##### ✅ src/utils/constants/design/ に追加すべきもの
+
+- **デザイン定数**: 色、サイズ、レイアウト関連
+- **UI 関連**: スタイリングに関する定数
+
+```typescript
+// 例：デザイン定数
+src/utils/constants/design/
+├── colors.ts          # カラーパレット
+├── layout.ts          # レイアウト定数
+├── styles.ts          # 共通スタイル
+└── index.ts           # バレルエクスポート
+```
+
+##### ✅ src/utils/constants/business/ に追加すべきもの
+
+- **ビジネス定数**: ステータス、カテゴリ、設定値
+- **アプリロジック**: 機能に関する定数
+
+```typescript
+// 例：ビジネス定数
+src/utils/constants/business/
+├── event.ts           # イベント関連定数
+├── member.ts          # メンバー関連定数
+├── app.ts             # アプリ設定定数
+└── index.ts           # バレルエクスポート
+```
+
+### ファイル追加時のチェックリスト
+
+新しいファイルを追加する前に以下を確認：
+
+#### 🔍 追加前チェック
+
+- [ ] **既存ファイルで対応できないか？**
+
+  - 同様の機能が既に存在していないか確認
+  - 既存ファイルの拡張で対応できないか検討
+
+- [ ] **適切な配置場所か？**
+
+  - 上記の配置基準に従っているか
+  - 将来的な保守性を考慮しているか
+
+- [ ] **バレルエクスポートの更新は必要か？**
+
+  - 該当ディレクトリの `index.ts` を更新
+  - 上位ディレクトリのエクスポートも確認
+
+- [ ] **型定義は適切か？**
+  - 型定義の配置基準に従っているか
+  - 既存の型を再利用できないか確認
+
+#### ✅ 追加後チェック
+
+- [ ] **import 文の確認**
+
+  - パスエイリアス `@/` を使用しているか
+  - バレルエクスポートを活用しているか
+
+- [ ] **TypeScript エラーの確認**
+
+  - `npx tsc --noEmit` でコンパイルエラーがないか
+  - `npm run lint` でリントエラーがないか
+
+- [ ] **テストの作成**
+  - 新しいロジックにはテストを作成
+  - `__tests__/` ディレクトリに配置
+
+### 命名規則
+
+- **ファイル名**:
+
+  - コンポーネント: `PascalCase.tsx` (例: `EventCard.tsx`)
+  - フック: `camelCase.ts` (例: `useFrameworkReady.ts`)
+  - 画面: `kebab-case.tsx` (例: `form-setup.tsx`)
+  - 型定義: `camelCase.ts` (例: `event.ts`)
+  - 定数: `camelCase.ts` (例: `colors.ts`)
+
+- **エクスポート名**:
+  - コンポーネント: `PascalCase` (例: `EventCard`)
+  - フック: `camelCase` (例: `useFrameworkReady`)
+  - 型: `PascalCase` (例: `Event`, `EventCardProps`)
+  - 定数: `PascalCase` または `SCREAMING_SNAKE_CASE`
+
 ## 技術スタック・アーキテクチャルール
 
 ### フロントエンド技術

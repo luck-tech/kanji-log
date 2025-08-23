@@ -45,12 +45,42 @@
   - `constants/Colors.ts`: カラーパレット（`primary`/`secondary`/`accent`/`gray`/`blue`/`green`/`purple` 等）
   - `constants/Styles.ts`: 共通スタイルパターン（ボタン、カード、入力フィールド等）
   - `constants/Layout.ts`: スペーシング・パディング・角丸・画面サイズ
-- **共通コンポーネント**（`components/common`）
-  - `Button`, `Card`, `Input`, `Header`, `TabBar`, `EmptyState`, `EventCard`, `FloatingActionButton`
-  - `Animations`: FadeIn, SlideIn, ScaleIn, Pulse, Shake, StaggeredList
-  - `SkeletonLoader`: スケルトンローディング状態
-  - シンプルな props 設計（variant/size/state など）
-  - **バレルエクスポート対応**: 統一された import パターン
+
+## ディレクトリ構造
+
+```
+frontend/
+├── app/                     # expo-router画面定義
+│   ├── _layout.tsx         # ルートレイアウト
+│   ├── (onboarding)/       # オンボーディング画面群
+│   ├── (tabs)/             # タブナビゲーション画面群
+│   ├── event/              # イベント関連画面
+│   └── member/             # メンバー関連画面
+├── src/                    # アプリケーションコード
+│   ├── components/         # UIコンポーネント
+│   │   ├── common/         # 汎用コンポーネント
+│   │   │   ├── ui/         # 基本UIコンポーネント
+│   │   │   └── layout/     # レイアウトコンポーネント
+│   │   └── features/       # 機能別コンポーネント
+│   │       ├── event/      # イベント機能
+│   │       ├── member/     # メンバー機能
+│   │       ├── record/     # 記録機能
+│   │       └── settings/   # 設定機能
+│   ├── hooks/              # カスタムフック
+│   ├── types/              # 型定義
+│   │   ├── common/         # 共通型定義
+│   │   └── features/       # 機能別型定義
+│   └── utils/              # ユーティリティ・定数
+│       └── constants/      # 定数定義
+│           ├── design/     # デザイン定数
+│           └── business/   # ビジネス定数
+├── assets/                 # 静的アセット
+└── docs/                   # ドキュメント
+```
+
+- `SkeletonLoader`: スケルトンローディング状態
+- シンプルな props 設計（variant/size/state など）
+- **バレルエクスポート対応**: 統一された import パターン
 - **機能別コンポーネント**（`src/components/features`）
   - **event**: イベント機能コンポーネント (list/detail/form-setup/schedule-results/restaurant-suggestions/reservation-support)
   - **member**: メンバー機能コンポーネント (list/detail)
@@ -75,228 +105,6 @@
 - **TypeScript**: `strict: true`、パスエイリアス `@/*`（`tsconfig.json`）
 - **ESLint**: v9（Flat Config）+ `eslint-config-expo`
 - **パッケージマネージャ**: pnpm（`pnpm-lock.yaml` あり）
-
-### ディレクトリ構成
-
-#### 現在の構造（中規模対応）
-
-```
-frontend/                     // フロントエンド（モバイルアプリ）
-├── app/                      // expo-router画面定義
-│   ├── _layout.tsx           // ルート Stack + SafeAreaProvider設定
-│   ├── (onboarding)/         // Onboarding フロー用の Stack グループ
-│   │   ├── _layout.tsx
-│   │   ├── splash.tsx
-│   │   ├── welcome.tsx
-│   │   ├── features.tsx
-│   │   └── auth.tsx
-│   ├── (tabs)/               // メインアプリのタブグループ
-│   │   ├── _layout.tsx       // Tabs（index/members/records/settings）
-│   │   ├── index.tsx         // イベント一覧タブ
-│   │   ├── members.tsx
-│   │   ├── records.tsx
-│   │   └── settings.tsx
-│   ├── event/[id]/           // イベント詳細・関連画面
-│   │   ├── [id].tsx          // イベント詳細
-│   │   ├── form-setup.tsx    // フォーム設定
-│   │   ├── reservation-support.tsx
-│   │   ├── restaurant-suggestions.tsx
-│   │   └── schedule-results.tsx
-│   └── +not-found.tsx
-├── src/                      // メインソースコード（バレルエクスポート対応）
-│   ├── components/           // 機能別コンポーネント管理
-│   │   ├── common/           // 汎用UIコンポーネント
-│   │   │   ├── ui/           // 基本UIコンポーネント
-│   │   │   │   ├── Button.tsx
-│   │   │   │   ├── Card.tsx
-│   │   │   │   ├── Input.tsx
-│   │   │   │   ├── Animations.tsx
-│   │   │   │   ├── FilterModal.tsx
-│   │   │   │   ├── ActiveFilters.tsx
-│   │   │   │   └── index.ts  // バレルエクスポート
-│   │   │   ├── layout/       // レイアウトコンポーネント
-│   │   │   │   ├── Header.tsx
-│   │   │   │   ├── TabBar.tsx
-│   │   │   │   └── index.ts  // バレルエクスポート
-│   │   │   └── index.ts      // 統合バレルエクスポート
-│   │   └── features/         // 機能別コンポーネント
-│   │       ├── event/        // イベント機能
-│   │       │   ├── list/     // 一覧機能
-│   │       │   ├── detail/   // 詳細機能
-│   │       │   ├── form-setup/
-│   │       │   ├── schedule-results/
-│   │       │   ├── restaurant-suggestions/
-│   │       │   ├── reservation-support/
-│   │       │   └── index.ts  // ドメインバレルエクスポート
-│   │       ├── member/       // メンバー機能
-│   │       │   ├── list/
-│   │       │   ├── detail/
-│   │       │   └── index.ts  // ドメインバレルエクスポート
-│   │       ├── record/       // レコード機能
-│   │       │   ├── list/
-│   │       │   └── index.ts  // ドメインバレルエクスポート
-│   │       ├── settings/     // 設定機能
-│   │       │   ├── list/
-│   │       │   └── index.ts  // ドメインバレルエクスポート
-│   │       └── index.ts      // 全機能統合バレルエクスポート
-│   ├── types/                // 型定義（階層化）
-│   │   ├── common/           // 共通型
-│   │   ├── features/         // 機能別型
-│   │   └── index.ts          // 統合エクスポート
-├── components/               // 旧UIコンポーネント（レガシー）
-│   └── modals/               // モーダルコンポーネント
-│       ├── EventCreateModal.tsx
-│       ├── MemberEditModal.tsx
-│       ├── EventLogModal.tsx
-│       └── index.ts          // バレルエクスポート
-├── constants/                // デザイン定数・設定
-│   ├── Colors.ts             // カラーパレット
-│   ├── Layout.ts             // スペーシング・レイアウト
-│   ├── EventConstants.ts     // イベント関連定数
-│   └── index.ts              // バレルエクスポート
-├── hooks/                    // カスタムフック
-│   ├── useFrameworkReady.ts
-│   └── index.ts              // バレルエクスポート
-├── assets/                   // 画像・アイコン
-├── docs/                     // ドキュメント・タスク管理
-│   └── tasks/                // 開発タスク詳細
-├── app.json                  // Expo設定
-├── eslint.config.js          // ESLint設定
-├── tsconfig.json             // TypeScript設定（パスエイリアス: @/*）
-└── package.json              // 依存関係管理
-```
-
-#### 大規模対応構造（将来の移行先）
-
-```
-frontend/
-├── app/                      # expo-router（ルーティング専用）
-│   ├── (onboarding)/        # オンボーディングルート
-│   ├── (tabs)/              # メインタブルート
-│   ├── event/[id]/          # イベント詳細ルート
-│
-├── src/                      # メインソースコード
-│   ├── components/          # 機能別コンポーネント管理
-│   │   ├── common/          # 汎用UIコンポーネント
-│   │   │   ├── ui/          # 基本UIコンポーネント
-│   │   │   │   ├── Button.tsx
-│   │   │   │   ├── Input.tsx
-│   │   │   │   ├── Card.tsx
-│   │   │   │   ├── Animations.tsx
-│   │   │   │   └── index.ts # バレルエクスポート
-│   │   │   ├── layout/      # レイアウトコンポーネント
-│   │   │   │   ├── Header.tsx
-│   │   │   │   ├── Footer.tsx
-│   │   │   │   └── index.ts # バレルエクスポート
-│   │   │   └── index.ts     # 全体エクスポート
-│   │   ├── features/        # 機能別コンポーネント
-│   │   │   ├── event/       # イベント画面関連
-│   │   │   │   ├── EventCard.tsx
-│   │   │   │   ├── EventForm.tsx
-│   │   │   │   ├── EventsList.tsx
-│   │   │   │   ├── __tests__/     # テスト
-│   │   │   │   │   ├── EventCard.test.tsx
-│   │   │   │   │   └── EventForm.test.tsx
-│   │   │   │   └── index.ts # バレルエクスポート
-│   │   │   ├── member/      # メンバー管理画面関連
-│   │   │   │   ├── MemberCard.tsx
-│   │   │   │   ├── MemberForm.tsx
-│   │   │   │   ├── __tests__/
-│   │   │   │   └── index.ts
-│   │   │   ├── record/      # 記録画面関連
-│   │   │   │   ├── __tests__/
-│   │   │   │   └── index.ts
-│   │   │   ├── setting/     # 設定画面関連
-│   │   │   │   ├── __tests__/
-│   │   │   │   └── index.ts
-│   │   │   └── index.ts     # 全体エクスポート
-│   │   └── index.ts         # 全体エクスポート
-│   │
-│   ├── hooks/               # グローバルカスタムフック
-│   │   ├── common/          # 汎用フック
-│   │   │   ├── useFrameworkReady.ts
-│   │   │   ├── __tests__/   # テスト
-│   │   │   └── index.ts     # バレルエクスポート
-│   │   ├── api/             # API関連フック
-│   │   │   ├── __tests__/
-│   │   │   └── index.ts
-│   │   ├── auth/            # 認証関連
-│   │   │   ├── __tests__/
-│   │   │   └── index.ts
-│   │   ├── features/        # 機能別フック
-│   │   │   ├── event/       # イベント画面関連
-│   │   │   │   ├── __tests__/
-│   │   │   │   └── index.ts
-│   │   │   ├── member/      # メンバー管理画面関連
-│   │   │   ├── record/      # 記録画面関連
-│   │   │   ├── setting/     # 設定画面関連
-│   │   │   └── index.ts     # 全体エクスポート
-│   │   └── index.ts         # 全体エクスポート
-│   │
-│   ├── services/            # 外部サービス・API管理
-│   │   ├── api/             # API層
-│   │   │   ├── __tests__/
-│   │   │   └── index.ts
-│   │   ├── storage/         # ローカルストレージ
-│   │   │   ├── __tests__/
-│   │   │   └── index.ts
-│   │   └── index.ts         # 全体エクスポート
-│   │
-│   ├── store/               # 状態管理（将来的にZustand等）
-│   │   ├── __tests__/       # テスト
-│   │   └── index.ts         # バレルエクスポート
-│   │
-│   ├── utils/               # ユーティリティ関数
-│   │   ├── constants/       # 定数（現在のconstants移行）
-│   │   │   ├── design/      # デザイン関連定数
-│   │   │   │   ├── colors.ts
-│   │   │   │   ├── layout.ts
-│   │   │   │   ├── styles.ts
-│   │   │   │   └── index.ts # バレルエクスポート
-│   │   │   ├── business/    # ビジネス関連定数
-│   │   │   │   ├── event.ts
-│   │   │   │   ├── member.ts
-│   │   │   │   └── index.ts
-│   │   │   ├── config/      # アプリ設定
-│   │   │   │   ├── api.ts
-│   │   │   │   ├── environment.ts
-│   │   │   │   └── index.ts
-│   │   │   └── index.ts     # 全体エクスポート
-│   │   ├── features/        # 機能別関数
-│   │   │   ├── event/       # イベント画面関連
-│   │   │   │   ├── __tests__/
-│   │   │   │   └── index.ts
-│   │   │   ├── member/      # メンバー管理画面関連
-│   │   │   ├── record/      # 記録画面関連
-│   │   │   ├── setting/     # 設定画面関連
-│   │   │   └── index.ts     # 全体エクスポート
-│   │   ├── __tests__/       # グローバルテスト
-│   │   └── index.ts         # 全体エクスポート
-│   │
-│   └── types/               # 型定義
-│       ├── common/          # 共通型定義
-│       │   ├── base.ts      # 基本型（ID、Date等）
-│       │   ├── api.ts       # API共通型
-│       │   ├── ui.ts        # UI共通型
-│       │   └── index.ts     # バレルエクスポート
-│       ├── features/        # 機能別型定義
-│       │   ├── event.ts     # イベント画面関連
-│       │   ├── member.ts    # メンバー管理画面関連
-│       │   ├── record.ts    # 記録画面関連
-│       │   ├── setting.ts   # 設定画面関連
-│       │   └── index.ts     # バレルエクスポート
-│       └── index.ts         # 全体エクスポート
-│
-├── __tests__/               # グローバルテスト
-│   ├── setup.ts             # テスト環境設定
-│   └── utils/               # テストユーティリティ
-├── assets/                  # 静的リソース
-├── app.json                 # Expo設定
-├── jest.config.js           # Jest設定
-├── eslint.config.js         # ESLint設定
-├── tsconfig.json            # TypeScript設定
-└── package.json             # 依存関係管理
-```
 
 ### バレルエクスポート使用例
 

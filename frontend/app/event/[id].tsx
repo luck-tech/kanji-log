@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { Header } from '../../src/components/common/layout';
+import { Header } from '@/components/common';
 import {
   EventOverviewCard,
   EventActionsList,
   EventMembersList,
-} from '../../src/components/features/event/detail';
+} from '@/components/features/event';
 import {
   DateScheduleModal,
   AreaSelectionModal,
   EventLogModal,
   type ScheduleData,
   type EventLogData,
-} from '../../components/modals';
+} from '@/components/features/event';
 import { Event } from '@/types';
 import { Colors } from '@/constants';
 
