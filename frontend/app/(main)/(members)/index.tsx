@@ -10,7 +10,7 @@ import {
   MemberAddModal,
   type MemberData,
 } from '@/components/features/member';
-import { Colors } from '@/constants/Colors';
+import { Colors } from '@/constants';
 import { Member } from '@/types/features/member';
 
 // Mock data - Member型に合わせて修正
@@ -75,7 +75,7 @@ export default function MembersScreen() {
   );
 
   const handleMemberPress = (member: Member) => {
-    router.push(`/member/${member.id}`);
+    router.push(`/(main)/(members)/${member.id}`);
   };
 
   const handleAddMember = () => {

@@ -12,7 +12,7 @@ import {
   MemberEditModal,
   type MemberEditData,
 } from '@/components/features/member';
-import { Colors } from '@/constants/Colors';
+import { Colors } from '@/constants';
 import { Member } from '@/types/features/member';
 
 // Mock data

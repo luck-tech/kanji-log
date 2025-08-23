@@ -112,7 +112,7 @@ export default function RestaurantSuggestionsScreen() {
 
     console.log('Making reservation for:', selectedRestaurant);
     // TODO: Navigate to reservation support screen
-    router.push(`/event/${params.id}/reservation-support`);
+    router.push(`/(main)/(events)/${params.id}/reservation-support`);
   };
 
   // サマリー情報を構築

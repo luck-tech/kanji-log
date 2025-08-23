@@ -10,7 +10,7 @@ import {
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Button, Input } from '@/components/common';
-import { Colors } from '@/constants/Colors';
+import { Colors } from '@/constants';
 
 export default function AuthScreen() {
   const [isLogin, setIsLogin] = useState(true);
@@ -29,14 +29,14 @@ export default function AuthScreen() {
     setTimeout(() => {
       setLoading(false);
       // Navigate to main app
-      router.replace('/(tabs)');
+      router.replace('/(main)/(events)');
     }, 1500);
   };
 
   const handleSocialLogin = (provider: string) => {
     console.log(`Login with ${provider}`);
     // Simulate social login
-    router.replace('/(tabs)');
+    router.replace('/(main)/(events)');
   };
 
   return (

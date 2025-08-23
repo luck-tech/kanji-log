@@ -15,7 +15,7 @@ import {
   type EventCreateData,
 } from '@/components/features/event';
 import { Event, EventStatus } from '@/types';
-import { EMPTY_STATE_MESSAGES } from '@/constants/EventConstants';
+import { EMPTY_STATE_MESSAGES } from '@/constants';
 import { useRouter, useFocusEffect } from 'expo-router';
 
 // Mock data for events
@@ -178,7 +178,7 @@ export default function EventsScreen() {
   };
 
   const handleEventPress = (eventId: string) => {
-    router.push(`/event/${eventId}`);
+    router.push(`/(main)/(events)/${eventId}`);
   };
 
   const handleEventCreate = (eventData: EventCreateData) => {

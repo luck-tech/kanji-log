@@ -11,7 +11,7 @@ export default function NotFoundScreen() {
         <Text style={styles.description}>
           お探しのページは存在しないか、移動された可能性があります。
         </Text>
-        <Link href="/" style={styles.linkButton}>
+        <Link href="/(main)/(events)" style={styles.linkButton}>
           <Text style={styles.linkText}>ホームに戻る</Text>
         </Link>
       </View>

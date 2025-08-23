@@ -210,11 +210,11 @@ export default function EventDetailScreen() {
   };
 
   const handleMemberPress = (memberId: string) => {
-    router.push(`/member/${memberId}`);
+    router.push(`/(main)/(members)/${memberId}`);
   };
 
   const handleCreateForm = () => {
-    router.push(`/event/${id}/form-setup`);
+    router.push(`/(main)/(events)/${id}/form-setup`);
   };
 
   const handleScheduleSetup = () => {
@@ -226,7 +226,7 @@ export default function EventDetailScreen() {
   };
 
   const handleViewScheduleResults = () => {
-    router.push(`/event/${id}/schedule-results`);
+    router.push(`/(main)/(events)/${id}/schedule-results`);
   };
 
   const handleCreateEventLog = () => {
@@ -310,7 +310,7 @@ export default function EventDetailScreen() {
               ...(area && { area }),
             });
             router.push(
-              `/event/${id}/restaurant-suggestions?${queryParams.toString()}`
+              `/(main)/(events)/${id}/restaurant-suggestions?${queryParams.toString()}`
             );
           }}
         />

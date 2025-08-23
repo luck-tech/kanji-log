@@ -2,7 +2,7 @@ import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useWindowDimensions, Platform } from 'react-native';
 
-export default function TabLayout() {
+export default function MainLayout() {
   const { width } = useWindowDimensions();
   const isSmallScreen = width < 768;
 
@@ -44,7 +44,7 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="index"
+        name="(events)"
         options={{
           title: 'イベント',
           tabBarIcon: ({ size, color, focused }) => (
@@ -57,7 +57,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="members"
+        name="(members)"
         options={{
           title: 'メンバーリスト',
           tabBarIcon: ({ size, color, focused }) => (
@@ -70,7 +70,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="records"
+        name="(records)"
         options={{
           title: 'みんなの記録',
           tabBarIcon: ({ size, color, focused }) => (
@@ -83,7 +83,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="settings"
+        name="(settings)"
         options={{
           title: '設定',
           tabBarIcon: ({ size, color, focused }) => (

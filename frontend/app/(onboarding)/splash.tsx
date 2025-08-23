@@ -8,7 +8,7 @@ import Animated, {
   withTiming,
   withSequence,
 } from 'react-native-reanimated';
-import { Colors } from '@/constants/Colors';
+import { Colors } from '@/constants';
 
 export default function SplashScreen() {
   const scale = useSharedValue(0);

@@ -134,7 +134,7 @@ ${reservationInfo.event.title}
         {
           text: '次の候補',
           onPress: () => {
-            router.push(`/event/${id}/restaurant-suggestions`);
+            router.push(`/(main)/(events)/${id}/restaurant-suggestions`);
           },
         },
       ]
