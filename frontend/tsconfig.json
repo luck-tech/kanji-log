@@ -5,23 +5,11 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"],
-      "@/types": ["./types"],
-      "@/types/*": ["./types/*"],
-      "@/utils": ["./utils"],
-      "@/utils/*": ["./utils/*"],
       "@/constants": ["./utils/constants"],
       "@/constants/*": ["./utils/constants/*"],
       "@/constants/Colors": ["./utils/constants/design/colors"],
       "@/constants/Layout": ["./utils/constants/design/layout"],
-      "@/constants/EventConstants": ["./utils/constants/business/event"],
-      "@/hooks": ["./hooks"],
-      "@/hooks/*": ["./hooks/*"],
-      "@/components": ["./components"],
-      "@/components/*": ["./components/*"],
-      "@/components/common": ["./components/common"],
-      "@/components/common/*": ["./components/common/*"],
-      "@/components/features": ["./components/features"],
-      "@/components/features/*": ["./components/features/*"]
+      "@/constants/EventConstants": ["./utils/constants/business/event"]
     }
   },
   "include": [
