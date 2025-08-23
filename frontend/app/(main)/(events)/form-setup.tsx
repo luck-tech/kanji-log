@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { View, ScrollView, Alert, Share, StyleSheet } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Header } from '../../../src/components/common/layout';
-import { Button } from '../../../src/components/common/ui';
+import { Header } from '@/components/common/layout';
+import { Button } from '@/components/common/ui';
 import {
   MemberAddSection,
   QuestionsList,
   FormUrlShare,
-} from '../../../src/components/features/event/form-setup';
-import { NewMember, Question } from '../../../src/types/features/event';
+} from '@/components/features/event/form-setup';
+import { NewMember, Question } from '@/types/features/event';
 import { Colors } from '@/constants';
 
 // Mock data

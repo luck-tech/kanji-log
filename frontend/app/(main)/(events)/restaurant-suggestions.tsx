@@ -3,16 +3,16 @@ import { View, ScrollView, StyleSheet } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Header } from '../../../src/components/common/layout';
-import { Button } from '../../../src/components/common/ui';
+import { Header } from '@/components/common/layout';
+import { Button } from '@/components/common/ui';
 import {
   RecommendationExplanation,
   RestaurantSelection,
-} from '../../../src/components/features/event/restaurant-suggestions';
+} from '@/components/features/event/restaurant-suggestions';
 import {
   RestaurantSuggestion,
   RestaurantRecommendationSummary,
-} from '../../../src/types/features/event';
+} from '@/types/features/event';
 import { Colors } from '@/constants';
 
 // Mock data

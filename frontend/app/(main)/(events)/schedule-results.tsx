@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, Alert, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Header } from '../../../src/components/common/layout';
+import { Header } from '@/components/common/layout';
 import {
   ScheduleSummaryCard,
   DateOptionCard,
   ResponseTable,
   DateConfirmFooter,
-} from '../../../src/components/features/event/schedule-results';
+} from '@/components/features/event/schedule-results';
 import {
   ScheduleResponse,
   DateOptionWithStats,
   ScheduleResultsSummary,
-} from '../../../src/types/features/event';
+} from '@/types/features/event';
 import { Colors } from '@/constants';
 
 // Mock data

@@ -15,11 +15,8 @@ import {
   ReservationActions,
   ReservationReportForm,
   ReservationTips,
-} from '../../../src/components/features/event/reservation-support';
-import {
-  ReservationInfo,
-  ReservationForm,
-} from '../../../src/types/features/event';
+} from '@/components/features/event/reservation-support';
+import { ReservationInfo, ReservationForm } from '@/types/features/event';
 import { Colors } from '@/constants';
 
 // Mock data

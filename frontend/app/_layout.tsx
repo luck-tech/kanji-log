@@ -1,6 +1,6 @@
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { useFrameworkReady } from '../src/hooks/common';
+import { useFrameworkReady } from '@/hooks/common';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function RootLayout() {
