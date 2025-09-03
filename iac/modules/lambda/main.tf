@@ -83,6 +83,5 @@ output "function_arn" {
 
 output "invoke_arn" {
   description = "API Gatewayが使用するLambda関数の呼び出しARN"
-  description = "Lambda function invoke ARN"
   value       = aws_lambda_function.hello.invoke_arn
 }

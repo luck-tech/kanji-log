@@ -16,8 +16,15 @@ terraform {
     }
   }
 
-  # Terraformの状態ファイルをS3で管理する場合の設定（現在はローカル保存）
-  # チーム開発時は以下のコメントアウトを解除してS3バックエンドを利用
+  # Terraformの状態ファイルをS3で管理（チーム開発対応）
+  # 状態ファイルの中央管理とロック機能により安全な協調開発を実現
+  backend "s3" {
+    bucket         = "kanji-navi-terraform-state-ocygln1t"
+    key            = "environments/dev/terraform.tfstate"
+    region         = "ap-northeast-1"
+    dynamodb_table = "kanji-navi-terraform-lock-ocygln1t"
+    encrypt        = true
+  }
   # backend "s3" {
   #   bucket = "kanji-log-terraform-state"  # 状態ファイル保存用S3バケット
   #   key    = "dev/terraform.tfstate"      # 開発環境用の状態ファイルパス
