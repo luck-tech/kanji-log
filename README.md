@@ -4,7 +4,7 @@
 
 ## プロジェクト構造
 
-```
+````
 kanji-log/                    // プロジェクトルート
 ├── frontend/                 // モバイルアプリ（フロントエンド）
 │   ├── app/                  // expo-router画面定義（ルーティング専用）
@@ -19,13 +19,34 @@ kanji-log/                    // プロジェクトルート
 │   ├── app.json              // Expo設定
 │   ├── tsconfig.json         // TypeScript設定
 │   └── README.md             // フロントエンド詳細ドキュメント
-└── README.md                 // プロジェクト全体の概要（このファイル）
-
-// 将来追加予定:
-// ├── api/                   // API実装
-// ├── aws/                   // AWS管理コード
-// ├── backend/               // バックエンドロジック
-// └── infrastructure/        // インフラ設定
+├── backend/                  // 🧠 サーバーサイド（Go）
+│   ├── cmd/                  // 実行可能なアプリケーションのエントリーポイント
+│   │   ├── api/              // Lambda関数ごとのmain.goを格納
+│   │   │   ├── create-event/
+│   │   │   └── get-event/
+│   │   └── batch/            // バッチ処理用のmain.go
+│   ├── internal/             // 内部パッケージ（プロジェクト固有のロジック）
+│   │   ├── domain/           // ドメインモデル（Event, Userなど）
+│   │   ├── handler/          // Lambdaのハンドラーロジック
+│   │   ├── repository/       // データストア（DynamoDB）とのやり取り
+│   │   └── config/           // 設定管理
+│   ├── pkg/                  // 外部公開可能な汎用ライブラリ（今回は基本使わない）
+│   ├── go.mod                // Goモジュール定義
+│   ├── go.sum                // 依存関係のチェックサム
+├── iac/                      // 🏛️ インフラ管理 (IaC)
+│   ├── environments/         // 環境ごとの設定
+│   │   ├── dev/
+│   │   └── prd/
+│   ├── modules/              // 再利用可能なインフラコンポーネント
+│   │   ├── api_gateway/
+│   │   ├── cognito/
+│   │   └── lambda/
+│   ├── main.tf               // (例: Terraformの場合のルート定義)
+├── .github/                  // CI/CDワークフロー (GitHub Actions)
+│   └── workflows/
+│       ├── deploy-backend.yml
+│       ├── deploy-iac.yml
+├── README.md
 ```
 
 ## 各ディレクトリの説明
@@ -39,13 +60,6 @@ kanji-log/                    // プロジェクトルート
 - React Native Reanimated によるネイティブアニメーション
 - expo-router によるファイルベースルーティング
 
-### 将来追加予定のディレクトリ
-
-- **api/**: REST API または GraphQL API の実装
-- **aws/**: AWS Lambda、API Gateway、DynamoDB 等の管理コード
-- **backend/**: ビジネスロジック、データ処理
-- **infrastructure/**: Terraform、CloudFormation 等のインフラ構成
-
 ## 開発開始方法
 
 ### フロントエンド開発
@@ -54,7 +68,7 @@ kanji-log/                    // プロジェクトルート
 cd frontend
 pnpm install
 pnpm dev
-```
+````
 
 ### 全体のセットアップ（将来）
 
@@ -80,7 +94,7 @@ cd infrastructure && terraform init
 - **React Native Reanimated**: ネイティブアニメーション
 - **expo-router**: 5.0（ファイルベースルーティング）
 
-### バックエンド（将来予定）
+### バックエンド
 
 - **AWS Lambda**: サーバーレス関数
 - **API Gateway**: RESTful API
@@ -93,7 +107,3 @@ cd infrastructure && terraform init
 2. **バックエンド**: スケーラブルな API とデータ管理
 3. **インフラ**: 自動化されたデプロイメントと監視
 4. **保守性**: 明確な責任分離と再利用可能なコード
-
-## ライセンス
-
-Private Project
