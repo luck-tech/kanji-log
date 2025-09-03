@@ -50,30 +50,27 @@
 
 ```
 frontend/
-├── app/                     # expo-router画面定義
+├── app/                    # ルーティング
 │   ├── _layout.tsx         # ルートレイアウト
 │   ├── (onboarding)/       # オンボーディング画面群
-│   ├── (tabs)/             # タブナビゲーション画面群
-│   ├── event/              # イベント関連画面
-│   └── member/             # メンバー関連画面
-├── src/                    # アプリケーションコード
-│   ├── components/         # UIコンポーネント
-│   │   ├── common/         # 汎用コンポーネント
-│   │   │   ├── ui/         # 基本UIコンポーネント
-│   │   │   └── layout/     # レイアウトコンポーネント
-│   │   └── features/       # 機能別コンポーネント
-│   │       ├── event/      # イベント機能
-│   │       ├── member/     # メンバー機能
-│   │       ├── record/     # 記録機能
-│   │       └── settings/   # 設定機能
-│   ├── hooks/              # カスタムフック
-│   ├── types/              # 型定義
-│   │   ├── common/         # 共通型定義
-│   │   └── features/       # 機能別型定義
-│   └── utils/              # ユーティリティ・定数
-│       └── constants/      # 定数定義
-│           ├── design/     # デザイン定数
-│           └── business/   # ビジネス定数
+│   └── (main)/             # アプリメイン画面群
+├── components/             # UIコンポーネント
+│   ├── common/             # 汎用コンポーネント
+│   │   ├── ui/             # 基本UIコンポーネント
+│   │   └── layout/         # レイアウトコンポーネント
+│   └── features/           # 機能別コンポーネント
+│       ├── event/          # イベント機能
+│       ├── member/         # メンバー機能
+│       ├── record/         # 記録機能
+│       └── settings/       # 設定機能
+├── hooks/                  # カスタムフック
+├── types/                  # 型定義
+│   ├── common/             # 共通型定義
+│   └── features/           # 機能別型定義
+└── utils/                  # ユーティリティ・定数
+│   └── constants/          # 定数定義
+│       ├── design/     # デザイン定数
+│       └── business/   # ビジネス定数
 ├── assets/                 # 静的アセット
 └── docs/                   # ドキュメント
 ```
