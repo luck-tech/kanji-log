@@ -80,8 +80,9 @@ kanji-log/
 │   ├── go.mod                // Goモジュール定義
 │   └── go.sum                // 依存関係のチェックサム
 ├── iac/                      // 🏛️ インフラ管理 (IaC)
-│   ├── bootstrap/            // Terraform状態管理用インフラ
-│   ├── policies/             // IAM権限管理（最小権限ポリシー）
+│   ├── _bootstrap/           // Terraform状態管理用インフラ
+│   │   ├── iam_policies/     // IAM権限管理（最小権限ポリシー）
+│   │   └── state_backend/    // S3バックエンド・DynamoDBロック設定
 │   ├── environments/         // 環境ごとの設定
 │   │   ├── dev/              // 開発環境（S3バックエンド対応済み）
 │   │   └── prd/              // 本番環境

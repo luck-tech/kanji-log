@@ -15,10 +15,11 @@
 
 ```
 iac/
-├── bootstrap/         # Terraform状態管理用インフラ
-│   └── main.tf       # S3バックエンド・DynamoDBロック設定
-├── policies/          # IAM権限管理
-│   └── kanji-navi-dev-policy-fixed.json  # 最小権限ポリシー
+├── _bootstrap/        # Terraform状態管理用インフラ
+│   ├── iam_policies/  # IAM権限管理（最小権限ポリシー）
+│   │   └── kanji-navi-dev-policy.json
+│   └── state_backend/ # S3バックエンド・DynamoDBロック設定
+│       └── main.tf
 ├── modules/           # 再利用可能なTerraformモジュール
 │   ├── dynamodb/      # DynamoDBテーブル定義
 │   ├── lambda/        # Lambda関数定義
