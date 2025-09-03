@@ -1,0 +1,46 @@
+# Task-006: CI/CD パイプライン構築
+
+**優先度**: 🟡 高  
+**所要時間**: 1 日  
+**担当**: DevOps 担当者
+
+## 目的
+
+GitHub Actions による自動デプロイパイプラインを構築
+
+## 成果物
+
+- [ ] Terraform 自動デプロイ
+- [ ] Lambda 自動デプロイ
+- [ ] 環境別デプロイ（dev/prod）
+
+## 詳細作業
+
+### 1. GitHub Actions 設定 (`.github/workflows/`)
+
+- `deploy-infrastructure.yml`
+- `deploy-backend.yml`
+
+### 2. AWS 認証設定
+
+- OIDC 設定
+- IAM Role for GitHub Actions
+
+### 3. デプロイスクリプト
+
+- 環境変数管理
+- ビルド・デプロイ自動化
+
+## 受け入れ条件
+
+- [ ] PR マージで自動デプロイされる
+- [ ] dev 環境でのテストが可能
+- [ ] 本番デプロイが手動トリガーで実行可能
+
+## 前のタスク
+
+[Task-005: 認証基盤構築](./task-005.md)
+
+## 次のタスク
+
+[Task-007: フォーム機能実装](./task-007.md)
