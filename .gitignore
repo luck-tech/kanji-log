@@ -45,3 +45,50 @@ yarn-error.*
 # Project specific
 frontend/dist/
 frontend/.expo/
+
+# =============================================================================
+# Terraform関連ファイル（GitHub管理対象外）
+# =============================================================================
+
+# Terraformステートファイル（機密情報・インフラの現在状態を含む）
+# ローカル状態管理では除外必須、チーム開発時はS3バックエンド推奨
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+
+# Terraformプロバイダーのバイナリファイル（サイズが大きい: 648MB等）
+# terraform init で自動ダウンロードされるため、Git管理不要
+.terraform/
+**/.terraform/
+
+# Terraformの依存関係ロックファイル
+# バージョン固定情報だが、環境差異で競合しやすいため除外
+# チーム開発では共有する場合もあるが、初期段階では除外
+.terraform.lock.hcl
+**/.terraform.lock.hcl
+
+# Terraformの実行計画ファイル（機密情報を含む可能性）
+# terraform plan -out で生成される計画ファイル
+*.tfplan
+*.tfplan.*
+
+
+# Terraformのクラッシュログ
+crash.log
+crash.*.log
+
+# Terraformの変数ファイル（機密情報：アクセスキー、パスワード等）
+# 本番環境の認証情報等が含まれる可能性があるため除外
+*.tfvars
+*.tfvars.json
+
+# Terraformのオーバーライドファイル
+# 一時的な設定変更やデバッグ用設定
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Terraformの一時ファイル
+.terraformrc
+terraform.rc

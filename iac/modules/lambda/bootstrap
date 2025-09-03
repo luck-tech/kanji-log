@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# AWS Lambda Runtime API を使用した簡単なレスポンス
+while true; do
+  # 次のイベントを取得
+  HEADERS="$(mktemp)"
+  EVENT_DATA=$(curl -sS -LD "$HEADERS" -X GET "http://${AWS_LAMBDA_RUNTIME_API}/2018-06-01/runtime/invocation/next")
+  REQUEST_ID=$(grep -Fi Lambda-Runtime-Aws-Request-Id "$HEADERS" | tr -d '[:space:]' | cut -d: -f2)
+
+  # レスポンスを準備
+  RESPONSE='{"statusCode": 200, "body": "{\"message\": \"Hello from Kanji-Log!\"}", "headers": {"Content-Type": "application/json"}}'
+
+  # レスポンスを送信
+  curl -X POST "http://${AWS_LAMBDA_RUNTIME_API}/2018-06-01/runtime/invocation/$REQUEST_ID/response" -d "$RESPONSE"
+done

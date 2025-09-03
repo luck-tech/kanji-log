@@ -1,5 +1,5 @@
 ---
-applyTo: "/frontend"
+applyTo: "frontend"
 ---
 
 ## ディレクトリ構造とファイル配置基準
