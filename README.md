@@ -1,109 +1,111 @@
 # kanji-log プロジェクト
 
-このリポジトリは、モバイルアプリとバックエンドサービスを含む統合プロジェクトです。
+「kanji-log」は、イベントの幹事が参加者管理や店舗選定を簡単に行うためのモバイルアプリと、参加者が Web フォーム経由で手軽に出欠回答できるサービスを提供する統合プロジェクトです。
 
-## プロジェクト構造
+## ✨ 技術スタック
 
-````
-kanji-log/                    // プロジェクトルート
-├── frontend/                 // モバイルアプリ（フロントエンド）
-│   ├── app/                  // expo-router画面定義（ルーティング専用）
-│   ├── components/           // UIコンポーネント
-│   │   ├── common/          // 汎用UIコンポーネント
-│   │   └── modals/          # モーダルコンポーネント
-│   ├── constants/            // デザイン定数・設定
-│   ├── hooks/                // カスタムフック
-│   ├── types/                // 型定義
-│   ├── assets/               // アセット
-│   ├── package.json          // フロントエンド依存関係
-│   ├── app.json              // Expo設定
-│   ├── tsconfig.json         // TypeScript設定
-│   └── README.md             // フロントエンド詳細ドキュメント
-├── backend/                  // 🧠 サーバーサイド（Go）
-│   ├── cmd/                  // 実行可能なアプリケーションのエントリーポイント
-│   │   ├── api/              // Lambda関数ごとのmain.goを格納
-│   │   │   ├── create-event/
-│   │   │   └── get-event/
-│   │   └── batch/            // バッチ処理用のmain.go
-│   ├── internal/             // 内部パッケージ（プロジェクト固有のロジック）
-│   │   ├── domain/           // ドメインモデル（Event, Userなど）
-│   │   ├── handler/          // Lambdaのハンドラーロジック
-│   │   ├── repository/       // データストア（DynamoDB）とのやり取り
-│   │   └── config/           // 設定管理
-│   ├── pkg/                  // 外部公開可能な汎用ライブラリ（今回は基本使わない）
-│   ├── go.mod                // Goモジュール定義
-│   ├── go.sum                // 依存関係のチェックサム
-├── iac/                      // 🏛️ インフラ管理 (IaC)
-│   ├── environments/         // 環境ごとの設定
-│   │   ├── dev/
-│   │   └── prd/
-│   ├── modules/              // 再利用可能なインフラコンポーネント
-│   │   ├── api_gateway/
-│   │   ├── cognito/
-│   │   └── lambda/
-│   ├── main.tf               // (例: Terraformの場合のルート定義)
+| カテゴリ              | 主要技術                                                |
+| :-------------------- | :------------------------------------------------------ |
+| 📱 **フロントエンド** | React Native, Expo, TypeScript, expo-router             |
+| 🧠 **バックエンド**   | Go (Golang), AWS Lambda, API Gateway, DynamoDB, Cognito |
+| 🏛️ **インフラ (IaC)** | Terraform, AWS IAM, AWS WAF                             |
+| 🚀 **CI/CD**          | GitHub Actions                                          |
+
+---
+
+## 📂 プロジェクト構造
+
+```
+kanji-log/
 ├── .github/                  // CI/CDワークフロー (GitHub Actions)
 │   └── workflows/
-│       ├── deploy-backend.yml
-│       ├── deploy-iac.yml
-├── README.md
+├── backend/                  // 🧠 サーバーサイド（Go）
+│   ├── cmd/                  // Lambda関数ごとのエントリーポイント(main.go)
+│   ├── internal/             // プロジェクト固有のビジネスロジック
+│   ├── go.mod                // Goモジュール定義
+│   └── go.sum
+├── frontend/                 // 📱 モバイルアプリ（React Native）
+│   ├── app/                  // expo-router画面定義
+│   └── (他、フロントエンド関連ファイル)
+├── iac/                      // 🏛️ インフラ管理 (Terraform)
+│   ├── environments/         // 環境ごとの設定 (dev, prd)
+│   ├── modules/              // 再利用可能なインフラ定義
+│   └── main.tf
+└── README.md                 // プロジェクト全体の概要（このファイル）
 ```
 
-## 各ディレクトリの説明
+---
 
-### frontend/
+## 🗺️ 各ディレクトリの説明
 
-モバイルアプリ（React Native + Expo）の実装です。
+### 📱 `frontend/`
 
-- 詳細な技術仕様は [`frontend/README.md`](./frontend/README.md) を参照
-- StyleSheet ベースのスタイリング
-- React Native Reanimated によるネイティブアニメーション
-- expo-router によるファイルベースルーティング
+幹事用のモバイルアプリ（React Native + Expo）の実装です。ファイルベースルーティングによる画面管理と、クリーンな UI コンポーネントの設計を特徴とします。
 
-## 開発開始方法
+- **詳細:** [`frontend/README.md`](https://www.google.com/search?q=./frontend/README.md) を参照してください。
 
-### フロントエンド開発
+### 🧠 `backend/`
 
-```bash
-cd frontend
-pnpm install
-pnpm dev
-````
+Go 言語で実装されたサーバーレスバックエンドです。各 Lambda 関数は独立したエントリーポイント（`cmd/api/*`）を持ち、ビジネスロジックは`internal/`に集約されています。
 
-### 全体のセットアップ（将来）
+- **責務:** API ロジック、DynamoDB とのデータ連携、外部 API（Google Maps 等）の呼び出し。
 
-```bash
-# フロントエンド
-cd frontend && pnpm install
+### 🏛️ `iac/`
 
-# バックエンド（将来）
-cd api && npm install
+Terraform で記述されたインフラストラクチャのコードです。AWS リソース（API Gateway, Lambda, DynamoDB, Cognito 等）のプロビジョニングを自動化します。
 
-# インフラ（将来）
-cd infrastructure && terraform init
-```
+- **特徴:** 環境（dev/prd）ごとの設定を分離し、再利用可能なモジュールで構成されています。
 
-## 技術スタック
+### 🚀 `.github/`
 
-### フロントエンド
+CI/CD パイプラインの定義ファイルです。GitHub Actions を利用し、`backend`と`iac`のテストとデプロイを自動化します。
 
-- **React Native**: 0.79
-- **Expo**: 53
-- **TypeScript**: 5.8
-- **StyleSheet**: React Native 標準スタイリング
-- **React Native Reanimated**: ネイティブアニメーション
-- **expo-router**: 5.0（ファイルベースルーティング）
+---
 
-### バックエンド
+## 🚀 開発開始方法
 
-- **AWS Lambda**: サーバーレス関数
-- **API Gateway**: RESTful API
-- **DynamoDB**: NoSQL データベース
-- **S3**: 画像・ファイルストレージ
+### 必要ツール
 
-## プロジェクト目標
+- Node.js (pnpm)
+- Go
+- Terraform
+- AWS CLI
 
-1. **フロントエンド**: ユーザーフレンドリーなモバイルアプリ
-2. **バックエンド**: スケーラブルな API とデータ管理
-3. **インフラ**: 自動化されたデプロイメントと監視
-4. **保守性**: 明確な責任分離と再利用可能なコード
+### セットアップと実行
+
+1.  **📱 フロントエンド**
+
+    ```bash
+    cd frontend
+    pnpm install
+    pnpm dev
+    ```
+
+2.  **🧠 バックエンド**
+
+    ```bash
+    cd backend
+    go mod tidy # 依存関係をインストール
+
+    # 例: create-event関数をローカルで実行する場合
+    cd cmd/api/create-event
+    go run .
+    ```
+
+3.  **🏛️ インフラ (IaC)**
+
+    ```bash
+    cd iac
+    terraform init
+    terraform plan  # 変更内容を確認
+    terraform apply # 変更を適用
+    ```
+
+---
+
+## 🎯 プロジェクト目標
+
+1.  **幹事の体験向上:** イベント管理の手間を削減する、直感的で使いやすいモバイルアプリを提供する。
+2.  **参加者の手軽さ:** アカウント登録不要で、数タップで完了するシンプルな回答フローを実現する。
+3.  **スケーラブルなバックエンド:** サーバーレスアーキテクチャにより、イベントの規模に応じて柔軟にスケールする API を構築する。
+4.  **自動化されたインフラ:** IaC と CI/CD を導入し、信頼性が高く、再現性のあるデプロイプロセスを確立する。
