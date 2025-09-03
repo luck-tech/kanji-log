@@ -28,9 +28,11 @@ kanji-log/
 │   ├── app/                  // expo-router画面定義
 │   └── (他、フロントエンド関連ファイル)
 ├── iac/                      // 🏛️ インフラ管理 (Terraform)
+│   ├── bootstrap/            // Terraform状態管理用インフラ
+│   ├── policies/             // IAM権限管理（最小権限ポリシー）
 │   ├── environments/         // 環境ごとの設定 (dev, prd)
 │   ├── modules/              // 再利用可能なインフラ定義
-│   └── main.tf
+│   └── README.md             // IaC詳細ドキュメント
 └── README.md                 // プロジェクト全体の概要（このファイル）
 ```
 
@@ -54,7 +56,11 @@ Go 言語で実装されたサーバーレスバックエンドです。各 Lamb
 
 Terraform で記述されたインフラストラクチャのコードです。AWS リソース（API Gateway, Lambda, DynamoDB, Cognito 等）のプロビジョニングを自動化します。
 
-- **特徴:** 環境（dev/prd）ごとの設定を分離し、再利用可能なモジュールで構成されています。
+- **セキュリティ強化**: IAM 最小権限ポリシー、S3 状態管理の暗号化対応済み
+- **チーム開発対応**: S3 バックエンドと DynamoDB ロックによる安全な協調開発
+- **環境分離**: 開発（dev）と本番（prd）環境の完全分離
+
+**詳細**: [`iac/README.md`](./iac/README.md) を参照してください。
 
 ### 🚀 `.github/`
 
@@ -94,11 +100,13 @@ CI/CD パイプラインの定義ファイルです。GitHub Actions を利用�
 
 3.  **🏛️ インフラ (IaC)**
 
+    **セキュリティ強化**: S3 バックエンドによる状態管理と IAM 最小権限が実装済み
+
     ```bash
-    cd iac
-    terraform init
-    terraform plan  # 変更内容を確認
-    terraform apply # 変更を適用
+    cd iac/environments/dev
+    terraform init   # S3バックエンドに自動接続
+    terraform plan   # 変更内容を確認
+    terraform apply  # 変更を適用（DynamoDBロックで安全実行）
     ```
 
 ---

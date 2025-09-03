@@ -35,6 +35,8 @@ applyTo: "backend,iac"
 ### 3\. 権限管理 (IAM)
 
 - **最小権限の原則を徹底せよ:** 各 Lambda 関数にアタッチする IAM Role には、その関数が必要とする最小限の権限のみを付与せよ。例えば、DynamoDB からの読み取りだけが必要なら、`dynamodb:GetItem`権限のみを許可し、`dynamodb:*`のようなワイルドカードは絶対に使用するな。
+- **開発用 IAM ユーザーの権限管理:** 開発用 IAM ユーザーには`KanjiNaviTerraformMinimal`ポリシーを適用し、AdministratorAccess は絶対に使用するな。必要最小限の権限（DynamoDB、Lambda、API Gateway、IAM 操作）のみを許可せよ。
+- **リージョン制限:** IAM ポリシーには`aws:RequestedRegion`条件を追加し、ap-northeast-1 リージョンでの操作に限定せよ（ただし、IAM はグローバルサービスのため別途考慮が必要）。
 
 ### 4\. 秘密情報 (Secrets) の管理
 
@@ -49,6 +51,13 @@ applyTo: "backend,iac"
 
 - **エラーハンドリングを徹底せよ:** Go のエラーは無視するな。全てのエラーを適切にハンドリングし、予期せぬエラーが発生した場合は、詳細なエラーメッセージをクライアントに返さず、サーバー側でロギングせよ。
 - **SQL インジェクション対策:** （今回は DynamoDB のため該当しないが）SQL を扱う場合は、必ずプレースホルダを用いたパラメータ化クエリを使用し、文字列結合で SQL 文を組み立てるな。
+
+### 7\. インフラストラクチャとしてのコード (IaC)
+
+- **Terraform 状態管理の中央化:** 状態ファイル（.tfstate）は必ず S3 バックエンドで管理し、DynamoDB によるロック機能を有効にせよ。ローカルでの状態管理は禁止する。
+- **S3 バックエンドのセキュリティ:** 状態ファイル保存用 S3 バケットには暗号化、バージョニング、パブリックアクセスブロックを必ず設定せよ。
+- **環境分離:** 開発環境（dev）と本番環境（prd）は完全に分離し、状態ファイルも別々のキーで管理せよ。
+- **インフラ変更の可視化:** terraform plan の実行結果は必ず確認し、意図しないリソースの削除や変更がないことを確認してから apply を実行せよ。
 
 ---
 
@@ -71,14 +80,18 @@ kanji-log/
 │   ├── go.mod                // Goモジュール定義
 │   └── go.sum                // 依存関係のチェックサム
 ├── iac/                      // 🏛️ インフラ管理 (IaC)
+│   ├── bootstrap/            // Terraform状態管理用インフラ
+│   ├── policies/             // IAM権限管理（最小権限ポリシー）
 │   ├── environments/         // 環境ごとの設定
-│   │   ├── dev/
-│   │   └── prd/
+│   │   ├── dev/              // 開発環境（S3バックエンド対応済み）
+│   │   └── prd/              // 本番環境
 │   ├── modules/              // 再利用可能なインフラコンポーネント
 │   │   ├── api_gateway/
 │   │   ├── cognito/
+│   │   ├── dynamodb/
+│   │   ├── iam/
 │   │   └── lambda/
-│   └── main.tf               // (例: Terraformの場合のルート定義)
+│   └── README.md             // IaC詳細ドキュメント
 ├── .github/                  // CI/CDワークフロー (GitHub Actions)
 │   └── workflows/
 │       ├── deploy-backend.yml

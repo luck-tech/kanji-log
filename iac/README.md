@@ -15,13 +15,17 @@
 
 ```
 iac/
+├── bootstrap/         # Terraform状態管理用インフラ
+│   └── main.tf       # S3バックエンド・DynamoDBロック設定
+├── policies/          # IAM権限管理
+│   └── kanji-navi-dev-policy-fixed.json  # 最小権限ポリシー
 ├── modules/           # 再利用可能なTerraformモジュール
 │   ├── dynamodb/      # DynamoDBテーブル定義
 │   ├── lambda/        # Lambda関数定義
 │   ├── api_gateway/   # API Gateway定義
 │   └── iam/          # IAMロール・ポリシー定義
 └── environments/      # 環境別設定
-    ├── dev/          # 開発環境（現在実装済み）
+    ├── dev/          # 開発環境（S3バックエンド対応済み）
     └── prd/          # 本番環境（今後実装予定）
 ```
 
@@ -54,23 +58,30 @@ iac/
    ```
 
 3. **必要な IAM 権限**
-   以下の AWS サービスに対する権限が必要です：
 
-   - DynamoDB (テーブル作成・管理)
+   **セキュリティ強化済み**: 開発用 IAM ユーザーには最小権限ポリシー（`KanjiNaviTerraformMinimal`）を適用。
+
+   以下の AWS サービスに対する最小限の権限が設定済み：
+
+   - DynamoDB (テーブル作成・管理・読み取り)
    - Lambda (関数作成・管理)
    - API Gateway (API 作成・管理)
    - IAM (ロール・ポリシー作成・管理)
+   - S3 (Terraform 状態管理用バケット操作)
+   - CloudWatch Logs (ログ管理)
 
-   開発環境では `AdministratorAccess` を推奨
+   **注意**: AdministratorAccess は削除済み（セキュリティリスク軽減）
 
 ### 開発環境のデプロイ
+
+**注意**: Terraform 状態ファイルは S3 で中央管理されています。初回実行時に自動的に S3 バックエンドに接続されます。
 
 ```bash
 # 開発環境ディレクトリに移動
 cd iac/environments/dev
 
-# Terraform初期化（初回のみ）
-# プロバイダーダウンロードとモジュール取得を実行
+# Terraform初期化（S3バックエンドに接続）
+# 状態ファイルがS3から自動取得されます
 terraform init
 
 # デプロイ計画の確認
@@ -81,6 +92,8 @@ terraform plan
 # 14個のAWSリソースが作成されます
 terraform apply
 ```
+
+**チーム開発対応**: 複数の開発者が同じ環境で作業する場合、DynamoDB による状態ロック機能が自動的に競合を防止します。
 
 ### デプロイ後の動作確認
 
@@ -97,9 +110,9 @@ curl $(terraform output -raw hello_endpoint)
 ### Terraform Output
 
 ```bash
-api_endpoint = "https://xxxxx.execute-api.ap-northeast-1.amazonaws.com/dev"
+api_endpoint = "https://sepimmk54m.execute-api.ap-northeast-1.amazonaws.com/dev"
 dynamodb_table_name = "kanji-log-events-dev"
-hello_endpoint = "https://xxxxx.execute-api.ap-northeast-1.amazonaws.com/dev/hello"
+hello_endpoint = "https://sepimmk54m.execute-api.ap-northeast-1.amazonaws.com/dev/hello"
 lambda_function_name = "kanji-log-hello-dev"
 ```
 
@@ -139,9 +152,25 @@ terraform destroy
    - Lambda 関数は実行時間に応じて課金
    - API Gateway は呼び出し回数に応じて課金
 
-4. **状態管理**:
-   - 現在はローカルで状態ファイル（`terraform.tfstate`）を管理
-   - チーム開発時は S3 バックエンドへの移行を推奨
+4. **状態管理（チーム開発対応完了）**:
+   - ✅ **S3 バックエンド**: 状態ファイルは`kanji-navi-terraform-state-*`バケットで中央管理
+   - ✅ **DynamoDB ロック**: `kanji-navi-terraform-lock-*`テーブルで同時実行制御
+   - ✅ **暗号化**: AES-256 暗号化とバージョニング有効
+   - ✅ **セキュリティ**: パブリックアクセス完全ブロック
+
+## 🔒 セキュリティ強化
+
+### IAM 権限の最小化
+
+- **最小権限原則**: `KanjiNaviTerraformMinimal`ポリシーで必要最小限の権限のみ付与
+- **AdministratorAccess 削除**: セキュリティリスクを大幅削減
+- **リージョン制限**: ap-northeast-1 リージョンのみでの操作に限定
+
+### Terraform 状態管理のセキュリティ
+
+- **S3 暗号化**: 状態ファイルの AES-256 暗号化
+- **バージョニング**: 状態ファイルの変更履歴管理
+- **アクセス制御**: 最小権限での S3 バケットアクセス
 
 ## � 次のステップ
 
