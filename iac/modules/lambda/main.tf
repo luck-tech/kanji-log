@@ -31,12 +31,13 @@ variable "source_file" {
 resource "aws_lambda_function" "hello" {
   function_name = "${var.function_name}-${var.environment}"  # 例: kanji-log-hello-dev
   role         = var.role_arn                                # IAMモジュールで作成された実行ロール
-  handler      = "bootstrap"                                 # Go言語カスタムランタイムのエントリーポイント
+  handler      = "bootstrap"                                 # Goバイナリの場合はbootstrapというファイル名
   runtime      = "provided.al2"                             # Amazon Linux 2ベースのカスタムランタイム
   timeout      = 30                                          # 最大実行時間（秒）
 
   # デプロイパッケージの指定
-  filename = var.source_file
+  filename         = var.source_file
+  source_code_hash = filebase64sha256(var.source_file)
 
   # 環境変数（Lambda関数内から参照可能）
   environment {
@@ -51,11 +52,10 @@ resource "aws_lambda_function" "hello" {
     Project     = "kanji-log"
   }
 
-  # ライフサイクル設定：コードデプロイの管理
-  # Terraformとは別でAWS CLIやCI/CDでコードをデプロイする場合に使用
-  lifecycle {
-    ignore_changes = [filename, source_code_hash]  # ファイル変更を無視（手動デプロイ対応）
-  }
+  # 今回はライフサイクル設定を無効化してTerraformでコードを更新
+  # lifecycle {
+  #   ignore_changes = [filename, source_code_hash]  # ファイル変更を無視（手動デプロイ対応）
+  # }
 }
 
 # Lambda関数の呼び出し権限設定

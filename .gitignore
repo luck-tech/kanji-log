@@ -69,9 +69,9 @@ frontend/.expo/
 
 # Terraformの実行計画ファイル（機密情報を含む可能性）
 # terraform plan -out で生成される計画ファイル
-*.tfplan
-*.tfplan.*
-
+**/*.tfplan
+**/*.tfplan.*
+**/tfplan
 
 # Terraformのクラッシュログ
 crash.log
@@ -92,3 +92,10 @@ override.tf.json
 # Terraformの一時ファイル
 .terraformrc
 terraform.rc
+
+# =============================================================================
+# Backendビルド成果物
+# =============================================================================
+# Goビルド成果物
+backend/build/
+backend/*-lambda.zip

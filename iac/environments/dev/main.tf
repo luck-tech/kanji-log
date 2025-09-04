@@ -22,7 +22,6 @@ terraform {
     bucket         = "kanji-navi-terraform-state-ocygln1t"
     key            = "environments/dev/terraform.tfstate"
     region         = "ap-northeast-1"
-    dynamodb_table = "kanji-navi-terraform-lock-ocygln1t"
     encrypt        = true
   }
   # backend "s3" {
@@ -79,7 +78,7 @@ module "lambda" {
   function_name = "kanji-log-hello"                     # Lambda関数名のベース
   environment   = "dev"                                 # 環境名（関数名に付与される）
   role_arn      = module.iam.lambda_execution_role_arn  # IAMモジュールで作成された実行ロール
-  source_file   = "../../modules/lambda/placeholder.zip" # デプロイするコードのzipファイル
+  source_file   = "../../../backend/hello-lambda.zip" # デプロイするコードのzipファイル
 }
 
 # API Gateway（HTTPSエンドポイント）

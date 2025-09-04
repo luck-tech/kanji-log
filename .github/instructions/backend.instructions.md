@@ -19,6 +19,21 @@ applyTo: "backend,iac"
   - 次タスクへの引き継ぎ事項
   - 学習ポイント・気づき
 
+### 開発フロー（Task-002a で改善済み）
+
+- **Makefile コマンドの使用を推奨**: 開発効率向上のため、`backend/Makefile`のコマンドを優先使用する
+  ```bash
+  # 基本コマンド
+  make help                          # ヘルプ表示
+  make build lambda=<function-name>  # Lambda関数ビルド
+  make deploy                        # Terraformデプロイ（確認あり）
+  make dev-deploy lambda=<function>  # ビルド+デプロイ一括実行
+  make test-api                      # API動作確認
+  make clean                         # ビルド成果物削除
+  ```
+- **汎用ビルドスクリプトの活用**: `./scripts/build.sh <function-name>`で任意の関数をビルド可能
+- **エラーハンドリングの活用**: 引数不足や関数未存在時の適切なエラーメッセージを確認する
+
 ## 開発上のセキュリティルール
 
 ### 1\. 認証 (Authentication) と認可 (Authorization)

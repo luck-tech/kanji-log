@@ -94,9 +94,16 @@ CI/CD パイプラインの定義ファイルです。GitHub Actions を利用�
     cd backend
     go mod tidy # 依存関係をインストール
 
-    # 例: create-event関数をローカルで実行する場合
-    cd cmd/api/create-event
-    go run .
+    # 🎯 新しい開発体験：Makefileコマンド
+    make help                          # 利用可能なコマンドを表示
+    make build lambda=hello            # Lambda関数をビルド
+    make test-api                      # APIの動作確認
+    make dev-deploy lambda=hello       # ビルド + デプロイの一括実行
+    make clean                         # ビルド成果物をクリーンアップ
+
+    # 🔧 従来のコマンド（上級者向け）
+    ./scripts/build.sh hello           # 特定の関数をビルド
+    cd ../iac/environments/dev && terraform apply  # 手動デプロイ
     ```
 
 3.  **🏛️ インフラ (IaC)**
