@@ -42,17 +42,17 @@ Go 言語、AWS Lambda、DynamoDB、Terraform を使用したサーバーレス�
 ```
 backend/
 ├── cmd/                           # 実行可能なアプリケーションのエントリーポイント
-│   └── api/                       # Lambda関数ごとのmain.goを格納
+│   └── api/                       # Controller: Lambda関数ごとのmain.goを格納
 │       ├── hello/                 # Hello API（テスト用）
 │       │   └── main.go           # エントリーポイント
 │       └── create-event/          # イベント作成API
 │           └── main.go           # エントリーポイント
 ├── internal/                      # 内部パッケージ（プロジェクト固有のロジック）
-│   ├── domain/                   # ドメインモデル（Event, Userなど）
+│   ├── domain/                   # Model: ドメインモデル（Event, Userなど）
 │   │   └── event.go             # イベントドメインモデル
-│   ├── handler/                  # Lambdaのハンドラーロジック
+│   ├── handler/                  # Service: Lambdaのハンドラーロジック
 │   │   └── event.go             # イベント関連のビジネスロジック
-│   ├── repository/               # データストア（DynamoDB）とのやり取り
+│   ├── repository/               # Repository: データストア（DynamoDB）とのやり取り
 │   │   └── dynamodb.go          # DynamoDBリポジトリ実装
 │   └── config/                   # 設定管理（将来用）
 ├── scripts/                      # ビルドスクリプト
