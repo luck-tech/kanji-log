@@ -25,6 +25,17 @@ variable "lambda_function_name" {
   type        = string
 }
 
+# Create Event Lambda関数用の追加変数
+variable "create_event_lambda_invoke_arn" {
+  description = "Create Event Lambda関数の呼び出しARN"
+  type        = string
+}
+
+variable "create_event_lambda_function_name" {
+  description = "Create Event Lambda関数名"
+  type        = string
+}
+
 # REST APIリソースの作成
 resource "aws_api_gateway_rest_api" "main" {
   name        = "${var.api_name}-${var.environment}"  # 例: kanji-log-api-dev
@@ -103,12 +114,209 @@ resource "aws_api_gateway_integration_response" "hello_integration_response" {
   depends_on = [aws_api_gateway_integration.hello_lambda]
 }
 
+# =============================================================================
+# /events エンドポイントの設定（イベント作成API）
+# =============================================================================
+
+# APIリソースの定義：/events パス
+resource "aws_api_gateway_resource" "events" {
+  rest_api_id = aws_api_gateway_rest_api.main.id
+  parent_id   = aws_api_gateway_rest_api.main.root_resource_id
+  path_part   = "events"
+}
+
+# HTTPメソッドの定義：POST /events
+resource "aws_api_gateway_method" "events_post" {
+  rest_api_id   = aws_api_gateway_rest_api.main.id
+  resource_id   = aws_api_gateway_resource.events.id
+  http_method   = "POST"
+  authorization = "NONE"       # 後でCognito認証に変更予定
+
+  # リクエストバリデーション設定
+  request_validator_id = aws_api_gateway_request_validator.events_validator.id
+  request_models = {
+    "application/json" = aws_api_gateway_model.create_event_request.name
+  }
+}
+
+# OPTIONS メソッド（CORS プリフライト対応）
+resource "aws_api_gateway_method" "events_options" {
+  rest_api_id   = aws_api_gateway_rest_api.main.id
+  resource_id   = aws_api_gateway_resource.events.id
+  http_method   = "OPTIONS"
+  authorization = "NONE"
+}
+
+# Lambda統合設定：POST /events
+resource "aws_api_gateway_integration" "events_post_lambda" {
+  rest_api_id = aws_api_gateway_rest_api.main.id
+  resource_id = aws_api_gateway_resource.events.id
+  http_method = aws_api_gateway_method.events_post.http_method
+
+  integration_http_method = "POST"
+  type                    = "AWS_PROXY"
+  uri                     = var.create_event_lambda_invoke_arn
+}
+
+# CORS プリフライト応答設定
+resource "aws_api_gateway_integration" "events_options_mock" {
+  rest_api_id = aws_api_gateway_rest_api.main.id
+  resource_id = aws_api_gateway_resource.events.id
+  http_method = aws_api_gateway_method.events_options.http_method
+
+  type = "MOCK"
+  request_templates = {
+    "application/json" = "{\"statusCode\": 200}"
+  }
+}
+
+# POST /events のレスポンス設定
+resource "aws_api_gateway_method_response" "events_post_response_200" {
+  rest_api_id = aws_api_gateway_rest_api.main.id
+  resource_id = aws_api_gateway_resource.events.id
+  http_method = aws_api_gateway_method.events_post.http_method
+  status_code = "200"
+
+  response_models = {
+    "application/json" = "Empty"
+  }
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin" = true
+  }
+}
+
+resource "aws_api_gateway_method_response" "events_post_response_201" {
+  rest_api_id = aws_api_gateway_rest_api.main.id
+  resource_id = aws_api_gateway_resource.events.id
+  http_method = aws_api_gateway_method.events_post.http_method
+  status_code = "201"
+
+  response_models = {
+    "application/json" = "Empty"
+  }
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin" = true
+  }
+}
+
+resource "aws_api_gateway_method_response" "events_post_response_400" {
+  rest_api_id = aws_api_gateway_rest_api.main.id
+  resource_id = aws_api_gateway_resource.events.id
+  http_method = aws_api_gateway_method.events_post.http_method
+  status_code = "400"
+
+  response_models = {
+    "application/json" = "Empty"
+  }
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin" = true
+  }
+}
+
+# OPTIONS メソッドのレスポンス設定
+resource "aws_api_gateway_method_response" "events_options_response_200" {
+  rest_api_id = aws_api_gateway_rest_api.main.id
+  resource_id = aws_api_gateway_resource.events.id
+  http_method = aws_api_gateway_method.events_options.http_method
+  status_code = "200"
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = true
+    "method.response.header.Access-Control-Allow-Methods" = true
+    "method.response.header.Access-Control-Allow-Origin"  = true
+  }
+}
+
+# 統合レスポンス設定
+resource "aws_api_gateway_integration_response" "events_post_integration_response" {
+  rest_api_id = aws_api_gateway_rest_api.main.id
+  resource_id = aws_api_gateway_resource.events.id
+  http_method = aws_api_gateway_method.events_post.http_method
+  status_code = aws_api_gateway_method_response.events_post_response_200.status_code
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin" = "'*'"
+  }
+
+  depends_on = [aws_api_gateway_integration.events_post_lambda]
+}
+
+resource "aws_api_gateway_integration_response" "events_options_integration_response" {
+  rest_api_id = aws_api_gateway_rest_api.main.id
+  resource_id = aws_api_gateway_resource.events.id
+  http_method = aws_api_gateway_method.events_options.http_method
+  status_code = aws_api_gateway_method_response.events_options_response_200.status_code
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,x-organizer-id'"
+    "method.response.header.Access-Control-Allow-Methods" = "'POST,OPTIONS'"
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+  }
+
+  depends_on = [aws_api_gateway_integration.events_options_mock]
+}
+
+# リクエストバリデーター
+resource "aws_api_gateway_request_validator" "events_validator" {
+  name                        = "${var.api_name}-${var.environment}-events-validator"
+  rest_api_id                 = aws_api_gateway_rest_api.main.id
+  validate_request_body       = true
+  validate_request_parameters = false
+}
+
+# リクエストモデル定義
+resource "aws_api_gateway_model" "create_event_request" {
+  rest_api_id  = aws_api_gateway_rest_api.main.id
+  name         = "CreateEventRequest"
+  content_type = "application/json"
+
+  schema = jsonencode({
+    "$schema" = "http://json-schema.org/draft-04/schema#"
+    title     = "Create Event Request Schema"
+    type      = "object"
+    required  = ["title"]
+    properties = {
+      title = {
+        type      = "string"
+        minLength = 1
+        maxLength = 100
+      }
+      purpose = {
+        type = "string"
+        enum = ["welcome", "farewell", "year_end", "social", "other"]
+      }
+      date = {
+        type    = "string"
+        pattern = "^\\d{4}-\\d{2}-\\d{2}$"
+      }
+      time = {
+        type    = "string"
+        pattern = "^\\d{2}:\\d{2}$"
+      }
+      notes = {
+        type      = "string"
+        maxLength = 1000
+      }
+      hasScheduling = {
+        type = "boolean"
+      }
+    }
+  })
+}
+
 # API デプロイメント
 # 設定変更を実際のエンドポイントに反映するための仕組み
 resource "aws_api_gateway_deployment" "main" {
   depends_on = [
     aws_api_gateway_integration.hello_lambda,
     aws_api_gateway_integration_response.hello_integration_response,
+    aws_api_gateway_integration.events_post_lambda,
+    aws_api_gateway_integration_response.events_post_integration_response,
+    aws_api_gateway_integration.events_options_mock,
+    aws_api_gateway_integration_response.events_options_integration_response,
   ]
 
   rest_api_id = aws_api_gateway_rest_api.main.id
@@ -120,6 +328,11 @@ resource "aws_api_gateway_deployment" "main" {
       aws_api_gateway_resource.hello.id,
       aws_api_gateway_method.hello_get.id,
       aws_api_gateway_integration.hello_lambda.id,
+      aws_api_gateway_resource.events.id,
+      aws_api_gateway_method.events_post.id,
+      aws_api_gateway_integration.events_post_lambda.id,
+      aws_api_gateway_method.events_options.id,
+      aws_api_gateway_integration.events_options_mock.id,
     ]))
   }
 
@@ -155,6 +368,11 @@ output "api_endpoint" {
 output "hello_endpoint" {
   description = "Hello APIの完全なエンドポイント URL"
   value       = "https://${aws_api_gateway_rest_api.main.id}.execute-api.${data.aws_region.current.name}.amazonaws.com/${aws_api_gateway_stage.main.stage_name}/hello"
+}
+
+output "events_endpoint" {
+  description = "Events APIの完全なエンドポイント URL"
+  value       = "https://${aws_api_gateway_rest_api.main.id}.execute-api.${data.aws_region.current.name}.amazonaws.com/${aws_api_gateway_stage.main.stage_name}/events"
 }
 
 # 現在のAWSリージョン情報を取得

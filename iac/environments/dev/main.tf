@@ -70,15 +70,26 @@ module "iam" {
   dynamodb_table_arn = module.dynamodb.table_arn # DynamoDBテーブルのARN（他モジュールからの参照）
 }
 
-# Lambda（サーバーレス関数）
-# API経由でビジネスロジックを実行する関数を作成
-module "lambda" {
-  source = "../../modules/lambda"   # Lambdaモジュールのパス
-  
-  function_name = "kanji-log-hello"                     # Lambda関数名のベース
-  environment   = "dev"                                 # 環境名（関数名に付与される）
-  role_arn      = module.iam.lambda_execution_role_arn  # IAMモジュールで作成された実行ロール
-  source_file   = "../../../backend/hello-lambda.zip" # デプロイするコードのzipファイル
+# Lambda関数（サーバーレス関数群）
+# 汎用的なlambdaモジュールを使用して複数の関数を実体化
+
+# Hello Lambda関数（テスト用）
+module "hello_lambda" {
+  source        = "../../modules/lambda"
+  function_name = "kanji-log-hello"
+  environment   = "dev"
+  role_arn      = module.iam.lambda_execution_role_arn
+  source_file   = "../../../backend/hello-lambda.zip"
+}
+
+# Create Event Lambda関数（イベント作成API）
+module "create_event_lambda" {
+  source        = "../../modules/lambda"
+  function_name = "kanji-log-create-event"
+  environment   = "dev"
+  role_arn      = module.iam.lambda_execution_role_arn
+  source_file   = "../../../backend/create-event-lambda.zip"
+  table_name    = module.dynamodb.table_name
 }
 
 # API Gateway（HTTPSエンドポイント）
@@ -88,6 +99,10 @@ module "api_gateway" {
   
   api_name              = "kanji-log-api"              # API名のベース
   environment           = "dev"                        # 環境名（API名に付与される）
-  lambda_invoke_arn     = module.lambda.invoke_arn     # Lambda関数の呼び出しARN
-  lambda_function_name  = module.lambda.function_name  # Lambda関数名
+  lambda_invoke_arn     = module.hello_lambda.invoke_arn     # Hello Lambda関数の呼び出しARN
+  lambda_function_name  = module.hello_lambda.function_name  # Hello Lambda関数名
+  
+  # Create Event Lambda関数の設定
+  create_event_lambda_invoke_arn     = module.create_event_lambda.invoke_arn
+  create_event_lambda_function_name  = module.create_event_lambda.function_name
 }
